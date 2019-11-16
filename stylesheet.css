@@ -1,0 +1,10 @@
+.main{
+    float:center;
+    margin:auto;
+    padding:20px;
+}
+.header{
+    background-color: #0C5C98;
+    color: white;
+    border-radius:0px;
+}
