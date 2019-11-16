@@ -3,8 +3,28 @@
     margin:auto;
     padding:20px;
 }
+/*
+Fixes header jumbotron styling
+*/
 .header{
     background-color: #0C5C98;
     color: white;
     border-radius:0px;
+    margin-bottom:0px;
+}
+.header > span{
+    font-size:40px;
+}
+@media only screen and (max-width: 550px) {
+    .header > span{
+        font-size:30px;
+    }
+}
+/*
+Wrapping grid
+*/
+article{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap:5px;
 }
