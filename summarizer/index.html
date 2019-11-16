@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>AutoSummarizer</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<meta charset="utf-8">
+<meta name="description" content="A configurable summary generator!">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    article{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap:5px;
+    }
+    .jumbotron{
+        margin-bottom:0px;
+    }
+    textarea{
+        resize:none;
+        height:200px;
+    }
+</style>
+
+<body>
+    <div class="jumbotron" style="background-color:#0C5C98 ">
+        <div class="container">
+            <span style="color:white;font-size:40">AutoSummarizer</span>
+            <p style="color:white">A configurable summary generator!</p>
+        </div>
+    </div>
+    <div style="float:center;margin:auto;padding:20px;">
+        <article>
+            <div>
+                <h3>Original Text</h3>
+                <textarea id=input class="form-control" placeholder="Type or paste text here."></textarea>
+            </div>
+            <div>
+                <h3 id="summarytitle">Summarized Text</h3>
+                <textarea id=output class="form-control" readonly=true></textarea>
+            </div>
+        </article>
+        <br>
+        <article>
+            <button class="btn btn-success" onclick="onSummarize()">Summarize</button>
+            <article>
+                <div class="input-group">
+                    <span class="input-group-addon">Threshold</span>
+                    <input id=weight type="number" value=1.3 class="form-control"></input>
+                </div>
+                <button class="btn btn-primary" onclick="onCopy()">Copy Text</button>
+            </article>          
+        </article>
+        <br>
+        <div class="breadcrumb">
+            <b>Why waste time, say lot word when few word work?</b>
+            <br>
+            This page summarizes text using a statistical model. It gives each sentence a score, and then
+            uses the threshold you provide to decide what to trim from the original. 
+            <br><br>
+            You need a modern browser to run this tool. It uses WebWorkers to run the summary generator
+            completely locally on a background thread! No servers required. 
+            <br><br>
+            Something not working, even on a modern browser? Try reloading the page. If you are summarizing 
+            a lot of text, be patient. If you have an old or slow device, it will take extra time. 
+        </div>
+    </div>
+</body>
+
+<script src="../sweetalert.min.js" ></script>
+<script src="../utilities.js" ></script>
+<script>
+    if (!window.Worker){
+        swal("Your browser is too old!","This page relies on newer web techologies.\nYou must update your browser to use this tool.","error");
+    }
+
+    //var worker = new Worker('summarizer.js');
+    var worker = new Worker('summarizer.js');
+    let input = document.getElementById('input');
+    let weight = document.getElementById('weight');
+    let output = document.getElementById('output');
+    worker.onmessage = e => {
+        output.value = e.data;
+        let percent = parseInt(output.value.length / input.value.length * 100);
+        document.getElementById('summarytitle').innerHTML = `Reduced ${100-percent}%`;  
+    } 
+
+    function onSummarize(){
+        output.value = "Summarizing text...";
+        worker.postMessage({text:input.value,weight:weight.value});
+    }
+
+    function onCopy(){
+        copy2(output,function(){
+            swal("Summary copied!","success");
+        },function(err){
+            swal("Oops!","Unable to copy. Try manually copying the text.","error");
+        });
+    }
+</script>

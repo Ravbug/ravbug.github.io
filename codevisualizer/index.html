@@ -1,0 +1,244 @@
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<head>
+  <title>Code Visualizer</title>
+  <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+  <link href="../magic-check.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../sweetalert.css">
+  <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <meta charset="UTF-8">
+</head>
+<style>
+  textarea{
+        font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    }
+</style>
+  <!-- Master table -->
+  <table style="width:100%;height:100%"><tr><td style="height:64px">
+    <!--- Top Bar -->
+    <div style="margin: auto; float: center; width: 100%;background-color:#ECECEC;">
+        <table cellpadding=10><tr>
+          <td><h2>Code Visualizer</h2>  </td>
+          <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='https://ravbuganimations.com/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
+          <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);downloadWrapper();"><i class="fas fa-save"  style="font-size:2em;"></i></div></td>
+          <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);copy(document.getElementById('input'))"><i class="far fa-copy"  style="font-size:2em;"></i></div></td>
+          <td><div id=urlCopyBtn onmousedown="clickEffect(this);" onmouseup="clickUp(this);createShareLink()"><i class="fas fa-link"  style="font-size:2em;"></i></div></td>
+          <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);loadRemoteResource();"><i class="fas fa-cloud-download-alt"  style="font-size:2em;"></i></div></td>
+          <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);helpMenu();"><i class="fas fa-question-circle"  style="font-size:2em;"></i></div></td>
+          <td><button class="btn btn-primary" id=viewFull onclick="redirect()" style="float:right;"><span style="font-size:20">View Full Window</span></button></td>
+        </table>
+      </div>
+    </td></tr><tr><td>
+      <!-- The content Div -->
+      <table style="width:100%;height:100%"><tr><td id=editorWidth style="width:50%;">
+        <!-- place to write code -->
+        <table style="width:100%;height:100%"><tr>
+          <td style="width:60px" id="lineContainer"> <textarea disabled class="form-control" style="resize:none;height:100%;text-align:right;overflow:hidden;font-size:14px" id="lineNums" style=""></textarea></td>
+          <td><textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;background-color:#ECECEC;font-size:14px"></textarea></td>
+        </tr></table>
+        <!--  <div id="input" style="width:90%;height:100%;" class="form-control" contenteditable="true">some text</div> -->
+        </td><td>
+          <!-- renderview -->
+          <div style="border-style:solid;border-width:1;border-radius:4px;border-color:lightgray;width:100%;height:100%;vertical-align:top;">
+            <iframe id=render srcdoc="" style="width:100%;height:100%;border:none"></iframe>
+          </div>
+        </td></tr></table>
+  </td></tr>
+  <tr><td style="height:64px">
+    <!-- Bottom toolbar -->
+    <div style="margin: auto; float: center; width: 100%;height:100%;background-color:#ECECEC;">
+        <table cellpadding=10 style="height:100%"><tr>
+          <td>Font Size:</td><td><input value=14 type="number" style="width:100px" class="form-control" id="fontSize" onchange="changeFont(this.value)"></input></td>
+          <td>Editor Width:</td><td><input type="range" class="form-control" style="width:100%" min=1 max=100 value=50 step=0.001 id="editWidth"></input></td>
+          <td><input type=checkbox class="magic-checkbox" id="allowLive" checked="true" onclick="toggleLive(this.checked)"></input><label for="allowLive">	Live Update</label></td>
+          <td><button onclick="render()" class="btn btn-secondary">Update</button></td>
+        </tr></table>
+      </div>
+
+  </td></tr></table>
+
+  <textarea id=urlCopy style="display:none"></textarea>
+
+<!-- Code to make it all work -->
+<script src="../sweetalert.min.js" ></script>
+<script src="../utilities.js"></script>
+<script>
+
+var p = document.getElementById("render");
+var i = document.getElementById("input");
+var slider = document.getElementById("editWidth")
+var warned = false;
+var live = true;
+//if base64 encoded arg is present, load its contents
+var arg = getURLArgValue('c');
+if (arg != undefined){
+  i.value=atob(decodeURIComponent(arg))
+  writeURLArgs([]);
+}
+else{
+  i.value="<b>Hello!</b><div style='border:2px solid red' ></div>\n\n<br><br> Paste your code into the <u>text field</u> and it will be rendered here. Supports all HTML, CSS, and JS that your browser supports.\n\n<br><br>Press the Link button to get a shareable link to your code! Note that significantly long URLs might not work correctly.\n\n<br><br>\n\nChanges are updated live. Uncheck Live Update if this is annoying.\n<br><br> <hr>"
+}
+render();
+changeFont(document.getElementById("fontSize").value)
+
+function render(){
+  if (!i.value.length == 0){
+    //disables the UI
+    generateEmbed(i.value)
+  }
+  //update line numbers
+  var numlines = i.value.split(/\r\n|\r|\n/).length;
+  var lineNums = document.getElementById("lineNums");
+  lineNums.value = "";
+  for (var n = 1; n <= numlines; n++){
+    lineNums.value += n + "\n" ;
+  }
+  //draw into iframe
+  p.srcdoc = i.value;
+}
+
+function Krender(){if (live) {render()}}
+
+function generateEmbed(code){
+  try{
+    var str =  encodeURIComponent(btoa(code));
+    warned=false;
+    document.getElementById('viewFull').disabled = false;
+    document.getElementById('viewFull').innerHTML = "<span style='font-size:20'>View Full Window</span>";
+    document.getElementById('urlCopyBtn').style = "";
+    return str;
+  }
+  catch(e){
+    if (!warned){
+
+      document.getElementById('viewFull').disabled = true;
+      document.getElementById('viewFull').innerHTML = "<span style='font-size:20'>Disabled</span>";
+      document.getElementById('urlCopyBtn').style = "color:gray;";
+      warned=true;
+      return undefined;
+    }
+  }
+}
+
+//creates a sharable link to the code. If the link is too long or cannot be encoded,
+//it uploads the code to a google sheet and generates a different URL
+function createShareLink(){
+    var link = generateEmbed(i.value);
+    if (link != undefined){
+      //use the base64 encoding
+      document.getElementById('urlCopy').value="https://ravbuganimations.com/codevisualizer.html?c="+link;
+      document.getElementById('urlCopy').style='display:;';copy(document.getElementById('urlCopy'));document.getElementById('urlCopy').style='display:none;'
+    }
+    else{
+      //Server upload to Google Sheet. For now, just warn user and fail out
+      swal({
+        title: "Heads Up!",
+        text: "This content could not be encoded into a URL. URL sharing is currently disabled.\n\nURL sharing will automatically resume at the next possible chance",
+        type: "error",
+        closeOnConfirm: false,
+      });
+    }
+}
+
+function toggleLive(state){
+  live = state;
+  if (state){
+    render();
+  }
+}
+
+function copySuccess(textToCopy){
+  sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
+}
+function copyFailed(){
+  swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
+}
+
+function loadRemoteResource(){
+    swal({
+      title: "Load Remote Resource",
+      text: "This feature could cause unexpected results",
+      type: "input",
+      showCancelButton: true,
+      closeOnConfirm: false,
+      inputPlaceholder: "Enter URL to load"
+    },
+    function(inputValue){
+      if (inputValue === false) return false;
+
+      if (inputValue === "") {
+        swal.showInputError("You must enter a URL to load.");
+        return false
+      }
+      swal({title:"Loading Resource", text:"Loading response from " + inputValue,  success:true,timer:2000});
+      httpGetAsync(inputValue,function onSuccess(data){i.value=data;setTimeout(render(),3000)},function onFailure(){swal("Oops!","Failed to load resouce at " + inputValue,"error")})
+    });
+}
+
+//orange flash for the div button icons at the top bar
+function clickEffect(div){
+  if (!warned){div.style="color:tomato;";}
+}
+function clickUp(div){
+  if (!warned){div.style=""};
+}
+
+function downloadWrapper(){
+  swal({
+    title: "Save HTML file",
+    text: "Name your file",
+    type: "input",
+    showCancelButton: true,
+    closeOnConfirm: false,
+    inputPlaceholder: "filename.html"
+  },
+  function(inputValue){
+    if (inputValue === false) return false;
+
+    if (inputValue === "") {
+      swal.showInputError("You must enter a filename");
+      return false
+    }
+    else{
+      if (!inputValue.includes(".html")){
+        inputValue += ".html";
+      }
+    }
+    swal({title:"Downloading...", text:"Your browser should download your file shortly" + inputValue,  success:true,timer:2000});
+    download(inputValue,document.getElementById('input').value)
+  });
+}
+
+function helpMenu(){
+  swal("Helpmeplz what does this page do??","This is a simple live HTML/JS code visualizer.\n\n Press the share (link) btutton to get a shareable link to your code!\n\nView Full Window redirects to a new page displaying your code without the editor or other elements.\n\nThis is an experimental code editor, and you use it at your own risk. I am not responsible if you lose data. But feel free to report bugs! Tweet them @ravbug on twitter.");
+}
+
+function redirect(){
+  var link = generateEmbed(i.value);
+
+  window.open("https://ravbuganimations.com/textrender.html?b=1&t="+link);
+}
+
+slider.oninput = function(){
+  document.getElementById("editorWidth").style.width = this.value + "%";
+}
+
+//adjusts the fontsize and the line #s div if necessary
+function changeFont(newSize){
+  document.getElementById("lineNums").style.fontSize = newSize + "px";
+  i.style.fontSize = newSize + "px";
+}
+
+//synchronous scrolling between line numbers and code div
+var s1 = i;
+var s2 = document.getElementById('lineNums');
+
+function select_scroll_1(e) { s2.scrollTop = s1.scrollTop; }
+
+//tab to indent
+s1.addEventListener('scroll', select_scroll_1, false);
+enableTab("input");
+
+//prompt for unsaved
+window.onbeforeunload = function(){return true;}
+
+</script>
