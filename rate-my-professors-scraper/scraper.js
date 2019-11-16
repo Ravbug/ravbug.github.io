@@ -108,10 +108,19 @@ async function processURL(url,school,classname){
         let dates = dummy.getElementsByClassName("date")
         let newest = new Date(0);
         for (let date of dates){
-            let d = new Date(date.innerText);
+            //get the class the date is associated with
+            let parent = date.parentElement.parentElement;
+            let cl = parent.querySelector(".class").getElementsByClassName("name")[0]
+                    .getElementsByClassName("response")[0].innerText;
+            
+            //if the class is correct
+            if (cl.toLowerCase().includes(classname.toLowerCase())){
+                //compare dates
+                let d = new Date(date.innerText);
 
-            if (d > newest){
-                newest = d;
+                if (d > newest){
+                    newest = d;
+                }
             }
         }
         summary["Most_Recent_Review"] = newest.toLocaleDateString()
