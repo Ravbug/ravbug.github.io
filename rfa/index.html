@@ -1,0 +1,215 @@
+<html>
+<head>
+<title>Ravbug's Funetik Alphabet</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<script src="../sweetalert.min.js"></script>
+<meta charset="utf-8">
+<meta name="description" content="A consistent spelling for English. (Ä kunsistunt speling for Inglish) ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    article{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap:5px;
+    }
+    .jumbotron{
+        margin-bottom:0px;
+    }
+    textarea{
+        resize:none;
+        height:200px;
+    }
+    #output{
+        height:200px;   
+        overflow:scroll;
+    }
+    err{
+        color:red;
+    }
+</style>
+
+<body>
+    <div class="jumbotron" style="background-color:#0C5C98 ">
+        <div class="container">
+            <span style="color:white;font-size:40">Ravbug's Funetik Alphabet</span>
+            <p style="color:white">A consistent spelling for English (satire)</p>
+        </div>
+    </div>
+    <div style="float:center;margin:auto;padding:20px;">
+        <article>
+            <div>
+                <h3>Regular English</h3>
+                <textarea id=input class="form-control" onkeyup="run()" placeholder="Type or paste English text here. Words highlighted in red could not be translated."></textarea>
+            </div>
+            <div>
+                <article style="grid-template-columns: 1fr 100px">
+                    <h3>RFA English</h3><button onclick="onCopy()" class="btn btn-primary">Copy Text</button>
+                </article>
+                <div id=output class="breadcrumb">Tïp or päst ingglish tekst hër. Werdz hïlïtid in <err>red</err> küd not bë tranzlätud.</div>
+            </div>
+        </article>
+        
+        <br>
+        <article style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));">
+            <div class="breadcrumb">
+                <h3>What is RFA?</h3>
+                English is an incredibly inconsistent language, especially when it comes to spelling. 
+                The inconsistency stems mainly from the language's tendency to borrow words from other languages,
+                and then Englishify their spellings (or not!). <br><br>
+
+                Well we can't have that, can we! This tool proposes a consistent, phonetic spelling for English.
+                After all, if the Germans could do it, so can we!<br><br>
+
+                The table to the right (or below, for mobile users) shows the complete symbol map of the new spelling
+                system. English has 26 letters, but there are 84 (counting lexical stress) possible sounds! 
+                Since many of the sounds are very similar, I condensed the characterset by using the same
+                character for all the lexical stress variants. If a word turns <err>red</err>, it means
+                the tool does not know the pronounciation for that word, so it did not translate it. <br><br> 
+
+                But what about homophones or homonyms? English is kind of garbage that way, and this tool cannot rectify
+                this inherent English flaw without fancy AI that wouldn't run well the browser. <br><br>
+
+                Carnegie Mellon University created and is currently maintaining a large pronounciation dictionary, which 
+                this tool uses underneath. You can find out more about the 
+                <a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict">CMU Pronounciation Dictionary</a> here. 
+                <br><br>
+
+                In addition, this tool has some fun ECMAScript6 features, namely running the "translation" on a background 
+                thread via <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">WebWorkers</a>. 
+                It shouldn't (hopefully) lag your browser when processing a lot of text. However, you will need a <a href="https://caniuse.com/#feat=webworkers">modern browser</a>
+                to use this tool.
+                <br><br>
+                If it wasn't obvious, <b>this is satire.</b> This spelling system looks like the Norwegian and German languages had a 
+                child and raised it in the southern United States.
+
+            </div>
+            <div>
+                <h3>Symbol mapping</h3>
+                Assumes American pronounciation.
+                <table id="mapping" style="width:200px">
+                    <tr>
+                        <td>Symbol</td>
+                        <td>Sound</td>
+                        <td>Example</td>
+                    </tr>
+                </table>
+                <none id="removed"></none>  <br>     
+                <none id="added"></none>    <br>
+                <none id="total"></none>
+            </div>
+        </article>
+    </div>
+</body>
+
+<script src="cmu-symbols.js"></script>
+<script src="examples.js"></script>
+<script>
+    //check that browser is supported
+    if (!window.Worker){
+        swal("Your browser is too old!","This page relies on newer web techologies.\nYou must update your browser to use this tool.","error");
+    }
+
+    {   //statistics
+        const alphabet = new Set("abcdefghijklmnopqrstuvwxyz".split(''));
+
+        //unique letters in RFA
+        rfa_s = new Set(Object.values(symbols));
+        
+        //calculate removed letters
+        let removed = new Set([...alphabet].filter(x => !rfa_s.has(x)));
+        document.getElementById('removed').innerHTML = "Letters removed: " + Array.from(removed).join(' ');
+
+        //calculate added letters
+        let added = new Set([...rfa_s].filter(x => !alphabet.has(x) && !x.match(/[a-z]/i)));
+        document.getElementById('added').innerHTML = "Letters added: " + Array.from(added).join(' ');
+
+        //calculate total letters
+        document.getElementById('total').innerHTML = "Total letters: " + (alphabet.size + added.size - removed.size);
+
+        //mapping Table
+        let table = document.getElementById('mapping');
+        
+        let html_add = [];
+        let rfa_a = Array.from(rfa_s);
+        for (let i in rfa_a){
+            let letter = rfa_a[i];
+            html_add.push(`<tr><td>${letter}</td><td>${examples[i][0]}</td><td>${examples[i][1]}</td></tr>`);
+        }
+        table.innerHTML += html_add.join('');
+    }
+
+    var worker = new Worker('worker.js');
+
+    worker.onmessage = function(event){
+        let keys = event.data[0];
+        for (let i in keys){
+            if (!event.data[1][i]){
+                keys[i] = ['<err>',keys[i],'</err>'].join('');
+            }
+        }
+        let str = keys.join('');
+        //fix errors 
+        str=str.replace(/<err> <<\/err><err> BR<\/err><err> ><\/err>/gm,'<br>'); //fix linebreaks
+        str=str.replace(/\( /g,'(');    // ( 1,2,3) --> (1,2,3)
+        str=str.replace(/' es/g,"'s");  //format' es --> format's
+        str = sentenceCase(str.trim(),true);
+        //capitalize the first letter
+        str = str.charAt(0).toUpperCase() + str.slice(1)
+
+        document.getElementById('output').innerHTML = str;
+    }; 
+
+    //invoke translation
+    function run(){
+        worker.postMessage(document.getElementById('input').value);
+    }   
+
+    function onCopy(){
+        //reuse the input textarea as the copy object
+        let c = document.getElementById('input');
+        let oldValue = c.value;
+        c.value = document.getElementById('output').innerHTML.replace(/<[^>]*>/gm,'');
+        copy2(c,function(str){
+            swal("Text copied!",str,"success");
+        },function(err){
+            swal("Copy failed","Check that there is text to copy.","error");
+        });
+        c.value=oldValue;
+        c.setSelectionRange(0,0);
+    }
+
+    /*
+    Copy an element
+    */
+    function copy2(object,callback_success,callback_failed){
+        object.select();
+        object.setSelectionRange(0,object.value.length);
+        var textToCopy=object.value;
+        var success = document.execCommand('copy');
+
+        if (!success){
+        callback_failed(textToCopy);
+        }
+        else{
+            if (textToCopy.length > 100){
+                textToCopy = textToCopy.substring(0,50) + " [...] " + textToCopy.substring(textToCopy.length-50);
+            }
+        callback_success(textToCopy);
+        }
+        //window.getSelection().removeAllRanges();
+    }
+
+    //https://stackoverflow.com/questions/40669216/capitalize-words-after-each-dot-starting-of-a-string
+    //modified to support more punctuation characters
+    function sentenceCase(input, lowercaseBefore) {
+        input = ( input === undefined || input === null ) ? '' : input;
+        if (lowercaseBefore) { input = input.toLowerCase(); }
+        return input.toString().replace( /(^|[\.\!\?] *)([a-z])/g, function(match, separator, char) {
+            return separator + char.toUpperCase();
+        });
+}
+    
+</script>
