@@ -1,0 +1,91 @@
+<head>
+    <title>RateMyProfessors Scraper</title>
+    <meta name="description" content="Easily get teacher ratings for any university and class!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+</head>
+
+<h2>Rate My Professors Scraper</h2>
+<input id="school" placeholder="Full Univeristy Name" value="University of Michigan"></input>
+<input id="keywords" placeholder="short school name, etc" value="umich"></input>
+<input id="classname" placeholder="class name" value="math 116"></input>
+<button onclick="run()">Search</button>
+<progress id=prog value=0 min=0 max=100></progress>
+
+<pre id="log"></pre>
+
+<table id="results">
+</table>
+
+<script>
+
+let results = document.getElementById("results");
+let progress = document.getElementById("prog");
+let school_i = document.getElementById("school");
+let keywords_i = document.getElementById("keywords");
+let classname_i = document.getElementById("classname");
+
+
+// getting around cross-origin blocking, using a forwarder
+const cors = "https://cors-anywhere.herokuapp.com/";
+
+//called on button click
+async function run(){
+    let school = school_i.value;
+    let classname = classname_i.value;
+    let keywords = keywords_i.value.split(' ');
+    keywords.push(classname);
+    classname = classname.replace(/ /g,'');
+
+    let urls = await loadURLs([keywords.join(' '),"rate my professor"]);
+
+    progress.max = urls.length;
+    progress.value = 0;
+    //Load each URL
+    let summaries = [];
+    for (let url of urls){
+        let summary = await processURL(url,school,classname).catch(()=>{});
+        if (summary){
+            summary["Name"] = ["<a href='" +url,"'target='_blank'>",summary["Name"],"</a>"].join('');
+            summaries.push(summary);
+        }
+        progress.value++;
+    }
+
+    //is there data to display
+    if (summaries.length == 0){
+        results.innerHTML = "<th>No data to display</th>";
+        return;
+    }
+
+    //prepare table headers
+    {
+        let keys = Object.keys(summaries[0]);
+        let headers = [];
+        for (let k of keys){
+            headers.push(k.replace(/_/g,' '));
+        }
+        results.innerHTML = "<th>" + headers.join("</th><th>") + "</th>";
+    }
+
+    //sort by highest rated
+    summaries.sort(function(a,b){
+        let val = b["Grade"] - a["Grade"];
+        if (val == 0){
+           return b["Ratings"] - a["Ratings"]; 
+        }
+        return val;
+    });
+
+    //display data
+    for (let summary of summaries){
+        let stat_t = [];
+            let keys = Object.keys(summary);
+            for (let stat of keys){
+                stat_t.push(summary[stat])
+            }
+            results.innerHTML += "<td>" + stat_t.join("</td><td>") + "</td>";
+    }
+}
+</script>
+<script src="scraper.js"></script>
