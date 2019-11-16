@@ -2,6 +2,7 @@
     float:center;
     margin:auto;
     padding:20px;
+    border-radius: 0px;
 }
 /*
 Fixes header jumbotron styling
@@ -11,12 +12,14 @@ Fixes header jumbotron styling
     color: white;
     border-radius:0px;
     margin-bottom:0px;
+    padding-top:30px;
+    padding-bottom:30px;
 }
-.header > span{
+.header span{
     font-size:40px;
 }
 @media only screen and (max-width: 550px) {
-    .header > span{
+    .header span{
         font-size:30px;
     }
 }

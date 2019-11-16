@@ -7,17 +7,112 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.css">
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
+
 <style>
-    
+    .card{
+        box-shadow:2px 2px 5px #CCC;
+        padding: 20px;
+        border-radius: 0px;
+    }
+    article{
+        gap:10px;
+    }
+    .attention{
+       font-size:20; 
+    }
+    .header-img{
+        width:100px;
+        margin:15px;
+    }
+    @media only screen and (max-width: 550px) {
+        .header-img{
+            width:75px;
+        }
+    }
+    .card-img{
+        float:right;
+        width:100px;
+    }
 </style>
+
 <div class="jumbotron header">
-    <span>Title line</span>
-    <p>Subtitle line</p>
+    <table style="color:white">
+        <tr>
+            <td>
+                <img src="https://avatars2.githubusercontent.com/u/22283943" class="header-img">
+            </td>
+            <td>
+                <span>Ravbug's Projects</span>
+                <p>View on <a href="https://github.com/ravbug" style="color:rgb(57, 255, 2)">GitHub!</a></p>
+            </td>
+        </tr>
+    </table>
 </div>
-<div class=main>
-    Test
-    <a href="rfa/">RFA link</a>
-    <br>
-    <a href="rate-my-professors-scraper/">Rate My Professors Scraper</a>
+
+<div class="main">
+    <article id="article">
+        
+    </article>
 </div>
 </html>
+
+<script>
+{
+    /* Contents of each card
+     * Title: top text
+     * img: image URL (blank for no image)
+     * tag: tagline text
+     * ref: url to page
+     */
+    const data = [
+        {
+            title:"Rate My Professors Scraper",
+            img:"https://i.pinimg.com/originals/70/cc/6a/70cc6a33636de0254df05634f5a1519f.png",
+            tag:"Quickly get a list of the best professors for your classes",
+            ref:"rate-my-professors-scraper/",
+        },
+        {
+            title:"AutoResponder",
+            img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
+            tag:"A customizable, regex-powered responder bot for your Discord server",
+            ref:"https://autoresponder.glitch.me",
+        },
+        {
+            title:"Cleverbug",
+            img:"https://images-ext-1.discordapp.net/external/FZ6XbC9DP_MCNKIog6TaBwbnO0qIW7mCAd7KGrUGkPs/%3Fsize%3D256/https/cdn.discordapp.com/avatars/374793801455108097/34cd9178a4f93f3dfb14fa55a0f3f74f.png",
+            tag:"A fun chatbot for your Discord server",
+            ref:"https://cleverbug.glitch.me"
+        },
+        {
+            title:"Ravbug's Funetik Alphabet",
+            img:"",
+            tag:"What if English spelling was phonetic?",
+            ref:"rfa/"
+        },
+        {
+            title:"Tanks Unreal",
+            tag:"unity Tanks! sample rewritten in Unreal C++",
+            ref:"https://github.com/ravbug/TanksUnreal",
+            img:""
+        }
+    ]
+
+    let components = []
+    for (let card of data){
+        //construct card and add to array
+       components.push(`
+       <div class="card">
+            <p>
+                <img class="card-img" src="${card.img}">
+                <a class=attention href="${card.ref}">${card.title}</a>
+                <br>
+                ${card.tag}   
+            </p>
+        </div>
+       `);
+    }
+    document.getElementById("article").innerHTML = components.join('');
+}
+//block scope allows releasing excess memory allocated above
+
+</script>
