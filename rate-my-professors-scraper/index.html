@@ -2,21 +2,54 @@
     <title>RateMyProfessors Scraper</title>
     <meta name="description" content="Easily get teacher ratings for any university and class!">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet.css">
     <meta charset="UTF-8">
 </head>
 
-<h2>Rate My Professors Scraper</h2>
-<input id="school" placeholder="Full Univeristy Name" value="University of Michigan"></input>
-<input id="keywords" placeholder="short school name, etc" value="umich"></input>
-<input id="classname" placeholder="class name" value="math 116"></input>
-<button onclick="run()">Search</button>
-<progress id=prog value=0 min=0 max=100></progress>
+<style>
+    table{
+        width:100%
+    }
+    td{
+        padding:5px;
+    }
+    th{
+      background-color:#EEE;  
+      padding:13px;
+    }
+</style>
 
-<pre id="log"></pre>
+<div class=main>
+    <h2>Rate My Professors Scraper</h2>
+    <div class="input-group">
+            <span class="input-group-addon">Full University Name</span>
+            <input class=form-control id="school" placeholder="Full Univeristy Name" value="University of Michigan"></input>
+    </div>
+    <div class="input-group">
+            <span class="input-group-addon">Short school name</span>
+            <input class=form-control id="keywords" placeholder="short school name, etc" value="umich"></input>
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon">Class name</span>
+        <input class=form-control id="classname" placeholder="class name" value="math 116"></input>
+    </div>
+    <table>
+        <tr>
+            <td style="width:100px">
+                <button style="width:100%" class="btn btn-primary" onclick="run()">Search</button>
+            </td>
+            <td>
+                <progress style="width:100%" id=prog value=0 min=0 max=100></progress>
+            </td>
+        </tr>
+    </table>
+    
+    <br>
 
-<table id="results">
-</table>
-
+    <table id="results">
+    </table>
+</div>
 <script>
 
 let results = document.getElementById("results");
