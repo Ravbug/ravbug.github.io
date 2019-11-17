@@ -16,11 +16,6 @@
 </head>
 
 <style>
-    .card{
-        box-shadow:2px 2px 5px #CCC;
-        padding: 20px;
-        border-radius: 0px;
-    }
     article{
         gap:10px;
     }
@@ -46,6 +41,9 @@
     .header{
         margin-bottom:0px;
     }
+    .header-tag-img{
+        width:30px;
+    }
 </style>
 
 <div class="jumbotron header">
@@ -56,7 +54,11 @@
             </td>
             <td>
                 <span>Ravbug's Projects</span>
-                <p>View on <a href="https://github.com/ravbug" style="color:rgb(57, 255, 2)">GitHub!</a></p>
+                <p>
+                    <a href="https://github.com/ravbug"><img class="header-tag-img" src="github.svg"></a> 
+                    <a href="https://youtube.com/c/ravbuganimations"><img class="header-tag-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTube_play_buttom_icon_%282013-2017%29.svg"></a> 
+                    <a href="https://twitter.com/ravbug"><img class="header-tag-img" src="https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg"></a>
+                </p>
             </td>
         </tr>
     </table>
@@ -78,6 +80,24 @@
      * ref: url to page
      */
     const data = [
+        {
+            title:"Open Source Software",
+            img:"github.svg",
+            tag:"View my public open source software repositories",
+            ref:"opensource/",
+        },
+        {
+            title:"Minecraft Sounds Extractor",
+            img:"https://i.imgur.com/RIzSrbc.png",
+            tag:"Extract the audio files from Minecraft Java Edition",
+            ref:"https://github.com/Ravbug/MCSoundsExtractorCPP",
+        },
+        {
+            title:"Desmos Graphs",
+            img:"https://s3.amazonaws.com/desmos/img/calc_thumb.png",
+            tag:"Various fun thought experiments I've conducted with math",
+            ref:"math/",
+        },
         {
             title:"Rate My Professors Scraper",
             img:"https://i.pinimg.com/originals/70/cc/6a/70cc6a33636de0254df05634f5a1519f.png",

@@ -30,3 +30,9 @@ article{
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap:5px;
 }
+
+.card{
+    box-shadow:2px 2px 5px #CCC;
+    padding: 20px;
+    border-radius: 0px;
+}
