@@ -1,0 +1,120 @@
+<html>
+<head>
+  <title>Discord Block Letter Translator</title>
+  <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+  <link href="../magic-check.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../sweetalert.css">
+  <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+</head>
+<style>
+  .header{
+    margin-bottom:15px;
+  }
+</style>
+<body>
+<div id="jumbotron" class="jumbotron header">
+		<span>Discord Block Letter Translator</span>
+		<p>Convert text into block letters for Discord!</p>
+</div>
+
+<!-- The actual content -->
+<div style=" float: center; width: 100%; background-color: ffffff;">
+	<!-- Inset Content Div -->
+	<div style="margin: auto; float: center; width: 95%;">
+    <table style="width:100%"><tr><td>
+        <H3> Input </h3></td>
+          <td><button class="btn btn-primary" onclick="generate();" style="float:right;"><span style="font-size:20">Generate Code!</span></button>
+        </td></tr>
+    </table>
+
+    <textarea id="input" onkeyup="generate()" class="form-control" style="width:100%;height:300px;" placeholder="Type or paste text here..."></textarea>
+    <br>
+    <input type=checkbox checked id="include" class="magic-checkbox" onclick="update();"/><label for="include"> Include unknown symbols</label>
+    <table style="width:100%"><tr><td>
+        <H3> Output </h3></td>
+          <td><button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span style="font-size:20">Copy Code!</span></button>
+        </td></tr>
+    </table>
+		<textarea id="output" readonly class="form-control" style="width:100%;height:300px;"></textarea>
+	</div>
+</div>
+
+<br>
+<!-- The info div -->
+<div style="width:95%; float:center; margin: auto;">
+	<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+		<strong>Helpmeplz what does this page do??</strong>
+		<br>This webpage transforms plain text into a paste-able code for the Discord chat interface that allows you to convey your message in large block letters.
+		<br>This page supports all Alphanumeric characters as well as some other symbols.
+		<br>
+
+	</div>
+</div>
+
+</body>
+
+<script>
+//set up variables
+var inputField = document.getElementById("input");
+var outputField = document.getElementById("output");
+var includeUnknownSymbols = document.getElementById("include").checked;
+//numbers dictionary
+var numbercodes = [":zero: ",":one: ",":two: ",":three: ",":four: ",":five: ",":six: ",":seven: ",":eight: ",":nine: "];
+//misc characters dictionary
+var symbolcodes = [[">",":arrow_right: "],["<",":arrow_left: "],["^",":arrow_up: "],["!",":exclamation: "],["?",":question: "],
+                    ["+",":heavy_plus_sign: "],["-",":heavy_minus_sign: "],["*",":heavy_multiplication_x: "],["$",":heavy_dollar_sign: "]];
+//the main routine called when the button is clicked
+function generate(){
+  var text = inputField.value;
+  var outputText = "";
+  for (var i = 0; i < text.length;i++){
+      var character = text.charAt(i);
+      //is this an a-z character?
+      if ((character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z')){
+        outputText += ":regional_indicator_" + character.toLowerCase() + ": ";
+      }
+      //is this a space?
+      else if(character == ' '){
+          outputText += "     ";
+      }
+      //is this a number?
+      else if (character >='0' && character <= '9'){
+        outputText += numbercodes[parseInt(character)];
+      }
+      //is this some other misc symbol that the program knows about?
+      else{
+        var found = false;
+        for (var x = 0; x < symbolcodes.length; x++){
+          if (symbolcodes[x][0] == character){
+            outputText += symbolcodes[x][1];
+            found = true;
+          }
+        }
+        //if the character was not found, should it be added anyways?
+        if (!found){
+          if (includeUnknownSymbols) outputText += character;
+          //otherwise ignore it
+        }
+      }
+  }
+  outputField.value = outputText;
+}
+function update(){
+  includeUnknownSymbols = document.getElementById("include").checked;
+  generate();
+}
+
+function copySuccess(textToCopy){
+  sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
+}
+function copyFailed(){
+  swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
+}
+//get a window listener for responsive sizing of input/output fields
+window.addEventListener('resize', resize);
+</script>
+<script src="../sweetalert.min.js" ></script>
+<script src="../utilities.js"></script>
+</html>

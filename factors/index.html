@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Factor Finder</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<link href="../magic-check.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+</head>
+
+<body>
+<div class="jumbotron header">
+		<h1 style="color:white">Factor Finder</h1>
+		<p style="color:white">Find integer factors of numbers</p>
+</div>
+
+<!-- The actual content -->
+<div style=" float: center; width: 100%; background-color: ffffff;">
+	<!--  The "table" div containing both the output and the settings -->
+	<div style="margin: auto; float: center; width: 95%;">
+    <div class="input-group">
+      <span class="input-group-addon">Numbers</span>
+      <input id=input class="form-control" style="width:100%" placeholder="Enter a number, or multiple numbers separated with commas" />
+      <span class="input-group-btn">
+          <button class="btn btn-success" type="button" onClick="run()">Go!</button>
+      </span>
+    </div>
+
+    <p id=output></p>
+
+	</div>
+</div>
+<br>
+<!-- The info div -->
+<div style="width:95%; float:center; margin: auto;">
+	<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+		<strong> What does this page do?</strong>
+		<br>This webpage finds the integer factors of any number.
+		<br>To find the common factors between numbers, enter them separated by commas. (example: 5, 10, 15)
+
+	</div>
+</div>
+
+</body>
+<script>
+var input = document.getElementById("input");
+var output = document.getElementById("output");
+
+function run(){
+  output.innerHTML = "";
+  var inputstring = input.value.toString();
+  inputstring = inputstring.replace(/\s+/g, '');
+  var split = inputstring.split(',');
+  var allFactors = [];
+  for (var i = 0; i < split.length; i++){
+    var factors = getFactors(split[i]);
+    allFactors.push(factors);
+    output.innerHTML += "<br><strong> Factors of " + split[i] + ":</strong> " + factors.toString().replace(/,/g, ', ') + "<br>";
+  }
+
+  if (inputstring.includes(",")){
+    var dupes = dupechecker(allFactors);
+    output.innerHTML += "<br><strong> Common Factors: </strong>" + dupes.toString().replace(/,/g, ', ') + "<br><br><strong> Greatest Common Factor = </strong> " + dupes[dupes.length-1];
+  }
+}
+
+function dupechecker(arrayOfArrays){
+  var result = arrayOfArrays.shift().filter(function(v) {
+      return arrayOfArrays.every(function(a){
+        return a.indexOf(v) !== -1;
+      });
+  });
+  return result;
+}
+
+function getFactors(num){
+  var factors = [];
+  for (var i = 0; i <= num/2; i++){
+    var res = num / i;
+    if (Number.isInteger(res)){
+      factors.push(i);
+    }
+  }
+  factors.push(num);
+  return factors;
+}
+
+</script>
+<script src="../sweetalert.min.js" ></script>
+</html>

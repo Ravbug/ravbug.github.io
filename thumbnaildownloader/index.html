@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>Thumbnail Downloader</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link href="../magic-check.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div class="jumbotron header">
+	<div class="container">
+		<span>YouTube Thumbnail Downloader</span>
+		<p>An easy utility to download YouTube video thumbnails!</p>
+	</div>
+</div>
+
+<div style="width:95%; float:center; margin: auto;">
+	<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+		<strong>How to use:</strong>
+		<br><strong>1)</strong> Enter a link to a YouTube video
+		<br><strong>2)</strong> Press  <strong> Get Thumbnails </strong>
+		<br><strong>3)</strong> Right-click an image you want to save and press "Save Image"
+
+	</div>
+	<table style="width:100%;">
+		<tr><td><div class="input-group">
+			  <span class="input-group-addon"><span style="font-size:20">Enter a video link</span></span>
+ 			 <input id="linkField" type="text" class="form-control" style="height:55px; width:98%" placeholder="https://www.youtube.com/watch?v=CtSxIj-nFCY"></input>
+			</div></td>
+
+		<td style="width:100px;"><button class="btn btn-primary" onclick="getThumbs();"><span style="font-size:28">Get Thumbnails!</span></button></td></tr>
+	</table>
+
+	<script>
+	//pick a random url of one of my vids to pre-seed it with
+	var urls = ["https://www.youtube.com/watch?v=3NLUHFFBXEk&index=4&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK","https://www.youtube.com/watch?v=CtSxIj-nFCY&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=1",
+			"https://www.youtube.com/watch?v=MXF2z6EU6XE&index=2&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK","https://www.youtube.com/watch?v=K7AS9jfPtEQ&index=3&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK",
+					"https://www.youtube.com/watch?v=DXngXkhEMlQ&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=5","https://www.youtube.com/watch?v=YbY2DNJ_XFs&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=6",
+							"https://www.youtube.com/watch?v=h6nBMKI2jKY&index=8&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK"];
+
+
+	var item = urls[Math.floor(Math.random()*urls.length)];
+	document.getElementById("linkField").value = item;
+	</script>
+
+	<div>
+	<br>
+		<!-- Change the display tag to "" to show the alert view -->
+		<div id="errors" class="alert alert-danger" role="alert" style="display:none">
+  			<strong>Whoops!</strong> Link is invalid, please check it and try again.
+		</div>
+		<div id="404s" class="alert alert-danger" role="alert" style="display:none">
+  			<strong>404!</strong> Could not access the thumbnails for that URL, please check the link and try again.
+		</div>
+		<div id="success" class="alert alert-success" role="alert" style="display:none">
+  			<strong>Success!</strong> Right-click an image, then press "Save as" to save it.
+		</div>
+
+		<div class="breadcrumb" id="output" style="display:none">
+			<div class="container" align=center style="float:center;">
+				<h4>Three Small Thumbnails (120x90)</h4>
+				<table style="width:100%"><tr>
+					<td style="text-align:center;"><img id="small1" src="" style="width:120px;height:90px;"></td>
+					<td style="text-align:center;"><img id="small2" src="" style="width:120px;height:90px;"></td>
+					<td style="text-align:center;"><img id="small3" src="" style="width:120px;height:90px;"></td>
+					</table>
+				<h4>Low Quality (320x180)</h4>
+				<img id="low" src="" style="width:320px;height:180px;">
+				<br>
+				<h4>Medium Quality (480x360)</h4>
+				<img id="med" src="" style="width:480px;height:360px;">
+				<!-- Create a </td><td> right here if window large enough -->
+				<div id="resize"></div>
+				<h4>High Quality (480x360)</h4>
+				<img id="high" src="" style="width:480px;height:360px;">
+				<br>
+				<h4>Highest Quality</h4>
+				<img id="highest" src="" style="width:720px;height:405px;">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+<script>
+	var threshold = 300;
+	resize();
+	function getThumbs(){
+		resize();
+		var link = document.getElementById("linkField").value;
+		//reset hidden elements
+		document.getElementById("errors").style.display="none";
+		document.getElementById("success").style.display="none";
+		document.getElementById("output").style.display="none";
+		document.getElementById("404s").style.display="none";
+
+
+		if (isValid(link)){
+
+			//show success and output elements
+			document.getElementById("success").style.display="";
+			document.getElementById("output").style.display="";
+
+			//get the id of the video
+			var isPresent = link.indexOf("&",40);
+			var vidID=""
+			if (isPresent < 0){
+				vidID = link.slice(link.indexOf("?v=")+3);
+			}
+			else{
+			 	vidID = link.slice(link.indexOf("?v=")+3,link.indexOf("&",40));
+			}
+			//add the image link onto it
+			var newLink = "http://img.youtube.com/vi/" + vidID + "/"
+			var testImage = newLink + "mqdefault.jpg";
+			//make sure the image actually exists
+			if (false){
+				document.getElementById("404s").style.display="";
+				document.getElementById("success").style.display="none";
+				document.getElementById("output").style.display="none";
+			}
+			else{
+				//set tiniest image elements
+				document.getElementById("small1").src = newLink + "1.jpg";
+				document.getElementById("small2").src = newLink + "2.jpg";
+				document.getElementById("small3").src = newLink + "3.jpg";
+
+				//set other image elements
+				document.getElementById("low").src = newLink + "mqdefault.jpg";
+				document.getElementById("med").src = newLink + "0.jpg";
+				document.getElementById("high").src = newLink + "hqdefault.jpg";
+				document.getElementById("highest").src = newLink + "maxresdefault.jpg";
+			}
+		}
+		else{
+			document.getElementById("errors").style.display="";
+		}
+
+	}
+	function isValid(link){
+		if (! link.includes("youtube.com/watch?v="))
+			return false;
+		return true;
+	}
+	function resize(){
+		//if viewer size passes a certain threshold make all elements draw smaller using an equation
+		if (window.innerWidth < 800){
+			document.getElementById("med").style.width = window.innerWidth - 180;
+			document.getElementById("med").style.height = (window.innerWidth - 180) / (4/3);
+			document.getElementById("high").style.width = window.innerWidth - 180;
+			document.getElementById("high").style.height = (window.innerWidth - 180) / (4/3);
+
+			document.getElementById("highest").style.width = window.innerWidth - 120;
+			document.getElementById("highest").style.height = (window.innerWidth - 120) / (16/9);
+		}
+		else{
+			//set elements to normal sizes
+			document.getElementById("med").style.width = 480;
+			document.getElementById("med").style.height = 360;
+			document.getElementById("high").style.width = 480;
+			document.getElementById("high").style.height = 360;
+			document.getElementById("highest").style.width = 720;
+			document.getElementById("highest").style.height = 405;
+		}
+	}
+	function imgError(image) {
+	    image.onerror = "";
+	    console.log("404!");
+	    return true;
+	}
+	window.addEventListener('resize', resize);
+</script>
+</html>

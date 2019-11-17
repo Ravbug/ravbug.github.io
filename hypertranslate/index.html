@@ -1,0 +1,205 @@
+<html>
+<style>
+
+</style>
+<head>
+<title>Hypertranslate - Google Translate Fun</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<link href="../magic-check.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+</head>
+
+<body id=main>
+<div id="jumbotron" class="jumbotron header">
+		<span>Hypertranslate</span>
+		<p>Google Translate fun!</p>
+</div>
+
+<!-- The actual content -->
+<div style="height: 500px;float: center; width: 100%;">
+	<!-- Inset Content Div -->
+	<div style="margin: auto; float: center; width: 95%;">
+
+    <article>
+      <div>
+        <span id=header1 style="font-size:20;font-weight:bold">Input</span>
+		    <textarea autofocus id="input" class="form-control" style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
+      </div>
+      <div>
+      <span id=header2 style="font-size:20;font-weight:bold">Translated</span>
+		    <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+      </div>
+    </article>
+
+    <!-- the progres indicator -->
+    <div id=progressdiv class="progress" style="display:none">
+    <div id=progress class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>
+    </div>
+    <!-- where to output the language  list -->
+    <p id=langStack></p>
+
+    <!-- The control buttons at the bottom -->
+    <br>
+    <table border=0 style="width:100%"><tr><td style="width:200px">
+        <button class="btn btn-primary" onclick="trans_interface();" style="float:left;"><span style="font-size:20">Translate!</span></button>
+      </td><td style="width:200px">
+      <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span style="font-size:20">Copy!</span></button>
+  </td></table>
+  <article>
+        <div class="input-group" style="min-width:200px;float:left;margin:auto">
+          <span class="input-group-addon">Start Language</span>
+          <input type="text" id=lang1 class="form-control" value=en>
+        </div>
+        <div class="input-group" style="min-width:200px;float:right;margin:auto">
+          <span class="input-group-addon">End Language</span>
+          <input type="text" id=lang2 class="form-control" value="en">
+        </div>
+      <div class="input-group" style="min-width:300px;float:center;margin:auto">
+        <span class="input-group-addon">Translate</span>
+        <input type="number" id=count class="form-control" value=4>
+        <span class="input-group-addon">times</span>
+      </div>
+    </article>
+  <br>
+  <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+    <strong>Whoa! What service this sheet does?</strong>
+
+    <br>This webpage takes text in any language, sends it through <a target="_blank" href="https://translate.google.com">Google Translate</a> a bunch of times, and then outputs it in any language.
+    <br>The start and end language boxes only accept language codes from ISO-639-1. Get the list <a target="_blank" href="https://cloud.google.com/translate/docs/languages"> here. </a>
+    <br>If you don't know what language you are pasting in, type "auto" into the start language field.
+    <br><br><strong>Not working?</strong> This webpage circumvents Google's translate API by using their "secret" unprotected call. This is the same call
+    that the Google Translate webpage uses. Google now temporarily bans IP addresses which use their private API too frequently. If this tool hangs, 
+    use a VPN, change which network you are connected to, or try again later. 
+
+  </div>
+	</div>
+</div>
+
+<!-- The info div -->
+<div style="width:95%; float:center; margin: auto;">
+
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="hypertranslate.js"></script>
+<script src=lang.js></script>
+
+<script>
+var inputField = document.getElementById("input");
+var outputField = document.getElementById("output");
+var lang1 = document.getElementById("lang1");
+var lang2 = document.getElementById("lang2");
+var progressdiv = document.getElementById("progressdiv");
+var progressbar = document.getElementById("progress");
+var countField = document.getElementById("count");
+var timeout = null;
+var prevTime = 0;
+var prevdiffs = [];
+var langs = [];
+
+resize();
+
+
+function update(){
+   inputField = document.getElementById("input");
+   outputField = document.getElementById("output");
+   lang1 = document.getElementById("lang1");
+   lang2 = document.getElementById("lang2");
+   progressdiv = document.getElementById("progressdiv");
+   progressbar = document.getElementById("progress");
+  countField = document.getElementById("count");
+}
+
+function trans_interface(){
+  update();
+  langs = [];
+  langs.push(lang1.value);
+  prevdiffs = [];
+
+  prevTime = new Date().getTime()/1000;
+
+  progressbar.className = "progress-bar progress-bar-striped progress-bar-animated";
+  progressbar.style.width="0%";
+  progressdiv.style.display="";
+  outputField.value = "Translating...";
+  clearTimeout(timeout);
+    //call the engine with the UI-specified variables
+    hypertranslate(inputField.value,lang1.value,lang2.value,countField.value,function(msg){
+      sweetAlert("Whoops!",msg + " Please update the settings and retry.","error");
+    },translate_failed,translate_progress,translate_complete);
+}
+
+function translate_failed(){
+  progressbar.className="progress-bar bg-danger"
+  swal("Uh oh!","An unexpected error occurred with the translate service. \n\nThis can happen if you lose your internet connection\n"+
+    "or your input exceeds the HttpRequest CORS length spec \n(aka it is too long). \n\nTry checking your internet connection, and splitting up your input into pieces and translating them separately.","error");
+  outputField.value="Translate Service Error. \n\n Please check your internet connection, and if that doesn't work, shorten the input.";
+}
+
+//called when the engine finishes
+function translate_complete(string){
+  outputField.value = string;
+
+  var langStack = document.getElementById("langStack");
+  langStack.innerHTML = "Languages: " + getLanguageName(lang1.value);
+  //now loop through the list of langs and write to the <p> field.
+  for (var i = 1; i < langs.length; i++){
+    langStack.innerHTML += " ➔ " + getLanguageName(langs[i]);
+  }
+}
+function translate_progress(prog,lang){
+  langs.push(lang);
+
+  progressbar.style.width = prog + "%";
+  //calculate time remaining
+  var timeNow = new Date().getTime() /1000
+  var diff = timeNow - prevTime;
+  prevdiffs.push(diff);
+  var avg = getAverage(prevdiffs);
+  var remaining = parseInt(avg*(100-prog));
+  var min = parseInt(remaining / 60);
+  remaining = parseInt(remaining % 60);
+  outputField.value = "Translating " + countField.value + " times...\n Approx " + min + " min " + remaining + " sec remaining";
+  prevTime = timeNow;
+
+  if (prog >= 100){
+    progressbar.className="progress-bar bg-success"
+    //hide the progress bar again
+  timeout = setTimeout(function(){
+      progressdiv.style.display="none";
+      progressbar.style.width="0%";
+
+    },5000);
+
+  }
+}
+
+function resize(){
+    inputField.style.height = (window.innerHeight-220) / 3;
+    outputField.style.height = (window.innerHeight-220) / 3;
+    document.getElementById("jumbotron").style.padding = window.innerHeight / 20;
+    var width = document.getElementById("main").scrollWidth;
+    var colcount = width / 324;
+    colcount = parseInt(colcount);
+    if (colcount == 1){
+      inputField.style.height = (window.innerHeight)/6;
+      outputField.style.height = (window.innerHeight)/6;
+    }
+}
+
+
+function copySuccess(textToCopy){
+  sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
+}
+function copyFailed(){
+  swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
+}
+
+//get a window listener for responsive sizing of input/output fields
+window.addEventListener('resize', resize);
+</script>
+<script src="../sweetalert.min.js" ></script>

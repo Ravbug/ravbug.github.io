@@ -1,0 +1,201 @@
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+<title>JConsole</title>
+<meta charset="UTF-8">
+<style id=embedStyles>
+    .console {
+        background-color:black;
+        color:white;
+        font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    }
+    .prompt{
+        color:greenyellow;
+        font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;   
+        font-weight:bold;
+    }
+
+    textarea{
+        font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    }
+
+</style>
+
+<!-- Toolbar -->
+<table style="width:100%;height:100%"><tr><td style="height:64px">
+    <div style="margin: auto; float: center; width: 100%;background-color:#ECECEC;">
+        <table cellpadding=10><tr>
+        <td><h2>JConsole</h2>  </td>
+        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
+        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);downloadWrapper();"><i class="fas fa-save"  style="font-size:2em;"></i></div></td>
+       <!-- <td><div id=urlCopyBtn onmousedown="clickEffect(this);" onmouseup="clickUp(this);createShareLink()"><i class="fas fa-link"  style="font-size:2em;"></i></div></td> -->
+        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);clearConsole();"><i class="fas fa-terminal"  style="font-size:2em;"></i></div></td>
+        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);helpMenu();"><i class="fas fa-question-circle"  style="font-size:2em;"></i></div></td>
+        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);stop();"><i class="far fa-stop-circle"  style="font-size:2em;"></i></div></td>
+        <td><button class="btn btn-primary" id=viewFull onclick="runWrapper()" style="float:right;"><span style="font-size:20">Run!</span></button></td>
+        </table>
+    </div>
+</td></tr><tr><td>
+    <!--Main Tables -->
+    <table style="width:100%;height:100%"><tr>
+    <td style="width:60px" id="lineContainer"><textarea disabled class="form-control" style="resize:none;height:100%;text-align:right;overflow:hidden;" id="lineNums" style=""></textarea></td>
+    </td>
+    <td>
+        <textarea class="form-control" spellcheck="false" style="width:100%;height:100%;" id=input onkeyup="lineNumbers()"></textarea>
+    </td><td>
+        <table style="width:100%;height:100%;"><tr><td>
+                <iframe id=output style="width:100%;height:100%"></iframe>
+            </td></tr><tr>
+                <td style="height:20px;">
+                    <form onsubmit="return execCommand2(document.getElementById('cmd').value)">
+                        <input id=cmd autocomplete="off" style="width:100%" class=form-control type="text" onkeyup="cliKey(event)" placeholder="Enter commands to console here, type help() for a command list"></input>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </td></tr></table>
+</td></tr></table>
+
+<script src="../utilities.js"></script>
+<script>
+    var input = document.getElementById('input');
+    var output = document.getElementById('output');
+    var cli = document.getElementById('cmd');
+    var cli_index = 0;
+   
+    var worker = new Worker("exec.js");
+    var cmdStack = [];
+
+    function setup(){
+        print("<style>"+document.getElementById('embedStyles').innerHTML+"</style>");
+        print("<body class=console>")
+        print("<span class=prompt>> ")
+    }
+    setup();
+
+
+    //example text
+    input.value = 'print("no ")\nprintln("u");\nprintln(eval("2+2"))';
+    lineNumbers();
+
+    function cliKey(event){
+        var x = event.which || event.keyCode;
+        if (x == 38){
+            cli_index --;
+            if (cli_index < 0){ cli_index = 0};
+            cli.value = cmdStack[cli_index];
+        }
+        else if (x == 40){
+            cli_index++;
+            if (cli_index >= cmdStack.length){cli_index = cmdStack.length-1;}
+            cli.value = cmdStack[cli_index];
+        }
+    }
+
+    function print(data) {
+        output.srcdoc += data;
+    }
+
+    function printError(data){
+     print("<span style='color:red'><b>" + data + "</b></span>")
+    }
+
+    function run(data,type) {
+        worker.postMessage([data,type,input.value]);
+        worker.onmessage = function(e){
+            print(e.data);
+        }
+    }
+    function runWrapper(){
+        print(" run</span><br>")
+        run(input.value);
+    }
+
+    function lineNumbers(){
+        //update line numbers
+        var numlines = input.value.split(/\r\n|\r|\n/).length;
+        var lineNums = document.getElementById("lineNums");
+        lineNums.value = "";
+        for (var n = 1; n <= numlines; n++){
+            lineNums.value += n + "\n" ;
+        }
+    }
+
+    //the cmd entry field
+    function execCommand2(cmd){
+        cmdStack.push(cmd);
+        cli_index = cmdStack.length;
+        print(cmd + "</span><br>");
+        if (cmd.trim() == "run"){
+            runWrapper();
+        }
+        else if(cmd.trim() == "clear()"){
+            clearConsole();
+        }
+        else if (cmd.trim() == "stop()"){
+            stop();
+        }
+        else{
+            run(cmd,1);
+        }
+        document.getElementById('cmd').value="";
+        return false;
+    }
+
+    //orange flash for the div button icons at the top bar
+    function clickEffect(div){
+        div.style="color:tomato;";
+    }
+    function clickUp(div){
+        div.style="";
+    }
+
+    function clearConsole(){
+        output.srcdoc = "";
+        setup();
+        print(" clear()</span><br>")
+        print("<span class=prompt>> ")
+    }
+
+    function stop(){
+        worker.terminate();
+        printError("<br>Process terminated by user<br>");
+        worker = new Worker("exec.js");
+        print("<span class=prompt>>")
+    }
+
+//for download file
+    function downloadWrapper(){
+  swal({
+    title: "Save JS file",
+    text: "Name your file",
+    type: "input",
+    showCancelButton: true,
+    closeOnConfirm: false,
+    inputPlaceholder: "filename.js"
+  },
+  function(inputValue){
+    if (inputValue === false) return false;
+
+    if (inputValue === "") {
+      swal.showInputError("You must enter a filename");
+      return false
+    }
+    else{
+      if (!inputValue.includes(".js")){
+        inputValue += ".js";
+      }
+    }
+    swal({title:"Downloading...", text:"Your browser should download your file shortly" + inputValue,  success:true,timer:2000});
+    download(inputValue,document.getElementById('input').value)
+  });
+}
+
+//help
+function helpMenu(){
+  swal("Helpmeplz what does this page do??","This is a simple JavaScript code visualizer.\n\n Press the share (link) btutton to get a shareable link to your code!\n\nPress Run to execute your code. >_ button clears the console. You can also type code to execute directly into the field under the console.\n\nI am not responsible if you lose data. But feel free to report bugs! Tweet them @ravbug on twitter.");
+}
+
+enableTab("input");
+</script>
+<script src="../sweetalert.min.js" ></script>

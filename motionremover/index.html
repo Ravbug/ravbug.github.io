@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+<html>
+    <head>
+        <title>Motion Remover</title>
+        <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+        <link href="../magic-check.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="../sweetalert.css">
+        <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta charset="UTF-8">
+    </head>
+<body>
+    <div style="margin: auto; float: center; width: 100%;background-color:#ECECEC;">
+    <table cellpadding=10><tr>
+            <td><h2>Motion Remover</h2></td>
+            <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
+    </table>
+    </div>
+    <br>
+
+    <!-- Output and Progress -->
+    <div style="width:98vw;float:center;margin:auto">
+
+        
+        <table style="width:100%"><tr><td style="width:50%;">
+            <div style="width:98%" class="breadcrumb">
+                <span id=header1 style="font-size:20;font-weight:bold">Input</span>
+                <br>
+                <br>
+                <video id=vidCont style="width:100%;height:100%" controls> 
+                    <source id=source src="" type="video/mp4"> Your browser does not support HTML5 video.
+                </video>
+        
+            </div>
+            </td><td>
+                 <div style="width:98%" class="breadcrumb">
+                    <span id=header1 style="font-size:20;font-weight:bold">Output</span><br>
+                    <span id=status>Upload a video, then press go!</span>
+                    <canvas style="width:100%;height:100%" id=outputDir src=""></canvas>
+                </div>
+        </td></tr>
+        </table>
+        <div class="breadcrumb" style="width:98vw;float:center;margin:auto">
+            <progress id=mainBar style="width:100%"  min=0 max=100 value=0></progress>
+
+            <!-- Uploader interface -->
+            <strong>Settings</strong>
+            <table style="width:100%" cellpadding=10px><tr>
+                <td>
+                    <b>Upload a video</b>
+                </td>
+                <td>
+                    <input id=picker type="file" accept="video/*">
+                </td>
+                </tr><tr>
+                <td>
+                    Solver method:
+                    <select style="width:100px" id=method>
+                        <option value=1>Median</option>
+                        <option value=2>Mode</option>
+                        <option value=0>Average</option>
+
+                    </select>
+                </td>
+                <td>
+                    Sample 
+                    <input id=sample class="container" style="width:100px" type="number" value=5.0 min=1 step="0.1"></input>
+                    frames
+                </td></tr><tr>
+                <tr></tr>
+                <td>
+                    <button style="margin:auto" class="btn btn-primary" onClick="go()">Remove moving objects!</button>
+                </td>
+            </tr></table>
+
+            </div>
+    </div>
+    <br>
+    <div class="breadcrumb" style="width:98vw; float:center;margin:auto" role=alert>
+        <strong>HELP! How do I use this?!</strong>
+    
+        <br>This webpage takes a video as input and attempts to create a single image where all the moving objects have been removed.
+        <br><u>Safari, Edge, and Internet Explorer are not supported.</u>
+        <br>
+        <br><b>How to use:</b>
+        <br>1) Take a video of the object you want, holding the camera as still as possible.
+        <br>2) Use the file picker to upload the video. 
+        <br>3) Choose the most appropriate solver method for your video. Higher samples yields a better result but takes longer.
+        <br>4) Press [Render Image!] and ignore the rouge script warning. The processor could take a minute.
+        <br>5) Right click the image when the page finishes and press [Save image]
+        <br><br><strong>Not working?</strong> A script might not have loaded. Try reloading.
+    </div>
+</body>
+</html>
+
+
+<script src="removerEngine.js"></script>
+<script src="../sweetalert.min.js" ></script>
+<script type="text/JavaScript">
+    
+var files;
+//load a file if something is cached
+previewFile()
+function go(){
+    previewFile();
+    var video = document.getElementById('vidCont');
+    var method = parseInt(document.getElementById('method').value);
+    var quality = parseFloat(document.getElementById('sample').value);
+    document.getElementById("status").innerHTML = "Loading video ... ";
+    document.getElementById("mainBar").value = "";
+
+    setTimeout(function(){
+        //wait for the silly video to load
+        var width = document.getElementById("vidCont").videoWidth
+        var height = document.getElementById("vidCont").videoHeight;
+        var duration = document.getElementById("vidCont").duration;
+        console.log("Frame size: " + width + "x" + height)
+
+        //create the background worker
+        run(document.getElementById("source").src,progress,complete,onError,method,quality,duration);
+    },2000);
+}
+
+
+function progress(prog,mode){
+    prog = Math.floor(prog);
+    console.log(prog + '%')
+    if (mode == 0 || mode == 2)
+        document.getElementById('mainBar').value = prog;
+    if (mode == 0){
+        document.getElementById('status').innerHTML = 'Decompressing video ... ' + prog + '%';
+    }
+    else if (mode == 1 || mode == 2){
+        document.getElementById('status').innerHTML = 'Rendering image ... ' + prog + '%';
+    }
+    else if (mode == 2){
+        document.getElementById('status').innerHTML = 'Rendering image ... ' + prog + '%';
+    }
+}
+
+function complete(medians){
+    document.getElementById("mainBar").value = 100;
+    document.getElementById("status").innerHTML = "Done! Right-click -> save image ";
+
+    var width = document.getElementById("vidCont").videoWidth
+    var height = document.getElementById("vidCont").videoHeight;
+
+    canvas = document.getElementById('outputDir')
+
+    //Render to canvas
+    ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+    var idata = ctx.createImageData(width,height)
+    idata.data.set(medians)
+    ctx.putImageData(idata,0,0);
+}
+
+function onError(title,body){
+    swal(title,body,"error");
+}
+
+function previewFile() {
+  var preview = document.getElementById('source');
+  var video = document.getElementById('vidCont');
+  var file    = document.getElementById("picker").files[0];
+  var reader  = new FileReader();
+
+  reader.addEventListener("load", function () {
+    preview.src = reader.result;
+    video.load();
+   
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+//orange flash for the div button icons at the top bar
+function clickEffect(div){
+  {div.style="color:tomato;";}
+}
+function clickUp(div){
+  {div.style=""};
+}
+
+document.getElementById("picker").addEventListener('change',previewFile)
+</script>
+
+
+
