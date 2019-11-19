@@ -49,77 +49,10 @@
     <div class=controls id="controlframe">
         <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
         <hr>
+        <select id="filterpicker"></select>
+        <button onclick="addAdjustment(document.getElementById('filterpicker'))">Add Adjustment</button>
+        <hr>
     </div>
 </div>
 
-<script>
-    //describes properties about the filters
-    const filters = {
-        "contrast":{unit: "%", min: 0, max: 200, val: 100},  
-        "blur":{unit: "px", min: 0, max: 10, val: 0, step:0.1}, 
-        "brightness":{unit: "", min: 0.0, max: 2.0, val: 1, step:0.01},
-        "grayscale":{unit: "%", min: 0, max: 100, val: 0},
-        "hue-rotate":{unit: "deg", min: 0, max: 360, val: 0},
-        "invert":{unit: "%", min: 0, max: 100, val: 0},
-        "saturate":{unit: "%", min: 0, max: 200, val: 100},
-        "sepia":{unit: "%", min: 0, max: 100, val: 0}
-    }
-
-    let renderview = document.getElementById("image")
-
-    let order = ["contrast","blur","brightness","grayscale","hue-rotate","invert","saturate","sepia"];
-
-    /**
-    Creates the filter render queue
-    */
-    function render(element){
-        //enable the slider that changed
-        try{
-            document.getElementById(element.srcElement.id+"_enable").checked=true;
-        }
-        catch(e){}
-        let queue = [];
-        for (let filter of order){
-            if (document.getElementById(filter+"_enable").checked){
-                let val = document.getElementById(filter).value
-                //add the function, value, and unit to the queue
-                queue.push(`${filter}(${val}${filters[filter]["unit"]})`);
-            }   
-        }
-        //apply the queue
-        renderview.style.filter = queue.join(' ');
-    }
-
-    /*
-    Sets up the default sliders
-    */
-    {
-        let controls = document.getElementById("controlframe")
-        let html = [];
-        for (let filter of order){
-            let d = filters[filter];
-            if (!d.step){
-                d.step=1;
-            }
-            html.push(`
-                <input type="checkbox" id="${filter}_enable">
-                <b>${filter}</b><br>
-                <input type=range style="width:100%" min=${d.min} max=${d.max} value=${d.val} id="${filter}" step=${d.step}>
-                <hr>
-            `);
-        }
-        controls.innerHTML += html.join('');
-        //attach events
-        for (let filter of order){
-            document.getElementById(filter).oninput = render;
-            document.getElementById(filter+"_enable").oninput = render;
-        }
-    }
-
-    function loadurl(){
-        let url = document.getElementById("img-url").value;
-        document.getElementById("image").src=url;
-    }
-
-    render()
-</script>
+<script src="webphoto.js"></script>
