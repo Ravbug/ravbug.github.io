@@ -26,17 +26,19 @@
         padding:5px;
         overflow:scroll;
     }
-    #image{
-        width:100%;
-    }
     #render{
         overflow:scroll;
         background-color:#ababab
     }
     #image{
         object-fit:contain;
+        overflow:hidden;
         max-height: 500px;
         vertical-align:middle;
+        width:100%;
+    }
+    #clip-bounds{
+        overflow:hidden;
     }
     .center {
         margin: 0;
@@ -55,10 +57,17 @@
     <div class=controls id="controlframe">
         <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
         <hr>
-        <select id="filterpicker"></select>
-        <button onclick="addAdjustment(document.getElementById('filterpicker'))">Add Adjustment</button>
-        <hr>
+        <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
     </div>
 </div>
 
 <script src="webphoto.js"></script>
+<script>
+    function loadurl(){
+        let url = document.getElementById("img-url").value;
+        document.getElementById("image").src=url;
+    }
+    
+    //start with one adustment group
+    addAdjustmentGroup();
+</script>
