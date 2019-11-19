@@ -11,9 +11,15 @@
 <style>
     .view{
         display:grid;
-        grid-template-columns: 1fr 240px;
+        grid-template-columns:1fr 240px;
         width: 100%;
         height: 100%;
+    }
+    /* Portrait phone mode */
+    @media only screen and (max-width: 550px) {
+        .view{
+            grid-template-columns: 1fr;
+        }
     }
     .controls{
         background-color:#CCC;
