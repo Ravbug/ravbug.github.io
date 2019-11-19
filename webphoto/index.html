@@ -102,9 +102,9 @@
                 d.step=1;
             }
             html.push(`
-                <b>${filter}</b>
                 <input type="checkbox" id="${filter}_enable">
-                <input type=range min=${d.min} max=${d.max} value=${d.val} id="${filter}" step=${d.step}>
+                <b>${filter}</b><br>
+                <input type=range style="width:100%" min=${d.min} max=${d.max} value=${d.val} id="${filter}" step=${d.step}>
                 <hr>
             `);
         }
