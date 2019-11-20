@@ -63,9 +63,10 @@ async function processURL(url,school,classname){
         dummy.innerHTML = res;
 
         //sanity check: correct school?
+        let pschool;
         try{
-            let profTitle = dummy.getElementsByClassName('result-title')[0].innerHTML;
-            if (!profTitle.includes(school)){
+            pschool = dummy.getElementsByClassName("school")[0].innerText;
+            if (!pschool.includes(school)){
                 resolve()
                 return;
             }
@@ -124,6 +125,7 @@ async function processURL(url,school,classname){
             }
         }
         summary["Most_Recent_Review"] = newest.toLocaleDateString()
+        summary["School"] = pschool;
 
         //clean up
         dummy.remove()

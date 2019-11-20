@@ -98,6 +98,8 @@ function addAdjustmentGroup(){
         name.innerHTML = "Adjustment Group";
     let addbtn = document.createElement('button');
         addbtn.innerHTML = "Add Adjustment";
+    let delbtn = document.createElement('button');
+        delbtn.innerHTML = "Delete";
 
     //setup combo box items
     let names = Object.keys(filters);
@@ -110,6 +112,7 @@ function addAdjustmentGroup(){
     root.appendChild(document.createElement('hr'));
     root.appendChild(enable);
     root.appendChild(name);
+    root.appendChild(delbtn);
     root.appendChild(select);
     root.appendChild(addbtn);
 
@@ -129,11 +132,24 @@ function addAdjustmentGroup(){
         //TODO: dim group if disabled
         render();
     };
+    delbtn.onclick = function(){
+        deleteAdjustment(order.length,order);
+        root.remove();
+        render();
+    }
     controls.appendChild(root);
 
     //add group to render list
     order.push(group);
-
 }
 
-render()
+/**
+ * Remove an adjustment from a queue
+ * @param {number} id the index of the adjustment to delete
+ * @param {{}[]} queue the adjustment queue to delete from
+ */
+function deleteAdjustment(id,queue){
+    queue.splice(id,1);
+}
+
+render();
