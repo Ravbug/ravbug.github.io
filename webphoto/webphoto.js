@@ -9,7 +9,8 @@ const filters = {
     "hue-rotate":{unit: "deg", min: 0, max: 360, val: 0},
     "invert":{unit: "%", min: 0, max: 100, val: 0},
     "saturate":{unit: "%", min: 0, max: 200, val: 100},
-    "sepia":{unit: "%", min: 0, max: 100, val: 0}
+    "sepia":{unit: "%", min: 0, max: 100, val: 0},
+    "opacity":{unit: "%", min: 0, max: 100, val: 100},
 }
 
 let renderview = document.getElementById("image")
@@ -28,7 +29,7 @@ function render(event){
         if (group.enable.checked){
             for (let filter of group.adjustments){
                 //should enable adjustment?
-                if (event && filter.slider == event.srcElement){
+                if (event && (filter.slider == event.srcElement || filter.number == event.srcElement)){
                     filter.enable.checked = true;
                 }
 
@@ -55,7 +56,7 @@ function addAdjustment(filter,group){
         d.step=1;
     }
     //create the elements that make the adjustment
-    let root = document.createElement('div')
+    let root = document.createElement('adjustment')
     let enable = document.createElement('input');
         enable.type = "checkbox";
     let title = document.createElement('i');
@@ -65,13 +66,23 @@ function addAdjustment(filter,group){
         slider.min = d.min, slider.max = d.max; slider.value = d.val;
         slider.step = d.step;
     let delbtn = document.createElement('button');
-        delbtn.innerHTML = "Delete";
+        delbtn.innerHTML = "–"
     let separator = document.createElement('br');
+    let numeric = document.createElement('input');
+        numeric.type="number"
+        numeric.value = slider.value;
+        numeric.min = d.min; numeric.max = d.max;
+        numeric.step = d.step;
+
+    let tgroup = document.createElement('div');
+
     //append the controls
-    root.appendChild(enable);
-    root.appendChild(title);
-    root.appendChild(delbtn)
+    tgroup.appendChild(enable);
+    tgroup.appendChild(title);
+    root.appendChild(tgroup);
+    root.appendChild(delbtn);
     root.appendChild(slider);
+    root.appendChild(numeric);
     root.appendChild(separator);
     group.display.appendChild(root);
 
@@ -80,10 +91,28 @@ function addAdjustment(filter,group){
         "name":filter,
         "enable":enable,
         "slider":slider,
+        "number":numeric
     };
 
     //attach events
-    slider.oninput = render;
+    slider.oninput = function(event){
+        //update the number field
+        numeric.value = slider.value;
+        render(event);
+    }
+    numeric.oninput = function(event){
+        //constrain to acceptable range
+        if (numeric.value < d.min){
+            numeric.value = d.min;
+        }
+        if (numeric.value > d.max){
+            numeric.value = d.max;
+        }
+
+        //update the slider
+        slider.value = numeric.value;
+        render(event);
+    }
     enable.oninput = render;
     delbtn.onclick = function(){
         //find in the render queue
@@ -120,7 +149,7 @@ function addAdjustmentGroup(){
     let name = document.createElement('b');
         name.innerHTML = "Adjustment Group";
     let addbtn = document.createElement('button');
-        addbtn.innerHTML = "Add Adjustment";
+        addbtn.innerHTML = "+";
     let delbtn = document.createElement('button');
         delbtn.innerHTML = "Delete";
 
