@@ -47,7 +47,7 @@ function render(event){
 /**
  * Adds an adjustment
  * @param {string} filter the name of the adjustment to add
- * @param {} group the group structure to add
+ * @param {{}} group the group structure to add
  */
 function addAdjustment(filter,group){
     let d = filters[filter];
@@ -55,6 +55,7 @@ function addAdjustment(filter,group){
         d.step=1;
     }
     //create the elements that make the adjustment
+    let root = document.createElement('div')
     let enable = document.createElement('input');
         enable.type = "checkbox";
     let title = document.createElement('i');
@@ -63,15 +64,16 @@ function addAdjustment(filter,group){
         slider.type="range"; slider.style="width:100%";
         slider.min = d.min, slider.max = d.max; slider.value = d.val;
         slider.step = d.step;
+    let delbtn = document.createElement('button');
+        delbtn.innerHTML = "Delete";
     let separator = document.createElement('br');
     //append the controls
-    group.display.appendChild(enable);
-    group.display.appendChild(title);
-    group.display.appendChild(slider);
-    group.display.appendChild(separator);
-    //attach events
-    slider.oninput = render;
-    enable.oninput = render;
+    root.appendChild(enable);
+    root.appendChild(title);
+    root.appendChild(delbtn)
+    root.appendChild(slider);
+    root.appendChild(separator);
+    group.display.appendChild(root);
 
     //create render object
     let adjustment = {
@@ -79,6 +81,27 @@ function addAdjustment(filter,group){
         "enable":enable,
         "slider":slider,
     };
+
+    //attach events
+    slider.oninput = render;
+    enable.oninput = render;
+    delbtn.onclick = function(){
+        //find in the render queue
+        for (let i = 0; i < group.adjustments.length; i++){
+            let a = group.adjustments[i];
+            if (a["slider"] == slider){
+                //remove from this group's adjustment
+                group.adjustments.splice(i,1);
+
+                 //remove from drawing
+                root.remove();
+                render();
+                return;
+            }
+        }
+        //something went wrong
+        alert("Unable to remove adjustment");
+    }
 
     //add slider to render queue
     group.adjustments.push(adjustment);
@@ -133,9 +156,21 @@ function addAdjustmentGroup(){
         render();
     };
     delbtn.onclick = function(){
-        deleteAdjustment(order.length,order);
-        root.remove();
-        render();
+        //find this group in the order
+        for (let i = 0; i < order.length; i++){
+            let g = order[i];
+            if (g.display == root){
+                //remove from the order
+                order.splice(i,1);
+
+                 //remove from the sidebar       
+                root.remove();
+                render();
+                return;
+            }
+        }
+        //something went wrong
+        alert("Unable to remove adjustment group")
     }
     controls.appendChild(root);
 
@@ -143,13 +178,5 @@ function addAdjustmentGroup(){
     order.push(group);
 }
 
-/**
- * Remove an adjustment from a queue
- * @param {number} id the index of the adjustment to delete
- * @param {{}[]} queue the adjustment queue to delete from
- */
-function deleteAdjustment(id,queue){
-    queue.splice(id,1);
-}
 
 render();
