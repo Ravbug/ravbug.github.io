@@ -19,8 +19,9 @@ let renderview = document.getElementById("image")
 let order = [];
 
 /**
-Creates the filter render queue
-*/
+ * Updates the render preview
+ * @param {Event} event the event from sender
+ */
 function render(event){
     let queue = [];
     //iterate through adjustment groups
@@ -32,11 +33,11 @@ function render(event){
                 if (event && (filter.slider == event.srcElement || filter.number == event.srcElement)){
                     filter.enable.checked = true;
                 }
-
+                
                 if (filter.enable.checked){
-                    let val = filter.slider.value;
+                    let value = filter.slider.value;
                     //add the function, value, and unit to the queue
-                    queue.push(`${filter.name}(${val}${filters[filter.name]["unit"]})`);
+                    queue.push(`${filter.name}(${value}${filters[filter.name]["unit"]})`);
                 }   
             }
         }    
