@@ -74,14 +74,24 @@ function addAdjustment(filter,group){
         numeric.value = slider.value;
         numeric.min = d.min; numeric.max = d.max;
         numeric.step = d.step;
-
+    let btnup = document.createElement('button');
+        btnup.innerHTML = "↑";
+    let btndown = document.createElement('button');
+        btndown.innerHTML = "↓";
+    let btngroup = document.createElement('div');
+        btngroup.id = "orderbtngroup";
+    let btnmaster = document.createElement('div');
     let tgroup = document.createElement('div');
 
     //append the controls
+    btnmaster.appendChild(delbtn);
+    btngroup.appendChild(btnup);
+    btngroup.appendChild(btndown);
+    btnmaster.appendChild(btngroup);
     tgroup.appendChild(enable);
     tgroup.appendChild(title);
     root.appendChild(tgroup);
-    root.appendChild(delbtn);
+    root.appendChild(btnmaster);
     root.appendChild(slider);
     root.appendChild(numeric);
     root.appendChild(separator);
@@ -131,6 +141,40 @@ function addAdjustment(filter,group){
         }
         //something went wrong
         alert("Unable to remove adjustment");
+    }
+    btnup.onclick = () => {
+        for (let i = 0; i < group.adjustments.length; i++){
+            let a = group.adjustments[i];
+            if (a["slider"]  == slider){
+                //move element towards front of list
+                if (i > 0){
+                    //update display
+                    group.adjustments[i-1].slider.parentElement.insertAdjacentElement("beforebegin",root)
+
+                    //update render order
+                    array_move(group.adjustments,i, i - 1);
+                    render()
+                }       
+                return;
+            }
+        }
+    }
+    btndown.onclick = () => {
+        for (let i = 0; i < group.adjustments.length; i++){
+            let a = group.adjustments[i];
+            if (a["slider"]  == slider){
+                //move element towards end of list
+                if (i < group.adjustments.length-1){
+                    //update display
+                    group.adjustments[i+1].slider.parentElement.insertAdjacentElement("afterend",root)
+
+                    //update render order
+                    array_move(group.adjustments,i, i + 1);
+                    render()
+                    return;
+                }     
+            }
+        }
     }
 
     //add slider to render queue
