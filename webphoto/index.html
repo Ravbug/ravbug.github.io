@@ -11,7 +11,7 @@
 <style>
     .view{
         display:grid;
-        grid-template-columns:1fr 240px;
+        grid-template-columns:1fr 260px;
         width: 100%;
         height: 100%;
     }
@@ -54,6 +54,15 @@
     }
 </style>
 
+<style id="delbtns">
+    #delbtn{
+        display:none;
+    }
+    #orderbtngroup{
+        display:unset;
+    }
+</style>
+
 <div class=view>
     <div id="render">
         <img id=image class="center" src="https://wallpapercave.com/wp/YHSuCPt.jpg">
@@ -62,16 +71,29 @@
         <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
         <hr>
         <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
+        <button onclick="toggleDelete(this)">Del</button>
     </div>
 </div>
 
 <script src="webphoto.js"></script>
 <script>
+    let delmode = false;
     function loadurl(){
         let url = document.getElementById("img-url").value;
         document.getElementById("image").src=url;
     }
-    
+    function toggleDelete(btn){
+        delmode = !delmode
+        btn.innerHTML = delmode? "Done" : "Del";
+        document.getElementById("delbtns").innerHTML = `
+        #delbtn{
+            display:${delmode? "unset" :"none"};
+        }
+        #orderbtngroup{
+            display:${!delmode? "unset" :"none"};
+        }
+        `;
+    }
     //start with one adustment group
     addAdjustmentGroup();
 </script>

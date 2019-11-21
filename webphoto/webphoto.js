@@ -66,7 +66,8 @@ function addAdjustment(filter,group){
         slider.min = d.min, slider.max = d.max; slider.value = d.val;
         slider.step = d.step;
     let delbtn = document.createElement('button');
-        delbtn.innerHTML = "–"
+        delbtn.innerHTML = "❌"
+        delbtn.id = "delbtn";
     let separator = document.createElement('br');
     let numeric = document.createElement('input');
         numeric.type="number"
@@ -147,11 +148,22 @@ function addAdjustmentGroup(){
         enable.type = "checkbox";
         enable.checked = true;
     let name = document.createElement('b');
-        name.innerHTML = "Adjustment Group";
+        name.innerHTML = "Adjust Group #" + Math.random().toString(36).substring(10);;
     let addbtn = document.createElement('button');
         addbtn.innerHTML = "+";
     let delbtn = document.createElement('button');
-        delbtn.innerHTML = "Delete";
+        delbtn.innerHTML = "❌";
+        delbtn.id = "delbtn";
+    //reorder buttons
+    let btnssort = document.createElement('div');
+    let btnup = document.createElement('button');
+        btnup.innerHTML = "↑";
+    let btndown = document.createElement('button');
+        btndown.innerHTML = "↓";
+        btnssort.id = "orderbtngroup";
+    let btngroup = document.createElement('div');
+        btngroup.style = "display:inline-block";
+
 
     //setup combo box items
     let names = Object.keys(filters);
@@ -161,10 +173,14 @@ function addAdjustmentGroup(){
         option.value=name;
         select.appendChild(option);
     }
+    btnssort.appendChild(btnup);
+    btnssort.appendChild(btndown);
+    btngroup.appendChild(btnssort);
+    btngroup.appendChild(delbtn);
     root.appendChild(document.createElement('hr'));
     root.appendChild(enable);
     root.appendChild(name);
-    root.appendChild(delbtn);
+    root.appendChild(btngroup);
     root.appendChild(select);
     root.appendChild(addbtn);
 
@@ -201,11 +217,63 @@ function addAdjustmentGroup(){
         //something went wrong
         alert("Unable to remove adjustment group")
     }
+    btnup.onclick = () => {
+        for (let i = 0; i < order.length; i++){
+            let g = order[i];
+            if (g.display == root){
+                //move element towards front of list
+                if (i > 0){
+                    //update display
+                    order[i-1].display.insertAdjacentElement("beforebegin",root)
+
+                    //update render order
+                    array_move(order,i, i - 1);
+                    render()
+                }       
+                return;
+            }
+        }
+    }
+    btndown.onclick = () => {
+        for (let i = 0; i < order.length; i++){
+            let g = order[i];
+            if (g.display == root){
+                //move element towards end of list
+                console.log(i);
+                if (i < order.length-1){
+                    //update display
+                    order[i+1].display.insertAdjacentElement("afterend",root)
+
+                    //update render order
+                    array_move(order,i, i + 1);
+                    render()
+                    return;
+                }     
+            }
+        }
+    }
     controls.appendChild(root);
 
     //add group to render list
     order.push(group);
 }
+
+/**
+ * Moves an element from one position to another in an array
+ * @param {*[]} arr Array to change
+ * @param {number} old_index Index of element to move
+ * @param {number} new_index Index to move to
+ * @source https://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
+ */
+function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+};
 
 
 render();
