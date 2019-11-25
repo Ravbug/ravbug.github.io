@@ -13,13 +13,21 @@
         display:grid;
         grid-template-columns:1fr 260px;
         width: 100%;
-        height: 100%;
+        height: calc(100% - 30px);
     }
     /* Portrait phone mode */
     @media only screen and (max-width: 700px) {
         .view{
             grid-template-columns: 1fr;
         }
+        .controls{
+            padding:100px;
+        }
+    }
+    .main_view{
+        display:grid;
+        grid-template-rows: 50px 1fr;
+        width:100%;
     }
     .controls{
         background-color:#CCC;
@@ -28,14 +36,15 @@
     }
     #render{
         overflow:scroll;
-        background-color:#ababab
+        background-color:#ababab;
+        height:100%;
     }
     #image{
         object-fit:contain;
         overflow:hidden;
-        max-height: 500px;
+        max-height: 100%;
         vertical-align:middle;
-        width:100%;
+        max-width:100%;
     }
     #clip-bounds{
         overflow:hidden;
@@ -63,17 +72,22 @@
     }
 </style>
 
-<div class=view>
-    <div id="render">
-        <img id=image class="center" src="https://wallpapercave.com/wp/YHSuCPt.jpg">
+<div class=main-view>
+    <div>
+            <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
+            <button onmousedown="renderview.style.filter=''" onmouseup="render(this)">Show Original</button>
     </div>
-    <div class=controls id="controlframe">
-        <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
-        <hr>
-        <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
-        <button onclick="toggleDelete(this)">Del</button>
-        <button onmousedown="renderview.style.filter=''" onmouseup="render(this)">Show Original</button>
+    <div class=view>
+        <div id="render">
+            <img id=image class="center" src="https://wallpapercave.com/wp/YHSuCPt.jpg">
+        </div>
+        <div class=controls id="controlframe">
+            <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
+            <button onclick="toggleDelete(this)">Del</button>
+        </div>
+        
     </div>
+    
 </div>
 
 <script src="webphoto.js"></script>
