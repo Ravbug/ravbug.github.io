@@ -1,21 +1,19 @@
 <head>
-	<title>Extracting Minecraft Texture Files</title>
+	<title>Rendering Z-Depth in Maya Tutorial</title>
 	<meta name="description" content="Step-by-step instructions for setup, rendering, and compositing">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
 	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="../../bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 </head>
+<script>
+	stylesheet_depth = 2;
+	document.currentScript.remove();
+</script>
+<script src="../../header.js"></script>
+
 <style>
 	img {
 		max-width: 500px;
 	}
 </style>
-<div class="jumbotron header">
-	<h1 style="color:white">Extracting Minecraft Texture Files</h1>
-	<p style="color:white">From any version using its jar file</p>
-</div>
 
 <div class=main>
 
@@ -127,12 +125,13 @@
 	<strong>The Basics of Nuke:
 		<ul>
 			<li>Creating nodes in nuke: </strong>Right Click in Node graph -&gt; find node OR Press tab -&gt; search for
-		node by name</li>
-		<li><strong>Connecting nodes: </strong>Click and Drag the arrows on top of compatible nodes</li>
-		<li><strong>Editing Nodes: </strong>Double-click on node to open property panel, then drag sliders to modify values.</li>
-		<li><strong>Close Node: </strong>Press the [x] at the top right of the node property panel (next to the ? and Window
-			buttons)</li>
-		<li><strong>Disable Node:</strong> Click on the node and press [D] on your keyboard</li>
+	node by name</li>
+	<li><strong>Connecting nodes: </strong>Click and Drag the arrows on top of compatible nodes</li>
+	<li><strong>Editing Nodes: </strong>Double-click on node to open property panel, then drag sliders to modify values.
+	</li>
+	<li><strong>Close Node: </strong>Press the [x] at the top right of the node property panel (next to the ? and Window
+		buttons)</li>
+	<li><strong>Disable Node:</strong> Click on the node and press [D] on your keyboard</li>
 	</ul>
 	<ol>
 		<li>Launch Nuke, and create a new project.</li>
@@ -168,7 +167,7 @@
 				<li>Z channel: depth.Z</li>
 				<li>Alpha channel: depth.Z</li>
 				<li>smaller Z = further away: checked
-					<br><img src="http://imgur.com/OR0V8BF.png"  /><br>
+					<br><img src="http://imgur.com/OR0V8BF.png" /><br>
 					<img src="http://imgur.com/jtoHZpE.png" /></li>
 			</ol>
 		</li>
@@ -192,18 +191,23 @@
 	<h2>Tweaking the setup:</h2>
 	To change how the different nodes interact, change the following values:
 	<ul>
-		<li><strong>Depth of Field distance: </strong>In the ZDefocus node, change the <em>Focus Plane</em> attribute. Larger
+		<li><strong>Depth of Field distance: </strong>In the ZDefocus node, change the <em>Focus Plane</em> attribute.
+			Larger
 			values = closer blurring
-			Alternatively, you can drag the <em>focal_point</em> handle in the viewer to interactively set the focus plane.</li>
-			<li><strong>Depth of Field strength: </strong>Change the <em>size</em> value of the ZDefocus node.</li>
-			<li><strong>Depth of field end strength: </strong>Change the <em>maximum</em> value of the ZDefocus node.</li>
-			<li><strong>Fog Color: </strong>Change the color of the Constant node. If you want the color to be something else, just
-				replace the Constant node with a different setup. Just make sure the final output of that setup outputs to the (A)
-				input on the AddMix node.</li>
-			<li><strong>Fog Density: </strong>Change the m<em>ix</em> value of the AddMix node</li>
-			<li><strong>Fog Distance/Intensity: </strong>Change the m<em>ix</em> value of the Merge node (Not the ZMerge node!)</li>
+			Alternatively, you can drag the <em>focal_point</em> handle in the viewer to interactively set the focus
+			plane.</li>
+		<li><strong>Depth of Field strength: </strong>Change the <em>size</em> value of the ZDefocus node.</li>
+		<li><strong>Depth of field end strength: </strong>Change the <em>maximum</em> value of the ZDefocus node.</li>
+		<li><strong>Fog Color: </strong>Change the color of the Constant node. If you want the color to be something
+			else, just
+			replace the Constant node with a different setup. Just make sure the final output of that setup outputs to
+			the (A)
+			input on the AddMix node.</li>
+		<li><strong>Fog Density: </strong>Change the m<em>ix</em> value of the AddMix node</li>
+		<li><strong>Fog Distance/Intensity: </strong>Change the m<em>ix</em> value of the Merge node (Not the ZMerge
+			node!)</li>
 	</ul>
-	
+
 	<hr>
 
 	<h2>Rendering the final composite</h2>
@@ -217,7 +221,7 @@
 			<ol>
 				<li>file type: mov</li>
 				<li>Codec: h.264 (if present) or Apple ProRes 4444<br>
-				<img src="http://imgur.com/ceuRHNf.png" /></li>
+					<img src="http://imgur.com/ceuRHNf.png" /></li>
 			</ol>
 		</li>
 		<li>For an image sequence output
@@ -225,7 +229,7 @@
 				<li>file type: select any image format (I recommend .exr or .tiff for preserving ultrawhite values, or
 					.png for regular clamping.</li>
 				<li>To render the alpha channel, set <em>channels </em>to rgba<br>
-				<img src="http://imgur.com/66J4o0w.png"/></li>
+					<img src="http://imgur.com/66J4o0w.png" /></li>
 			</ol>
 		</li>
 		<li>Click the folder icon next to <em>file </em>and select a folder to write the file in (make sure to include

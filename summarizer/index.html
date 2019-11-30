@@ -1,37 +1,34 @@
 <html>
-<head>
-<title>AutoSummarizer</title>
-<meta name="description" content="Summarize text clientside with WebWorkers">
-<link rel="stylesheet" type="text/css" href="../bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet.css">
-<link rel="stylesheet" type="text/css" href="../sweetalert.css">
-<meta charset="utf-8">
-<meta name="description" content="A configurable summary generator!">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
 
+<head>
+    <title>AutoSummarizer</title>
+    <meta name="description" content="A configurable summary generator!">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+</head>
+<script>
+    stylesheet_depth = 1;
+    document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
+</head>
 <style>
-    article{
-        display:grid;
+    article {
+        display: grid;
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap:5px;
+        gap: 5px;
     }
-    .jumbotron{
-        margin-bottom:0px;
+
+    .jumbotron {
+        margin-bottom: 0px;
     }
-    textarea{
-        resize:none;
-        height:200px;
+
+    textarea {
+        resize: none;
+        height: 200px;
     }
 </style>
 
 <body>
-    <div class="jumbotron header">
-        <div class="container">
-            <span style="color:white;font-size:40">AutoSummarizer</span>
-            <p style="color:white">A configurable summary generator!</p>
-        </div>
-    </div>
     <div style="float:center;margin:auto;padding:20px;">
         <article>
             <div>
@@ -52,29 +49,29 @@
                     <input id=weight type="number" value=1.3 class="form-control"></input>
                 </div>
                 <button class="btn btn-primary" onclick="onCopy()">Copy Text</button>
-            </article>          
+            </article>
         </article>
         <br>
         <div class="breadcrumb">
             <b>Why waste time, say lot word when few word work?</b>
             <br>
             This page summarizes text using a statistical model. It gives each sentence a score, and then
-            uses the threshold you provide to decide what to trim from the original. 
+            uses the threshold you provide to decide what to trim from the original.
             <br><br>
             You need a modern browser to run this tool. It uses WebWorkers to run the summary generator
-            completely locally on a background thread! No servers required. 
+            completely locally on a background thread! No servers required.
             <br><br>
-            Something not working, even on a modern browser? Try reloading the page. If you are summarizing 
-            a lot of text, be patient. If you have an old or slow device, it will take extra time. 
+            Something not working, even on a modern browser? Try reloading the page. If you are summarizing
+            a lot of text, be patient. If you have an old or slow device, it will take extra time.
         </div>
     </div>
 </body>
 
-<script src="../sweetalert.min.js" ></script>
-<script src="../utilities.js" ></script>
+<script src="../sweetalert.min.js"></script>
+<script src="../utilities.js"></script>
 <script>
-    if (!window.Worker){
-        swal("Your browser is too old!","This page relies on newer web techologies.\nYou must update your browser to use this tool.","error");
+    if (!window.Worker) {
+        swal("Your browser is too old!", "This page relies on newer web techologies.\nYou must update your browser to use this tool.", "error");
     }
 
     //var worker = new Worker('summarizer.js');
@@ -85,19 +82,19 @@
     worker.onmessage = e => {
         output.value = e.data;
         let percent = parseInt(output.value.length / input.value.length * 100);
-        document.getElementById('summarytitle').innerHTML = `Reduced ${100-percent}%`;  
-    } 
-
-    function onSummarize(){
-        output.value = "Summarizing text...";
-        worker.postMessage({text:input.value,weight:weight.value});
+        document.getElementById('summarytitle').innerHTML = `Reduced ${100 - percent}%`;
     }
 
-    function onCopy(){
-        copy2(output,function(){
-            swal("Summary copied!","success");
-        },function(err){
-            swal("Oops!","Unable to copy. Try manually copying the text.","error");
+    function onSummarize() {
+        output.value = "Summarizing text...";
+        worker.postMessage({ text: input.value, weight: weight.value });
+    }
+
+    function onCopy() {
+        copy2(output, function () {
+            swal("Summary copied!", "success");
+        }, function (err) {
+            swal("Oops!", "Unable to copy. Try manually copying the text.", "error");
         });
     }
 </script>

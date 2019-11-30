@@ -1,35 +1,33 @@
 <head>
-        <title>Math Experiments</title>
-        <meta name="description" content="Interactive graphs home">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
-        <link rel="stylesheet" type="text/css" href="../bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+    <title>Math Experiments</title>
+    <meta name="description" content="Links here will be updated when I update or add a graph">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
 </head>
+<script>
+    stylesheet_depth = 1;
+    document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
 
 <style>
-     .attention{
-       font-size:25; 
+    .attention {
+        font-size: 25;
     }
-    img{
-        object-fit:contain;
-        object-position:0;
-        max-height:250px;
+
+    img {
+        object-fit: contain;
+        object-position: 0;
+        max-height: 250px;
     }
-    .header{
-        margin-bottom:0px;
+
+    .header {
+        margin-bottom: 0px;
     }
-    article{
-        gap:10px;
+
+    article {
+        gap: 10px;
     }
 </style>
-
-<div class="jumbotron header">
-    <span>Math Experiments</span>
-    <p>Links here will be updated when I update or add a graph</p>
-</div>
-
 
 <div class="main">
     <article id="article">
@@ -37,136 +35,136 @@
     <br>
     <div class="breadcrumb">
         PNGs compressed with <a href="https://compress-or-die.com">Compress-Or-Die</a>
-    </div>        
+    </div>
 </div>
 <script>
-{
-    //array representing the card contents
-    const content = [
-        {
-            title:"Auto-Linearization",
-            tag:"Automatically selects the closest, easiest point to center local linearization using local quadratic approximation",
-            img:"autolinearization.png",
-            ref:"https://www.desmos.com/calculator/0tlmnqkpvm"
-        },
-        {
-            title:"Cart Animation",
-            tag:"Animate the movement of a cart using a function of time!",
-            img:"cartanim.png",
-            ref:"https://www.desmos.com/calculator/roztvsr7b0"
-        },
-        {
-            title:"Cart Animation 2",
-            tag:"Similar to Cart Animation, except the background parallax-scrolls so that you don't have to chase down the cart.",
-            img:"cartanim2.png",
-            ref:"https://www.desmos.com/calculator/wamtdno150"
-        },
-        {
-            title:"Calculating Pi",
-            tag:"Shows how the formula converges at π, using the limit as x approaches ∞. ",
-            img:"pi.png",
-            ref:"https://www.desmos.com/calculator/mdlkem8s5y"
-        },
-        {
-            title:"Concavity",
-            tag:"Displays where a function is concave up and concave down, and highlights inflection points.",
-            img:"concavity.png",
-            ref:"https://www.desmos.com/calculator/qcmb8auivj"
-        },
-        {
-            title:"Symmetric Difference Quotient",
-            tag:"Calculate the derivative at a point using the Symmetric Difference Quotient method",
-            img:"deriv.png",
-            ref:"https://www.desmos.com/calculator/n6fm0zfoq8"
-        },
-        {
-            title:"Simple Harmonic Motion",
-            tag:"Animate a simple box-spring system given physics constraints",
-            img:"harmonicmotion.png",
-            ref:"https://www.desmos.com/calculator/q3m5h3idjk"
-        },
-        {
-            title:"Integrals Approximations",
-            tag:"Showcases Left, center, and right-sided Riemann sums along with the Trapezoidal approximation method for calculating integrals",
-            img:"approximation.png",
-            ref:"https://www.desmos.com/calculator/hjnw2i2oh2"
-        },
-        {
-            title:"Simple Integrals",
-            tag:"Displays the net area and total area under a function, with an adjustable zero-floor.",
-            img:"integrals.png",
-            ref:"https://www.desmos.com/calculator/oqfpwypchw"
-        },
-        {
-            title:"Dual Integrals",
-            tag:"Similar to Simple Integrals, except with two functions",
-            img:"integrals2.png",
-            ref:"https://www.desmos.com/calculator/m17fi1la2i"
-        },
-        {
-            title:"Local Linearization",
-            tag:"Illustrates how linearization works",
-            img:"linearization.png",
-            ref:"https://www.desmos.com/calculator/zdmxovhr3j"
-        },
-        {
-            title:"Differentiability",
-            tag:"Highights the function as red if the function is not differentiable at a given point, and green if it is.",
-            img:"differentiability.png",
-            ref:"https://www.desmos.com/calculator/f7nkei6wid"
-        },
-        {
-            title:"Integral C finder",
-            tag:"Finds the value of C when calculating the anti-derivative for any function",
-            img:"cfinder.png",
-            ref:"https://www.desmos.com/calculator/occbuvmky7"
-        },
-        {
-            title:"Simple orbits",
-            tag:"A basic planet animation system using circle transformations",
-            img:"planets.png",
-            ref:"https://www.desmos.com/calculator/vlruvxqnxz"
-        },
-        {
-            title:"Complex orbits",
-            tag:"A more correct planet simulation supporting oval paths using circle transformations",
-            img:"planets2.png",
-            ref:"https://www.desmos.com/calculator/1hf2j5wcev"
-        },
-        {
-            title:"Slope Field Generator",
-            tag:"An enhanced version of an existing slope field generator that is easier to use",
-            img:"slopefield.png",
-            ref:"https://www.desmos.com/calculator/1pse6lzlen"
-        },
-        {
-            title:"Tangent and Normal lines",
-            tag:"A demo showing the equations for the tangent and normal lines at a given point",
-            img:"tangentnormal.png",
-            ref:"https://www.desmos.com/calculator/oekk6oefmk"
-        },
-        {
-            title:"Average Rate of Change",
-            tag:"A simple graph which shows slope calculation",
-            img:"avgrate.png",
-            ref:"https://www.desmos.com/calculator/wp9vnhxpja"
-        },
-    ];
+    {
+        //array representing the card contents
+        const content = [
+            {
+                title: "Auto-Linearization",
+                tag: "Automatically selects the closest, easiest point to center local linearization using local quadratic approximation",
+                img: "autolinearization.png",
+                ref: "https://www.desmos.com/calculator/0tlmnqkpvm"
+            },
+            {
+                title: "Cart Animation",
+                tag: "Animate the movement of a cart using a function of time!",
+                img: "cartanim.png",
+                ref: "https://www.desmos.com/calculator/roztvsr7b0"
+            },
+            {
+                title: "Cart Animation 2",
+                tag: "Similar to Cart Animation, except the background parallax-scrolls so that you don't have to chase down the cart.",
+                img: "cartanim2.png",
+                ref: "https://www.desmos.com/calculator/wamtdno150"
+            },
+            {
+                title: "Calculating Pi",
+                tag: "Shows how the formula converges at π, using the limit as x approaches ∞. ",
+                img: "pi.png",
+                ref: "https://www.desmos.com/calculator/mdlkem8s5y"
+            },
+            {
+                title: "Concavity",
+                tag: "Displays where a function is concave up and concave down, and highlights inflection points.",
+                img: "concavity.png",
+                ref: "https://www.desmos.com/calculator/qcmb8auivj"
+            },
+            {
+                title: "Symmetric Difference Quotient",
+                tag: "Calculate the derivative at a point using the Symmetric Difference Quotient method",
+                img: "deriv.png",
+                ref: "https://www.desmos.com/calculator/n6fm0zfoq8"
+            },
+            {
+                title: "Simple Harmonic Motion",
+                tag: "Animate a simple box-spring system given physics constraints",
+                img: "harmonicmotion.png",
+                ref: "https://www.desmos.com/calculator/q3m5h3idjk"
+            },
+            {
+                title: "Integrals Approximations",
+                tag: "Showcases Left, center, and right-sided Riemann sums along with the Trapezoidal approximation method for calculating integrals",
+                img: "approximation.png",
+                ref: "https://www.desmos.com/calculator/hjnw2i2oh2"
+            },
+            {
+                title: "Simple Integrals",
+                tag: "Displays the net area and total area under a function, with an adjustable zero-floor.",
+                img: "integrals.png",
+                ref: "https://www.desmos.com/calculator/oqfpwypchw"
+            },
+            {
+                title: "Dual Integrals",
+                tag: "Similar to Simple Integrals, except with two functions",
+                img: "integrals2.png",
+                ref: "https://www.desmos.com/calculator/m17fi1la2i"
+            },
+            {
+                title: "Local Linearization",
+                tag: "Illustrates how linearization works",
+                img: "linearization.png",
+                ref: "https://www.desmos.com/calculator/zdmxovhr3j"
+            },
+            {
+                title: "Differentiability",
+                tag: "Highights the function as red if the function is not differentiable at a given point, and green if it is.",
+                img: "differentiability.png",
+                ref: "https://www.desmos.com/calculator/f7nkei6wid"
+            },
+            {
+                title: "Integral C finder",
+                tag: "Finds the value of C when calculating the anti-derivative for any function",
+                img: "cfinder.png",
+                ref: "https://www.desmos.com/calculator/occbuvmky7"
+            },
+            {
+                title: "Simple orbits",
+                tag: "A basic planet animation system using circle transformations",
+                img: "planets.png",
+                ref: "https://www.desmos.com/calculator/vlruvxqnxz"
+            },
+            {
+                title: "Complex orbits",
+                tag: "A more correct planet simulation supporting oval paths using circle transformations",
+                img: "planets2.png",
+                ref: "https://www.desmos.com/calculator/1hf2j5wcev"
+            },
+            {
+                title: "Slope Field Generator",
+                tag: "An enhanced version of an existing slope field generator that is easier to use",
+                img: "slopefield.png",
+                ref: "https://www.desmos.com/calculator/1pse6lzlen"
+            },
+            {
+                title: "Tangent and Normal lines",
+                tag: "A demo showing the equations for the tangent and normal lines at a given point",
+                img: "tangentnormal.png",
+                ref: "https://www.desmos.com/calculator/oekk6oefmk"
+            },
+            {
+                title: "Average Rate of Change",
+                tag: "A simple graph which shows slope calculation",
+                img: "avgrate.png",
+                ref: "https://www.desmos.com/calculator/wp9vnhxpja"
+            },
+        ];
 
-    // assemble each card's HTML
-    let components = [];
-    for(let card of content){
-        components.push(`
+        // assemble each card's HTML
+        let components = [];
+        for (let card of content) {
+            components.push(`
         <div class="card">
             <a class="attention" href="${card.ref}">${card.title}</a>
             <img src="${card.img}">
             ${card.tag}
         </div>
         `);
+        }
+        //insert into page
+        document.getElementById("article").innerHTML = components.join('');
     }
-    //insert into page
-    document.getElementById("article").innerHTML = components.join('');
-}
-//delete this script tag
-document.currentScript.remove();
+    //delete this script tag
+    document.currentScript.remove();
 </script>

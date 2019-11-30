@@ -1,109 +1,98 @@
 <html>
-<head>
 
-<title>Full Window Video Player</title>
-<meta name="description" content="Expand a YouTube video to fill the browser window">
-<link rel="stylesheet" type="text/css" href="../bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet.css">
-<link href="../magic-check.css" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+	<title>Full Window Video Player</title>
+	<meta name="description" content="Expand a YouTube video to fill the browser window">
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
 </head>
+<script>
+	stylesheet_depth = 1;
+	document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
 
 <body>
-<div id=jumbotron class="jumbotron header">
-		<span>Full Window Video Player</span>
-		<p>Bigger than the webpage, smaller than full-screen, and resizable!</p>
-</div>
-
-<div style="width:95%; float:center; margin: auto;">
-  <div class="alert alert-danger" role="alert">
-		<strong>I am no longer updating this page!</strong> <br>
-		YouTube has added essentially everything this page does into the Theater Mode Player in their new Material UI. <br>
-		This page is still useful for making embed links for YouTube videos.
-	</div>
-	<div id=info class="breadcrumb" style="min-width:50%; float:center" role=alert>
-		<strong>How to use:</strong>
-		<br><strong>1)</strong> Enter a link to a YouTube video.
-		<br><strong>2)</strong> Press  <strong> Watch! </strong> You will be redirected to the full player.
-		<br><strong>3)</strong> Use the browser's <strong> back </strong> buttons to return to this page.
-	</div>
-
-	<table style="width:100%;">
-		<tr><td><div class="input-group">
-			  <span class="input-group-addon"><span style="font-size:20">Enter a video link</span></span>
- 			 <input id="linkField" type="text" class="form-control" style="height:55px; width:98%"></input>
-			</div></td>
-
-		<td style="width:100px;"><button class="btn btn-primary" onclick="updateViewer();"><span style="font-size:28">Watch Video!</span></button></td></tr>
-	</table>
-
-	<script>
-
-	</script>
-
-	<div>
-	<br>
-		<!-- Change the display tag to "" to show the alert view -->
-		<div id="errors" class="alert alert-danger" role="alert" style="display:none">
-  			<strong>Whoops!</strong> Link is invalid, please check it and try again.
+	<div class=main>
+		<div class="alert alert-danger" role="alert">
+			<strong>I am no longer updating this page!</strong> <br>
+			YouTube has added essentially everything this page does into the Theater Mode Player in their new Material
+			UI. <br>
+			This page is still useful for making embed links for YouTube videos.
 		</div>
-		<div id="404s" class="alert alert-danger" role="alert" style="display:none">
-  			<strong>404!</strong> Could not access the video for that URL, please check the link and try again.
-		</div>
-		<div id="success" class="alert alert-success" role="alert" style="display:none">
-  			<strong>Success!</strong> Right-click an image, then press "Save as" to save it.
+		<div id=info class="breadcrumb" style="min-width:50%; float:center" role=alert>
+			<strong>How to use:</strong>
+			<br><strong>1)</strong> Enter a link to a YouTube video.
+			<br><strong>2)</strong> Press <strong> Watch! </strong> You will be redirected to the full player.
+			<br><strong>3)</strong> Use the browser's <strong> back </strong> buttons to return to this page.
 		</div>
 
+		<table style="width:100%;">
+			<tr>
+				<td>
+					<div class="input-group">
+						<span class="input-group-addon"><span style="font-size:20">Enter a video link</span></span>
+						<input id="linkField" type="text" class="form-control" style="height:55px; width:98%"></input>
+					</div>
+				</td>
+
+				<td style="width:100px;"><button class="btn btn-primary" onclick="updateViewer();"><span
+							style="font-size:28">Watch Video!</span></button></td>
+			</tr>
+		</table>
+
+		<script>
+
+		</script>
+
+		<div>
+			<br>
+			<!-- Change the display tag to "" to show the alert view -->
+			<div id="errors" class="alert alert-danger" role="alert" style="display:none">
+				<strong>Whoops!</strong> Link is invalid, please check it and try again.
+			</div>
+			<div id="404s" class="alert alert-danger" role="alert" style="display:none">
+				<strong>404!</strong> Could not access the video for that URL, please check the link and try again.
+			</div>
+			<div id="success" class="alert alert-success" role="alert" style="display:none">
+				<strong>Success!</strong> Right-click an image, then press "Save as" to save it.
+			</div>
+
+		</div>
 	</div>
-</div>
-<!-- the video player, commented out due to youtube being youtube -->
-<!-- <iframe id="player" style="width:100%; height:100%" src="http://www.youtube.com/embed/CtSxIj-nFCY" frameborder="0" allowfullscreen crossorigin="anonymous"></iframe> -->
+	<!-- the video player, commented out due to youtube being youtube -->
+	<!-- <iframe id="player" style="width:100%; height:100%" src="http://www.youtube.com/embed/CtSxIj-nFCY" frameborder="0" allowfullscreen crossorigin="anonymous"></iframe> -->
 </body>
+
 </html>
 
 <script>
 	//pick a random url of one of my vids to pre-seed it with
-	var urls = ["https://www.youtube.com/watch?v=3NLUHFFBXEk&index=4&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK","https://www.youtube.com/watch?v=CtSxIj-nFCY&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=1",
-			"https://www.youtube.com/watch?v=MXF2z6EU6XE&index=2&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK","https://www.youtube.com/watch?v=K7AS9jfPtEQ&index=3&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK",
-					"https://www.youtube.com/watch?v=DXngXkhEMlQ&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=5","https://www.youtube.com/watch?v=YbY2DNJ_XFs&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=6",
-							"https://www.youtube.com/watch?v=h6nBMKI2jKY&index=8&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK"];
+	var urls = ["https://www.youtube.com/watch?v=3NLUHFFBXEk&index=4&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK", "https://www.youtube.com/watch?v=CtSxIj-nFCY&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=1",
+		"https://www.youtube.com/watch?v=MXF2z6EU6XE&index=2&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK", "https://www.youtube.com/watch?v=K7AS9jfPtEQ&index=3&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK",
+		"https://www.youtube.com/watch?v=DXngXkhEMlQ&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=5", "https://www.youtube.com/watch?v=YbY2DNJ_XFs&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK&index=6",
+		"https://www.youtube.com/watch?v=h6nBMKI2jKY&index=8&list=PLXex2MY-JJKfV38ELvTNIDiyJ2VnuFjtK"];
 
 
-	var item = urls[Math.floor(Math.random()*urls.length)];
+	var item = urls[Math.floor(Math.random() * urls.length)];
 	document.getElementById("linkField").value = item;
 
 
-	window.addEventListener('resize', resize);
-	function resize(){
-		//jump viewer to bottom of window
-		window.scrollTo(0,document.body.scrollHeight);
-	}
-	function updateViewer(){
-		//remove any existing players if they exist
-		//var player = document.getElementById("player");
-		//player.parentNode.removeChild(player);
+	function updateViewer() {
 
 		var linkField = document.getElementById("linkField");
-		//var player = document.createElement('iframe');
 		var vidID = getID(linkField.value);
-		/*player.setAttribute("src",vidID);
-		player.setAttribute("width","100%");
-		player.setAttribute("height","100%");
-		document.body.appendChild(player);*/
-		resize();
-
 		player.src = linkField.value;
 	}
-	function getID(url){
+	function getID(url) {
 		var ID = '';
-		  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-		  if(url[2] !== undefined) {
-		    ID = url[2].split(/[^0-9a-z_\-]/i);
-		    ID = ID[0];
-		  }
-		  else {
-		    ID = url;
-		  }
+		url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+		if (url[2] !== undefined) {
+			ID = url[2].split(/[^0-9a-z_\-]/i);
+			ID = ID[0];
+		}
+		else {
+			ID = url;
+		}
 
 		window.location = "http://www.youtube.com/embed/" + ID;
 	}

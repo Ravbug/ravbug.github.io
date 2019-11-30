@@ -29,7 +29,7 @@ Object.prototype.insertAfter = function (newNode) { this.parentNode.insertBefore
     let header = document.createElement('div');
     header.className = "jumbotron header";
     header.innerHTML = `
-    <h1 style="color:white">${page_title}</h1>
+    <span style="color:white">${page_title}</span>
     <p style="color:white">${page_desc}</p>`;
 
     //add the jumbotron

@@ -1,146 +1,163 @@
 <html>
+
 <head>
 	<title>Random Number Generator</title>
 	<meta name="description" content="Generate non-repeating random numbers">
-	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheet.css">
-	<link href="../magic-check.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../sweetalert.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8"/>
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<link rel="stylesheet" href="../magic-check.css">
 </head>
-<style>
-	.header{
-		margin-bottom:15px;
-	}
-</style>
+<script>
+	stylesheet_depth = 1;
+	document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
+</head>
+
 <body>
-<div class="jumbotron header">
-		<h1 style="color:white">Random Number Generator</h1>
-		<p style="color:white">Generate random numbers!</p>
-</div>
 
-<!-- The actual content -->
-<div style=" float: center; width: 100%; background-color: ffffff;">
-	<!--  The "table" div containing both the output and the settings -->
-	<div style="margin: auto; float: center; width: 95%;">
-		<table style="width:100%;">
-		<tr><td>
-			<label id=answer style="font-size:40;width:100%;text-align:center">Press Generate to get a number!</label></td></tr>
-		<tr><td><hr>
+	<!-- The actual content -->
+	<div class=main>
+		<!--  The "table" div containing both the output and the settings -->
+		<div style="margin: auto; float: center; width: 95%;">
+			<table style="width:100%;">
+				<tr>
+					<td>
+						<label id=answer style="font-size:40;width:100%;text-align:center">Press Generate to get a
+							number!</label></td>
+				</tr>
+				<tr>
+					<td>
+						<hr>
 
-			<div  style="text-align:center"><button class="btn btn-primary" onclick="generate()" style="width:75%; font-size:20; float:center;margin:0 auto;">Generate!</button></div>
-			<hr>
-			<label>Settings:</label><br>
+						<div style="text-align:center"><button class="btn btn-primary" onclick="generate()"
+								style="width:75%; font-size:20; float:center;margin:0 auto;">Generate!</button></div>
+						<hr>
+						<label>Settings:</label><br>
 
-			<!--  the table with a row of settings -->
-			<table border=0 style="padding:50px; width:70%"><tr>
-				<td><div class="input-group">
-						<span class="input-group-addon" id="basic-addon1">Min:</span>
-						<input id="min" type="number" class="form-control" style="width:100%px; text-align:center;" onKeyDown="isNumberKey(event);" value=1/>
-				</div></td>
-				<td>
-					<input type=checkbox id="reroll" class="magic-checkbox" onclick="update();"/><label for="reroll"> Unique every time</label>
-				</td>
-				</tr><tr>
-				<td><div class="input-group">
-						<span class="input-group-addon" id="basic-addon1">Max:</span>
-						<input id="max" type="number" class="form-control" style="width:100%px; text-align:center;" onKeyDown="isNumberKey(event);" value=6/>
-				</div></td>
+						<!--  the table with a row of settings -->
+						<table border=0 style="padding:50px; width:70%">
+							<tr>
+								<td>
+									<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1">Min:</span>
+										<input id="min" type="number" class="form-control"
+											style="width:100%px; text-align:center;" onKeyDown="isNumberKey(event);"
+											value=1 />
+									</div>
+								</td>
+								<td>
+									<input type=checkbox id="reroll" class="magic-checkbox" onclick="update();" /><label
+										for="reroll"> Unique every time</label>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1">Max:</span>
+										<input id="max" type="number" class="form-control"
+											style="width:100%px; text-align:center;" onKeyDown="isNumberKey(event);"
+											value=6 />
+									</div>
+								</td>
 
-				<td>
-					<!-- <input type=checkbox class="magic-checkbox" onclick="update();this.checked = !this.checked;"/><label for="toggleSettings"> Animate Roll</label> -->
-				</td>
-			</tr>
+								<td>
+									<!-- <input type=checkbox class="magic-checkbox" onclick="update();this.checked = !this.checked;"/><label for="toggleSettings"> Animate Roll</label> -->
+								</td>
+							</tr>
+						</table>
+						<hr>
+					</td>
+				</tr>
 			</table>
-			<hr>
-		</td></tr>
-		</table>
 
+		</div>
 	</div>
-</div>
-<br>
-<!-- The info div -->
-<div style="width:95%; float:center; margin: auto;">
-	<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
-		<strong> What's this webpage?!</strong>
-		<br>This webpage generates random numbers based on parameters.
-		<br>Enabling unique numbers may cause a performance hit on large ranges because the program needs to search for numbers it hasn't rolled yet.
-		<br>Once the page is loaded, it doesn't need to make any network calls, so disabling wifi should not affect the page.
+	<br>
+	<!-- The info div -->
+	<div style="width:95%; float:center; margin: auto;">
+		<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+			<strong> What's this webpage?!</strong>
+			<br>This webpage generates random numbers based on parameters.
+			<br>Enabling unique numbers may cause a performance hit on large ranges because the program needs to search
+			for numbers it hasn't rolled yet.
+			<br>Once the page is loaded, it doesn't need to make any network calls, so disabling wifi should not affect
+			the page.
 
+		</div>
 	</div>
-</div>
 
 </body>
 <script>
-if (document.getElementById("min").value == "")
-	document.getElementById("min").value = "1";
-if (document.getElementById("max").value =="")
-	document.getElementById("max").value = "6";
+	if (document.getElementById("min").value == "")
+		document.getElementById("min").value = "1";
+	if (document.getElementById("max").value == "")
+		document.getElementById("max").value = "6";
 
-var postResult = document.getElementById("answer");
-var min = 0;
-var max = 0;
-var reroll = false;
-update();
-var alreadyRolled = new Set([min-1]);
-function update(){
+	var postResult = document.getElementById("answer");
+	var min = 0;
+	var max = 0;
+	var reroll = false;
+	update();
+	var alreadyRolled = new Set([min - 1]);
+	function update() {
 
-	min = parseInt(document.getElementById("min").value);
-	max = parseInt(document.getElementById("max").value);
-	reRoll = document.getElementById("reroll").checked;
-}
-
-function generate(){
-	//update fields
-    update();
-	//get random number
-	//if don't reroll is active
-	var num = min-1;
-	if (reRoll){
-		num = getRandomUnique();
+		min = parseInt(document.getElementById("min").value);
+		max = parseInt(document.getElementById("max").value);
+		reRoll = document.getElementById("reroll").checked;
 	}
-	else{
-		 num = parseInt(getRandom(min,max+1));
-	}
-	postResult.innerHTML = num;
 
-	//verify correctness
-	if (postResult.innerHTML == "NaN"){
-		if (document.getElementById("min").value == "")
-			document.getElementById("min").value = "1";
-		if (document.getElementById("max").value =="")
-			document.getElementById("max").value = "6";
-		generate();
-		sweetAlert("Oops...", "One or more of the settings were invalid, so they have been reset to the defaults.", "error");
-	}
-	alreadyRolled.add(num);
+	function generate() {
+		//update fields
+		update();
+		//get random number
+		//if don't reroll is active
+		var num = min - 1;
+		if (reRoll) {
+			num = getRandomUnique();
+		}
+		else {
+			num = parseInt(getRandom(min, max + 1));
+		}
+		postResult.innerHTML = num;
+
+		//verify correctness
+		if (postResult.innerHTML == "NaN") {
+			if (document.getElementById("min").value == "")
+				document.getElementById("min").value = "1";
+			if (document.getElementById("max").value == "")
+				document.getElementById("max").value = "6";
+			generate();
+			sweetAlert("Oops...", "One or more of the settings were invalid, so they have been reset to the defaults.", "error");
+		}
+		alreadyRolled.add(num);
 
 
-	if (num == "NaN"){ postResult.innerHTML = "";
-  sweetAlert("Error!", "Please check settings and try again.", "error");
-  }
-}
-function getRandomUnique(){
-	//have all the numbers been chosen?
-	var num = min-1;
-	if (alreadyRolled.size >= Math.abs((max+1)-min)+1){
-		alreadyRolled = new Set([min-1]);
+		if (num == "NaN") {
+		postResult.innerHTML = "";
+			sweetAlert("Error!", "Please check settings and try again.", "error");
+		}
 	}
-	while (alreadyRolled.has(num)){
-		num = parseInt(getRandom(min,max+1));
+	function getRandomUnique() {
+		//have all the numbers been chosen?
+		var num = min - 1;
+		if (alreadyRolled.size >= Math.abs((max + 1) - min) + 1) {
+			alreadyRolled = new Set([min - 1]);
+		}
+		while (alreadyRolled.has(num)) {
+			num = parseInt(getRandom(min, max + 1));
+		}
+		return num;
 	}
-	return num;
-}
-function getRandom(min, max){
-	return (Math.random() * (max-min) + min);
-}
-function isNumberKey(evt){
-    var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57 || charCode ==37 || charCode == 39))
-        return false;
-    return true;
-}
+	function getRandom(min, max) {
+		return (Math.random() * (max - min) + min);
+	}
+	function isNumberKey(evt) {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (charCode > 31 && (charCode < 48 || charCode > 57 || charCode == 37 || charCode == 39))
+			return false;
+		return true;
+	}
 </script>
-<script src="../sweetalert.min.js" ></script>
+<script src="../sweetalert.min.js"></script>
+
 </html>

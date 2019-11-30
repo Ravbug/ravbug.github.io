@@ -1,244 +1,258 @@
-
 <html>
+
 <head>
-<title>Emojitizer - Translate English into Emoji</title>
-<meta name="description" content="Insert emojis into text like it's the year 2100">
-<link rel="stylesheet" type="text/css" href="../bootstrap.css">
-<link href="../magic-check.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8"/>
-  <script src="../utilities.js"></script>
-  <script src="emojitizer.js"></script>
-  <link rel="stylesheet" type="text/css" href="../sweetalert.css">
-  <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+  <title>Emojitizer - Translate English into Emoji</title>
+  <meta name="description" content="Insert emojis into text like it's the year 2100">
+  <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+  <meta charset="UTF-8">
 </head>
-<style>
-    .header{
-      margin-bottom:5px;
+<script>
+  stylesheet_depth = 1;
+  document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
+<script src="../utilities.js"></script>
+<script src="emojitizer.js"></script>
+
+<head>
+  <style>
+    .header {
+      margin-bottom: 5px;
     }
   </style>
+
 <body id=main>
-<div id="jumbotron" class="jumbotron header">
-		<span id=bigText style="color:white;font-size:60">Emojitizer</span>
-		<p id=littleText style="color:white">Translate English into Emoji!</p>
-</div>
 
-<!-- The actual content -->
-<div style="height: 500px;float: center; width: 100%;">
-	<!-- Inset Content Div -->
-	<div style="margin: auto; float: center; width: 95%;">
-    <article>
-      <div>
-        <span id=header1 style="font-size:20;font-weight:bold">English</span>
-		    <textarea autofocus id="input" onkeyup="generate(true)" class="form-control" style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
-      </div>
-      <div>
-        <span id=header2 style="font-size:20;font-weight:bold">Emoji</span>
-		    <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
-      </div>
-    </article>
-
-    <!-- The control buttons at the bottom -->
-    <br>
-    <table border=0 style="width:100%"><tr><td style="width:200px">
-        <button class="btn btn-primary" onclick="update();" style="float:left;"><span style="font-size:20">Translate!</span></button>
-      </td><td style="width:200px">
-          <button id=toggle class="btn btn-secondary" onclick="swap();" style="float:center;width:100%"><span style="font-size:20">Emoji ➔ English</span></button>
-      </td><td style="width:200px">
-      <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span style="font-size:20">Copy!</span></button>
-  </td></table>
-<br>
-  <table border=0 style="width:100%"><tr>
-      <td>
-          <input type=checkbox id="discord"  class="magic-checkbox" onclick="update();"/><label for="discord" style="float:center;">Discord Emojis</label>
-      </td><td>
-        <label>Mode: </label>
-        <select id=mode onclick="update();">
-          <option value=0>Strict Match</option>
-          <option value=1>Length Ratio</option>
-          <option value=2>Loose Match</option>
-        </select>
-        <div id=ratio_container style="display:none;float:center;min-width:100px" class="input-group" style="width:10%">
-            <span class="input-group-addon">Ratio</span>
-            <input onkeyup="update();" id=ratio_value type="number" value=0.3 class="form-control" aria-label="A decimal between 0 and 1">
+  <!-- The actual content -->
+  <div style="height: 500px;float: center; width: 100%;">
+    <!-- Inset Content Div -->
+    <div style="margin: auto; float: center; width: 95%;">
+      <article>
+        <div>
+          <span id=header1 style="font-size:20;font-weight:bold">English</span>
+          <textarea autofocus id="input" onkeyup="generate(true)" class="form-control"
+            style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
         </div>
-      </td><td>
-        <label>Operation:</label>
-        <select id="operation" onClick="update()">
-          <option value=0>Replace</option>
-          <option value=1>Append</option>
-          <option value=2>Prepend</option>
-        </select>
-      </td></tr>
-  </table>
-  <br>
-  <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
-    <h3>😱 😱 😱 👌👌👌</h3></strong>
+        <div>
+          <span id=header2 style="font-size:20;font-weight:bold">Emoji</span>
+          <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+        </div>
+      </article>
 
-    This webpage transforms plain text into the immaculate emoji language.
-    <br>Want emoji tokens for the VOIP service Discord instead of Unicode characters? Tick that checkbox!
-    <br><br>You can force a particular emoji in loose/ratio modes by putting colons around it, like this - :dog2:
-    <br><strong>Not working?</strong> A script might not have loaded. Try reloading.
+      <!-- The control buttons at the bottom -->
+      <br>
+      <table border=0 style="width:100%">
+        <tr>
+          <td style="width:200px">
+            <button class="btn btn-primary" onclick="update();" style="float:left;"><span
+                style="font-size:20">Translate!</span></button>
+          </td>
+          <td style="width:200px">
+            <button id=toggle class="btn btn-secondary" onclick="swap();" style="float:center;width:100%"><span
+                style="font-size:20">Emoji ➔ English</span></button>
+          </td>
+          <td style="width:200px">
+            <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span
+                style="font-size:20">Copy!</span></button>
+          </td>
+      </table>
+      <br>
+      <table border=0 style="width:100%">
+        <tr>
+          <td>
+            <input type=checkbox id="discord" class="magic-checkbox" onclick="update();" /><label for="discord"
+              style="float:center;">Discord Emojis</label>
+          </td>
+          <td>
+            <label>Mode: </label>
+            <select id=mode onclick="update();">
+              <option value=0>Strict Match</option>
+              <option value=1>Length Ratio</option>
+              <option value=2>Loose Match</option>
+            </select>
+            <div id=ratio_container style="display:none;float:center;min-width:100px" class="input-group"
+              style="width:10%">
+              <span class="input-group-addon">Ratio</span>
+              <input onkeyup="update();" id=ratio_value type="number" value=0.3 class="form-control"
+                aria-label="A decimal between 0 and 1">
+            </div>
+          </td>
+          <td>
+            <label>Operation:</label>
+            <select id="operation" onClick="update()">
+              <option value=0>Replace</option>
+              <option value=1>Append</option>
+              <option value=2>Prepend</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+        <h3>😱 😱 😱 👌👌👌</h3></strong>
+
+        This webpage transforms plain text into the immaculate emoji language.
+        <br>Want emoji tokens for the VOIP service Discord instead of Unicode characters? Tick that checkbox!
+        <br><br>You can force a particular emoji in loose/ratio modes by putting colons around it, like this - :dog2:
+        <br><strong>Not working?</strong> A script might not have loaded. Try reloading.
+
+      </div>
+    </div>
+  </div>
+
+  <!-- The info div -->
+  <div style="width:95%; float:center; margin: auto;">
 
   </div>
-	</div>
-</div>
-
-<!-- The info div -->
-<div style="width:95%; float:center; margin: auto;">
-
-</div>
 </body>
 
 <script>
-var inputField = document.getElementById("input");
-var outputField = document.getElementById("output");
-var discord = document.getElementById("discord").checked;
-var mode = document.getElementById("mode").value;
-var ratio = document.getElementById("ratio_value").value;
-var operation = document.getElementById("operation").value;
-var timeoutID = -1;
-var header1 = document.getElementById("header1");
-var header2 = document.getElementById("header2");
-var toEmoji = true;
+  var inputField = document.getElementById("input");
+  var outputField = document.getElementById("output");
+  var discord = document.getElementById("discord").checked;
+  var mode = document.getElementById("mode").value;
+  var ratio = document.getElementById("ratio_value").value;
+  var operation = document.getElementById("operation").value;
+  var timeoutID = -1;
+  var header1 = document.getElementById("header1");
+  var header2 = document.getElementById("header2");
+  var toEmoji = true;
 
-setupFromQString();
+  setupFromQString();
 
-resize();
+  resize();
 
-//setup vars from qstring
+  //setup vars from qstring
 
-function update(){
-  discord = document.getElementById("discord").checked;
-  mode = document.getElementById("mode").value;
-  ratio = document.getElementById("ratio_value").value;
-  operation = document.getElementById("operation").value;
+  function update() {
+    discord = document.getElementById("discord").checked;
+    mode = document.getElementById("mode").value;
+    ratio = document.getElementById("ratio_value").value;
+    operation = document.getElementById("operation").value;
 
-  if (mode == 1){
-    document.getElementById("ratio_container").style.display = "";
+    if (mode == 1) {
+      document.getElementById("ratio_container").style.display = "";
+    }
+    else {
+      document.getElementById("ratio_container").style.display = "none";
+    }
+    if (ratio == "" || ratio > 1 || ratio < 0) {
+      document.getElementById("ratio_value").value = 0.0;
+    }
+    generate(false);
   }
-  else{
-    document.getElementById("ratio_container").style.display = "none";
-  }
-  if (ratio == "" || ratio > 1 || ratio < 0){
-    document.getElementById("ratio_value").value = 0.0;
-  }
-  generate(false);
-}
 
-/*
-Kicks off the emojitizer engine
-If the string is long, this gets delayed to prevent lagging the browser
-Writes current userprefs to the URL bar for sharing purposes
-*/
-function generate(ignoreLength){
-  //write arguments to URL
+  /*
+  Kicks off the emojitizer engine
+  If the string is long, this gets delayed to prevent lagging the browser
+  Writes current userprefs to the URL bar for sharing purposes
+  */
+  function generate(ignoreLength) {
+    //write arguments to URL
 
-  writeURLArgs(["d=" + discord,"m=" + mode,"r=" + ratio,"o=" + operation,"t=" + toEmoji ,"s=" + encodeURIComponent(inputField.value)]);
-  //clear any timers if there are any
-  if (timeoutID >= 0)
-    clearTimeout(timeoutID);
+    writeURLArgs(["d=" + discord, "m=" + mode, "r=" + ratio, "o=" + operation, "t=" + toEmoji, "s=" + encodeURIComponent(inputField.value)]);
+    //clear any timers if there are any
+    if (timeoutID >= 0)
+      clearTimeout(timeoutID);
 
-//if string is too long, kick of as async, otherwise run live
+    //if string is too long, kick of as async, otherwise run live
 
-  if (inputField.value.length < 2000 && ignoreLength){
-    if (toEmoji) outputField.value = emojitize(inputField.value, discord, mode, ratio, operation);
-    else outputField.value = reverseEmojitize(inputField.value,discord);
-    outputField.scrollTop = outputField.scrollHeight;
-
-  }
-  else{
-    outputField.style.backgroundColor = "ffdddd" ;
-    timeoutID = setTimeout(function(){
+    if (inputField.value.length < 2000 && ignoreLength) {
       if (toEmoji) outputField.value = emojitize(inputField.value, discord, mode, ratio, operation);
-      else outputField.value = reverseEmojitize(inputField.value,discord);
-
+      else outputField.value = reverseEmojitize(inputField.value, discord);
       outputField.scrollTop = outputField.scrollHeight;
-      outputField.style.backgroundColor = "eeeeee";
-    },1000);
-  }
-}
 
-function resize(){
-    inputField.style.height = (window.innerHeight-220) / 3;
-    outputField.style.height = (window.innerHeight-220) / 3;
-    document.getElementById("bigText").style.fontSize = window.innerHeight / 20;
-    document.getElementById("jumbotron").style.padding = window.innerHeight / 20;
+    }
+    else {
+      outputField.style.backgroundColor = "ffdddd";
+      timeoutID = setTimeout(function () {
+        if (toEmoji) outputField.value = emojitize(inputField.value, discord, mode, ratio, operation);
+        else outputField.value = reverseEmojitize(inputField.value, discord);
+
+        outputField.scrollTop = outputField.scrollHeight;
+        outputField.style.backgroundColor = "eeeeee";
+      }, 1000);
+    }
+  }
+
+  function resize() {
+    inputField.style.height = (window.innerHeight - 220) / 3;
+    outputField.style.height = (window.innerHeight - 220) / 3;
     var width = document.getElementById("main").scrollWidth;
     var colcount = width / 324;
     colcount = parseInt(colcount);
-    if (colcount == 1){
-      inputField.style.height = (window.innerHeight)/6;
-      outputField.style.height = (window.innerHeight)/6;
+    if (colcount == 1) {
+      inputField.style.height = (window.innerHeight) / 6;
+      outputField.style.height = (window.innerHeight) / 6;
     }
-}
-
-//switch the direction the translation proceeds, and update the headers
-function swap(){
-  toEmoji = !toEmoji;
-
-  var oldOut = outputField.value;
-  var oldIn = inputField.value;
-
-  outputField.value = oldIn;
-  inputField.value = oldOut;
-
-  if (toEmoji){
-    document.getElementById("toggle").innerHTML = "<h4>Emoji ➔ English</h4>";
-    header1.innerHTML = "English";
-    header2.innerHTML = "Emoji";
-  }
-  else{
-    document.getElementById("toggle").innerHTML = "<h4>English ➔ Emoji</h4>";
-    header1.innerHTML = "Emoji";
-    header2.innerHTML = "English";
   }
 
-  generate(true);
-}
+  //switch the direction the translation proceeds, and update the headers
+  function swap() {
+    toEmoji = !toEmoji;
 
-function copySuccess(textToCopy){
-  sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
-}
-function copyFailed(){
-  swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
-}
+    var oldOut = outputField.value;
+    var oldIn = inputField.value;
 
-//loads the data from the qString. called once on load.
-function setupFromQString(){
-  var discord = getURLArgValue("d");
-  if (discord == "true")
-    document.getElementById("discord").checked = true;
-  else {
-    document.getElementById("discord").checked = false;
-  }
-  var m = getURLArgValue("m");
-  if (m) document.getElementById("mode").value = m;
+    outputField.value = oldIn;
+    inputField.value = oldOut;
 
-  var o = getURLArgValue("o");
-  if (o) document.getElementById("operation").value = o;
+    if (toEmoji) {
+      document.getElementById("toggle").innerHTML = "<span style='font-size:20px'>Emoji ➔ English</span>";
+      header1.innerHTML = "English";
+      header2.innerHTML = "Emoji";
+    }
+    else {
+      document.getElementById("toggle").innerHTML = "<span style='font-size:20px'>English ➔ Emoji</span>";
+      header1.innerHTML = "Emoji";
+      header2.innerHTML = "English";
+    }
 
-  var string = getURLArgValue("s");
-  if (string)
-    document.getElementById("input").value = string;
-  else{
-    inputField.value = "";
+    generate(true);
   }
-  //switch dir if necessary, else statement to avoid double-translate
-  if (getURLArgValue("t") == "false"){
-    swap();
+
+  function copySuccess(textToCopy) {
+    sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
   }
-  else{
-    update();
+  function copyFailed() {
+    swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
   }
-  setTimeout(function() {
-    outputField.scrollTop = 0;
-    outputField.style.backgroundColor = "eeeeee";
-  },700);
-}
-//get a window listener for responsive sizing of input/output fields
-window.addEventListener('resize', resize);
+
+  //loads the data from the qString. called once on load.
+  function setupFromQString() {
+    var discord = getURLArgValue("d");
+    if (discord == "true")
+      document.getElementById("discord").checked = true;
+    else {
+      document.getElementById("discord").checked = false;
+    }
+    var m = getURLArgValue("m");
+    if (m) document.getElementById("mode").value = m;
+
+    var o = getURLArgValue("o");
+    if (o) document.getElementById("operation").value = o;
+
+    var string = getURLArgValue("s");
+    if (string)
+      document.getElementById("input").value = string;
+    else {
+      inputField.value = "";
+    }
+    //switch dir if necessary, else statement to avoid double-translate
+    if (getURLArgValue("t") == "false") {
+      swap();
+    }
+    else {
+      update();
+    }
+    setTimeout(function () {
+      outputField.scrollTop = 0;
+      outputField.style.backgroundColor = "eeeeee";
+    }, 700);
+  }
+  //get a window listener for responsive sizing of input/output fields
+  window.addEventListener('resize', resize);
 </script>
-<script src="../sweetalert.min.js" ></script>
+<script src="../sweetalert.min.js"></script>
 
 </html>
