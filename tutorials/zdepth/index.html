@@ -1,0 +1,246 @@
+<head>
+	<title>Extracting Minecraft Texture Files</title>
+	<meta name="description" content="Step-by-step instructions for setup, rendering, and compositing">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+</head>
+<style>
+	img {
+		max-width: 500px;
+	}
+</style>
+<div class="jumbotron header">
+	<h1 style="color:white">Extracting Minecraft Texture Files</h1>
+	<p style="color:white">From any version using its jar file</p>
+</div>
+
+<div class=main>
+
+	This tutorial shows how to render a zDepth Map from Autodesk Maya 2016 Ext 2 (or higher) and how to
+	composite it in Nuke.
+
+	I have linked all the example files below, but I strongly encourage following this tutorial so you will know how the
+	system works and can adapt it.
+	<hr>
+	<h2>Software you will need:</h2>
+	<ul style="list-style-type: circle;">
+		<li>Autodesk Maya 2016 Extension 2 or higher</li>
+		<li>Nuke 10 (licensed or non-commerical)</li>
+	</ul>
+	<hr>
+	<h2>Setting up the Scene</h2>
+	You do not need to start with an empty scene. If there's already animation/lighting/vfx in the scene does not
+	matter.
+	<ol>
+		<li>Open your 3D scene in Maya and open the Render Setup window (In Windows -&gt; Rendering Editors -&gt; Render
+			Setup)</li>
+		<li>Create a new Render Layer, and rename it to "Color"
+			<ol>
+				<li>Right-click the layer and add a new collection</li>
+				<li>Name it "Elements"</li>
+				<li>In the outliner, select all your geometry and lights</li>
+				<li>In the Property Editor of the Render Setup window, click the [Add] button.</li>
+				<img src="http://i.imgur.com/0HOUTcA.png" /></li>
+	</ol>
+	</li>
+	<li>Create a new Render Layer and rename it to "zDepth"
+		<ol>
+			<li>Create a new collection, rename it to "Geometry" and add only the geometry of your scene to it</li>
+			<li>Create a new collection, and add all of your lights to it</li>
+			<li>Disable the collection containing your lights (this way they don't shine and mess up the depth map<br>
+				<img src="http://i.imgur.com/FQJLokz.png" /></li>
+	</li>
+	<li>In the Outliner, go to Display -&gt; and uncheck "Show DAG shapes only"</li>
+	<li>type "rs" into the search box and select the "rs_zDepth" entry</li>
+	<li>In the Attribute Editor, Click Presets and click "Luminance Depth"<br>
+		<img src="http://i.imgur.com/9gnEukQ.png" /><img src="http://i.imgur.com/HNTj0Ay.png" /></li>
+	<li>A Surface Shader has been created, and the attribute editor should have switched to it. If it did
+		not automatically switch, go to the Hypershade (Windows -&gt; Rendering Editors -&gt; Hypershade)
+		and click the Surface Shader. Click the black triangle-box next to [Color]</li>
+	<li>The Attribute Editor should have switched to a setRange node screen. Right click "Old Min" and "Old
+		Max" and break the connections</li>
+	<li>"Old min" is the value that determines the closeness of objects. Leave this value alone.</li>
+	<li>"Old Max" is the number of units before the depth map becomes completely black. For My own scene, I
+		set this t0 250.<br>
+		<img src="http://i.imgur.com/QDQOfxy.png" /></li>
+	</li>
+	<li>Switch back to the Render Setup window. Right click the "Geometry" collection and select "Create
+		Material Override"</li>
+	<li>Open the Hypershade window (Windows -&gt; Rendering Editors -&gt; Hypershade)
+		<ol>
+			<li>Select the surfaceShader, and middle-mouse drag it to the Override Material box in the
+				Render Setup View<br>
+				<img src="http://i.imgur.com/8vrUd2k.png" /></li>
+		</ol>
+	</li>
+	<li>Click the eye icon on the zDepth layer to make it visible. All the objects in the scene should have
+		a white-to-black gradient. Move the camera to see it update.</li>
+	<li>Play around with the "Old Max" value and try to make the 100% black area be just at the far edge of
+		the scene.
+		<img src="http://i.imgur.com/rlEgzqd.png" /></li>
+	</ol>
+	</li>
+	<li>(Optional, but adds to the visuals) Create another Render Layer and rename it to "Fog"
+		<ol>
+			<li>To create the objects for the fog pass,
+				<ol>
+					<li>create a volume cube and encompass your whole scene with it.</li>
+					<li>In the cubeFog properties, assign a Cloud texture to the transparency attribute. You don't
+						need to change anything about the fog pass.<br>
+						<img src="http://i.imgur.com/hEZUyGM.png" /></li>
+				</ol>
+			</li>
+			<li>Create two collections for the Fog layer: "Fog_Object" and "Disable_Lights"</li>
+			<li>Add your volume box to the "Fog_Object" collection</li>
+			<li>Add all your lights to the "Disable_Lights" collection, and then disable the collection.</li>
+			<li>Click the Eye to make the Fog Layer visible. You should only see the volume box and nothing else.
+				<br>
+				<img src="http://i.imgur.com/stbfm1e.png" /></li>
+		</ol>
+	</li>
+	<li>In the Render Settings window, click the clapboard next to the default "Scene" render layer to disable it.
+		(It should not be blue)
+		<br><img src="http://i.imgur.com/s4FNBrm.png" /></li>
+	</li>
+	<li>Set up your render settings how you like (I've found Mental Ray to create the best depth map), and render
+		your scene!
+		<ol>
+			<li>Make sure that the Depth pass does not render a colored background (have a transparent background)
+			</li>
+			<li>It should create 3 folders in the images directory: "Color" "zDepth" and "Fog", each containing the
+				correct data.
+				<br><img title="" src="http://i.imgur.com/Ar1EWz0.png" /></li>
+		</ol>
+	</li>
+	</ol>
+	<hr>
+	<h2>Compositing the scene</h2>
+	You are done with Maya now. Make sure you like the output of your three image sequences before continuing to the
+	next steps.
+	<br>
+	If you prefer a different compositor and know how to composite the depth, then you can skip the rest of this
+	document.
+	<br><br>
+	<strong>The Basics of Nuke:
+		<ul>
+			<li>Creating nodes in nuke: </strong>Right Click in Node graph -&gt; find node OR Press tab -&gt; search for
+		node by name</li>
+		<li><strong>Connecting nodes: </strong>Click and Drag the arrows on top of compatible nodes</li>
+		<li><strong>Editing Nodes: </strong>Double-click on node to open property panel, then drag sliders to modify values.</li>
+		<li><strong>Close Node: </strong>Press the [x] at the top right of the node property panel (next to the ? and Window
+			buttons)</li>
+		<li><strong>Disable Node:</strong> Click on the node and press [D] on your keyboard</li>
+	</ul>
+	<ol>
+		<li>Launch Nuke, and create a new project.</li>
+		<li>Go to Edit -&gt; Project Settings (or press [S] on your keyboard)
+			<ol>
+				<li>Set <em>frame range </em>so it matches your image sequences, then close the panel</li>
+			</ol>
+		</li>
+		<li>Drag your image sequences from the file explorer into the project viewer (or import them from File -&gt;
+			Import File(s))
+			<ol>
+				<li>They should have rendered into 3 folders: "rs_Color" "rs_zDepth" and "rs_Fog"
+					<br><img src="http://imgur.com/fm3Sf3J.png" /></li>
+			</ol>
+		</li>
+		<li>Click the Node Graph tab at the middle-right of the window</li>
+		<li>Drag your sequences from the Project viewer into the node graph</li>
+		<li>In the Node Graph, create a ShuffleCopy node</li>
+		<li>Connect the (1) to the Color sequence and the (2) to the Depth sequence
+			<ol>
+				<li>Set the properties as follows:
+					<br><img src="http://imgur.com/WRi3vnw.png" />
+					<img src="http://imgur.com/YER57j7.png" /></li>
+			</ol>
+		</li>
+		<li>Create a Constant node, and set it to any color that's not black</li>
+		<li>Create an AddMix node, and connect the (A) to the Constant, and the (B) to the Fog sequence
+			<br>
+			<img src="http://imgur.com/qZz0QIt.png" />
+		</li>
+		<li>Create a ZMerge node, and connect the (1) input to the AddMix node and the (2) Input to the ShuffleCopy node
+			<ol>
+				<li>Z channel: depth.Z</li>
+				<li>Alpha channel: depth.Z</li>
+				<li>smaller Z = further away: checked
+					<br><img src="http://imgur.com/OR0V8BF.png"  /><br>
+					<img src="http://imgur.com/jtoHZpE.png" /></li>
+			</ol>
+		</li>
+		<li>Create a ZDefocus Node, and connect the (Image) input to the ShuffleCopy node
+			<ol>
+				<li>math: depth</li>
+				<li>blur inside: unchecked<br>
+					<img src="http://imgur.com/blISBhS.png" />
+					<img src="http://imgur.com/VFRqIar.png" /></li>
+			</ol>
+		</li>
+		<li>Create a Merge node, and connect the (A) input to the ZMerge node and the (B) input to the ZDefocus node
+			<ol>
+				<li>Decrease mix to around 0.225<br><img src="http://imgur.com/ZlZFvb1.png" /></li>
+			</ol>
+		</li>
+		<li>Connect the Viewer input to the Merge node.</li>
+		<li>Your node graph is done! Connect any extra nodes for further compositing to the Merge Node</li>
+	</ol>
+	<hr>
+	<h2>Tweaking the setup:</h2>
+	To change how the different nodes interact, change the following values:
+	<ul>
+		<li><strong>Depth of Field distance: </strong>In the ZDefocus node, change the <em>Focus Plane</em> attribute. Larger
+			values = closer blurring
+			Alternatively, you can drag the <em>focal_point</em> handle in the viewer to interactively set the focus plane.</li>
+			<li><strong>Depth of Field strength: </strong>Change the <em>size</em> value of the ZDefocus node.</li>
+			<li><strong>Depth of field end strength: </strong>Change the <em>maximum</em> value of the ZDefocus node.</li>
+			<li><strong>Fog Color: </strong>Change the color of the Constant node. If you want the color to be something else, just
+				replace the Constant node with a different setup. Just make sure the final output of that setup outputs to the (A)
+				input on the AddMix node.</li>
+			<li><strong>Fog Density: </strong>Change the m<em>ix</em> value of the AddMix node</li>
+			<li><strong>Fog Distance/Intensity: </strong>Change the m<em>ix</em> value of the Merge node (Not the ZMerge node!)</li>
+	</ul>
+	
+	<hr>
+
+	<h2>Rendering the final composite</h2>
+	To export your composite as a video file or as an image sequence, do the following:
+	<ol>
+		<li>Create a Write node and connect the input to the Merge node (if the viewer is already connected, just drag
+			the Write node over the dashed line)
+			<br><img src="http://imgur.com/RqaAzPq.png" /></li>
+		</li>
+		<li>For a Video output
+			<ol>
+				<li>file type: mov</li>
+				<li>Codec: h.264 (if present) or Apple ProRes 4444<br>
+				<img src="http://imgur.com/ceuRHNf.png" /></li>
+			</ol>
+		</li>
+		<li>For an image sequence output
+			<ol>
+				<li>file type: select any image format (I recommend .exr or .tiff for preserving ultrawhite values, or
+					.png for regular clamping.</li>
+				<li>To render the alpha channel, set <em>channels </em>to rgba<br>
+				<img src="http://imgur.com/66J4o0w.png"/></li>
+			</ol>
+		</li>
+		<li>Click the folder icon next to <em>file </em>and select a folder to write the file in (make sure to include
+			the extension!)</li>
+		<li>To exclude the DOF disable the ZDefocus node (optional)</li>
+		<li>Go to Render -&gt; All Write nodes (or press F5 on your keyboard)</li>
+		<li>(Optional) check render in background, set the frame range if incorrect, and press [OK]</li>
+		<li>Wait for the render to complete (this can take a while on slow hardware)</li>
+	</ol>
+	Congratulations! You have successfully composited depth from Maya using Nuke!
+
+	If you want to suggest edits, or another tutorial, comment it down below (you do not need to register to comment)
+
+	<a href="http://bit.ly/2hKHAlm"><strong>Download the example files</strong></a>
+
+	Note: the .mb file requires Maya 2017 to open without errors.
+
+</div>

@@ -1,0 +1,241 @@
+<head>
+	<title>Kinect Motion Capture</title>
+	<meta name="description" content="Use an Xbox sensor for inexpensive motion capture!">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+</head>
+<style>
+	img {
+		max-width: 300px;
+	}
+</style>
+<div class="jumbotron header">
+	<h1 style="color:white">Kinect Motion Capture Tutorial</h1>
+	<p style="color:white">Inexpensive motion capture using an Xbox Kinect</p>
+</div>
+
+<div class=main>
+
+	Motion capture is a method used in the film industry to copy the motions of real-world actors into a 3D environment.
+	These movements can then be skinned onto CGI characters resulting in very natural-looking animation that is not
+	achievable with regular keyframing. Some movies that used this technique are The Polar Express and The Adventures of
+	Tintin: The secret of the Unicorn.
+
+	But you don't need any extra super-expensive finicky tools to do this! You can use an Xbox Kinect! This webpage will
+	show you how to make your own very natural looking animations with very inexpensive gear.
+	<h1>Video Tutorial:
+		<iframe style="width: 100%;" src="https://www.youtube.com/embed/LL1wrw5iLO8" width="300" height="480"
+			allowfullscreen="allowfullscreen"></iframe></h1>
+	Seb8tian graciously created this video tutorial from this webpage. Go subscribe! Make sure to enable Closed Captions
+	(CC) on the video.
+	<script src="https://apis.google.com/js/platform.js"></script>
+	<div class="g-ytsubscribe" data-channel="Seb8tian" data-layout="full" data-count="default"></div>
+	<hr>
+	<h2>Things you will need:</h2>
+	<ol>
+		<li>A 64-bit computer running Windows 7 or higher with USB 2.0 or higher</li>
+		<li>At least 6 GB free of hard disk space</li>
+		<li>a CPU and GPU that meet system requirements for Maya</li>
+		<li>A 3-button mouse (Not required, but you can't pan without one)</li>
+		<li>An Xbox Kinect 360 sensor. (The instructions for an Xbox One are different and I don't know how to do it.
+			You can try with these steps but success is not guaranteed.)</li>
+		<li>Kinect 360 USB adapter (if your Kinect does not have a standard USB connector)
+			<ol>
+				<li>An adapter you could use: <a
+						href="https://www.amazon.com/Microsoft-Xbox-360-Kinect-Sensor-Adapter/dp/B00JVI6BVY"
+						target="_blank"
+						rel="noopener">https://www.amazon.com/Microsoft-Xbox-360-Kinect-Sensor-Adapter/dp/B00JVI6BVY</a>
+				</li>
+			</ol>
+		</li>
+		<li>An open space free of obstructions (10ft*10ft recommended, 5ft*5ft minimum)</li>
+		<li>Once you have gathered all of these parts you are ready to proceed!</li>
+	</ol>
+	<hr>
+	<h2>The software we will install:</h2>
+	A complete list of all the software we will install just as a heads-up. No surprises! <strong>(Don't install any of
+		this yet)</strong>
+	<ol>
+		<li>Autodesk Maya 2016 or higher (Can be acquired for free legally by making a student account on Autodesk.com,
+			more info about this later)</li>
+		<li>Autodesk MotionBuilder 2016 or higher (make sure to use the same version as Maya!)</li>
+		<li>Kinect SDK 1.8 (or 2.0 for Xbox One)</li>
+	</ol>
+	<hr>
+	<h2>Installation and Setup</h2>
+	<ol>
+		<li>Download and install the Kinect SDK 1.8 (Do not plug in the Kinect first!)[spoiler title='Specific
+			Instructions' style='blue' collapse_link='true']
+			<ol>
+				<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=40278">Click this link to go to
+						the page for the download [If you are using an Xbox One Kinect then download the SDK v2.0]</a>
+				</li>
+				<li>Press the green [Continue] button Press [No, I do not want to register.Take me to the download] and
+					then the [Next] button at the bottom right</li>
+				<li>When the file downloads, you can close that tab/window</li>
+			</ol>
+		</li>
+		<li>Run the installer to install the SDK[spoiler title='Specific Instructions' style='blue'
+			collapse_link='true']
+			<ol>
+				<li>Double-click the file named "KinectSDK-v1.8-Setup.exe" (KinectSDK-v-2.0-Setup.exe for Xbox One, I
+					assume)</li>
+				<li>Check "I agree to the license terms and conditions</li>
+				<li>Click [Install], then [Yes] When it finishes installing, you can close the window</li>
+			</ol>
+		</li>
+		<li>If you haven't already, create an Autodesk student account [spoiler title='How to make an Autodesk student
+			account' style='blue' collapse_link='true']
+			<ol>
+				<li>Go to www.autodesk.com Press [Sign in] and then [Education Community] at the upper-right side of the
+					website</li>
+				<li>Click [signing up] link above the email text box</li>
+				<li>Choose your country for the first box</li>
+				<li>Select [Student] for the second box</li>
+				<li>Enter any birthday that makes you 13+ years old</li>
+				<li>Fill in the fields and check the box, then press [Sign up]</li>
+				<li>Click the link in the email they sent you to verify it.</li>
+				<li>You're done! You now have access to nearly all of Autodesk's software, for free! You can use it
+					however you like as long as you don't make direct revenue from it. Otherwise you will be violating
+					their EULA (YouTube ad revenue doesn't count)</li>
+			</ol>
+		</li>
+		<li>Install the student version of Autodesk MotionBuilder[spoiler title='How to install MotionBuilder'
+			style='blue' collapse_link='true']
+			<ol>
+				<li>Go to <a
+						href="http://www.autodesk.com/education/free-software/motionbuilder">www.autodesk.com/education/free-software/motionbuilder</a>
+				</li>
+				<li>Set the version to any version 2016 or later</li>
+				<li>Set the operating system to Windows 64-bit</li>
+				<li>Set the language to whichever one you prefer reading in</li>
+				<li>Press [Install Now]</li>
+				<li>Press [I Accept], then [Install]</li>
+				<li>Double-click to run the file you just downloaded (it has a long name)</li>
+				<li>Press [Yes]</li>
+				<li>Press [Install], then [Install] again in the new dialog</li>
+				<li>Wait for it to complete, then close the dialog</li>
+			</ol>
+		</li>
+		<li>Repeat the process for Maya (make sure you set the same version!)
+			<ol>
+				<li>www.autodesk.com/education/free-software/maya</li>
+			</ol>
+		</li>
+		<li>Plug  your Kinect sensor into any power USB 2.0 or higher port on your computer
+			<ol>
+				<li>Plug the power cable into a wall socket if your Kinect requires a power outlet</li>
+				<li>Wait while your computer automatically installs any required drivers for your computer. Do not
+					unplug the Kinect during this process!</li>
+			</ol>
+		</li>
+	</ol>
+	<hr>
+	<h2>Operation Instructions - Setup</h2>
+	If you need help finding things here is a link to an Imgur Album with screenshots. <a
+		href="http://imgur.com/a/hLZVI">http://imgur.com/a/hLZVI</a>
+	<ol>
+		<li>Plug in your Kinect and place it in a spot so it is about 4 feet off the ground and level horizontally. Do
+			not force the sensor arm backward or forwards! You will damage the motor!</li>
+		<li>Launch MotionBuilder. On the controls popup, in the first checkbox, select [Maya] (This makes it easier
+			later on because the 3D controls will be the same for both programs)</li>
+		<li>Go to the [Asset Browser], expand the [Templates] folder, and click [Devices]</li>
+		<li>Drag [Kinect 1.0] onto the 3D grid</li>
+		<li>Under [Model Binding] click [Create]. A yellow joint skeleton should appear in the view
+			<ol>
+				<li>Note: for MotionBuilder 2017 or higher, you will need to go to [Characters] -&gt;
+					[MocapDeviceCharacter] and change [Character Solver] to [MB Character Solver]</li>
+			</ol>
+		</li>
+		<li>Click the Online button and wait until it turns green. If a dialog for voice control pops up, press [No].
+			The Kinect should auto-level its sensor if necesary.</li>
+		<li>Under [Setup] click [Setup Recording]. A man should appear in the viewport.</li>
+		<li>[Optional] Delete all of the mesh for the man. You do not need it unless you don't have any rigs to retarget
+			the motion to. But keep the white skeleton because it is essential.</li>
+		<li>Click [Calibration], and then [Ok]</li>
+		<li>Stand about 6 feet away from the Kinect and directly in front of it. You will notice the yellow skeleton on
+			the screen will begin to match your movements.</li>
+		<li>Put your arms out in a T-Pose (look at the white skeleton for reference)</li>
+		<li>When the Kinect has calibrated successfully, you will hear a sound effect and the white skeleton will start
+			moving with the yellow one.</li>
+	</ol>
+	<hr>
+	<h2>Capturing Motion</h2>
+	<ol>
+		<li style="list-style-type: none;">
+			<ol>
+				<li>Complete Setup mentioned above.</li>
+				<li>In the timeline, press the circular Record button (If you have another person to operate computer,
+					do step 3 first and have the other person do steps 1 &amp; 2)</li>
+				<li>Press the triangular Play Forwards button</li>
+				<li>Stand about 6 feet in front of the Kinect and perform (make sure the player is running while you
+					perform)</li>
+				<li>Press either Play Forwards or Stop (square) to end the recording</li>
+				<li>Wait until progress bars stop appearing.</li>
+				<li>Move the time scrubber to the beginning of the timeline and play back your recording. Notice that
+					only the white skeleton is moving -- this is what we want.</li>
+				<li>[optional] Turn the camera around to explore all areas of the recording. Congratulations! You have
+					captured real-world movements into 3D space!</li>
+			</ol>
+		</li>
+	</ol>
+	<hr>
+	<h2>Trimming out bad recordings</h2>
+	If the skeleton glitches a lot at the beginning and end of the clip, we trim them out now.
+	<ol>
+		<li>Go to the Story tab.</li>
+		<li>Drag the time slider to where the skeleton stops shaking.</li>
+		<li>Click on the edge of the clip and drag it over to the time slider. It should snap to the location of the
+			time slider.</li>
+		<li>Drag the time slider to just before the animation becomes shaky again at the end of the clip.</li>
+		<li>Click on the edge of the clip and drag it over to the time slider. It should snap to the location of the
+			time slider.</li>
+		<li>Click in the middle of the clip and drag it to the left so it lines up with frame 1.</li>
+		<li>Now play back the animation. The trimmed out portions will be gone.</li>
+	</ol>
+	<hr>
+	<h2>Sending to Maya</h2>
+	Maya is an advanced 3D animation program that was used to make movies such as Frozen, Wreck-it-Ralph, Cloudy with a
+	Chance of Meatballs, and much more. The only reason why we installed MotionBuilder is that Maya has no motion
+	capture tools. Instead, the artists use keyframing to animate the characters for a more cartoony look.
+	<ol>
+		<li>Deselect everything in MotionBuilder. Simply drag in the 3D view to make a dashed-line rectangle. Make sure
+			that rectangle is not covering anything in the scene and release the mouse button.</li>
+		<li>Go to File -&gt; Send to Maya -&gt; Send as New Scene</li>
+		<li>Click [OK]. This is why we deselected everything. That way MotionBuilder won't leave out anything important
+			when sending the scene.</li>
+		<li>Wait for Maya to launch. When the popup shows up, press [Don't save]</li>
+		<li>Use the scroll wheel to zoom out. Keep zooming out until you see the Mocap Skeleton.</li>
+		<li>You can now close MotionBuilder. At this point, it doesn't matter if you save it or not. You can if you want
+			to.</li>
+		<li>In Maya, open up the Outliner. (In Windows -&gt; Outliner)</li>
+		<li>[Optional] You can delete MocapDeviceReference because it doesn't do anything.</li>
+		<li>Click on master. This control allows you to scale the skeleton and move it around, without changing
+			animation curves. I prefer to scale it down for better visibility. This is optional but highly recommended.
+			<ol>
+				<li>Press 'R' on your keyboard to bring up the scale controls. (W for translate, E for rotate, R for
+					scale, Q for no controls)</li>
+				<li>Middle-Mouse drag to the left over the 3D view to scale the skeleton down so that its feet fit
+					inside 2 grid squares</li>
+				<li>While hovering over the 3D view, press 'F' on your keyboard to re-center the camera</li>
+			</ol>
+		</li>
+		<li>You can now close the Outliner.</li>
+		<li>Right-click the timeline, go to Playback speed -&gt; Real-time to play back at 24 frames per second.</li>
+		<li>Play back your animation. Congratulations! You have successfully captured real-world motions into a
+			computer!</li>
+	</ol>
+
+	<div class="breadcrumb">
+		To clone these movements onto a CGI character, you can follow <a
+			href="http://ravbuganimations.com/hik-retargeting/" target="_blank" rel="noopener">this guide.</a>
+
+		If you want any of your existing rigs to copy the motions of the mocap skeleton, use HIK Retargeting for HIK
+		equipped rigs, or simply use Parent and Orient constraints from the mocap skeleton to controllers on your custom
+		rig.
+	</div>
+
+</div>

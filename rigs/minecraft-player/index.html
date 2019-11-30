@@ -1,0 +1,143 @@
+<head>
+	<title>Minecraft Player/Villager Rigs</title>
+	<meta name="description" content="Tools for Maya written in MEL and Python">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+</head>
+<style>
+	img{
+		max-width: 400px;
+	}
+	iframe{
+		width:100%;
+		height:540px;
+	}
+</style>
+<div class="jumbotron header">
+	<h1 style="color:white">Minecraft Player/Villager combo rig for Maya</h1>
+	<p style="color:white">View features, screenshots, and downloads below</p>
+</div>
+
+<div class=main>
+
+	<img class="alignnone size-medium" src="https://i.imgur.com/AaufLqg.png" /><br>
+
+	This player rig is the same rig I use in my own videos! Anything you see in the videos is possible with this
+	download. I create the rig for myself, and I provide it to you as-is for free. You're welcome to make suggestions,
+	but I might not add them if I don't find them beneficial to my own videos.
+	<h2>Features</h2>
+	Many controls have actions for translate, rotate, and scale. For example: translating the eye control moves the eye,
+	rotating the control rotates the eye, and scaling the control dilates the eye.
+	<ul>
+		<li>Head
+			<ul>
+				<li>Automatic hair extrusion (uses hat layer on skin)</li>
+				<li>No texture deformation on face</li>
+				<li>Top and bottom eyelid with full rotation control, both can be overdriven</li>
+				<li>Each eye has 8 control points, which can all be translated and rotated independently</li>
+				<li>Eye control can be translated and scaled for custom position and sizing</li>
+				<li>Pupil size</li>
+				<li>Independent eye translate and rotation controls</li>
+				<li>Mouth has 8 control points, each can be translated and rotated independently, with no limits</li>
+				<li>Mouth position and rotation control</li>
+				<li>Teeth control</li>
+				<li>2D mouth open / pinch control (for lipsync)</li>
+				<li>Enable Disable facial features</li>
+				<li>3 eyebrow states: Normal, Villager, and Disabled</li>
+				<li>Rounded or square mouth</li>
+			</ul>
+		</li>
+		<li>Torso
+			<ul>
+				<li>Torso location control</li>
+				<li>3 fine tuning controls: 2 chest, 1 hips, all can be translated / rotated without limits</li>
+				<li>Squash and stretch using fine tuning controls</li>
+				<li>Smooth bends</li>
+			</ul>
+		</li>
+		<li>Arms
+			<ul>
+				<li>IK / FK toggle</li>
+				<li>sharp or smooth bends</li>
+				<li>Fingers (retracted = disabled, can be rotated)</li>
+				<li>&gt; 90° bends</li>
+				<li>wrist controls (all axis)</li>
+				<li>Extra controls for arm shape (intended for cartoony animation)</li>
+			</ul>
+		</li>
+		<li>Legs
+			<ul>
+				<li>IK / FK toggle</li>
+				<li>Sharp or smooth bends</li>
+				<li>Fancy feet</li>
+				<li>squash and stretch</li>
+				<li>support for almost 180° bends</li>
+			</ul>
+		</li>
+		<li>Other
+			<ul>
+				<li>Walk helper: auto-position the character rig based on the IK foot controls!</li>
+				<li>Support for any scale (some render engines break on very small sizes)</li>
+				<li>HIK retargeting support: apply motion capture animation directly to the rig! See my tutorial here if
+					you have a Kinect sensor.</li>
+				<li>Independent Root and Floor controls</li>
+				<li>Set the viewport smooth level and render smooth level independently</li>
+				<li>Villager mode: Enables villager robe and nose</li>
+			</ul>
+		</li>
+	</ul>
+	<h2>Screenshots</h2>
+	<img class="size-medium" src="https://i.imgur.com/3jqwHJK.png" alt="Default state screenshot" /> <br>
+	Screenshot of the rig in its default state
+
+
+	<br><img class="size-medium" src="https://i.imgur.com/AaufLqg.png" alt="Posing screenshot" /> <br>
+	Screenshot showing posing capabilities<br>
+
+	<img class="size-medium" src="https://i.imgur.com/UlTfuEO.png" alt="Villager mode screenshot" /> <br>
+	Villager mode enabled. When rendered, the nose androbe will be solid
+
+	<br>
+
+	<iframe src="https://www.youtube.com/embed/T3w05KFzOjQ" frameborder="0"
+		allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	<br>Automatic walk cycle helper video demo (Watch in 4K, YouTube messed up the compression)
+
+	<br>
+
+	<b>Starring in these videos!</b>
+	<table style="width:100%">
+		<tbody>
+			<tr>
+				<td><iframe src="https://www.youtube.com/embed/Zq7qnfiONSU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></td>
+				<td><iframe src="https://www.youtube.com/embed/h1uzcSGjBQA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></td>
+			</tr>
+			<tr>
+				<td><iframe src="https://www.youtube.com/embed/Plp7t9CaHBY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></td>
+				<td><iframe src="https://www.youtube.com/embed/CtSxIj-nFCY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	The rig supports any 64x64 Minecraft skin file. Higher resolution textures will work as well, but they must be 1:1
+	squares and the texture placement must match. I do not provide any textures with this rig. Check out <a
+		href="https://ravbuganimations.com/minecraft-texture-files/" target="_blank" rel="noopener"
+		data-slimstat="5">this page</a> for information about how to extract the textures from Minecraft.
+	<h1><a title="Download the rig! (via Google Drive)"
+			href="https://drive.google.com/open?id=0BwP1i1mr4uNXMml3OG4wd01ybEk">Download Rig</a></h1>
+	Supported Maya versions: 2016 Extension 2 SP 2 or newer.
+
+	Please give credit! Copy-paste the following into your description:
+	<pre>Player and Villager rig by Ravbug Animations
+		YouTube: <a href="https://www.youtube.com/ravbuganimations"
+			data-slimstat="5">https://www.youtube.com/ravbuganimations</a></pre>
+	<br>
+	I announce progress updates on my Twitter, which you can find here:
+
+	<a class="twitter-follow-button" href="https://twitter.com/ravbug?ref_src=twsrc%5Etfw"
+		data-show-count="false">Follow @ravbug</a>
+	<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>

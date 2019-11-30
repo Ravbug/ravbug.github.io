@@ -1,0 +1,179 @@
+<head>
+    <title>Maya Scripts</title>
+    <meta name="description" content="Tools for Maya written in MEL and Python">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+</head>
+<style>
+    img {
+        max-width: 300px;
+    }
+</style>
+<div class="jumbotron header">
+    <h1 style="color:white">Maya Scripts</h1>
+    <p style="color:white">Tools for Maya written in MEL and Python</p>
+</div>
+
+<div class="main">
+    <strong>Here are a bunch of Maya scripts that I wrote that I am releasing to the public. They are confirmed to work
+        in Maya 2016 or later.</strong>
+
+    If you find issues with any of the scripts, tweet the issue at me (@ravbug).
+    <hr>
+
+    <h2>N-Gon detector for Maya</h2>
+    - Language: MEL
+    <p>This simple program scans any polygonal object and finds any N-Gons (or ngons). An N-gon is a polygon face that
+        has more vertices than 4 (or 3 if your program doesn't accept quads).
+
+        To use, select any object or set of objects, launch the script, and press [Run]. You have the option of having
+        the program consider quads or tris (or both) to be N-Gons.
+
+        The program will select all the N-Gons and report how many it found. With the N-Gons selected, you can delete
+        them, or assign them a material, or put them in a display layer, etc.</p>
+    <article>
+        <div>
+            <img class="aligncenter" src="https://i.imgur.com/CwzotJU.png" />
+            <p style="text-align: center;">Main Window</p>
+        </div>
+        <div>
+            <img class="aligncenter" src="https://i.imgur.com/5Zz9Jy8.png" />
+            <p style="text-align: center;"> Polygon cube with N-Gons highlighted</p>
+        </div>
+    </article>
+
+    <a href="http://bit.ly/2nl1oQj">Download N-Gon detector</a>
+    <hr>
+
+    <h2>Hidden Object Locator</h2>
+    Language: Python
+    <p>This program analyzes the camera view and animation and finds objects that are always outside the camera's view.
+        It can also find objects that are always obscured by other objects. It selects these objects, so you can delete
+        them or put them on a display layer or what have you.
+
+        To use, Go into a single-panel layout that shows the view you want to scan. Then deselect everything and
+
+        You can also use this script to check an object's geometry to see if there are any faces the camera never sees.
+        Running this script this on environment geometry and then deleting the found faces can greatly improve render
+        times. Make sure to go into isolate select and then go into component mode if you decide to do this.
+
+        Objects whose LOD is set to Template or Reference will confuse the script. Set all objects to a LOD of Normal.
+        Otherwise the script will flag them as being "invisible."</p>
+    (Right-click -&gt; View image to see the images bigger)<br>
+    <img src="https://i.imgur.com/f05kb6f.png" /><br>
+    Usage Examples:
+    <article>
+        <div>
+            <img src="https://i.imgur.com/3PXya7h.png" /><br>
+            The red pipe is selected because it is outside of camera1's view for the entirety of the 120 frames.
+        </div>
+        <div>
+            <img src="https://i.imgur.com/JUxfeuD.png" /><br>
+            Here, the red pipe is not selected because it originated inside the camera view but exited. Because
+            it was once in the camera view, it was not flagged as hidden. (See motion trail)
+        </div>
+        <div>
+            <img src="https://i.imgur.com/350XsX0.png" /><br>
+            With Occlusion Search turned off, the green pipe is not selected even though the purple plane is
+            completely blocking it form camera1's view. The red pipe was selected because it remained outside
+            camera1's view.
+        </div>
+        <div>
+            <img src="https://i.imgur.com/zUUn811.png" /><br>
+            However, with Occlusion Search enabled, the green pipe is selected because camera1 cannot see it,
+            even though it is 100% inside camera1's frustum. Occlusion Search is disabled by default because
+            sometimes objects such as lights and shadow casting objects are hidden behind other objects but are
+            critical to the look of a scene.
+        </div>
+    </article>
+
+    <a href="http://bit.ly/2DLBtvz">Download Hidden Object Locator</a>
+
+    <hr>
+
+    <h2>Auto Keyframe Camera Shake Generator</h2>
+    Language: MEL
+    <p>This simple utility adds customizable jitter to a camera (or any object with translate / rotate channels). Select
+        the objects, launch the script, and press [Shake!].</p>
+    <article>
+        <div>
+            <img src="https://i.imgur.com/UnnKv2i.png" /><br>
+            Script UI
+        </div>
+        <div>
+            <img src="https://i.imgur.com/wi0UhEe.png" /><br>
+            Animation Curves of camera before shake
+        </div>
+        <div>
+            <img src="https://i.imgur.com/NCvDNmK.png" /><br>
+            Animation curves of camera after intense shake
+        </div>
+        <div>
+            <img src="https://i.imgur.com/ZebiYj6.png" /><br>
+            Animation curves of camera after weak shake
+        </div>
+    </article>
+
+    <a href="http://bit.ly/2FqNeDX">Download Auto Shake Generator</a>
+
+    <hr>
+    <h2>Quad Sphere generator</h2>
+    Language: Python
+    <p>
+        Creates a sphere that has no triangles or poles (vertex with many edges leading to it).
+        Note: The sphere isn't perfect, so if you have a way to fix the shape, please let me know.
+    </p>
+    <div>
+        <img src="https://i.imgur.com/7CHVygy.png" /><br>
+        The interface
+    </div>
+    <article>
+        <div>
+            <img src="https://i.imgur.com/5LY91SH.png" /><img src="https://i.imgur.com/9fyeYXR.png" /><br>
+            A quad sphere with the default settings
+
+        </div>
+        <div>
+            <img src="https://i.imgur.com/qjrXcMr.png" /><img src="https://i.imgur.com/egjCTTK.png" /><br>
+            A quad sphere with 5 divisions
+        </div>
+    </article>
+    <a href="https://drive.google.com/open?id=1wA1iEsOknf2z1V69cDa-Flqq-ZoW1h1s">Download Quad Sphere Generator</a>
+
+    <hr>
+
+    <h2>Batch Attribute Connector</h2>
+    Language: MEL
+    <p>
+        Bulk direct-connects a set of objects to a master object. Useful for easiliy setting up direct-drive for a
+        controller, Rig-wide node caching or Rig-wide evalulation disabling
+
+        Very simple, so just copy-paste the code into the script editor.
+    </p>
+    <pre>
+/*
+ Created by Ravbug (ravbug.github.io)
+ Simple program to mass connect the attributes of one object to many.
+*/
+//Set the Master object name and attribute name
+$master = "Root";
+$attr = "Caching";
+$attr2 = "caching";
+
+$objs = `ls -sl`;
+$full = $master + "." + $attr;
+$count = 0;
+for ($obj in $objs){
+ $exists = `attributeExists $attr2 $obj`;
+ if ($exists &amp;&amp; $obj != $master){
+ $full2 = $obj + "." + $attr2;
+ connectAttr $full $full2;
+ $count = $count + 1;
+ }
+}
+print ("Connected " + $count + " objects to " + $full);
+</pre>
+</div>

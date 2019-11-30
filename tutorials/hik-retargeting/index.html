@@ -1,0 +1,68 @@
+<head>
+	<title>HIK Retargeting Tutorial</title>
+	<meta name="description" content="Tools for Maya written in MEL and Python">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+</head>
+<style>
+	img {
+		max-width: 300px;
+	}
+</style>
+<div class="jumbotron header">
+	<h1 style="color:white">HIK Retargeting Tutorial</h1>
+	<p style="color:white">Apply motion capture data to a humanIK rig</p>
+</div>
+
+<div class=main>
+
+	In this tutorial, you will learn how to apply Motion Capture data to a custom rig. I will cover both HIK equipped
+	rigs and custom rigs.
+
+	To get Motion capture data, you can refer to <a
+		href="http://ravbuganimations.com/how-to-use-a-kinect-for-motion-capture/" target="_blank" rel="noopener">Xbox
+		Kinect</a> tutorial or download Autodesk's example files.
+	<h2>Things you will need:</h2>
+	<ol>
+		<li>Autodesk Maya and Autodesk MotionBuilder</li>
+		<li>A custom rig to apply the data</li>
+	</ol>
+	<h2>HumanIK (HIK)</h2>
+	Human IK retargeting is the preferred method of applying mocap data to a rig because it performs all the necessary
+	calculations automatically to ensure the motion looks natural. It's also a lot more user-friendly, intuitive, and
+	efficent than the Constraints system.
+
+	If you have already sent your motion to Maya, you can skip steps 1 and 2.
+	<ol>
+		<li>In MotionBuilder, deselect everything in the viewport and go to File -&gt; Send to Maya - &gt;Send as New
+			Scene</li>
+		<li>Wait for Maya to launch (if it's not already running)</li>
+		<li>In Maya, go to Window -&gt; Animation Editors -&gt; HumanIK</li>
+		<li>In the side panel that appeared, under Character, select your character from the dropdown (Not
+			MocapDeviceCharacter)</li>
+		<li>Under Source, select Character1 (or the name your Motion Capture system names the output rig)</li>
+		<li>Play back the animation. Your custom rig should match the mocap system's rig. To edit the motion, use the
+			Graph editor to edit the curves of the Mocap rig.</li>
+	</ol>
+	<h2>Constraints</h2>
+	If your rig is not set up for HumanIK or setting it up for HumanIK would be too difficult, using constraints can
+	also work.
+
+	If you have already sent your motion to Maya, you can skip steps 1 and 2.
+	<ol>
+		<li>In MotionBuilder, deselect everything in the viewport and go to File -&gt; Send to Maya - &gt;Send as New
+			Scene</li>
+		<li>Wait for Maya to launch (if it's not already running)</li>
+		<li>Scale the MocapDeviceCharacter so it roughly matches the size of your custom rig</li>
+		<li>Manipulate your custom rig so it matches the pose of the MocapDeviceCharacter</li>
+		<li>Use Orient constraints (Make sure that Maintain Offset is checked!) for the arms and head. Constrain the FK
+			controllers for the arms and head to the bones on the MocapDeviceCharacter</li>
+		<li>Parent Constrain the IK controllers for the feet to the feet on the MocapDeviceCharacter</li>
+		<li>Parent Constrain the Hip (or root) controller to the hip bone of the MocapDeviceCharacter</li>
+		<li>Play back the animation to make sure you did not miss any bones.</li>
+	</ol>
+
+<div>
