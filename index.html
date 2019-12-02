@@ -66,6 +66,17 @@
 <div class="main">
     <div id="jumpto" class="breadcrumb">Jump To:</div>
     <div id="main"></div>
+    <br>
+    <div class="breadcrumb">
+        Images sourced from 
+        <a href="https://github.com/">GitHub</a>,
+        <a href="https://unrealengine.com">Epic Games</a>,
+        <a href="https://desmos.com">Desmos</a>,
+        <a href="https://thenounproject.com">The Noun Project</a>,
+        <a href="https://twemoji.twitter.com">Twitter Emoji</a>,
+        <a href="https://wikipedia.org/">Wikipedia</a>,
+        <a href="https://minecraft.gamepedia.com">Minecraft Wiki</a>
+    </div>
 </div>
 </html>
 
@@ -362,7 +373,7 @@
     }
     //insert into document
     document.getElementById("main").innerHTML = content.join('<br>');
-    document.getElementById("jumpto").innerHTML += headers.join();
+    document.getElementById("jumpto").innerHTML += headers.join('|');
 }
 //delete this script tag
 document.currentScript.remove();
