@@ -23,7 +23,6 @@
         min-height:50px;
     }
     
-
     .numericButton{background-color:white;}
     button:hover {background-color: #AAAAAA;}
     button:active {background-color: #DDDDDD;}
@@ -46,35 +45,34 @@
         padding:10px;
         font-weight:100;
     }
-
+    .main{
+        width:100%;
+        display:grid;
+        grid-template-rows: 200px 1fr
+    }
+    .io{
+        display:grid;
+        grid-template-columns: 1fr 200px;
+    }
 </style>
 
-
-<table style="width:100%;" border=0 id="ioTable">
-    <tr>
-        <td>
-            <table id=IOfields style="width:100%;max-height:200px"><tr><td>
-                 <input id="disp" class="textArea" autocomplete="off" onkeydown="entryFieldKeys(event);" placeholder="Enter an expression"></input>
-				  </td><td><button class="smallbutton" onClick="buttonHit(this)">PrvAns</button>
-          </td></tr><tr><td>
-                <input readonly class="textArea" placeholder="Answers appear here" id="answer"></input>
-				</td><td><button class="smallbutton" onClick="buttonHit(this)">Ans</button>
-          </td></tr></table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-             <table style="float:right;margin:auto;height:80px" id=fnrow> <!--the function row buttons go here  --> </table>
-        </td>
-    </tr>
-</table>
-
-<div id="calcContainer" style="overflow-x:auto">
-    <table id="4funct" style="min-width:1500px;">
-        <!-- the program dynamically inserts buttons here-->
-    </table>
+<div class="main" id="ioTable">
+    <div class=io>
+        <input id="disp" class="textArea" autocomplete="off" onkeydown="entryFieldKeys(event);" placeholder="Enter an expression"></input>
+        <button class="smallbutton" onClick="buttonHit(this)">PrvAns</button>
+        <input readonly class="textArea" placeholder="Answers appear here" id="answer"></input>
+        <button class="smallbutton" onClick="buttonHit(this)">Ans</button>
+        <table style="height:80px;" id=fnrow> <!--the function row buttons go here  --> </table>
+    </div>
+    <div style="overflow:scroll">
+            <table id="4funct" style="min-width:1500px;">
+                    <!-- the program dynamically inserts buttons here-->
+                </table>
+    </div>
 </div>
-<!-- <iframe style="width:100%;height:100%" src="https://www.desmos.com/scientific"></iframe -->
+<table id="IOfields"></table>
+
+
 <script>
     /*
     functions to implement:
@@ -629,22 +627,10 @@
     //show function row if needed
     window.onresize = resize;
     function resize(){
-        var diff = parseInt(document.getElementById("IOfields").style.maxHeight);
-        if (window.innerWidth > parseInt(document.getElementById("4funct").style.minWidth)){
-            document.getElementById("fnrow").style.display = "none";
-        }
-        else{
-            var fn = document.getElementById("fnrow")
-            fn.style.display = "";
-            diff += parseInt(fn.style.height)+15;
-        }
         layout("A");
-        document.getElementById("4funct").style.minWidth = window.innerHeight * 2 + "px";
-        
-        //if the window is too short, fix the font size
         document.getElementById("calcContainer").scrollLeft = 10000;
     }
-	
+    
     resize();
 
 	disp.focus();
