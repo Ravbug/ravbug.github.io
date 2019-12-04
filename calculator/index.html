@@ -79,7 +79,7 @@
 
 <div class="main" id="ioTable">
     <div class=io id="io">
-        <input id="disp" class="textArea" autocomplete="off" onkeydown="entryFieldKeys(event);"
+        <input id="disp" class="textArea" autocomplete="off" onfocus="if(isMobile()){blur()}" onkeydown="entryFieldKeys(event);"
             placeholder="Enter an expression"></input>
         <button class="smallbutton" onClick="buttonHit(this)">PrvAns</button>
         <input readonly class="textArea" placeholder="Answers appear here" id="answer"></input>
@@ -94,7 +94,7 @@
         </table>
     </div>
 </div>
-
+<script src="../mobile.js"></script>
 <script>
     /*
     functions to implement:
