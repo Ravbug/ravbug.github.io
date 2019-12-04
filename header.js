@@ -4,8 +4,9 @@ Object.prototype.insertAfter = function (newNode) { this.parentNode.insertBefore
  *  Define the following variables in an earlier `<script>`:
  *  @param {number} stylesheet_depth the distance from the root dir. 0 = at root dir
  * 
- */
-{
+ */{
+    let body = document.getElementsByTagName("body")[0];
+
     let stylesheetroot = [];
     for (let i = 0; i < stylesheet_depth; i++){
         stylesheetroot.push('../');
@@ -33,8 +34,7 @@ Object.prototype.insertAfter = function (newNode) { this.parentNode.insertBefore
     <p style="color:white">${page_desc}</p>`;
 
     //add the jumbotron
-    p = document.currentScript;
-    document.firstChild.append(header);
+    body.insertBefore(header,body.firstChild);
     //unload this script
     document.currentScript.remove();
 }
