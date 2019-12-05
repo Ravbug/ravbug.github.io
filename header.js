@@ -1,4 +1,4 @@
-Object.prototype.insertAfter = function (newNode) { this.parentNode.insertBefore(newNode, this.nextSibling); }
+//Object.prototype.insertAfter = function (newNode) { this.parentNode.insertBefore(newNode, this.nextSibling); }
 
 /** Creates the header for the page
  *  Define the following variables in an earlier `<script>`:

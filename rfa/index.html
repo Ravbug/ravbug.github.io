@@ -5,6 +5,7 @@
     <meta name="description" content="A consistent spelling for English. (Ä kunsistunt speling for Inglish) ">
     <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../sweetalert.css">
 </head>
 
 <style>
@@ -43,13 +44,20 @@
             </div>
             <div>
                 <article style="grid-template-columns: 1fr 100px">
-                    <h3>RFA English</h3><button onclick="onCopy()" class="btn btn-primary">Copy Text</button>
+                    <h3>RFA English</h3>
+                   <button onclick="onCopy()" class="btn btn-primary">Copy Text</button>
                 </article>
                 <div id=output class="breadcrumb">Tïp or päst ingglish tekst hër. Werdz hïlïtid in <err>red</err> küd
                     not bë tranzlätud.</div>
             </div>
         </article>
-
+        <div>Character set:
+            <select id="charset" onchange="run();symbolmap(characterset[this.selectedIndex],examples)">
+                <option value="roman">Roman</option>
+                <option value="roman">Cryllic (beta)</option>
+            </select>
+        </div>
+        
         <br>
         <article style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));">
             <div class="breadcrumb">
@@ -92,11 +100,6 @@
                 <h3>Symbol mapping</h3>
                 Assumes American pronounciation.
                 <table id="mapping" style="width:200px">
-                    <tr>
-                        <td>Symbol</td>
-                        <td>Sound</td>
-                        <td>Example</td>
-                    </tr>
                 </table>
                 <none id="removed"></none> <br>
                 <none id="added"></none> <br>
@@ -107,18 +110,23 @@
 </body>
 
 <script src="cmu-symbols.js"></script>
+<script src="cmu-symbols-cr.js"></script>
 <script src="examples.js"></script>
+<script src="../sweetalert.min.js"></script>
 <script>
     //check that browser is supported
     if (!window.Worker) {
         swal("Your browser is too old!", "This page relies on newer web techologies.\nYou must update your browser to use this tool.", "error");
     }
-
-    {   //statistics
+    let characterset = [symbols,symbolscr];
+    function symbolmap(charset,examples_set)
+    {   
+        
+        //statistics
         const alphabet = new Set("abcdefghijklmnopqrstuvwxyz".split(''));
 
         //unique letters in RFA
-        rfa_s = new Set(Object.values(symbols));
+        rfa_s = new Set(Object.values(charset));
 
         //calculate removed letters
         let removed = new Set([...alphabet].filter(x => !rfa_s.has(x)));
@@ -133,15 +141,20 @@
 
         //mapping Table
         let table = document.getElementById('mapping');
-
+        table.innerHTML = `<tr>
+                        <td>Symbol</td>
+                        <td>Sound</td>
+                        <td>Example</td>
+                    </tr>`;
         let html_add = [];
         let rfa_a = Array.from(rfa_s);
         for (let i in rfa_a) {
             let letter = rfa_a[i];
-            html_add.push(`<tr><td>${letter}</td><td>${examples[i][0]}</td><td>${examples[i][1]}</td></tr>`);
+            html_add.push(`<tr><td>${letter}</td><td>${examples_set[i][0]}</td><td>${examples_set[i][1]}</td></tr>`);           
         }
         table.innerHTML += html_add.join('');
     }
+    symbolmap(symbols,examples);
 
     var worker = new Worker('worker.js');
 
@@ -166,7 +179,8 @@
 
     //invoke translation
     function run() {
-        worker.postMessage(document.getElementById('input').value);
+        let charset = document.getElementById("charset").selectedIndex;
+        worker.postMessage([document.getElementById('input').value,charset]);
     }
 
     function onCopy() {

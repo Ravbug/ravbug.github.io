@@ -1,5 +1,8 @@
 //load the symbol table
 self.importScripts("cmu-symbols.js");
+self.importScripts("cmu-symbols-cr.js");
+let symlist = [symbols,symbolscr];
+
 let dict = {};
 const punct = new Set(['.',',','!','?',':',':',')',']','"',"'"]);
 
@@ -47,7 +50,7 @@ onmessage = function(e){
     let success = [];
     //replace newlines
     //split sent string
-    let arr = e.data.replace(/\n/gm,'<br>').toUpperCase().split(re);
+    let arr = e.data[0].replace(/\n/gm,'<br>').toUpperCase().split(re);
     for (let word of arr){
         //replace smart quotes
         word = word.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
@@ -59,7 +62,7 @@ onmessage = function(e){
             //convert the symbols to RFA
             let translated = [];
             for (let i in pronounciation){
-                translated[i] = symbols[pronounciation[i]];
+                translated[i] = symlist[e.data[1]][pronounciation[i]];
             }
             //add to the dictionary
             translation.push(" " + translated.join(''));
