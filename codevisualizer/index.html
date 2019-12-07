@@ -126,7 +126,7 @@ function createShareLink(){
     var link = generateEmbed(i.value);
     if (link != undefined){
       //use the base64 encoding
-      document.getElementById('urlCopy').value="https://ravbuganimations.com/codevisualizer.html?c="+link;
+      document.getElementById('urlCopy').value=window.location.protocol + "//" + window.location.hostname+"/codevisualizer?c="+link;
       document.getElementById('urlCopy').style='display:;';copy(document.getElementById('urlCopy'));document.getElementById('urlCopy').style='display:none;'
     }
     else{
@@ -216,7 +216,7 @@ function helpMenu(){
 function redirect(){
   var link = generateEmbed(i.value);
 
-  window.open("https://ravbuganimations.com/textrender.html?b=1&t="+link);
+  window.open("../textrender.html?b=1&t="+link);
 }
 
 slider.oninput = function(){
