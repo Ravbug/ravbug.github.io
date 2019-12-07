@@ -1,0 +1,129 @@
+/*
+highlightNgons.mel
+Created by Ravbug (github.com/ravbug)
+This script is a simple utility which finds all the ngons (non tri / quad) faces on the selected objects
+Like the script? Share it with your friends! I would recommend sharing the download link because I push updates on occasion
+*/
+
+//results window
+proc createResultsPane(string $msg){
+	//clear window if it exists
+	if ( `window -exists windowObj` ) {
+        deleteUI windowObj;
+    }
+	//create window object and fill it with objects
+	$windowName = `window -t "Polygon n-gon Detector" -width 170 windowObj`;
+    frameLayout -l "Polygon n-gon Detector" -mh 1 -mw 3;
+	text -label $msg;
+	showWindow $windowName;
+}
+
+//main routine. check1 = tris as ngon, check2 = quads as ngon
+proc run(string $tri, string $quad, int $postFix){
+	deleteUI windowObj;
+	string $obj[]= `ls -sl`;
+	if (size($obj) == 0){
+		createResultsPane("No objects selected. \nSelect your objects and re-run this script.");
+		return;
+	}
+    //declare ngon array
+    string $ngons[];
+	//loop through each object in the selection
+	for($i = 0; $i < size($obj); $i++){
+		//select the object
+		select -r  $obj[$i];
+		//get a string array of the printouts of `polyInfo -fe` of each face
+		$verts = `polyInfo -fe`;
+	    
+		//loop through each entry of $verts
+        for ($line = 0; $line <  size($verts); $line++){
+			//declare $tokens to be used later
+        	string $tokens[];
+			//Concatenate as string
+        	$vert = "" + $verts[$line];
+			//get the number of tokens in the line (doubles as a vert count)
+            $numTokens = `tokenize $vert " :\n\r" $tokens`;
+            //subtract 2 because tokenize includes the "FACE     n:" in the tokenized array. We don't want those.
+            $numVerts = $numTokens - 2;
+			
+            $idx = 0;
+			//is this an ngon?
+			$isNgon = ($numVerts != 3) && ($numVerts != 4);
+            if ($isNgon == false){
+				if ($numVerts == 3 && $tri == 1){$isNgon = true;}
+				if ($numVerts == 4 && $quad == 1){$isNgon = true;}
+            }
+			if ($isNgon){
+				//if so, create the identifier for the offending object
+				$objName = $obj[$i] + ".f[" + $tokens[1] + "]";
+				//add the offending object's name to the master array (postincrement to save space)
+				stringArrayInsertAtIndex($idx++,$ngons,$objName);
+			}
+        }
+	}
+	
+	
+	//now that we have the ngons in an array, go into face selection on each (as a way of highlighting them
+	//grammar
+	$objsStr = "objects";
+	if (size($obj) == 1){$objsStr = "object";}
+	$ngonStr = "ngons";
+	if (size($ngons) == 1){$ngonStr = "ngon";}
+	
+	string $result = "Scanned " + size($obj) + " " + $objsStr + ". Found and selected " + size($ngons) + " " + $ngonStr +".\n";
+	print ($result);
+	createResultsPane($result);
+	//select the ngons
+	select -r $ngons;
+	
+	//fix based on postFix
+	if ($postFix == 1 || $postFix == 2)
+		polyTriangulate;
+	if ($postFix ==2){
+		polyQuad;
+	}
+}
+//windowing
+proc int updateItem(string $value){
+	$mode = 0;
+	if ($value == "Do nothing")
+		$mode = 0;
+	else if ($value == "Triangulate Ngons")
+		$mode = 1;
+	else
+		$mode = 2;
+	return $mode;
+}
+proc createWindow(){
+	//clear window if it exists
+	if ( `window -exists windowObj` ) {
+        deleteUI windowObj;
+    }
+	//create window object and fill it with objects
+	$windowName = `window -t "Polygon n-gon Detector" -width 170 windowObj`;
+    frameLayout -l "Polygon n-gon Detector" -mh 1 -mw 3;
+    separator -height 2;
+	text -label "Created By Ravbug (github.com/ravbug)";
+	separator -height 2;
+	text -label "Select the objects to check for ngons, then press [Find NGons]\n\nThe script will select any ngons in your selection.";
+	separator -height 2;
+	frameLayout -l "Options" -mh 1 -mw 3;
+	separator -height 4;
+	//these must be globals for the run statement to work
+	global string $c1;
+	$c1 = `checkBox -l "Treat triangles as ngons"`;
+	global string $c2;
+	$c2 = `checkBox -l "Treat quads as ngons"`;
+	frameLayout -l "Fix Ngons" -mh 1 -mw 3;
+	global string $post;
+	$post = `optionMenu -label "Post-find action: " -changeCommand "updateItem(`optionMenu -query -value $post`)"`;
+	menuItem -label "Do nothing";
+	menuItem -label "Triangulate Ngons";
+	menuItem -label "Quadrangulate Ngons";
+
+	button -l "Run" -c "run( `checkBox -query -value $c1`, `checkBox -query -value $c2`, updateItem(`optionMenu -query -value $post`))";
+	//draw the window
+	showWindow $windowName;
+}
+
+createWindow();
