@@ -536,7 +536,7 @@
 
     //takes a fraction as a string and simplifies it
     function simplifyFrac(value, sign) {
-        sign += "";
+        if (sign == undefined){sign=""}
         var separate = value.split('/');
 
         var div = gcd(separate[0], separate[1])
@@ -560,7 +560,7 @@
 
         eval("var view = allView" + mode);
         gridSpacing = window.innerWidth / view.length - 20;
-        heightSpacing = (window.innerHeight - document.getElementById("io").clientHeight) / view.length - 5;
+        heightSpacing = (window.innerHeight - document.getElementById("io").clientHeight) / view.length - 10;
 
         //arrange main buttons
         var tbl = document.getElementById("4funct");
