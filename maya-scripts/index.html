@@ -2,10 +2,12 @@
     <title>Maya Scripts</title>
     <meta name="description" content="Scripts for Maya written in MEL and Python">
     <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
 </head>
 
 <style>
     img {
+        width:100%;
         max-width: 300px;
     }
 </style>
@@ -29,11 +31,11 @@
         them, or assign them a material, or put them in a display layer, etc.</p>
     <article>
         <div>
-            <img class="aligncenter" src="https://i.imgur.com/CwzotJU.png" />
+            <img class="aligncenter" src="ngons1.png" />
             <p style="text-align: center;">Main Window</p>
         </div>
         <div>
-            <img class="aligncenter" src="https://i.imgur.com/5Zz9Jy8.png" />
+            <img class="aligncenter" src="ngons2.png" />
             <p style="text-align: center;"> Polygon cube with N-Gons highlighted</p>
         </div>
     </article>
@@ -56,26 +58,26 @@
         Objects whose LOD is set to Template or Reference will confuse the script. Set all objects to a LOD of Normal.
         Otherwise the script will flag them as being "invisible."</p>
     (Right-click -&gt; View image to see the images bigger)<br>
-    <img src="https://i.imgur.com/f05kb6f.png" /><br>
+    <img src="offscreen1.png" /><br>
     Usage Examples:
     <article>
         <div>
-            <img src="https://i.imgur.com/3PXya7h.png" /><br>
+            <img src="offscreen2.png" /><br>
             The red pipe is selected because it is outside of camera1's view for the entirety of the 120 frames.
         </div>
         <div>
-            <img src="https://i.imgur.com/JUxfeuD.png" /><br>
+            <img src="offscreen3.png" /><br>
             Here, the red pipe is not selected because it originated inside the camera view but exited. Because
             it was once in the camera view, it was not flagged as hidden. (See motion trail)
         </div>
         <div>
-            <img src="https://i.imgur.com/350XsX0.png" /><br>
+            <img src="offscreen4.png" /><br>
             With Occlusion Search turned off, the green pipe is not selected even though the purple plane is
             completely blocking it form camera1's view. The red pipe was selected because it remained outside
             camera1's view.
         </div>
         <div>
-            <img src="https://i.imgur.com/zUUn811.png" /><br>
+            <img src="offscreen5.png" /><br>
             However, with Occlusion Search enabled, the green pipe is selected because camera1 cannot see it,
             even though it is 100% inside camera1's frustum. Occlusion Search is disabled by default because
             sometimes objects such as lights and shadow casting objects are hidden behind other objects but are
@@ -93,19 +95,19 @@
         the objects, launch the script, and press [Shake!].</p>
     <article>
         <div>
-            <img src="https://i.imgur.com/UnnKv2i.png" /><br>
+            <img src="shake0.png" /><br>
             Script UI
         </div>
         <div>
-            <img src="https://i.imgur.com/wi0UhEe.png" /><br>
+            <img src="shake1.png" /><br>
             Animation Curves of camera before shake
         </div>
         <div>
-            <img src="https://i.imgur.com/NCvDNmK.png" /><br>
+            <img src="shake2.png" /><br>
             Animation curves of camera after intense shake
         </div>
         <div>
-            <img src="https://i.imgur.com/ZebiYj6.png" /><br>
+            <img src="shake3.png" /><br>
             Animation curves of camera after weak shake
         </div>
     </article>
@@ -120,17 +122,17 @@
         Note: The sphere isn't perfect, so if you have a way to fix the shape, please let me know.
     </p>
     <div>
-        <img src="https://i.imgur.com/7CHVygy.png" /><br>
+        <img src="quadsphere0.png" /><br>
         The interface
     </div>
     <article>
         <div>
-            <img src="https://i.imgur.com/5LY91SH.png" /><img src="https://i.imgur.com/9fyeYXR.png" /><br>
+            <img src="quadpshere1.png" /><img src="quadsphere2.png" /><br>
             A quad sphere with the default settings
 
         </div>
         <div>
-            <img src="https://i.imgur.com/qjrXcMr.png" /><img src="https://i.imgur.com/egjCTTK.png" /><br>
+            <img src="quadsphere3.png" /><img src="quadpshere4.png" /><br>
             A quad sphere with 5 divisions
         </div>
     </article>

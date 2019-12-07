@@ -2,10 +2,12 @@
 	<title>Rendering Z-Depth in Maya Tutorial</title>
 	<meta name="description" content="Step-by-step instructions for setup, rendering, and compositing">
 	<link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+	<meta charset="UTF-8">
 </head>
 
 <style>
 	img {
+		width:100%;
 		max-width: 500px;
 	}
 </style>
@@ -36,7 +38,7 @@
 				<li>Name it "Elements"</li>
 				<li>In the outliner, select all your geometry and lights</li>
 				<li>In the Property Editor of the Render Setup window, click the [Add] button.</li>
-				<img src="http://i.imgur.com/0HOUTcA.png" /></li>
+				<img src="setup1.png" /></li>
 	</ol>
 	</li>
 	<li>Create a new Render Layer and rename it to "zDepth"
@@ -44,12 +46,12 @@
 			<li>Create a new collection, rename it to "Geometry" and add only the geometry of your scene to it</li>
 			<li>Create a new collection, and add all of your lights to it</li>
 			<li>Disable the collection containing your lights (this way they don't shine and mess up the depth map<br>
-				<img src="http://i.imgur.com/FQJLokz.png" /></li>
+				<img src="setup2.png" /></li>
 	</li>
 	<li>In the Outliner, go to Display -&gt; and uncheck "Show DAG shapes only"</li>
 	<li>type "rs" into the search box and select the "rs_zDepth" entry</li>
 	<li>In the Attribute Editor, Click Presets and click "Luminance Depth"<br>
-		<img src="http://i.imgur.com/9gnEukQ.png" /><img src="http://i.imgur.com/HNTj0Ay.png" /></li>
+		<img src="setup3.png" /><img src="setup4.png" /></li>
 	<li>A Surface Shader has been created, and the attribute editor should have switched to it. If it did
 		not automatically switch, go to the Hypershade (Windows -&gt; Rendering Editors -&gt; Hypershade)
 		and click the Surface Shader. Click the black triangle-box next to [Color]</li>
@@ -58,7 +60,7 @@
 	<li>"Old min" is the value that determines the closeness of objects. Leave this value alone.</li>
 	<li>"Old Max" is the number of units before the depth map becomes completely black. For My own scene, I
 		set this t0 250.<br>
-		<img src="http://i.imgur.com/QDQOfxy.png" /></li>
+		<img src="setup5.png" /></li>
 	</li>
 	<li>Switch back to the Render Setup window. Right click the "Geometry" collection and select "Create
 		Material Override"</li>
@@ -66,14 +68,14 @@
 		<ol>
 			<li>Select the surfaceShader, and middle-mouse drag it to the Override Material box in the
 				Render Setup View<br>
-				<img src="http://i.imgur.com/8vrUd2k.png" /></li>
+				<img src="setup6.png" /></li>
 		</ol>
 	</li>
 	<li>Click the eye icon on the zDepth layer to make it visible. All the objects in the scene should have
 		a white-to-black gradient. Move the camera to see it update.</li>
 	<li>Play around with the "Old Max" value and try to make the 100% black area be just at the far edge of
 		the scene.
-		<img src="http://i.imgur.com/rlEgzqd.png" /></li>
+		<img src="setup7.png" /></li>
 	</ol>
 	</li>
 	<li>(Optional, but adds to the visuals) Create another Render Layer and rename it to "Fog"
@@ -83,7 +85,7 @@
 					<li>create a volume cube and encompass your whole scene with it.</li>
 					<li>In the cubeFog properties, assign a Cloud texture to the transparency attribute. You don't
 						need to change anything about the fog pass.<br>
-						<img src="http://i.imgur.com/hEZUyGM.png" /></li>
+						<img src="setup8.png" /></li>
 				</ol>
 			</li>
 			<li>Create two collections for the Fog layer: "Fog_Object" and "Disable_Lights"</li>
@@ -91,12 +93,12 @@
 			<li>Add all your lights to the "Disable_Lights" collection, and then disable the collection.</li>
 			<li>Click the Eye to make the Fog Layer visible. You should only see the volume box and nothing else.
 				<br>
-				<img src="http://i.imgur.com/stbfm1e.png" /></li>
+				<img src="setup9.png" /></li>
 		</ol>
 	</li>
 	<li>In the Render Settings window, click the clapboard next to the default "Scene" render layer to disable it.
 		(It should not be blue)
-		<br><img src="http://i.imgur.com/s4FNBrm.png" /></li>
+		<br><img src="setup10.png" /></li>
 	</li>
 	<li>Set up your render settings how you like (I've found Mental Ray to create the best depth map), and render
 		your scene!
@@ -105,7 +107,7 @@
 			</li>
 			<li>It should create 3 folders in the images directory: "Color" "zDepth" and "Fog", each containing the
 				correct data.
-				<br><img title="" src="http://i.imgur.com/Ar1EWz0.png" /></li>
+				<br><img src="setup11.png" /></li>
 		</ol>
 	</li>
 	</ol>
@@ -139,7 +141,7 @@
 			Import File(s))
 			<ol>
 				<li>They should have rendered into 3 folders: "rs_Color" "rs_zDepth" and "rs_Fog"
-					<br><img src="http://imgur.com/fm3Sf3J.png" /></li>
+					<br><img src="comp1.png" /></li>
 			</ol>
 		</li>
 		<li>Click the Node Graph tab at the middle-right of the window</li>
@@ -148,35 +150,35 @@
 		<li>Connect the (1) to the Color sequence and the (2) to the Depth sequence
 			<ol>
 				<li>Set the properties as follows:
-					<br><img src="http://imgur.com/WRi3vnw.png" />
-					<img src="http://imgur.com/YER57j7.png" /></li>
+					<br><img src="comp2.png" />
+					<img src="comp3.png" /></li>
 			</ol>
 		</li>
 		<li>Create a Constant node, and set it to any color that's not black</li>
 		<li>Create an AddMix node, and connect the (A) to the Constant, and the (B) to the Fog sequence
 			<br>
-			<img src="http://imgur.com/qZz0QIt.png" />
+			<img src="comp4.png" />
 		</li>
 		<li>Create a ZMerge node, and connect the (1) input to the AddMix node and the (2) Input to the ShuffleCopy node
 			<ol>
 				<li>Z channel: depth.Z</li>
 				<li>Alpha channel: depth.Z</li>
 				<li>smaller Z = further away: checked
-					<br><img src="http://imgur.com/OR0V8BF.png" /><br>
-					<img src="http://imgur.com/jtoHZpE.png" /></li>
+						<br><img src="comp5.png" /></li>
+					<img src="comp4-2.png" /><br>
 			</ol>
 		</li>
 		<li>Create a ZDefocus Node, and connect the (Image) input to the ShuffleCopy node
 			<ol>
 				<li>math: depth</li>
 				<li>blur inside: unchecked<br>
-					<img src="http://imgur.com/blISBhS.png" />
-					<img src="http://imgur.com/VFRqIar.png" /></li>
+					<img src="comp6.png" />
+					<img src="comp7.png" /></li>
 			</ol>
 		</li>
 		<li>Create a Merge node, and connect the (A) input to the ZMerge node and the (B) input to the ZDefocus node
 			<ol>
-				<li>Decrease mix to around 0.225<br><img src="http://imgur.com/ZlZFvb1.png" /></li>
+				<li>Decrease mix to around 0.225<br><img src="comp8.png" /></li>
 			</ol>
 		</li>
 		<li>Connect the Viewer input to the Merge node.</li>
@@ -210,13 +212,13 @@
 	<ol>
 		<li>Create a Write node and connect the input to the Merge node (if the viewer is already connected, just drag
 			the Write node over the dashed line)
-			<br><img src="http://imgur.com/RqaAzPq.png" /></li>
+			<br><img src="tweak1.png" /></li>
 		</li>
 		<li>For a Video output
 			<ol>
 				<li>file type: mov</li>
 				<li>Codec: h.264 (if present) or Apple ProRes 4444<br>
-					<img src="http://imgur.com/ceuRHNf.png" /></li>
+					<img src="tweak2.png" /></li>
 			</ol>
 		</li>
 		<li>For an image sequence output
@@ -224,7 +226,7 @@
 				<li>file type: select any image format (I recommend .exr or .tiff for preserving ultrawhite values, or
 					.png for regular clamping.</li>
 				<li>To render the alpha channel, set <em>channels </em>to rgba<br>
-					<img src="http://imgur.com/66J4o0w.png" /></li>
+					<img src="tweak3.png" /></li>
 			</ol>
 		</li>
 		<li>Click the folder icon next to <em>file </em>and select a folder to write the file in (make sure to include

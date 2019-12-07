@@ -5,7 +5,8 @@
 </head>
 <style>
 	img {
-		max-width: 300px;
+		width:100%;
+		max-width: 700px;
 	}
 </style>
 
@@ -127,32 +128,41 @@
 	</ol>
 	<hr>
 	<h2>Operation Instructions - Setup</h2>
-	If you need help finding things here is a link to an Imgur Album with screenshots. <a
-		href="http://imgur.com/a/hLZVI">http://imgur.com/a/hLZVI</a>
 	<ol>
 		<li>Plug in your Kinect and place it in a spot so it is about 4 feet off the ground and level horizontally. Do
 			not force the sensor arm backward or forwards! You will damage the motor!</li>
 		<li>Launch MotionBuilder. On the controls popup, in the first checkbox, select [Maya] (This makes it easier
 			later on because the 3D controls will be the same for both programs)</li>
-		<li>Go to the [Asset Browser], expand the [Templates] folder, and click [Devices]</li>
+		<li>Go to the [Asset Browser], expand the [Templates] folder, and click [Devices]
+			<br><img src="setup_step3.png"> 
+		</li>
 		<li>Drag [Kinect 1.0] onto the 3D grid</li>
 		<li>Under [Model Binding] click [Create]. A yellow joint skeleton should appear in the view
+			<br><img src="setup_step5.png">
 			<ol>
 				<li>Note: for MotionBuilder 2017 or higher, you will need to go to [Characters] -&gt;
 					[MocapDeviceCharacter] and change [Character Solver] to [MB Character Solver]</li>
 			</ol>
 		</li>
 		<li>Click the Online button and wait until it turns green. If a dialog for voice control pops up, press [No].
-			The Kinect should auto-level its sensor if necesary.</li>
-		<li>Under [Setup] click [Setup Recording]. A man should appear in the viewport.</li>
+			The Kinect should auto-level its sensor if necesary.
+			<br><img src="setup_step6.png">
+		</li>
+		<li>Under [Setup] click [Setup Recording]. A human male model should appear in the viewport.
+			<br><img src="steup_step7.png">
+		</li>
 		<li>[Optional] Delete all of the mesh for the man. You do not need it unless you don't have any rigs to retarget
-			the motion to. But keep the white skeleton because it is essential.</li>
+			the motion to. But keep the white skeleton because it is essential.
+			<br><img src="setup_step8-9.png">
+		</li>
 		<li>Click [Calibration], and then [Ok]</li>
 		<li>Stand about 6 feet away from the Kinect and directly in front of it. You will notice the yellow skeleton on
 			the screen will begin to match your movements.</li>
 		<li>Put your arms out in a T-Pose (look at the white skeleton for reference)</li>
 		<li>When the Kinect has calibrated successfully, you will hear a sound effect and the white skeleton will start
-			moving with the yellow one.</li>
+			moving with the yellow one.
+			<br><img src="setup_step12.png">
+		</li>
 	</ol>
 	<hr>
 	<h2>Capturing Motion</h2>
@@ -161,10 +171,14 @@
 			<ol>
 				<li>Complete Setup mentioned above.</li>
 				<li>In the timeline, press the circular Record button (If you have another person to operate computer,
-					do step 3 first and have the other person do steps 1 &amp; 2)</li>
+					do step 3 first and have the other person do steps 1 &amp; 2)
+					<br><img src="capturing1-2.png">
+				</li>
 				<li>Press the triangular Play Forwards button</li>
 				<li>Stand about 6 feet in front of the Kinect and perform (make sure the player is running while you
-					perform)</li>
+					perform)
+					<br><img src="capturing4.png">
+				</li>
 				<li>Press either Play Forwards or Stop (square) to end the recording</li>
 				<li>Wait until progress bars stop appearing.</li>
 				<li>Move the time scrubber to the beginning of the timeline and play back your recording. Notice that
@@ -176,27 +190,36 @@
 	</ol>
 	<hr>
 	<h2>Trimming out bad recordings</h2>
-	If the skeleton glitches a lot at the beginning and end of the clip, we trim them out now.
+	If the skeleton glitches a lot at the beginning and end of the clip, follow the steps below to remove it.
 	<ol>
-		<li>Go to the Story tab.</li>
+		<li>Go to the Story tab.
+			<br><img src="trimbad1-2.png">
+		</li>
 		<li>Drag the time slider to where the skeleton stops shaking.</li>
 		<li>Click on the edge of the clip and drag it over to the time slider. It should snap to the location of the
 			time slider.</li>
-		<li>Drag the time slider to just before the animation becomes shaky again at the end of the clip.</li>
+		<li>Drag the time slider to just before the animation becomes shaky again at the end of the clip.
+			<br><img src="trimbad4.png">
+		</li>
 		<li>Click on the edge of the clip and drag it over to the time slider. It should snap to the location of the
-			time slider.</li>
-		<li>Click in the middle of the clip and drag it to the left so it lines up with frame 1.</li>
-		<li>Now play back the animation. The trimmed out portions will be gone.</li>
+			time slider.
+			<br><img src="trimbad5.png">
+		</li>
+		<li>Click in the middle of the clip and drag it to the left so it lines up with frame 1.
+			<br><img src="trimbad6.png">
+		</li>
+		<li>Now play back the animation. The problematic portions will be gone.</li>
 	</ol>
 	<hr>
 	<h2>Sending to Maya</h2>
 	Maya is an advanced 3D animation program that was used to make movies such as Frozen, Wreck-it-Ralph, Cloudy with a
-	Chance of Meatballs, and much more. The only reason why we installed MotionBuilder is that Maya has no motion
-	capture tools. Instead, the artists use keyframing to animate the characters for a more cartoony look.
+	Chance of Meatballs, and much more.
 	<ol>
 		<li>Deselect everything in MotionBuilder. Simply drag in the 3D view to make a dashed-line rectangle. Make sure
 			that rectangle is not covering anything in the scene and release the mouse button.</li>
-		<li>Go to File -&gt; Send to Maya -&gt; Send as New Scene</li>
+		<li>Go to File -&gt; Send to Maya -&gt; Send as New Scene
+			<br><img src="sendtomaya.png">
+		</li>
 		<li>Click [OK]. This is why we deselected everything. That way MotionBuilder won't leave out anything important
 			when sending the scene.</li>
 		<li>Wait for Maya to launch. When the popup shows up, press [Don't save]</li>
