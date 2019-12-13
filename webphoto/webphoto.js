@@ -11,6 +11,7 @@ const filters = {
     "saturate":{unit: "%", min: 0, max: 200, val: 100},
     "sepia":{unit: "%", min: 0, max: 100, val: 0},
     "opacity":{unit: "%", min: 0, max: 100, val: 100},
+    "svg":"",
 }
 
 let renderview = document.getElementById("image")
@@ -29,16 +30,22 @@ function render(event){
         //should evaluate this group?
         if (group.enable.checked){
             for (let filter of group.adjustments){
-                //should enable adjustment?
-                if (event && (filter.slider == event.srcElement || filter.number == event.srcElement)){
-                    filter.enable.checked = true;
+                //if not SVG
+                if (filter.name="svg"){
+
                 }
-                
-                if (filter.enable.checked){
-                    let value = filter.slider.value;
-                    //add the function, value, and unit to the queue
-                    queue.push(`${filter.name}(${value}${filters[filter.name]["unit"]})`);
-                }   
+                else{
+                    //should enable adjustment?
+                    if (event && (filter.slider == event.srcElement || filter.number == event.srcElement)){
+                        filter.enable.checked = true;
+                    }
+                    
+                    if (filter.enable.checked){
+                        let value = filter.slider.value;
+                        //add the function, value, and unit to the queue
+                        queue.push(`${filter.name}(${value}${filters[filter.name]["unit"]})`);
+                    }  
+                } 
             }
         }    
     }

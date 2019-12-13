@@ -79,7 +79,16 @@
     </div>
     <div class=view>
         <div id="render">
-            <img id=image class="center" src="https://wallpapercave.com/wp/YHSuCPt.jpg">
+            <svg id=image width="100%" height="100%" viewBox="0 0 600 450">
+                    <defs>
+                        <filter id="main">
+                            <feGaussianBlur in="SourceGraphic" stDeviation="15" />
+                        </filter>
+                    </defs>
+                    <image xlink:href="https://wallpapercave.com/wp/YHSuCPt.jpg" 
+                            width="100%" height="100%" x="0" y="0"
+                            filter="url(#main)"></image>   
+            </svg>
         </div>
         <div class=controls id="controlframe">
             <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>

@@ -36,3 +36,32 @@ article{
     padding: 20px;
     border-radius: 0px;
 }
+
+/*
+Dark mode
+*/
+@media (prefers-color-scheme: dark) {
+    .header{
+        background-color: rgb(8, 56, 92);
+        color: #E0E0E0
+    }
+    body{
+        background-color: #323232;
+    }
+    .card{
+        background-color: #444;
+        box-shadow:2px 2px 5px #222;
+    }
+    .breadcrumb{
+        background-color: #444;
+    }
+    .header, body, .card{
+        color: #E0E0E0
+    }
+    a{
+        color:rgb(83, 158, 250)
+    }
+    a:hover{
+        color:rgb(0, 115, 255) 
+    }
+}
