@@ -5,7 +5,8 @@
     <head>
         <title>Motion Remover</title>
         <meta name="description" content="Create a clean still image from video">
-        <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../bootstrap-custom.css">
+        <link rel="stylesheet" type="text/css" href="../stylesheet.css">
         <link href="../magic-check.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="../sweetalert.css">
         <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,14 +19,11 @@
             <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
     </table>
     </div>
-    <br>
 
     <!-- Output and Progress -->
-    <div style="width:98vw;float:center;margin:auto">
-
-        
+    <div class="main">
         <table style="width:100%"><tr><td style="width:50%;">
-            <div style="width:98%" class="breadcrumb">
+            <div  class="breadcrumb">
                 <span id=header1 style="font-size:20;font-weight:bold">Input</span>
                 <br>
                 <br>
@@ -35,14 +33,14 @@
         
             </div>
             </td><td>
-                 <div style="width:98%" class="breadcrumb">
+                 <div class="breadcrumb">
                     <span id=header1 style="font-size:20;font-weight:bold">Output</span><br>
                     <span id=status>Upload a video, then press go!</span>
                     <canvas style="width:100%;height:100%" id=outputDir src=""></canvas>
                 </div>
         </td></tr>
         </table>
-        <div class="breadcrumb" style="width:98vw;float:center;margin:auto">
+        <div class="breadcrumb" style="float:center;margin:auto">
             <progress id=mainBar style="width:100%"  min=0 max=100 value=0></progress>
 
             <!-- Uploader interface -->
@@ -76,9 +74,8 @@
             </tr></table>
 
             </div>
-    </div>
-    <br>
-    <div class="breadcrumb" style="width:98vw; float:center;margin:auto" role=alert>
+            <br>
+    <div class="breadcrumb" style="float:center;margin:auto" role=alert>
         <strong>HELP! How do I use this?!</strong>
     
         <br>This webpage takes a video as input and attempts to create a single image where all the moving objects have been removed.
@@ -91,6 +88,7 @@
         <br>4) Press [Render Image!] and ignore the rouge script warning. The processor could take a minute.
         <br>5) Right click the image when the page finishes and press [Save image]
         <br><br><strong>Not working?</strong> A script might not have loaded. Try reloading.
+    </div>
     </div>
 </body>
 </html>

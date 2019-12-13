@@ -25,8 +25,7 @@
 
     <!-- the progres indicator -->
     <div id=progressdiv class="progress" style="display:none">
-      <div id=progress class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>
+      <progress id=progress min=0 max=100 value=0 style="width:100%"></progress>    
     </div>
     <!-- where to output the language  list -->
     <p id=langStack></p>
@@ -121,8 +120,6 @@
 
     prevTime = new Date().getTime() / 1000;
 
-    progressbar.className = "progress-bar progress-bar-striped progress-bar-animated";
-    progressbar.style.width = "0%";
     progressdiv.style.display = "";
     outputField.value = "Translating...";
     clearTimeout(timeout);
@@ -133,7 +130,6 @@
   }
 
   function translate_failed() {
-    progressbar.className = "progress-bar bg-danger"
     swal("Uh oh!", "An unexpected error occurred with the translate service. \n\nThis can happen if you lose your internet connection\n" +
       "or your input exceeds the HttpRequest CORS length spec \n(aka it is too long). \n\nTry checking your internet connection, and splitting up your input into pieces and translating them separately.", "error");
     outputField.value = "Translate Service Error. \n\n Please check your internet connection, and if that doesn't work, shorten the input.";
@@ -153,7 +149,7 @@
   function translate_progress(prog, lang) {
     langs.push(lang);
 
-    progressbar.style.width = prog + "%";
+    progressbar.value = prog;
     //calculate time remaining
     var timeNow = new Date().getTime() / 1000
     var diff = timeNow - prevTime;
@@ -166,11 +162,10 @@
     prevTime = timeNow;
 
     if (prog >= 100) {
-      progressbar.className = "progress-bar bg-success"
       //hide the progress bar again
       timeout = setTimeout(function () {
         progressdiv.style.display = "none";
-        progressbar.style.width = "0%";
+        progressbar.value = 0;
 
       }, 5000);
 

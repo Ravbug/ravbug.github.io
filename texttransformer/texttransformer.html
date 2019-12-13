@@ -1,0 +1,234 @@
+<html>
+<head>
+<title>Text Transformer</title>
+<meta name="description" content="Typo generator">
+<link rel="stylesheet" type="text/css" href="../bootstrap-custom.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link href="../magic-check.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<script src="TextTransformer.js"></script>
+
+<body>
+<div class="jumbotron header">
+		<span>Text Transformer</span>
+		<p>A typo generator of the most advanced kind! Type or paste anything into the upper box.</p>
+</div>
+
+<div style=" float: center; width: 100%;">
+	<!--  The "table" div containing both the output and the settings -->
+	<div style="margin: auto; float: center; width: 95%;">
+
+		<table style="width:100%;">
+		<!-- The div with the input/output boxes -->
+		<tr><td id="fieldsCol">
+		<div style="margin: auto; float: center; width: 100%">
+			<br>
+			<span align=center width=100% style="font-family: Gills Sans, Gills Sans Ultrabold, sans-serif; font-size: 20;">Input</span>
+
+			<form>
+				<textarea id="inputArea" class="form-control" onKeyUp="getResultsLive()" style="float: center; width: 100%; resize:vertical; " rows=14 placeholder="Type or paste any text here, then press update"></textarea>
+			</form>
+			<span align=center width=100% style="font-family: Gills Sans, Gills Sans Ultrabold, sans-serif; font-size: 20;">Output</span>
+
+			<textarea readonly id="outputArea" style="resize:vertical" class="form-control" style="float: center; width: 100%;" rows=14></textarea>
+			<br>
+
+			<div class="btn-group dropup">
+		</div></td>
+
+		<!--  the settings div + table (fixed width) add hidden tag to hide the settings-->
+		<td id="settingsPane" VALIGN=top style="width:400px;">
+			<br>
+			<span align=center width=100% style="font-family: Gills Sans, Gills Sans Ultrabold, sans-serif; font-size: 20;"><h4>Settings</h4></span>
+			<div style="margin: auto; float: right; width: 95%;">
+				<br>
+				<form>
+					<button class="btn btn-primary" type="button" onclick="getResults()" style="width:48% "> <h4>Transform!</h4> </button>
+					<button class="btn btn-success" type="button" onclick="copy(document.getElementById('outputArea'))" style="width:48%; float:right;"> <h4>Copy!</h4> </button> <br><br>
+				<br>
+				<input type=checkbox class="magic-checkbox" id="allowLive" checked="true" onclick="getResults()"></input><label for="allowLive">	Live Transform</label>
+				</form>
+
+				<table style="width:100%;"><tr><td>
+				<button class="btn btn-secondary" style="width:95%; float:left" id="capitalizeAll" onclick="document.getElementById('outputArea').style.textTransform = 'capitalize';">  Capitalize Every Word</button></td><td>
+				<button class="btn btn-secondary" style="width:95%;  float:right" id="resetCapitalization" onclick="document.getElementById('outputArea').style.textTransform = 'initial';">  Reset Captalization</button></td></tr>
+				<tr><td>
+				<br>
+				<button class="btn btn-secondary" style="width:95%; float:left" id="capitalizeAll" onclick="document.getElementById('outputArea').style.textTransform = 'Uppercase';">  Only Capitals</button></td><td><br>
+				<button class="btn btn-secondary" style="width:95%;  float:right" id="resetCapitalization" onclick="document.getElementById('outputArea').style.textTransform = 'lowercase';">  Only Lowercase</button></td></tr>
+				</table>
+				<br>
+				<form>
+				<!--  <input type=checkbox id="CapitalizeEveryWord" checked="true" onclick="capitalizeAll()">   Capitalize Every Word</input> <br><br> -->
+
+				<!--  Settings mains -->
+				<table>
+				<tr><td valign=top><br>
+					Case Swap Chance:
+					</td><td>
+					<div class="input-group">
+						<input type="text" id="caseChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=10  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+						<span class="input-group-addon" id="basic-addon1">%</span>
+					</div></td><tr><td><br>
+					<input type=checkbox class="magic-checkbox" id="capitalize" checked="true" onclick="getResultsLive()"></input><label for="capitalize">	Allow Capitals</label>
+					</td><td><br>
+					<input type=checkbox class="magic-checkbox" id="lowercase" checked="true" onclick="getResultsLive()"></input><label for="lowercase">	Allow Lowercase</label>
+					</tr>
+
+
+				<tr><td><br><br>
+				Duplication Chance:
+				</td><td> <br><br>
+					<div class="input-group">
+					<input type="text" id="duplicateChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=1  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+					<span class="input-group-addon" id="basic-addon1">%</span>
+				</div>
+				</td>
+
+				<tr><td><br>
+				Deletion Chance:
+				</td><td> <br>
+					<div class="input-group">
+					<input type="text" id="deleteChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=3  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+					<span class="input-group-addon" id="basic-addon1">%</span>
+				</div>
+				</td>
+
+				<tr><td><br>
+				Swap Chance:
+				</td><td> <br>
+					<div class="input-group">
+					<input type="text" id="swapChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=3  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+					<span class="input-group-addon" id="basic-addon1">%</span>
+				</div>
+				</td>
+
+				<tr><td><br>
+				Insertion Chance:
+				</td><td> <br>
+					<div class="input-group">
+					<input type="text" id="insertChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=2  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+					<span class="input-group-addon" id="basic-addon1">%</span>
+				</div>
+				</td>
+				<tr><td><br>
+				Replacement Chance:
+				</td><td> <br>
+					<div class="input-group">
+					<input type="text" id="replaceChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=1  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>					<span class="input-group-addon" id="basic-addon1">%</span>
+				</div>
+				</td>
+      </tr>
+				<tr><td><br>🅱️ Chance</td>
+          <td><BR>
+          <div class="input-group">
+					<input type="text" id="bChance" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=4  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+          <span class="input-group-addon" id="basic-addon1">%</span>
+        </td></tr>
+      </tr>
+        <tr><td><br>🅱️ Min length</td>
+          <td><BR>
+          <div class="input-group">
+          <input type="text" id="bMin" class="form-control" style="width:100%; text-align:center;" maxlength="6" value=4  onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 57" onKeyUp="getResultsLive()"></input>
+          <span class="input-group-addon" id="basic-addon1">characters</span>
+        </td>
+
+		</td></table>
+		</table>
+		<table style="width:100%;"><tr><td>
+			<input type=checkbox class="magic-checkbox" id="toggleSettings" checked="true" onclick="showHideSettings()"></input><label for="toggleSettings">	Show Settings Panel</label>
+			</td><td>
+			<input type=checkbox class="magic-checkbox" id="autoSettings" checked="true" onclick="updateOverride()"></input><label for="autoSettings">	Auto Hide Settings</label>
+			</td>
+
+			</table>
+	</div>
+</div>
+<br>
+<div style="width:95%; float:center; margin: auto;">
+	<div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+		<strong>Whoa! What's this webpage?!</strong>
+		<br>This is a website that takes any text and randomly applies operations to it, such as capitalizing, deleting, and swapping characters.
+		<br>Setting a field to 0% will disable the operation.
+
+	</div>
+</div>
+
+</body>
+<script>
+	var autoHide = true;
+	var widthThreshold = 900;
+	setOverride();
+	function getResults(){
+		var inputField = document.getElementById("inputArea");
+		var outputField = document.getElementById("outputArea");
+		var userInput = inputField.value;
+		var output = transform(userInput);
+		outputField.value = output;
+	}
+	function getResultsLive(){
+		if (document.getElementById("allowLive").checked)
+			getResults();
+	}
+	function showHideSettings(){
+		var boxState = document.getElementById("toggleSettings").checked;
+		if (boxState){
+			document.getElementById("settingsPane").style.display="";
+			if (window.innerWidth < widthThreshold-400){
+				document.getElementById("fieldsCol").style.display="none"; //if it's likely they're on a phone, hide text fields when settings are being displayed
+			}
+		}
+		else{
+			document.getElementById("settingsPane").style.display="none";
+			if (window.innerWidth < widthThreshold-400){
+				document.getElementById("fieldsCol").style.display="";
+			}
+		}
+	}
+	function resize(){
+		if (window.innerWidth < widthThreshold-300 && autoHide){
+			document.getElementById("settingsPane").style.display="none";
+			document.getElementById("toggleSettings").checked = false;
+		}
+		else{
+			if (autoHide){
+				document.getElementById("settingsPane").style.display="";
+				document.getElementById("toggleSettings").checked = true;
+			}
+		}
+	}
+	function setOverride(){
+		if (window.innerWidth < widthThreshold-300){
+			document.getElementById("toggleSettings").checked = false;
+			document.getElementById("autoSettings").checked = false;
+			document.getElementById("settingsPane").style.display="none";
+			autoHide = false;
+		}
+	}
+	function updateOverride(){
+		var boxState = document.getElementById("autoSettings").checked;
+		if (boxState){
+			autoHide=true;
+			resize();
+		}
+		else{
+			autoHide=false;
+		}
+	}
+	window.addEventListener('resize', resize);
+
+  function copySuccess(textToCopy){
+    sweetAlert("Copied!", "Copied \"" + textToCopy + "\"", "success");
+  }
+  function copyFailed(){
+    swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
+  }
+
+	</script>
+  <script src="utilities.js"></script>
+  <script src="sweetalert.min.js" ></script>
+</html>
