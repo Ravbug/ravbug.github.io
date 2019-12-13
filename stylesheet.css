@@ -38,6 +38,10 @@ article{
     border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
+.barheader{
+    margin: auto; float: center; width: 100%;background-color:#ECECEC;
+}
+
 /*
 Dark mode
 */
@@ -53,16 +57,10 @@ Dark mode
         background-color: #444;
         box-shadow:2px 2px 5px #222;
     }
-    .breadcrumb{
-        background-color: #444;
-    }
     .header, body, .card{
         color: #E0E0E0
     }
-    a{
-        color:rgb(83, 158, 250)
-    }
-    a:hover{
-        color:rgb(0, 115, 255) 
+    .barheader{
+        background-color:#464a4c
     }
 }

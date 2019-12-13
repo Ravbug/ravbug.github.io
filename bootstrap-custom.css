@@ -96,25 +96,13 @@ b, strong {
     border-radius: 0;
   }
   
-  /* Forms */
-  .form-control {
-    display: block;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.25;
+  /* form colors */
+  .form-control{
+    border: 1px solid rgba(0, 0, 0, 0.15);
     color: #464a4c;
     background-color: #fff;
-    background-image: none;
-    -webkit-background-clip: padding-box;
-            background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
-    -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
-    transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
-    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
   }
+
   .form-control:focus {
     color: #464a4c;
     background-color: #fff;
@@ -126,6 +114,28 @@ b, strong {
     #eceeef;
     opacity: 1;
 }
+.input-group-addon{
+    color: #464a4c;
+    background-color: #eceeef;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+  /* Forms */
+  .form-control {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    background-image: none;
+    -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+    border-radius: 0.25rem;
+    -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+  }
 
 .input-group {
     position: relative;
@@ -187,10 +197,7 @@ b, strong {
     font-size: 1rem;
     font-weight: normal;
     line-height: 1.25;
-    color: #464a4c;
     text-align: center;
-    background-color: #eceeef;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0.25rem;
   }
   
@@ -808,3 +815,36 @@ hr {
     border-color: #d9534f;
   }
   
+  /* dark mode */
+@media (prefers-color-scheme: dark) {
+    .breadcrumb, .form-control:disabled, .form-control[readonly]{
+        background-color: #444;
+    }
+    a{
+        color:rgb(83, 158, 250)
+    }
+    a:hover{
+        color:rgb(0, 115, 255) 
+    }
+     /* form colors */
+    .form-control, .form-control:focus{
+        color: #fff;
+        background-color: #464a4c;
+    }
+
+    .form-control:focus {
+        border-color: #5cb3fd;
+        outline: none;
+    }
+    .form-control:disabled, .form-control[readonly] {
+        background-color:  #333;
+        opacity: 1;
+    }
+    .input-group-addon{
+        color: #eceeef;
+        background-color: #464a4c;
+    }
+    .form-control, .input-group-addon{
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+}

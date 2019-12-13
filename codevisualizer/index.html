@@ -3,6 +3,7 @@
   <title>Code Visualizer</title>
   <meta name="description" content="Live-updating webpage editor">
   <link rel="stylesheet" type="text/css" href="../bootstrap-custom.css">
+  <link rel="stylesheet" type="text/css" href="../stylesheet.css">
   <link href="../magic-check.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../sweetalert.css">
   <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,7 +20,7 @@
   <!-- Master table -->
   <table style="width:100%;height:100%"><tr><td style="height:64px">
     <!--- Top Bar -->
-    <div style="margin: auto; float: center; width: 100%;background-color:#ECECEC;">
+    <div class=barheader>
         <table cellpadding=10><tr>
           <td><h2>Code Visualizer</h2>  </td>
           <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
@@ -37,23 +38,24 @@
         <!-- place to write code -->
         <table style="width:100%;height:100%"><tr>
           <td style="width:60px" id="lineContainer"> <textarea disabled class="form-control" style="resize:none;height:100%;text-align:right;overflow:hidden;font-size:14px" id="lineNums" style=""></textarea></td>
-          <td><textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;background-color:#ECECEC;font-size:14px"></textarea></td>
+          <td><textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;font-size:14px"></textarea></td>
         </tr></table>
         <!--  <div id="input" style="width:90%;height:100%;" class="form-control" contenteditable="true">some text</div> -->
         </td><td>
           <!-- renderview -->
           <div style="border-style:solid;border-width:1;border-radius:4px;border-color:lightgray;width:100%;height:100%;vertical-align:top;">
-            <iframe id=render srcdoc="" style="width:100%;height:100%;border:none"></iframe>
+            <iframe id=render srcdoc="" style="width:100%;height:100%;border:none;background-color:white"></iframe>
           </div>
         </td></tr></table>
   </td></tr>
   <tr><td style="height:64px">
     <!-- Bottom toolbar -->
-    <div style="margin: auto; float: center; width: 100%;height:100%;background-color:#ECECEC;">
+    <div class=barheader>
         <table cellpadding=10 style="height:100%"><tr>
           <td>Font Size:</td><td><input value=14 type="number" style="width:100px" class="form-control" id="fontSize" onchange="changeFont(this.value)"></input></td>
           <td>Editor Width:</td><td><input type="range" class="form-control" style="width:100%" min=1 max=100 value=50 step=0.001 id="editWidth"></input></td>
-          <td><input type=checkbox class="magic-checkbox" id="allowLive" checked="true" onclick="toggleLive(this.checked)"></input><label for="allowLive">	Live Update</label></td>
+          <td><input type=checkbox class="magic-checkbox" id="allowLive" checked="false" onclick="toggleLive(this.checked)"></input><label for="allowLive">	Live Update</label></td>
+          <td><input type=checkbox class="magic-checkbox" id="accurateView" checked=true onclick="toggleDarkView(this.checked)"></input><label for="accurateView">Force Accurate Renderview</label></td>
           <td><button onclick="render()" class="btn btn-secondary">Update</button></td>
         </tr></table>
       </div>
@@ -72,6 +74,12 @@ var i = document.getElementById("input");
 var slider = document.getElementById("editWidth")
 var warned = false;
 var live = true;
+
+
+function toggleDarkView(state){
+    p.style.backgroundColor = state? "white" : "unset"
+  }
+
 //if base64 encoded arg is present, load its contents
 var arg = getURLArgValue('c');
 if (arg != undefined){
