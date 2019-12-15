@@ -12,8 +12,7 @@
     .view{
         display:grid;
         grid-template-columns:1fr 260px;
-        width: 100%;
-        height: calc(100% - 30px);
+        overflow:hidden;
     }
     /* Portrait phone mode */
     @media only screen and (max-width: 700px) {
@@ -24,10 +23,11 @@
             padding:100px;
         }
     }
-    .main_view{
+    .main-view{
         display:grid;
         grid-template-rows: 50px 1fr;
         width:100%;
+        height:100%;
     }
     .controls{
         background-color:#CCC;
@@ -57,6 +57,9 @@
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
+    input[type=number]{
+        width:100%;
+    }
     adjustment {
         display:grid;
         grid-template-columns: 1fr 60px;
@@ -76,6 +79,9 @@
     <div>
             <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
             <button onmousedown="renderview.style.filter=''" onmouseup="render(this)">Show Original</button>
+            <button onclick="downloadEdit()">Download Edit Doc</button>
+            <button onclick="filePicker.click()">Import Edit Doc</button>
+            <input type="file" style="display:none;" id="inputfile"/>
     </div>
     <div class=view>
         <div id="render">
@@ -85,7 +91,7 @@
                             <feGaussianBlur in="SourceGraphic" stDeviation="15" />
                         </filter>
                     </defs>
-                    <image xlink:href="https://wallpapercave.com/wp/YHSuCPt.jpg" 
+                    <image id="imgdata" xlink:href="https://wallpapercave.com/wp/YHSuCPt.jpg" 
                             width="100%" height="100%" x="0" y="0"
                             filter="url(#main)"></image>   
             </svg>
@@ -100,11 +106,12 @@
 </div>
 
 <script src="webphoto.js"></script>
+<script src="../utilities.js"></script>
 <script>
     let delmode = false;
     function loadurl(){
         let url = document.getElementById("img-url").value;
-        document.getElementById("image").src=url;
+        document.getElementById("imgdata").href.baseVal=url;
     }
     function toggleDelete(btn){
         delmode = !delmode
@@ -118,6 +125,48 @@
         }
         `;
     }
+    function downloadEdit(){
+        let name;
+        if (name = prompt("Name file","adjustments")){
+            dlEditDoc(name,true);
+        }
+    }
+    let filePicker = document.getElementById('inputfile');
+
+    //when a file is uploaded
+    filePicker.onchange = function(){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            let doc = JSON.parse(e.target.result);
+            //load the image if the file describes one
+            if (doc["img"]){
+                document.getElementById("imgdata").href.baseVal = doc["img"]
+            }
+            //clear the adjustment sidebar
+            {
+                let elements = document.getElementsByTagName("adjgroup");
+                for (let element of elements){
+                    element.remove();
+                }
+            }
+            order = [];
+
+            //add adjustment groups
+            for(let group of doc["adj"]){
+                let g = addAdjustmentGroup();
+                g.enable.checked = group["on"];
+                //add adjustments and set their values
+                for (let adjustment of group["adj"]){
+                    let a = addAdjustment(adjustment["name"],g);
+                    a.setvalue(adjustment["val"]);
+                    a.enable.checked = adjustment["on"]
+                }
+            }
+            render();
+        }
+        reader.readAsText(filePicker.files[0]);
+    }
     //start with one adustment group
     addAdjustmentGroup();
+    render();
 </script>

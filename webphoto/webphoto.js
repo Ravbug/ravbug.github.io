@@ -31,7 +31,7 @@ function render(event){
         if (group.enable.checked){
             for (let filter of group.adjustments){
                 //if not SVG
-                if (filter.name="svg"){
+                if (filter.name=="svg"){
 
                 }
                 else{
@@ -57,6 +57,7 @@ function render(event){
  * Adds an adjustment
  * @param {string} filter the name of the adjustment to add
  * @param {{}} group the group structure to add
+ * @returns the adjustment created
  */
 function addAdjustment(filter,group){
     let d = filters[filter];
@@ -110,7 +111,11 @@ function addAdjustment(filter,group){
         "name":filter,
         "enable":enable,
         "slider":slider,
-        "number":numeric
+        "number":numeric,
+        "setvalue":function(newval){
+            slider.value = newval;
+            numeric.value = newval;
+        }
     };
 
     //attach events
@@ -187,14 +192,17 @@ function addAdjustment(filter,group){
 
     //add slider to render queue
     group.adjustments.push(adjustment);
+
+    return adjustment;
 }
 
 /**
  * Create an Adjustment group
+ * @returns the group created
  */
 function addAdjustmentGroup(){
     //create html elements
-    let root = document.createElement('div');
+    let root = document.createElement('adjgroup');
     let select = document.createElement('select');
     let enable = document.createElement('input');
         enable.type = "checkbox";
@@ -308,6 +316,8 @@ function addAdjustmentGroup(){
 
     //add group to render list
     order.push(group);
+
+    return group;
 }
 
 /**
@@ -327,5 +337,59 @@ function array_move(arr, old_index, new_index) {
     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
 };
 
+/**
+ * Turns an image into a data URL
+ * @param {string} url URL of the image to change
+ */
+async function imgToDataURL(url) {
+    return new Promise(function(resolve,reject){
 
-render();
+        //if already a data URL, skip
+        if (url.startsWith("data:")){
+            resolve(url);
+            return;
+        }
+
+        let image = new Image();
+
+        image.onload = function () {
+            let canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+    
+            canvas.getContext('2d').drawImage(this, 0, 0);
+    
+            // Get raw image data
+            //resolve(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+    
+            // ... or get as Data URI
+            resolve(canvas.toDataURL('image/png'));
+    
+            canvas.remove();
+        };
+    
+        image.src = url;
+    });
+}
+
+/**
+ * Download the image as a non-destructive edit document
+ * @param {string} name the name of the document to download
+ * @param {boolean} includeImg true to include the image as a data URL, false otherwise
+ */
+async function dlEditDoc(name="adjustments",includeImg=false){
+    let doc = {}
+    if (includeImg){
+        doc["img"] = await imgToDataURL(document.getElementById("imgdata").href.baseVal)
+    }
+    let all = [];
+    for (let group of order){
+        let g_adj = {"on":group.enable.checked,"adj":[]};
+        for (let adj of group.adjustments){
+            g_adj["adj"].push({"name":adj.name,"val":adj.slider.value,"on":adj.enable.checked});
+        }
+        all.push(g_adj);
+    }
+    doc["adj"] = all;
+    download(name+".json",JSON.stringify(doc));
+}
