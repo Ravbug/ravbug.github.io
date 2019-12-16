@@ -2,10 +2,12 @@
     <title>Calculator</title>
     <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-title" content="Calculator">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link id="favicon" rel="icon" href="icon.svg" type="image/x-icon">
     <meta name="description" content="Advanced scientific calculator">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="white">
-    <meta name="viewport" content="width=device-width, initial-scale=0.6, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
 </head>
 <style>
     button,
@@ -79,7 +81,7 @@
 
 <div class="main" id="ioTable">
     <div class=io id="io">
-        <input id="disp" class="textArea" autocomplete="off" onfocus="if(isMobile()){blur()}" onkeydown="entryFieldKeys(event);"
+        <input id="disp" class="textArea" autocomplete="off" onfocus="if(window.mobile()){blur()}" onkeydown="entryFieldKeys(event);"
             placeholder="Enter an expression"></input>
         <button class="smallbutton" onClick="buttonHit(this)">PrvAns</button>
         <input readonly class="textArea" placeholder="Answers appear here" id="answer"></input>
@@ -94,17 +96,21 @@
         </table>
     </div>
 </div>
-<script src="../mobile.js"></script>
 <script>
     /*
     functions to implement:
+    nderiv(func,x=)
+    fnint(func,a,b)
+    sum(func,i,n)
+    prod(func,i,n)
+    logbase(x,base)
+    nroot(x,n)
     dataURL with auto update
 
     things to fix:
     2e doesn't work
     pi2 doesn't work
     3sin(5) doesn't work
-    negative fraction simplification
     */
 
     //official memory variables
@@ -126,13 +132,12 @@
         return check;
     };
 
-    //if the client is mobile, disable typing in the disp field
-    if (window.mobile()) {
-        disp.readonly = "true";
-    }
-    function solve(equation) {
-        var orig = equation;
-
+    /**
+     * Parses an input equation into an evaluatable one
+     * @param {string} input the input equation to solve
+     * @returns {string} the corrected input equation
+     */
+    function parse(equation){
         //find numbers next to parenthesis like this: 5(3+4) or 10.6(6) and insert * inbetween
         var numbers = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "𝓮", "π"]);
         for (var i = equation.length - 1; i >= 0; i--) {
@@ -160,6 +165,13 @@
         for (var i in fixDict) {
             equation = replaceAll(equation, i, fixDict[i]);
         }
+        return equation;
+    }
+
+    function solve(equation) {
+        var orig = equation;
+
+        equation = parse(equation);
 
         //attempt to solve
         try {
