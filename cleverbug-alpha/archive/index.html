@@ -1,0 +1,89 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../stylesheet.css">
+    <link rel="stylesheet" href="../../bootstrap-custom.css">
+</head>
+<div class="main">
+    <h1>Legacy Cleverbug Source Code</h1>
+
+    What is this, you ask?
+    I decided to partially open-source the legacy Cleverbug code. You can find
+    its entirety contained within <code>cleverbug-alpha/</code> of this website. 
+    <br>
+    To view the code on GitHub, visit this link: <a href=""></a>
+    
+    <br><br>The code 
+    is a mess and poorly documented. I will attempt to break it down below.
+    <hr>
+    <br>
+    This version of cleverbug was split into three parts. One part ran serverside, while the 
+    other ran clientside, and the third part was a Google Spreadsheet. Yes, I used Google Sheets 
+    as a free SQL database. 
+    <br><br>
+
+    <h3>Client-side code</h3>
+    The way users interacted with the bot was through a webpage. The webpage presented the user 
+    a simple interface: a large text area for the session's chat history, a text field for typing
+    messages to the bot, and buttons to send the message and toggle the settings. In the settings 
+    menu were two text fields for changing your's or the bot's display name. A "think for me" button 
+    adorned the info box alongside the settings button. 
+
+    <br><br>
+    When the user pressed enter or clicked the say button, the responder engine executed. It actually 
+    ran the responder clientside. The responder queried the google spreadsheet recursively with different 
+    a different SELECT call until it got a satisfactory answer. It would then add the message to the chat history. 
+    The client did not stop the user from sending messages before it had finished responding, making spam possible.
+
+    <br><br>
+    Think for me was nothing special. It simply called the responder with an empty string, effectively
+    guarenteeing the base case of a random answer. It then placed that answer inside the user's say field.
+
+    <br><br>The user posting a message to the chat also triggered the data collection, or "learning," aspect 
+    of this version. It queried my server with a set of URL arguments containg what the user wrote and other information.
+    This was how the bot learned. It gathered sentences from the users that interacted with it and added 
+    them to the repertoire of phrases it could use. It did not generate unique phrases. 
+
+    <br><br>
+    You can see the original, working client running <a href="../"><b>here.</b></a>
+    <br><br>
+    <h3>Server-side code</h3>
+
+    The server-side code was responsible for the learning aspect of the bot.
+    I wrote the serverside in php and the clientside in HTML, CSS, and JavaScript. The server-side code 
+    has been deactivated, but is preserved here.
+
+    There are two versions of the serverside code preserved here. Version one was hard coded, 
+    save for the client-secret file needed for Google Sheets authentication. Version two
+    loaded a file named <code>cleverbug_badwords.txt</code> which contained a comma-separated
+    list of tokens. I moved the bad word detection to a separate file so that I could easily
+    add new tokens without fear of accidentally breaking the php code. 
+
+    <br><br>
+    When the server recieved a request from the client, it first checked the body for blacklisted
+    words as described by <code>cleverbug_badwords.txt</code>. If a bad word was found, the server rejected
+    the request. This step helped prevent (and worked surprisingly well) the bot from learning
+    racist or offensive phrases. 
+
+    <br><br>
+    If the code did not find a bad word (and it checked for variations), then it proceeded to the 
+    next step of adding it to the database. Here, it initialized the Google Spreadsheet API library
+    for php (verison 2.2.0) and authenticated using the credentials described in <code>client_secret.json</code>.
+    <br><br>
+    After authentication, it called the Spreadsheet API to add a row to the spreadsheet. The row, once added,
+    was instantly available to the clients, enabling real-time learning. 
+
+    <br><br>Two files, <code>cleverbot_up.php</code> and <code>cleverbot_respond.php</code> also exist. These
+    files contained a single instruction which was to include a different php file. The clients called 
+    these two files. The reason I did this was because I didn't know anything about web security and I stored my
+    credentials in plain text, albeit outside of <code>public_html</code>. I believed at the time that by storing the php 
+    files that did the actual work outside of <code>public_html</code>, I would prevent hackers from
+    tricking my server into downloading the php code and seeing how it worked. Of course, web security
+    doesn't actually work that way. 
+
+    <br><br>
+    <h3>Conclusion</h3>
+    I didn't want to delete this code, so I decided to make it public, not that this code is worth anything. 
+    If you want to read it, go ahead. This code turned into a Discord bot with the same name, which you
+    can invite to your server by visiting the working client (linked above) and using the link in the footer. 
+    <br><br>
+</div>
