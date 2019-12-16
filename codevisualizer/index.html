@@ -225,9 +225,9 @@ function helpMenu(){
 }
 
 function redirect(){
-  var link = generateEmbed(i.value);
-
-  window.open("../textrender.html?b=1&t="+link);
+  //open a popup window
+  let win = window.open("","CodeVisualizer Preview","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=540,height=480,top="+(screen.height-700)+",left="+(screen.width-840));
+  win.document.body.innerHTML = i.value;
 }
 
 slider.oninput = function(){
