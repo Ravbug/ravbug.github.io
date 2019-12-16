@@ -1,0 +1,264 @@
+<meta charset="UTF-8">
+<html>
+
+<head>
+	<title>Cleverbug Web v2.0 alpha</title>
+	<meta desc="">
+	<!-- The Web App stuff -->
+	<link rel="icon" href="cleverbot.png">
+	<link rel="apple-touch-icon" href="cleverbot.png">
+	<link rel="apple-touch-startup-image" href="cleverbot.png">
+	<meta name="apple-mobile-web-app-title" content="Cleverbot Web">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="white">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+</head>
+<style>
+	.header{
+		margin-bottom:0px !important;
+	}
+</style>
+<body>
+	<div class="main">
+      	<table style=" width:100%;height:50%;">
+		<tr>
+			<td id="main"><br>
+				<textarea id="outputField" placeholder="Thinking..." readonly class="form-control"
+					style="width:100%;height:500px;font-size:18px;resize:none;vertical-align:top"></textarea>
+				<br>
+				<table style="width:100%;">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon"><span
+										id="inputHeader"></span></span>
+
+								<form style="width:100%;height:15px;" onsubmit="return ask(document.getElementById('inputField').value);"> <input
+										id="inputField" class="form-control"
+										style="width:100%;height:100%"
+										placeholder="Type a message here, then press [Enter]" maxlength="300"></input>
+								</form>
+								<span class="input-group-btn"><button id="sayButton"
+										class="btn btn-primary" type="button"
+										onclick="return ask(document.getElementById('inputField').value);">Say!</button></span>
+
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:300px;">
+
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td id="settingsPane" style="display:none;width:400px;height:100%">
+				<!-- The settings panel -->
+				<div class="breadcrumb" style="width:95%; float:center; margin: auto;">
+					<h4>Settings</h4>
+					<div class="input-group">
+						<span class="input-group-addon">Your name:</span>
+						<input id="yourName" class="form-control" value="You" onkeyup="changeYourName();"></input>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">Cleverbug:</span>
+						<input id="cpuName" class="form-control" value="Cleverbug" onkeyup="changeCPUName();"></input>
+					</div>
+					<br>
+				</div>
+
+			</td>
+		</tr>
+		</table>
+		<br>
+		<!-- <button id="toggleSettings" style="float:right;" class="btn btn-default" onclick="toggleSettings();">Toggle Settings</button> -->
+		<button id="settingsBtn" style="float:right;font-size:18" class="btn btn-secondary"
+			onclick="toggleSettings();">Toggle Settings</button>
+		<button id="thinkForMe" style="float:right;font-size:18" class="btn btn-primary" onclick="thinkFor();">Think for
+			me!</button>
+
+		<div id=info class="breadcrumb" style="min-width:50%; float:center">
+			<!-- How to use pane -->
+			<strong>I am a bot, and if anything I say is innapropriate or offensive, I'm sorry. I don't know any
+				better!</strong>
+			<br>My creator, Ravbug, does not endorse anything I say.
+			<br>Type anything into the text field and press [Enter] to say it to Cleverbug. Note that this webpage runs
+			an early alpha
+			of the algorithm and therefore response quality will be different than that of the discord bot.
+			<br>Want to run as a web app? Add this page to your home screen!
+			<br><b>Want to add me to your Discord server? Use <a target="_blank"
+					href="https://discordapp.com/oauth2/authorize?client_id=374793801455108097&scope=bot">this invite
+					link.</a></b>
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script src="../sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<!-- the node.js script does not need the utilities file -->
+<script src="../utilities.js"></script>
+<script src="cleverbug3.js"></script>
+
+<script>
+	init();
+	var windowThresh = 950;
+	var hideThreshold = 600;
+	var minFont = 14
+	var inputField = document.getElementById("inputField");
+	var outputField = document.getElementById("outputField");
+	var username = "You";
+	var cpuName = "Cleverbug";
+	var prevmsg = null;
+
+	window.addEventListener('resize', resize);
+	var minInput = 30; //the shortest the say row can be
+	resize();
+	outputField.value = "";
+	//get a kickoff message
+	thinkForMe(function (response) { outputField.value += cpuName + ": " + response + "\n\n"; prevmsg = response; }, cleverbot_failed)
+
+	function ask(string) {
+		if (string == "") return false;
+		outputField.value += username + ": " + string + "\n\n";
+		getResponse(string, prevmsg, function (response) {
+			prevmsg = response;
+			outputField.value += cpuName + ": " + response + "\n\n";
+			outputField.scrollTop = outputField.scrollHeight;
+		}, true, cleverbot_failed, "web", "web");
+
+		inputField.value = "";
+		//return false to prevent page reload (invalidates form)
+		return false;
+	}
+	function cleverbot_failed() {
+		swal("Ooops!", "An unexpected database read error occurred. Please try again, and make sure you have an internet connection.", "error");
+
+	}
+
+	function resize() {
+		//resizey stuff goes here
+		var inputHeader = document.getElementById("inputHeader");
+		var sayButton = document.getElementById("sayButton");
+		var thinkBtn = document.getElementById("thinkForMe");
+		var ts = document.getElementById("settingsBtn");
+
+		//calculate scaling
+		var resizeTo = window.innerWidth / 2.5;
+		var inputResizeTo = window.innerWidth / 20;
+		var fontSize = window.innerWidth / 50;
+
+		if (fontSize < minFont) {
+			fontSize = minFont;
+		}
+
+		if (inputResizeTo < minInput) {
+			inputResizeTo = minInput;
+		}
+
+		var settingsBtn = document.getElementById;
+
+		if (window.innerWidth < windowThresh) {
+			//outputField.style.height = resizeTo.toString() + "px";
+			outputField.style.fontSize = fontSize.toString() + "px";
+			inputField.style.fontSize = fontSize.toString() + "px";
+			inputField.style.height = inputResizeTo.toString() + "px";
+			inputHeader.style.fontSize = fontSize.toString();
+
+			sayButton.style.fontSize = (fontSize).toString() + "px";
+			sayButton.style.height = inputResizeTo.toString();
+
+			thinkBtn.style.fontSize = (fontSize).toString() + "px";
+			ts.style.fontSize = fontSize.toString();
+		}
+		else {
+			outputField.style.height = "500px";
+			outputField.style.fontSize = "18px";
+			inputField.style.height = "55px";
+			inputField.style.fontSize = "18px"
+			sayButton.style.height = "55px";
+		}
+
+		//the height control for vertically-challenged displays
+		if (window.innerHeight < windowThresh) {
+			resizeTo = window.innerHeight / 2.5;
+			fontSize = window.innerHeight / 50;
+
+			if (fontSize < minFont) {
+				fontSize = minFont;
+			}
+			outputField.style.height = resizeTo.toString() + "px";
+			outputField.style.fontSize = fontSize.toString() + "px";
+		}
+
+	}
+
+	//now the bot prompts the user with an opening, deferred
+	setTimeout(function () {
+		//ask a space, to force a fallback
+		ask("");
+	}, 1000, cleverbot_failed);
+
+	function toggleSettings() {
+		var settingsPane = document.getElementById("settingsPane");
+		if (settingsPane.style.display == "") {
+			document.getElementById("settingsPane").style.display = "none";
+			if (window.innerWidth < hideThreshold) {
+				document.getElementById("main").style.display = "";
+			}
+		}
+		else {
+			document.getElementById("settingsPane").style.display = "";
+			if (window.innerWidth < hideThreshold) {
+				document.getElementById("main").style.display = "none";
+			}
+		}
+	}
+	//interface into thinkForMe
+	function thinkFor() {
+		thinkForMe(function (response) {
+			inputField.value = response;
+		}, cleverbot_failed);
+	}
+
+	//Sets up the variables based on the settings in the fields (in case the browser cached them)
+	function init() {
+
+		//defer calling the utilities lib to ensure it loads
+		setTimeout(function () {
+			document.getElementById("yourName").value = decodeURI(getCookie("username"));
+			document.getElementById("cpuName").value = decodeURI(getCookie("cpuName"));
+
+			//if they are blank init to default values
+			if (document.getElementById("yourName").value == "") {
+				document.getElementById("yourName").value = username;
+			}
+			if (document.getElementById("cpuName").value == "") {
+				document.getElementById("cpuName").value = cpuName;
+			}
+
+			changeYourName(); changeCPUName()
+		}, 200);
+
+	}
+
+
+	function changeYourName() {
+		username = document.getElementById("yourName").value;
+		document.getElementById("inputHeader").textContent = username + ":";
+		document.cookie = "username=" + encodeURI(username);
+	}
+
+	function changeCPUName() {
+		cpuName = document.getElementById("cpuName").value;
+		document.cookie = "cpuName=" + encodeURI(cpuName);
+	}
+
+</script>
+<script>
+    stylesheet_depth = 1;
+    document.currentScript.remove();
+</script>
+<script src="../header.js"></script>

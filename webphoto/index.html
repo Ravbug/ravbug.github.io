@@ -80,6 +80,7 @@
             <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
             <button onmousedown="renderview.style.filter=''" onmouseup="render(this)">Show Original</button>
             <button onclick="downloadEdit()">Download Edit Doc</button>
+            <button onclick="downloadPreset()">Download Preset</button>
             <button onclick="filePicker.click()">Import Edit Doc</button>
             <input type="file" style="display:none;" id="inputfile"/>
     </div>
@@ -129,6 +130,12 @@
         let name;
         if (name = prompt("Name file","adjustments")){
             dlEditDoc(name,true);
+        }
+    }
+    function downloadPreset(){
+        let name;
+        if (name = prompt("Name file","preset")){
+            dlEditDoc(name,false);
         }
     }
     let filePicker = document.getElementById('inputfile');
