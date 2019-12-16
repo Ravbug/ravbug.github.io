@@ -77,6 +77,30 @@
         display: grid;
         grid-template-columns: minmax(150px,1fr) minmax(10px,200px);
     }
+    @media (prefers-color-scheme: dark) {
+        body{
+            background-color:#222;
+        }
+        .textArea{
+            background-color: #323232; 
+            border: 2px solid #111;
+            color:lightgray;
+        }
+        button{
+            background-color: #323232;
+            border: 2px solid #111;
+            color:lightgray;
+        }
+        button:hover{
+            background-color: #555;
+        }
+        button:active{
+            background-color: #666;
+        }
+        .numericButton{
+            background-color:#444;
+        }
+    }
 </style>
 
 <div class="main" id="ioTable">
