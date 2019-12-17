@@ -179,6 +179,9 @@
      */
     function parse(equation){
 
+        //remove | serving as cursor on mobile
+        equation = equation.replace(/\|/g,"");
+
         equation = replaceAllSlow(equation, "^", "**");        //fix powers (special regex character so requires looping)
 
         //fix the math functions like sin(), cos(), etc
@@ -537,9 +540,26 @@
     //move the insertion point buttons (true = ->, false = <-)
     function moveInsert(dir) {
         disp.focus();
+        //mobile fake cursor remove
+        if (isMobile()){
+            let pos = disp.selectionStart;
+            disp.value = disp.value.replace(/\|/g,"")
+            disp.selectionStart = disp.selectionEnd = pos-1;
+        }
+       
+
         if (dir) { disp.selectionStart += 1; }
         else { disp.selectionStart -= 1 }
         disp.selectionEnd = disp.selectionStart;
+
+        //mobile fake cursor update
+        if (isMobile()){
+            let prev = disp.selectionStart+1;
+            
+            disp.value = disp.value.substring(0,disp.selectionStart) + "|" + disp.value.substring(disp.selectionStart,disp.value.length);
+            disp.selectionStart = prev;
+            disp.selectionEnd = prev;
+        }
     }
 
     function fracDec() {
