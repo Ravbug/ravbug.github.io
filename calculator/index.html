@@ -188,7 +188,7 @@
 
         //convert user-friendly labels and mistakes into solvables
         let fixDict = {
-            "•": "*", "÷": "/", "–": "-", "%": "*(0.01)", "rand": "Math.random()", "√": "Math.sqrt", "𝓮": "Math.E", "π": "Math.PI", "Math.aMath.": "Math.", "rnd": "Math.round", "log": "log10", "𝘭𝘯": "log", "σ": "stdev", "prm": "isPrime", "fac": "factorsOf",
+            "•": "*", "÷": "/", "–": "-", "%": "*(0.01)", "rand": "Math.random()", "√": "Math.sqrt", "𝓮": "Math.E", "π": "Math.PI", "Math.aMath.": "Math.", "rnd": "Math.round", "log": "logten", "𝘭𝘯": "log", "σ": "stdev", "prm": "isPrime", "fac": "factorsOf",
             "𝔁!": "faktorial", "Mo": "mode", "med": "median", "°": "*(Math.PI/180)", "ᵍ": "*(Math.PI/200)"
         };
         for (let i in fixDict) {
@@ -615,6 +615,10 @@
     //for typing LN
     function ln(value){
         return Math.log(value);
+    }
+    //log base 10 support
+    Math.logten = function(value){
+        return Math.log10(value);
     }
 
     //takes a fraction as a string and simplifies it
