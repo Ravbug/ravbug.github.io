@@ -125,7 +125,7 @@
         </table>
     </div>
     <div style="overflow:scroll" id="calcContainer">
-        <table id="4funct" style="min-width:1500px;">
+        <table id="4funct" style="min-width:1550px;">
             <!-- the program dynamically inserts buttons here-->
         </table>
     </div>
@@ -147,6 +147,10 @@
     pi2 doesn't work
     3sin(5) doesn't work
     */
+
+    //constants shortcuts
+    const pi = Math.PI;
+    const e = Math.E;
 
     //official memory letiables
     let Ans = 0;
@@ -475,7 +479,7 @@
     function buttonHit(object) {
         let funct = object.innerHTML;
         //simple replacement
-        if (funct == "x") { funct = "•"; }
+        if (funct == "✕") { funct = "•"; }
 
         if (disp.selectionStart != disp.selectionEnd) {
             del();
@@ -608,6 +612,11 @@
         return 0;
     }
 
+    //for typing LN
+    function ln(value){
+        return Math.log(value);
+    }
+
     //takes a fraction as a string and simplifies it
     function simplifyFrac(value, sign) {
         if (sign == undefined){sign=""}
@@ -626,8 +635,8 @@
             board = '123';
         }
 
-        let allViewA = [[board, '𝔁!', '(', ')', 'M', 'M+', '⇦', '⇨', '%', '^', 'Del', 'AC'], ['°', 'nPr', '√', 'π', '𝓮', 'log', '⇧', '⇩', 7, 8, 9, '÷'], ['ᵍ', 'nCr', 'sin', 'cos', 'tan', '𝘭𝘯', 'gcd', 'lcm', 4, 5, 6, 'x'], ['/', 'asin', 'acos', 'atan', 'σ', 'avg', 'fac', 'Mo', 1, 2, 3, '–'], ['s/d', 'abs', 'rand', 'rnd', 'min', 'max', 'med', ',', '.', 0, '==', '+']];
-        let allViewB = [[board, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0], ['Del', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['AC', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'], ['==', 'z', '𝔁', 'c', 'v', 'b', 'n', 'm', '<', '>', '/'], [';', '{', '}', '[', ']', '_', '"', "'", 'var', ' ', '=']];
+        let allViewA = [[board, '𝔁!', '(', ')', 'M', 'M+', '⇦', '⇨', '%', '^', 'Del', 'AC'], ['°', 'nPr', '√', 'π', '𝓮', 'log', '⇧', '⇩', 7, 8, 9, '÷'], ['ᵍ', 'nCr', 'sin', 'cos', 'tan', '𝘭𝘯', 'gcd', 'lcm', 4, 5, 6, '✕'], ['/', 'asin', 'acos', 'atan', 'σ', 'avg', 'fac', 'Mo', 1, 2, 3, '–'], ['s/d', 'abs', 'rand', 'rnd', 'min', 'max', 'med', ',', '.', 0, '==', '+']];
+        let allViewB = [[board, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0], ['Del', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['AC', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'], ['==', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '>', '/'], [';', '{', '}', '[', ']', '_', '"', "'", 'var', ' ', '=']];
 
         //miniature buttons above the keypad that are guarenteed always onscreen
         let functionRow = [board, '(', ')', '⇦', '⇨', 'Del', 'AC'];
@@ -649,7 +658,7 @@
     }
 
     //used for layout engine
-    let specialButtons = new Set(["AC", "+", "x", "–", "÷", "Del", "=="]); //which buttons to color orange
+    let specialButtons = new Set(["AC", "+", "✕", "–", "÷", "Del", "=="]); //which buttons to color orange
     let numericButtons = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "⇨", "⇦", "⇧", "⇩", "Ans", "PrvAns"]);
     let specialActions = { "AC": "clearDisp()", "==": "solve(document.getElementById(\"disp\").value)", "Del": "del()", "⇨": "moveInsert(true)", "⇦": "moveInsert(false)", "⇧": "savedEQbuttons(true)", "⇩": "savedEQbuttons(false)", "M+": "saveTolet(\"M\")", 'abc': 'layout("B")', '123': 'layout("A")', "s/d": "fracDec()" };
 
