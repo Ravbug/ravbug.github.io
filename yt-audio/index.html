@@ -91,10 +91,35 @@
       videoId: startVidId,
       events:{
         'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
+        'onStateChange': onPlayerStateChange,
+        'onError':onError
       }
     });
-   
+  }
+
+  function onError(event){
+    let status = event.data;
+    if (status == 101 || status == 150){
+        //embedded playback was disabled
+        playpause.innerHTML = "🔒";
+        alert("The selected video cannot be played outside of YouTube.com")
+    }
+    if (status==100){
+        //video cannot be loaded / found
+        playpause.innerHTML = "⁉️";
+        alert("The selected video could not be found")
+    }
+    if (status == 5){
+        //HTML5 player had an error
+        playpause.innerHTML="🛑";
+        alert("The player errored. Reload the page.")
+    }
+
+    if (status == 2){
+        //Invalid parameter
+        playpause.innerHTML = "⚠️"
+        alert("Invalid parameter")
+    }
   }
 
   function loadVideo(id){
