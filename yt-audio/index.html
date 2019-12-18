@@ -1,0 +1,157 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../stylesheet.css">
+    <title>YouTube Audio Player</title>
+</head>
+<style>
+    .player,
+    .volume {
+        display: grid;
+        text-align: center;
+    }
+
+    .player {
+        grid-template-columns: 40px 1fr 130px 150px;
+        gap: 10px;
+        border-radius: 40px;
+        box-shadow: 2px 2px 5px #CCC;
+        padding: 10px;
+        align-items: center;
+    }
+
+    .volume {
+        padding: 5px;
+        grid-template-columns: 40px 1fr;
+    }
+    #ytplayer{
+        display:none;
+    }
+</style>
+
+<div class="main">
+    <div class="player">
+        <button id='playpause' onclick="togglePlay(this)">▶</button>
+        <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()" onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
+        <div id="time">0:00 / 3:36</div>
+        <div class="volume">
+            <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
+            <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
+        </div>
+    </div>
+</div>
+<div id="ytplayer"></div>
+
+<script src="https://www.youtube.com/player_api"></script>
+<script src="../utilities.js"></script>
+<script>
+  let playpause = document.getElementById('playpause')
+  let playhead = document.getElementById('playhead');
+  let time = document.getElementById("time");
+  let volslider = document.getElementById("volslider");
+  // Replace the 'ytplayer' element with an <iframe> and
+  // YouTube player after the API code downloads.
+  let player;
+  function onYouTubePlayerAPIReady() {
+    player = new YT.Player('ytplayer', {
+      height: '50',
+      width: '50',
+      videoId: 'M7lc1UVf-VE',
+      events:{
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+   
+  }
+  function onPlayerReady(event){
+    //on player load
+    player.playVideo()
+    //update volume slider
+    document.getElementById("volslider").value = player.getVolume();
+  }
+  function onPlayerStateChange(event){
+      let state = event.data;
+      if (state == 1){
+        playpause.innerHTML = "‖"; 
+        updateReadout();
+        //start slider update
+        playhead.max = player.getDuration();
+        playhead.value = player.getCurrentTime()
+        startSliderUpdate();
+      }
+      if (state == 2){
+        playpause.innerHTML = "▶";
+        //stop slider update
+        stopSliderUpdate();
+        updateReadout();
+      }
+      if (state == 3){
+        playpause.innerHTML = '⏳';
+      }
+      if (state == 0){
+          playpause.innerHTML = '⏮'
+          //if loop is enabled, trigger play
+      }
+  }
+  function togglePlay(button){
+      player.getPlayerState() == 1?  player.pauseVideo() :  player.playVideo(); 
+  }
+
+  function toggleMute(button){
+      player.isMuted()? player.unMute() : player.mute();
+      if (!player.isMuted()){
+            button.innerHTML = '🔇';
+            volslider.disabled = true;
+            return;
+      }
+      else{
+        volslider.disabled = false;
+        setVolIcon(button);
+      }
+  }
+
+  function changeVolume(value){
+    player.setVolume(value);
+    setVolIcon(document.getElementById('muteBtn'));
+  }
+
+  function setVolIcon(button){
+    let vol = player.getVolume();
+    if (vol < 20){
+        button.innerHTML = '🔈'
+    }
+    else if (vol > 80){
+        button.innerHTML = '🔊';
+    }
+    else{
+        button.innerHTML = '🔉'
+    }
+  }
+
+  //converts seconds to time stamp
+  function secToStamp(sec){
+    var date = new Date(null);
+    date.setSeconds(sec); 
+    return date.toISOString().substr(11, 8);
+  }
+
+  function updateReadout(){
+    time.innerHTML = `${secToStamp(playhead.value)} / ${secToStamp(playhead.max)}`;
+  }
+
+  var loopID = null;
+  function startSliderUpdate(){
+    if (loopID == null){
+        loopID = setInterval(function(){
+            //update slider
+            playhead.value = player.getCurrentTime()
+            //update readout
+            updateReadout();
+        },1000)
+    }
+  }
+  function stopSliderUpdate(){
+      clearTimeout(loopID);
+      loopID = null;
+  }
+</script>
