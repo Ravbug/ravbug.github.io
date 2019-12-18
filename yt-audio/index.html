@@ -29,16 +29,27 @@
 </style>
 
 <div class="main">
+    <div id="name">Now Playing: </div>
     <div class="player">
         <button id='playpause' onclick="togglePlay(this)">▶</button>
         <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()" onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
-        <div id="time">0:00 / 3:36</div>
+        <div id="time">00:00:00 / 00:00:00</div>
         <div class="volume">
             <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
             <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
         </div>
     </div>
+    <br>
+    <div> 
+        <form onsubmit="let v = document.getElementById('addvid'); loadVideo(v.value); v.value=''; return false">
+            Load Video: <input id="addvid"></input>
+        </form>        
+        <form onsubmit="let v = document.getElementById('addpl'); loadPlaylist(v.value);v.value='';return false">
+            Load Playlist:<input id="addpl"></input>
+        </form>
+    </div>
 </div>
+
 <div id="ytplayer"></div>
 
 <script src="https://www.youtube.com/player_api"></script>
@@ -48,6 +59,28 @@
   let playhead = document.getElementById('playhead');
   let time = document.getElementById("time");
   let volslider = document.getElementById("volslider");
+  let nameFieled = document.getElementById('name');
+
+  let startVidId = "";
+  let startPlId = "";
+  let startplidx = 0;
+  //read the URL arguments
+  {
+      let args = readURLArgs();
+      let argdict = {}
+      for (let arg of args){
+          let parts = arg.split('=');
+          argdict[parts[0]] = parts[1];
+      }
+      //load the initial video
+      startVidId = argdict["v"];
+      //load the initial playlist
+      try{
+        startPlId = argdict['pl'];
+        startplidx = argdict['i']
+      }catch(e){}
+  }
+
   // Replace the 'ytplayer' element with an <iframe> and
   // YouTube player after the API code downloads.
   let player;
@@ -55,7 +88,7 @@
     player = new YT.Player('ytplayer', {
       height: '50',
       width: '50',
-      videoId: 'M7lc1UVf-VE',
+      videoId: startVidId,
       events:{
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
@@ -63,9 +96,22 @@
     });
    
   }
-  function onPlayerReady(event){
+
+  function loadVideo(id){
+      nameFieled.innerHTML = "Now Playing: Video " + id;
+      player.loadVideoById(id);
+  }
+
+  function loadPlaylist(id){
+    nameFieled.innerHTML = "Now Playing: Playlist " + id;
+    player.loadPlaylist({list:id,listType:"playlist",index:startplidx})
+  }
+
     //on player load
-    player.playVideo()
+  function onPlayerReady(event){
+    player.playVideo();
+    //load playlist if one is specified
+    if (startPlId!=undefined){loadPlaylist(startPlId)};
     //update volume slider
     document.getElementById("volslider").value = player.getVolume();
   }
