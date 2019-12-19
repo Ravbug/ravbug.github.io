@@ -301,7 +301,7 @@
   function playID() {
     let v = document.getElementById('addvid');
     if (v.value != "") {
-      loadVideo(v.value);
+      loadVideo(YouTubeGetID(v.value));
       v.value = ''
     }
   }
@@ -310,8 +310,42 @@
   function playPlaylist() {
     let v = document.getElementById('addpl');
     if (v.value != "") {
-      loadPlaylist(v.value);
+      loadPlaylist(getYoutubePlaylistId(v.value));
       v.value = ''
     }
   }
+
+
+/**
+* Get YouTube ID from various YouTube URL
+* @param {string} url the URL to extract
+* @attribution: https://gist.github.com/takien/4077195
+*/
+
+function YouTubeGetID(url){
+  var ID = '';
+  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if(url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  }
+  else {
+    ID = url;
+  }
+    return ID;
+}
+
+/**
+ * Gets a YouTube PlaylistID from different YouTube URLs
+ * @param {string} url the URL to extract
+ * @attribution: https://github.com/pierreneter-repositories/get-youtube-playlist-id/ (adapted)
+ */
+function getYoutubePlaylistId(url) {
+  if (!url.includes("http")){
+    return url;
+  }
+  var id = /[&|\?]list=([a-zA-Z0-9_-]+)/gi.exec(url)
+  return (id && id.length > 0) ? id[1] : false
+}
+
 </script>
