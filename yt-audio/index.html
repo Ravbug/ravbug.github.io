@@ -1,53 +1,102 @@
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../stylesheet.css">
-    <title>YouTube Audio Player</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../stylesheet.css">
+  <link rel="stylesheet" href="../bootstrap-custom.css">
+  <title>YouTube Audio Player</title>
 </head>
 <style>
-    .player,
-    .volume {
-        display: grid;
-        text-align: center;
-    }
+  .player,
+  .volume {
+    display: grid;
+    text-align: center;
+  }
 
-    .player {
-        grid-template-columns: 40px 1fr 130px 150px;
-        gap: 10px;
-        border-radius: 40px;
-        box-shadow: 2px 2px 5px #CCC;
-        padding: 10px;
-        align-items: center;
-    }
+  .box,
+  .player {
+    border-radius: 40px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+  }
 
-    .volume {
-        padding: 5px;
-        grid-template-columns: 40px 1fr;
-    }
-    #ytplayer{
-        display:none;
-    }
+  .box {
+    border-radius: 20px;
+  }
+
+  .player {
+    grid-template-columns: 40px 1fr 130px 150px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .volume {
+    padding: 5px;
+    grid-template-columns: 40px 1fr;
+  }
+
+  #ytplayer {
+    display: none;
+  }
+
+  #time {
+    font-family: monospace;
+    font-size: 11px;
+  }
+
+  #playlist_ctrl {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    width: 100%;
+  }
+
+  .externalctrl{
+    width:80px;
+    height:100%;
+  }
+
+  button {}
 </style>
 
 <div class="main">
-    <div id="name">Now Playing: </div>
-    <div class="player">
-        <button id='playpause' onclick="togglePlay(this)">▶</button>
-        <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()" onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
-        <div id="time">00:00:00 / 00:00:00</div>
-        <div class="volume">
-            <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
-            <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
+  <div id="name">Now Playing: </div>
+  <div class="player">
+    <button id='playpause' onclick="togglePlay(this)">▶</button>
+    <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()"
+      onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
+    <div id="time">00:00:00 / 00:00:00</div>
+    <div class="volume">
+      <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
+      <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
+    </div>
+  </div>
+  <br>
+  <div class="box">
+    <form onsubmit="playID(); return false">
+      <div class="input-group">
+        <span class="input-group-addon">Load Video:</span>
+        <input class="form-control" id="addvid" placeholder="Paste a video ID or URL"></input>
+      </div>
+    </form>
+    <form onsubmit="playPlaylist();return false">
+      <div class="input-group">
+        <span class="input-group-addon">Load Playlist:</span>
+        <input class="form-control" id="addpl" placeholder="Paste a playlist ID, URL, or video with playlist"></input>
+      </div>
+    </form>
+    <div id="playlist_ctrl">
+      <form onsubmit="jumpToVideo();return false">
+        <div class="input-group">
+          <span class="input-group-addon">Jump to index:</span>
+          <input class="form-control" id="jumpto" type=number value=0 min=0 step=1></input>
         </div>
+      </form>
+      <div>
+        <button class="externalctrl" onclick="player.previousVideo()">Prev</button>
+        <button class="externalctrl" onclick="player.nextVideo()">Next</button>
+        <button class="externalctrl" onclick="toggleLoop(this)">Loop</button>
+      </div>
     </div>
-    <br>
-    <div> 
-        <form onsubmit="let v = document.getElementById('addvid'); loadVideo(v.value); v.value=''; return false">
-            Load Video: <input id="addvid"></input>
-        </form>        
-        <form onsubmit="let v = document.getElementById('addpl'); loadPlaylist(v.value);v.value='';return false">
-            Load Playlist:<input id="addpl"></input>
-        </form>
-    </div>
+  </div>
+</div>
 </div>
 
 <div id="ytplayer"></div>
@@ -64,21 +113,24 @@
   let startVidId = "";
   let startPlId = "";
   let startplidx = 0;
+
+  //video looping, not a provided feature of embed api
+  let loop = false;
   //read the URL arguments
   {
-      let args = readURLArgs();
-      let argdict = {}
-      for (let arg of args){
-          let parts = arg.split('=');
-          argdict[parts[0]] = parts[1];
-      }
-      //load the initial video
-      startVidId = argdict["v"];
-      //load the initial playlist
-      try{
-        startPlId = argdict['pl'];
-        startplidx = argdict['i']
-      }catch(e){}
+    let args = readURLArgs();
+    let argdict = {}
+    for (let arg of args) {
+      let parts = arg.split('=');
+      argdict[parts[0]] = parts[1];
+    }
+    //load the initial video
+    startVidId = argdict["v"];
+    //load the initial playlist
+    try {
+      startPlId = argdict['pl'];
+      startplidx = argdict['i']
+    } catch (e) { }
   }
 
   // Replace the 'ytplayer' element with an <iframe> and
@@ -89,140 +141,173 @@
       height: '50',
       width: '50',
       videoId: startVidId,
-      events:{
+      events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange,
-        'onError':onError
+        'onError': onError
       }
     });
   }
 
-  function onError(event){
+  function onError(event) {
     let status = event.data;
-    if (status == 101 || status == 150){
-        //embedded playback was disabled
-        playpause.innerHTML = "🔒";
-        alert("The selected video cannot be played outside of YouTube.com")
+    if (status == 101 || status == 150) {
+      //embedded playback was disabled
+      playpause.innerHTML = "🔒";
+      alert("The selected video cannot be played outside of YouTube.com")
     }
-    if (status==100){
-        //video cannot be loaded / found
-        playpause.innerHTML = "⁉️";
-        alert("The selected video could not be found")
+    if (status == 100) {
+      //video cannot be loaded / found
+      playpause.innerHTML = "⁉️";
+      alert("The selected video could not be found")
     }
-    if (status == 5){
-        //HTML5 player had an error
-        playpause.innerHTML="🛑";
-        alert("The player errored. Reload the page.")
+    if (status == 5) {
+      //HTML5 player had an error
+      playpause.innerHTML = "🛑";
+      alert("The player errored. Reload the page.")
     }
 
-    if (status == 2){
-        //Invalid parameter
-        playpause.innerHTML = "⚠️"
-        alert("Invalid parameter")
+    if (status == 2) {
+      //Invalid parameter
+      playpause.innerHTML = "⚠️"
+      alert("Invalid parameter")
     }
   }
 
-  function loadVideo(id){
-      nameFieled.innerHTML = "Now Playing: Video " + id;
-      player.loadVideoById(id);
+  function loadVideo(id) {
+    nameFieled.innerHTML = "Now Playing: Video " + id;
+    player.loadVideoById(id);
   }
 
-  function loadPlaylist(id){
+  function loadPlaylist(id) {
     nameFieled.innerHTML = "Now Playing: Playlist " + id;
-    player.loadPlaylist({list:id,listType:"playlist",index:startplidx})
+    player.loadPlaylist({ list: id, listType: "playlist", index: startplidx })
   }
 
-    //on player load
-  function onPlayerReady(event){
+  //on player load
+  function onPlayerReady(event) {
     player.playVideo();
     //load playlist if one is specified
-    if (startPlId!=undefined){loadPlaylist(startPlId)};
+    if (startPlId != undefined) { loadPlaylist(startPlId) };
     //update volume slider
     document.getElementById("volslider").value = player.getVolume();
   }
-  function onPlayerStateChange(event){
-      let state = event.data;
-      if (state == 1){
-        playpause.innerHTML = "‖"; 
-        updateReadout();
-        //start slider update
-        playhead.max = player.getDuration();
-        playhead.value = player.getCurrentTime()
-        startSliderUpdate();
+  function onPlayerStateChange(event) {
+    let state = event.data;
+    if (state == 1) {
+      playpause.innerHTML = "‖";
+      updateReadout();
+      //start slider update
+      playhead.max = player.getDuration();
+      playhead.value = player.getCurrentTime()
+      startSliderUpdate();
+    }
+    if (state == 2) {
+      playpause.innerHTML = "▶";
+      //stop slider update
+      stopSliderUpdate();
+      updateReadout();
+    }
+    if (state == 3) {
+      playpause.innerHTML = '⏳';
+    }
+    if (state == 0) {
+      playpause.innerHTML = '⏮'
+      //if loop is enabled, trigger play
+      if (loop){
+        player.playVideo();
       }
-      if (state == 2){
-        playpause.innerHTML = "▶";
-        //stop slider update
-        stopSliderUpdate();
-        updateReadout();
-      }
-      if (state == 3){
-        playpause.innerHTML = '⏳';
-      }
-      if (state == 0){
-          playpause.innerHTML = '⏮'
-          //if loop is enabled, trigger play
-      }
+    }
   }
-  function togglePlay(button){
-      player.getPlayerState() == 1?  player.pauseVideo() :  player.playVideo(); 
-  }
-
-  function toggleMute(button){
-      player.isMuted()? player.unMute() : player.mute();
-      if (!player.isMuted()){
-            button.innerHTML = '🔇';
-            volslider.disabled = true;
-            return;
-      }
-      else{
-        volslider.disabled = false;
-        setVolIcon(button);
-      }
+  //called when play button hit
+  function togglePlay(button) {
+    player.getPlayerState() == 1 ? player.pauseVideo() : player.playVideo();
   }
 
-  function changeVolume(value){
+  //called when loop is pressed
+  function toggleLoop(button){
+     
+  }
+
+  function toggleMute(button) {
+    player.isMuted() ? player.unMute() : player.mute();
+    if (!player.isMuted()) {
+      button.innerHTML = '🔇';
+      volslider.disabled = true;
+      return;
+    }
+    else {
+      volslider.disabled = false;
+      setVolIcon(button);
+    }
+  }
+
+  function changeVolume(value) {
     player.setVolume(value);
     setVolIcon(document.getElementById('muteBtn'));
   }
 
-  function setVolIcon(button){
+  function setVolIcon(button) {
     let vol = player.getVolume();
-    if (vol < 20){
-        button.innerHTML = '🔈'
+    if (vol < 20) {
+      button.innerHTML = '🔈'
     }
-    else if (vol > 80){
-        button.innerHTML = '🔊';
+    else if (vol > 80) {
+      button.innerHTML = '🔊';
     }
-    else{
-        button.innerHTML = '🔉'
+    else {
+      button.innerHTML = '🔉'
     }
   }
 
   //converts seconds to time stamp
-  function secToStamp(sec){
+  function secToStamp(sec) {
     var date = new Date(null);
-    date.setSeconds(sec); 
+    date.setSeconds(sec);
     return date.toISOString().substr(11, 8);
   }
 
-  function updateReadout(){
+  function updateReadout() {
     time.innerHTML = `${secToStamp(playhead.value)} / ${secToStamp(playhead.max)}`;
   }
 
+  //updating (and stopping updates) to the playhead slider
   var loopID = null;
-  function startSliderUpdate(){
-    if (loopID == null){
-        loopID = setInterval(function(){
-            //update slider
-            playhead.value = player.getCurrentTime()
-            //update readout
-            updateReadout();
-        },1000)
+  function startSliderUpdate() {
+    if (loopID == null) {
+      loopID = setInterval(function () {
+        //update slider
+        playhead.value = player.getCurrentTime()
+        //update readout
+        updateReadout();
+      }, 1000)
     }
   }
-  function stopSliderUpdate(){
-      clearTimeout(loopID);
-      loopID = null;
+  function stopSliderUpdate() {
+    clearTimeout(loopID);
+    loopID = null;
+  }
+
+  //called when user presses enter in Jump To video field
+  function jumpToVideo() {
+    player.playVideoAt(document.getElementById('jumpto').value);
+  }
+
+  //called when user presses enter in play video field
+  function playID() {
+    let v = document.getElementById('addvid');
+    if (v.value != "") {
+      loadVideo(v.value);
+      v.value = ''
+    }
+  }
+
+  //called when user presses enter in playlist field
+  function playPlaylist() {
+    let v = document.getElementById('addpl');
+    if (v.value != "") {
+      loadPlaylist(v.value);
+      v.value = ''
+    }
   }
 </script>
