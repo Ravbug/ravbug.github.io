@@ -92,7 +92,9 @@
       <div>
         <button class="externalctrl" onclick="player.previousVideo()">Prev</button>
         <button class="externalctrl" onclick="player.nextVideo()">Next</button>
-        <button class="externalctrl" onclick="toggleLoop(this)">Loop</button>
+        <button id="loopbtn" class="externalctrl" onclick="toggleLoop(this)">Loop</button>
+        <button class="externalctrl">Loop Pl</button>
+        <button id="shufflebtn" class="externalctrl" onclick="">Shuffle</button>
       </div>
     </div>
   </div>
@@ -115,7 +117,8 @@
   let startplidx = 0;
 
   //video looping, not a provided feature of embed api
-  let loop = false;
+  let loop = true;
+  toggleLoop(document.getElementById('loopbtn'));
   //read the URL arguments
   {
     let args = readURLArgs();
@@ -226,7 +229,8 @@
 
   //called when loop is pressed
   function toggleLoop(button){
-     
+    loop = !loop;
+    button.innerHTML = loop? '🔁' : '➡'
   }
 
   function toggleMute(button) {
