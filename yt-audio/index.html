@@ -5,41 +5,47 @@
   <title>YouTube Audio Player</title>
 </head>
 <style>
-  .player,
-  .volume {
+  .playhead, .volume, .player, .btnrow {
     display: grid;
     text-align: center;
+    align-items: center;
+    gap:10px;
   }
 
-  .box,
-  .player {
-    border-radius: 40px;
+  .box, .player {
+    border-radius: 20px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 10px;
   }
 
-  .box {
-    border-radius: 20px;
+  .playhead{
+    grid-template-columns: 50px 65px 1fr 65px;
   }
 
-  .player {
-    grid-template-columns: 40px 1fr 130px 150px;
-    gap: 10px;
-    align-items: center;
+  .player{
+    grid-template-rows: 40px 40px 40px;
+  }
+
+  .btnrow{
+    margin:auto;
+    grid-template-columns: 50px 50px 50px;
+    gap:5px;
   }
 
   .volume {
-    padding: 5px;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 40px 1fr 40px;
+    width:100%;
+    max-width:250px;
+    margin:auto;
   }
 
   #ytplayer {
     display: none;
   }
 
-  #time {
+  #time,#ctime, #volLabel {
     font-family: monospace;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   #playlist_ctrl {
@@ -48,25 +54,41 @@
     width: 100%;
   }
 
-  .externalctrl{
-    width:80px;
-    height:100%;
+  button {
+    border-radius: 2px;
+    border: 1px solid darkgray;
+    background-color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   }
-
-  button {}
+  button:hover {
+    background-color: #EEE;
+  }
+  button:active {
+    background-color: #DDD;
+    color: black;
+  }
 </style>
 
 <div class="main">
   <div id="name">Now Playing: </div>
   <div class="player">
-    <button id='playpause' onclick="togglePlay(this)">▶</button>
-    <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()"
-      onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
-    <div id="time">00:00:00 / 00:00:00</div>
-    <div class="volume">
-      <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
-      <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
+    <div class=playhead>
+        <button id='playpause' onclick="togglePlay(this)">▶</button>
+        <div id="ctime">00:00:00</div>
+        <input id="playhead" type="range" value=0 min=0 step=1 onmousedown="player.pauseVideo()"
+          onmouseup="player.playVideo()" oninput="updateReadout()" onchange="player.seekTo(this.value)"></input>
+        <div id="time">00:00:00</div>
     </div>
+    <div class=btnrow>
+      <button class="externalctrl" onclick="player.previousVideo()">⇦</button>
+      <button class="externalctrl" onclick="player.nextVideo()">⇨</button>
+      <button id="loopbtn" class="externalctrl" onclick="toggleLoop(this)">Loop</button>
+    </div>
+    <div class="volume">
+        <button id="muteBtn" onclick="toggleMute(this)">🔈</button>
+        <input id="volslider" type="range" min=1 max=100 oninput="changeVolume(this.value)"></input>
+        <div id="volLabel">50%</div>
+      </div>
   </div>
   <br>
   <div class="box">
@@ -90,11 +112,8 @@
         </div>
       </form>
       <div>
-        <button class="externalctrl" onclick="player.previousVideo()">Prev</button>
-        <button class="externalctrl" onclick="player.nextVideo()">Next</button>
-        <button id="loopbtn" class="externalctrl" onclick="toggleLoop(this)">Loop</button>
         <button class="externalctrl">Loop Pl</button>
-        <button id="shufflebtn" class="externalctrl" onclick="">Shuffle</button>
+        <button id="shufflebtn" class="externalctrl" onclick="">ShufflePL</button>
       </div>
     </div>
   </div>
@@ -102,13 +121,18 @@
 </div>
 
 <div id="ytplayer"></div>
-
-<script src="https://www.youtube.com/player_api"></script>
+<script>
+    function offline(){
+      alert("Unable to load.\nCheck your internet connection, and reload if necessary.");
+    }
+</script>
+<script onerror="offline()" src="https://www.youtube.com/player_api"></script>
 <script src="../utilities.js"></script>
 <script>
   let playpause = document.getElementById('playpause')
   let playhead = document.getElementById('playhead');
   let time = document.getElementById("time");
+  let ctime = document.getElementById("ctime");
   let volslider = document.getElementById("volslider");
   let nameFieled = document.getElementById('name');
 
@@ -131,8 +155,8 @@
     startVidId = argdict["v"];
     //load the initial playlist
     try {
-      startPlId = argdict['pl'];
-      startplidx = argdict['i']
+      startPlId = YouTubeGetID(argdict['pl']);
+      startplidx = getYoutubePlaylistId(argdict['i']);
     } catch (e) { }
   }
 
@@ -217,7 +241,7 @@
     if (state == 0) {
       playpause.innerHTML = '⏮'
       //if loop is enabled, trigger play
-      if (loop){
+      if (loop) {
         player.playVideo();
       }
     }
@@ -228,9 +252,9 @@
   }
 
   //called when loop is pressed
-  function toggleLoop(button){
+  function toggleLoop(button) {
     loop = !loop;
-    button.innerHTML = loop? '🔁' : '➡'
+    button.innerHTML = loop ? '🔁' : '➡'
   }
 
   function toggleMute(button) {
@@ -247,6 +271,7 @@
   }
 
   function changeVolume(value) {
+    document.getElementById("volLabel").innerHTML = `${value}%`;
     player.setVolume(value);
     setVolIcon(document.getElementById('muteBtn'));
   }
@@ -272,7 +297,8 @@
   }
 
   function updateReadout() {
-    time.innerHTML = `${secToStamp(playhead.value)} / ${secToStamp(playhead.max)}`;
+    time.innerHTML = secToStamp(playhead.max);
+    ctime.innerHTML= secToStamp(playhead.value);
   }
 
   //updating (and stopping updates) to the playhead slider
@@ -294,58 +320,64 @@
 
   //called when user presses enter in Jump To video field
   function jumpToVideo() {
-    player.playVideoAt(document.getElementById('jumpto').value);
+    try{
+      player.playVideoAt(document.getElementById('jumpto').value);
+    }catch(e){offline()}
   }
 
   //called when user presses enter in play video field
   function playID() {
-    let v = document.getElementById('addvid');
-    if (v.value != "") {
-      loadVideo(YouTubeGetID(v.value));
-      v.value = ''
-    }
+    try{
+      let v = document.getElementById('addvid');
+      if (v.value != "") {
+        loadVideo(YouTubeGetID(v.value));
+        v.value = ''
+      }
+    }catch(e){offline()}
   }
 
   //called when user presses enter in playlist field
   function playPlaylist() {
-    let v = document.getElementById('addpl');
-    if (v.value != "") {
-      loadPlaylist(getYoutubePlaylistId(v.value));
-      v.value = ''
+    try{
+      let v = document.getElementById('addpl');
+      if (v.value != "") {
+        loadPlaylist(getYoutubePlaylistId(v.value));
+        v.value = ''
+      }
+    }catch(e){offline()}
+  }
+
+
+  /**
+  * Get YouTube ID from various YouTube URL
+  * @param {string} url the URL to extract
+  * @attribution: https://gist.github.com/takien/4077195
+  */
+
+  function YouTubeGetID(url) {
+    var ID = '';
+    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if (url[2] !== undefined) {
+      ID = url[2].split(/[^0-9a-z_\-]/i);
+      ID = ID[0];
     }
-  }
-
-
-/**
-* Get YouTube ID from various YouTube URL
-* @param {string} url the URL to extract
-* @attribution: https://gist.github.com/takien/4077195
-*/
-
-function YouTubeGetID(url){
-  var ID = '';
-  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  if(url[2] !== undefined) {
-    ID = url[2].split(/[^0-9a-z_\-]/i);
-    ID = ID[0];
-  }
-  else {
-    ID = url;
-  }
+    else {
+      ID = url;
+    }
     return ID;
-}
-
-/**
- * Gets a YouTube PlaylistID from different YouTube URLs
- * @param {string} url the URL to extract
- * @attribution: https://github.com/pierreneter-repositories/get-youtube-playlist-id/ (adapted)
- */
-function getYoutubePlaylistId(url) {
-  if (!url.includes("http")){
-    return url;
   }
-  var id = /[&|\?]list=([a-zA-Z0-9_-]+)/gi.exec(url)
-  return (id && id.length > 0) ? id[1] : false
-}
+
+  /**
+   * Gets a YouTube PlaylistID from different YouTube URLs
+   * @param {string} url the URL to extract
+   * @attribution: https://github.com/pierreneter-repositories/get-youtube-playlist-id/ (adapted)
+   */
+  function getYoutubePlaylistId(url) {
+    if (!url.includes("http")) {
+      return url;
+    }
+    var id = /[&|\?]list=([a-zA-Z0-9_-]+)/gi.exec(url)
+    return (id && id.length > 0) ? id[1] : false
+  }
 
 </script>
