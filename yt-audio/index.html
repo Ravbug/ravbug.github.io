@@ -149,6 +149,7 @@
 <script onerror="offline()" src="https://www.youtube.com/player_api"></script>
 <script src="../utilities.js"></script>
 <script>
+  let player;
   let playpause = document.getElementById('playpause')
   let playhead = document.getElementById('playhead');
   let time = document.getElementById("time");
@@ -175,25 +176,33 @@
     startVidId = argdict["v"];
     //load the initial playlist
     try {
-      startPlId = YouTubeGetID(argdict['pl']);
-      startplidx = getYoutubePlaylistId(argdict['i']);
-    } catch (e) { }
+        startPlId = getYoutubePlaylistId(argdict['pl']);
+        console.log(startPlId);
+        startplidx = argdict['i'];
+      
+    } catch (e) { 
+      startVidId = YouTubeGetID(startVidId);
+    }
   }
 
   // Replace the 'ytplayer' element with an <iframe> and
   // YouTube player after the API code downloads.
-  let player;
   function onYouTubePlayerAPIReady() {
     player = new YT.Player('ytplayer', {
       height: '50',
       width: '50',
-      videoId: startVidId,
       events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange,
         'onError': onError
       }
     });
+    if (startVidId != ""){
+      loadVideo(startVidId);
+    }
+    else{
+      loadPlaylist(startPlId);
+    }
   }
 
   function onError(event) {
@@ -233,9 +242,11 @@
 
   //on player load
   function onPlayerReady(event) {
-    player.playVideo();
     //load playlist if one is specified
-    if (startPlId != undefined) { loadPlaylist(startPlId) };
+    if (startPlId != undefined) { loadPlaylist(startPlId) }
+    else{
+      player.playVideo();
+    }
     //update volume slider
     document.getElementById("volslider").value = player.getVolume();
   }
