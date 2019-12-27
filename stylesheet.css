@@ -48,6 +48,11 @@ article{
     max-width:700px;
 }
 
+.shadow{
+    box-shadow:2px 2px 5px rgba(0, 0, 0, 0.25);
+    border: 1px solid solid rgba(0, 0, 0, 0.125);
+}
+
 /*
 Dark mode
 */

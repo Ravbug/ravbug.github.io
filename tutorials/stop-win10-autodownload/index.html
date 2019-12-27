@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <title>Prevent Windows 10 Auto Installs</title>
+    <meta name="description" content="Registry edits to stop Windows 10 from auto-downloading shovelware like Candy Crush">
+    <link id="favicon" rel="icon" href="regedit_100.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/tutorials/stop-win10-autodownload/regedit_102.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+</head>
+<body>
+    <div class="main">
+        <b>Last updated: </b><b><script>document.currentScript.parentElement.innerHTML=new Date("12/27/2019").toLocaleDateString()</script></b><br>
+
+        As part of the Consumer Out-of-box Experience, Microsoft signs deals with companies to automatically download sponsored apps and content to 
+        users' computers without their permission. Even if the user tries to uninstall them, they will either automatically re-download at a later date
+        by themselves or will come with the next Windows update. It is a questionable practice at best.
+
+        <br><br>
+        Fortunately, it is not particularly difficult to prevent these downloads using a built-in tool called <b>Regedit</b> (short for Registry Editor). 
+        To use it, simply paste <code>\Windows\regedit.exe</code> into the taskbar search field, or into a File Explorer window's address bar.
+        <img src="searchbar.png" class="responsiveimg">
+
+        <br><br>
+        In Regedit, the folders are known as keys. At the top of the window is an address bar. We will use the address bar to quickly navigate to keys
+        in the registry. The left sidebar is a tree-view for manually navigating the registry hierarchy, and in the right panel we can create, edit, or delete keys or values.
+        <img src="regedit.png" class="responsiveimg shadow">
+        <br><br>
+        
+        Make the following changes to the registry. If a key or value does not exist, create it by right-clicking the parent key in the left sidebar and choosing <code>New > Key</code> or 
+        right-clicking in the right sidebar and choosing <code>New > DWORD (32-bit) Value</code>, respectively.
+        <ul>
+            <li>
+                <b>Recommended</b>
+                <ol>
+                    <li>
+                        <code>Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager</code>
+                        <ol>
+                            <li><code>SilentInstalledAppsEnabled</code> = 0</li>
+                            <li><code>PreInstalledAppsEnabled</code> = 0</li>
+                            <li><code>OemPreInstalledAppsEnabled</code> = 0</li>
+                            <li><code>SystemPaneSuggestionsEnabled</code> = 0</li>
+                            <li><code>ContentDeliveryAllowed</code> = 0</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <code>Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows</code>
+                        <ol>
+                            <li>Create Key <code>CloudContent</code>, then Create DWORD (32-bit) Value <code>DisableWindowsConsumerFeatures</code> and set equal to 1</li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>Additional</b> (Change only if Recommended does not fix the issue)
+                <ol>
+                    <li>
+                        <code>Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft</code>
+                        <li>Create Key <code>WindowsStore</code>, then Create DWORD (32-bit) Value <code>AutoDownload </code> and set equal to 2</li>
+                    </li>
+                    <li>
+                        <code>Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate</code>
+                        <ol>
+                            <li><code>AutoDownload</code> = 2</li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+        </ul>
+        Once you have made these changes, close Regedit and restart your computer. Windows should no longer auto-download bloatware without your permission!
+    </div>
+</body>
+
+<script>
+    stylesheet_depth = 2;
+    document.currentScript.remove();
+</script>
+<script src="../../header.js"></script>
+
+<style>
+    .header {
+        margin-bottom: 5px;
+    }
+
+    figcaption {
+        color: rgba(0, 0, 0, 0.5)
+    }
+</style>
+
+</html>
