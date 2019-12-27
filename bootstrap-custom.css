@@ -814,6 +814,40 @@ hr {
     background-color: #d9534f;
     border-color: #d9534f;
   }
+
+  /* Code blocks */
+  code,
+  kbd,
+  samp {
+    font-family: monospace, monospace;
+    font-size: 1em;
+  }
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  code {
+    padding: 0.2rem 0.4rem;
+    font-size: 90%;
+    color: #bd4147;
+    background-color: #f7f7f9;
+    border-radius: 0.25rem;
+  }
+  
+  a > code {
+    padding: 0;
+    color: inherit;
+    background-color: inherit;
+  }
+  pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+  }
   
   /* dark mode */
 @media (prefers-color-scheme: dark) {

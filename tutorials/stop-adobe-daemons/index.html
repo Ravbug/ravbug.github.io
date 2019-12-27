@@ -1,0 +1,88 @@
+<html>
+<head>
+    <title>How to disable Adobe background processes on macOS</title>
+    <meta name="description" content="Save CPU, Memory, and network activity">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="main">
+        <img src="image.png">
+        <figcaption>I don't have any Adobe apps running!</figcaption>
+        <br>    
+        You can safely disable these processes without affecting your experience using Adobe Software.
+        <br>
+        To do so, follow the steps below:
+        <ol>
+            <li><b>Close all Adobe Apps</b>. This includes the Creative Cloud desktop app. </li>
+            <li>
+                <b>Disable CoreSync.</b><br>
+                Adobe CoreSync automatically syncs documents with Adobe's servers, enabling seamless transitions between computers. Skip this step if you use CoreSync. 
+                <ol>
+                    <li>Open System Preferences > Extensions</li>
+                    <li>Uncheck the box immediately under Core Sync<br>
+                    <img class="responsiveimg" src="extensions.png"></li>
+                </ol>
+                To restore CoreSync, simply re-enable the checkbox.
+            </li>
+            <li>
+                <b>Disable LaunchAgents and LaunchDaemons.</b><br>
+                LaunchAgent and LaunchDaemon files instruct the OS to automatically run and re-launch headless background processes.
+                <br>There are at minimum three such folders on macOS. They are:  <code>/Library/LaunchAgents</code>, <code>~/Library/LaunchAgents/</code>, and <code>/Library/LaunchDaemons</code>
+                Follow these steps for <b>all three folders:</b>
+                <ol>
+                    <li>In the Finder, use the menus <code>Go > Go to Folder</code> (CMD+Shift+G) and enter a path listed above.</li>
+                    <li>Create a new folder named <code>AdobeDisabled</code> (or any other name, as long as you remember). You might have to authenticate with your administrator password.</li>
+                    <li>
+                        Move every <code>.plist</code> file with "Adobe" in the name inside the folder you created.
+                        <br><img class="responsiveimg" src="launchagents.png">
+                    </li>
+                    <li><u>Repeat these steps for each of the paths listed above.</u><br>
+                        <img class="responsiveimg" src="launchdaemons.png">
+                    </li>
+                </ol>
+                On my system, <code>~/Library/LaunchAgents</code> did not exist, so I skipped that path.
+                To restore the agents and daemons, simply revisit these folders and move the <code>.plist</code> files out of the folder you made.
+            </li>
+            <li>
+                <b>Terminate the running Adobe Processes</b>
+                <ol>
+                    <li>Open Activity Monitor (Spotlight Search or go to <code>/Applications/Utilities/</code>)</li>
+                    <li>Use the menus <code>View > All Processes</code> to show every running process.</li>
+                    <li>Use the search bar to search for <code>adobe</code></li>
+                    <li>On macOS Catalina (10.15) or later, shift-select all of the listed processes and press the X button in the toolbar (first from left). 
+                        On macOS Mojave (10.14) or earlier, you cannot multi-select. Simply select each process individually and press the X button in the toolbar</li>
+                    <li>Press the Quit button<br>
+                        <img class="responsiveimg" src="killprocesses.png">
+                    </li>
+                    <li>Wait a few seconds to ensure that the processes close and do not re-launch.</li> It is normal for AdobeIPCBroker to re-launch. 
+                </ol>
+            </li>
+        </ol>
+
+        Once you have followed these steps, you have successfully disabled the Adobe processes! I recommend launching each Addobe application you have installed to ensure that
+        following the above instructions did not mess with those apps. You might also want to re-visit this guide if you install a new Adobe product, since the Adobe installer
+        might re-create the <code>.plist</code> files that you moved.
+
+        <img class="responsiveimg" src="post-instructions.png">
+        <figcaption>Much better!</figcaption>
+
+    </div> 
+</body>
+
+<script>
+    stylesheet_depth = 2;
+    document.currentScript.remove();
+</script>
+<script src="../../header.js"></script>
+
+<style>
+    .header {
+        margin-bottom: 5px;
+    }
+    figcaption{
+        color: rgba(0,0,0,0.5)
+    }
+</style>
+
+</html>
