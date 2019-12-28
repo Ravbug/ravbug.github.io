@@ -58,14 +58,14 @@ Get statistics about a professor by scraping the RateMyProfessors page
 */
 async function processURL(url,school,classname){
     return new Promise(async function(resolve,reject){
-        let res = await httpGetAsync(url).catch(()=>{alert("Could not load")});
+        let res = await httpGetAsync(cors + url).catch(()=>{alert("Could not load")});
         let dummy = document.createElement('html');
         dummy.innerHTML = res;
 
         //sanity check: correct school?
         let pschool;
         try{
-            pschool = dummy.getElementsByClassName("school")[0].innerText;
+            pschool = dummy.getElementsByClassName("NameTitle__Title-dowf0z-1 wVnqu")[0].getElementsByTagName("a")[0].innerText;
             if (!pschool.includes(school)){
                 resolve()
                 return;
@@ -74,12 +74,10 @@ async function processURL(url,school,classname){
         catch(e){resolve();return;}
 
         //sanity check: correct classes listed?
-        let classes = dummy.getElementsByClassName('class');
+        let classes = dummy.getElementsByClassName('RatingHeader__StyledClass-sc-1dlkqw1-2 hBbYdP');
         let correct = 0;
         for (let cl of classes){
-            // the value is 2 elements deep
-            let v = cl.firstElementChild.firstElementChild;
-            if (v && v.innerHTML.toLowerCase().includes(classname.toLowerCase())){
+            if (cl.innerText.toLowerCase() == classname){
                 correct++;
             }
         }
@@ -90,34 +88,47 @@ async function processURL(url,school,classname){
 
         //get the name
         let summary = {};
-        let name = dummy.getElementsByClassName('profname')[0];
+        let name = dummy.getElementsByClassName('NameTitle__Name-dowf0z-0 cjgLEI')[0];
         name = name.innerText.trim().split(' ');
         name = name[0] + " " + name[name.length-1];
         summary["Name"] = name;
 
         //get the rating info
-        let breakdown = dummy.getElementsByClassName('left-breakdown')[0];
-        let scores = breakdown.querySelectorAll(".grade");
-        summary["Grade"] = parseFloat(scores[0].innerHTML);
-        summary["Difficulty"] = parseFloat(scores[2].innerHTML);
+        let scores = dummy.getElementsByClassName('RatingValue__Numerator-qw8sqy-2 gxuTRq')[0];
+        summary["Grade"] = parseFloat(scores.innerText);
+
+        //calculate the average difficulty (Rate my professors removed this summary stat)
+        let diffs = dummy.getElementsByClassName("RatingValues__RatingValue-sc-6dc747-3 cKZySD");
+        let difficulty = 0;
+        for (let diff of diffs){
+            difficulty += parseFloat(diff.innerText);
+        }
+        summary["Difficulty"] = (difficulty/diffs.length).toFixed(2);
 
         //get the number of ratings
-        let nratings = dummy.getElementsByClassName("table-toggle rating-count active")[0];
+        let nratings = dummy.getElementsByClassName("TeacherRatingTabs__StyledTab-pnmswv-1 cuqpDu react-tabs__tab--selected")[0];
         summary["Ratings"] = parseInt(nratings.innerHTML);
 
         //get the review dates, find the most recent
-        let dates = dummy.getElementsByClassName("date")
+        let dates = dummy.getElementsByClassName("TimeStamp__StyledTimeStamp-sc-9q2r30-0 huIsPy RatingHeader__RatingTimeStamp-sc-1dlkqw1-3 ctCDUI")
         let newest = new Date(0);
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         for (let date of dates){
             //get the class the date is associated with
             let parent = date.parentElement.parentElement;
-            let cl = parent.querySelector(".class").getElementsByClassName("name")[0]
-                    .getElementsByClassName("response")[0].innerText;
+            let cl = date.parentElement.innerText;
             
             //if the class is correct
-            if (cl.toLowerCase().includes(classname.toLowerCase())){
-                //compare dates
-                let d = new Date(date.innerText);
+            if (cl.toLowerCase().includes(classname)){
+               
+                //format date
+                let dateparts = [0,0,0];
+                dateparts[0] = months.indexOf(date.innerText.substring(0,3))
+                dateparts[1] = parseInt(parseInt(date.innerText.substring(4,6)));
+                dateparts[2] = parseInt(date.innerText.substring(9,15));
+
+                 //compare dates
+                let d = new Date(dateparts.join('/'));
 
                 if (d > newest){
                     newest = d;
