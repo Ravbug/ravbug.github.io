@@ -313,3 +313,16 @@ function enableTab(id) {
         }
     };
 }
+
+/**
+ * @returns the URL arguments as a key-value dictionary
+ */
+function urlArgsAsDict(){
+	let args = readURLArgs();
+    let argdict = {}
+    for (let arg of args) {
+      let parts = arg.split('=');
+      argdict[parts[0]] = parts[1];
+	}
+	return argdict;
+}
