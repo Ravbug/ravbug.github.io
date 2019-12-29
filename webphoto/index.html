@@ -41,8 +41,17 @@
 
 <!-- Built in SVG filters -->
 <svg id=svg_builtin>
+    <filter id="GaussianBlur1">
+        <feGaussianBlur stdDeviation="1" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="wrap"/>
+    </filter>
+    <filter id="GaussianBlur3">
+        <feGaussianBlur stdDeviation="3" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="wrap"/>
+    </filter>
     <filter id="GaussianBlur10">
-       <feGaussianBlur stdDeviation="10"/>
+        <feGaussianBlur stdDeviation="10" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="wrap"/>
+    </filter>
+    <filter id="GaussianBlur50">
+        <feGaussianBlur stdDeviation="50" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="wrap"/>
     </filter>
     <filter id="LumaToAlpha">
         <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" />
@@ -73,6 +82,25 @@
     <filter id="Blot" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="linearRGB">
         <feDisplacementMap in="SourceGraphic" in2="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="B" x="0%" y="0%" width="100%" height="100%" result="displacementMap"/>
         <feMorphology operator="erode" radius="3 3" x="0%" y="0%" width="100%" height="100%" in="displacementMap" result="morphology"/>
+    </filter>
+    <filter id="duotone">
+        <feColorMatrix type="matrix" values=".33 .33 .33 0 0
+                .33 .33 .33 0 0
+                .33 .33 .33 0 0
+                0 0 0 1 0">
+        </feColorMatrix>
+        <feComponentTransfer color-interpolation-filters="sRGB">
+            <feFuncR type="table" tableValues=".996078431  .984313725"></feFuncR>
+            <feFuncG type="table" tableValues=".125490196  .941176471"></feFuncG>
+            <feFuncB type="table" tableValues=".552941176  .478431373"></feFuncB>
+        </feComponentTransfer>
+    </filter>
+    <filter id="posterize">
+        <feComponentTransfer>
+              <feFuncR type="discrete" tableValues=".25 .4 .5 .75 1"/>
+              <feFuncG type="discrete" tableValues=".25 .4 .5 .75 1"/>
+              <feFuncB type="discrete" tableValues=".25 .4 .5 .75 1"/>
+          </feComponentTransfer>
     </filter>
 </svg>
 <svg id="svg_user">
