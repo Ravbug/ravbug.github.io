@@ -53,11 +53,12 @@ article{
     border: 1px solid solid rgba(0, 0, 0, 0.125);
 }
 
+/* for navigation toobar */
 .headerlink{
     color:white;
     font-size:12px;
+    margin-top:5px;
 }
-
 @media only screen and (max-width:420px){
     .header-nonessential{
         display:none;

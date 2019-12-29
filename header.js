@@ -2,23 +2,10 @@
 
 /** Creates the header for the page
  *  Define the following variables in an earlier `<script>`:
- *  @param {number} stylesheet_depth the distance from the root dir. 0 = at root dir
+ *  @param {number} stylesheetroot string containing "../" to get correct directories
  * 
  */{
-    let stylesheetroot = [];
-    for (let i = 0; i < stylesheet_depth; i++){
-        stylesheetroot.push('../');
-    }
-
-    delete stylesheet_depth;
-    stylesheetroot = stylesheetroot.join('');
-    var script = document.createElement('script');
-    script.onload = function() {
-      generate();
-    };
-    script.src=`${stylesheetroot}homepage.mjs`
-    document.getElementsByTagName('head')[0].appendChild(script);
-    function generate(){
+    function generate(stylesheetroot){
         let body = document.getElementsByTagName("body")[0];
 
        
@@ -59,4 +46,18 @@
             }
         }
     }
+
+    let stylesheetroot = [];
+    for (let i = 0; i < stylesheet_depth; i++){
+        stylesheetroot.push('../');
+    }
+
+    delete stylesheet_depth;
+    stylesheetroot = stylesheetroot.join('');
+    var script = document.createElement('script');
+    script.onload = function() {
+      generate(stylesheetroot);
+    };
+    script.src=`${stylesheetroot}homepage.mjs`
+    document.getElementsByTagName('head')[0].appendChild(script);
 }
