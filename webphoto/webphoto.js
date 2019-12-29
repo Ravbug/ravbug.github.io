@@ -24,7 +24,7 @@ const svgfilters = new Set();
         svgfilters.add(f.id);
     }
 }
-const svgelem = document.getElementById("svg_builtin");
+const svgelem = document.getElementById("svg_user");
 
 let renderview = document.getElementById("image")
 
@@ -416,15 +416,25 @@ async function imgToDataURL(url) {
  * @param {boolean} includeImg true to include the image as a data URL, false otherwise
  */
 async function dlEditDoc(name="adjustments",includeImg=false){
+    //get image
     let doc = {}
     if (includeImg){
         doc["img"] = await imgToDataURL(document.getElementById("image").src)
     }
+    //get custom SVG filters
+    doc["filters"] = svgelem.innerHTML;
+
+    //get adjustments
     let all = [];
     for (let group of order){
         let g_adj = {"on":group.enable.checked,"adj":[]};
         for (let adj of group.adjustments){
-            g_adj["adj"].push({"name":adj.name,"val":adj.slider.value,"on":adj.enable.checked});
+            if (adj.name == "svg"){
+                g_adj["adj"].push({"name":adj.name,"val":adj.select.options[adj.select.selectedIndex].text,"on":adj.enable.checked});
+            }
+            else{
+                g_adj["adj"].push({"name":adj.name,"val":adj.slider.value,"on":adj.enable.checked});
+            }
         }
         all.push(g_adj);
     }

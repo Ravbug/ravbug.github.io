@@ -75,6 +75,9 @@
         <feMorphology operator="erode" radius="3 3" x="0%" y="0%" width="100%" height="100%" in="displacementMap" result="morphology"/>
     </filter>
 </svg>
+<svg id="svg_user">
+
+</svg>
 
 <script src="webphoto.js"></script>
 <script src="../utilities.js"></script>
@@ -119,6 +122,14 @@
             if (doc["img"]){
                 document.getElementById("imgdata").href.baseVal = doc["img"]
             }
+
+            //load custom SVG filters
+            svgelem.innerHTML = doc["filters"];
+            let usr_filters = svgelem.getElementsByTagName("filter");
+            for (let f of usr_filters){
+                svgfilters.add(f.id);
+            }
+
             //clear the adjustment sidebar
             {
                 let elements = document.getElementsByTagName("adjgroup");
@@ -135,8 +146,13 @@
                 //add adjustments and set their values
                 for (let adjustment of group["adj"]){
                     let a = addAdjustment(adjustment["name"],g);
-                    a.setvalue(adjustment["val"]);
-                    a.enable.checked = adjustment["on"]
+                    a.enable.checked = adjustment["on"];
+                    if (adjustment.name == "svg"){
+                        a.select.innerHTML = `<option>${adjustment["val"]}</option>`;
+                    }
+                    else{
+                        a.setvalue(adjustment["val"]);    
+                    }
                 }
             }
             render();
