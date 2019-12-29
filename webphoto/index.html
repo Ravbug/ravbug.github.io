@@ -6,75 +6,8 @@
     <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="../bootstrap-custom.css">
     <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-
-<style>
-    .view{
-        display:grid;
-        grid-template-columns:1fr 260px;
-        overflow:hidden;
-    }
-    /* Portrait phone mode */
-    @media only screen and (max-width: 700px) {
-        .view{
-            grid-template-columns: 1fr;
-        }
-        .controls{
-            padding:100px;
-        }
-    }
-    .main-view{
-        display:grid;
-        grid-template-rows: 50px 1fr;
-        width:100%;
-        height:100%;
-    }
-    .controls{
-        background-color:#CCC;
-        padding:10px;
-        overflow:scroll;
-    }
-    #render{
-        overflow:scroll;
-        background-color:#ababab;
-        height:100%;
-    }
-    #image{
-        object-fit:contain;
-        overflow:hidden;
-        max-height: 100%;
-        vertical-align:middle;
-        max-width:100%;
-    }
-    #clip-bounds{
-        overflow:hidden;
-    }
-    .center {
-        margin: 0;
-        position: relative;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-    }
-    input[type=number]{
-        width:100%;
-    }
-    adjustment {
-        display:grid;
-        grid-template-columns: 1fr 60px;
-    }
-</style>
-
-<style id="delbtns">
-    #delbtn{
-        display:none;
-    }
-    #orderbtngroup{
-        display:unset;
-    }
-</style>
-
 <div class=main-view>
     <div>
             <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
