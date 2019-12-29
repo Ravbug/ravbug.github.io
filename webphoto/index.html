@@ -8,6 +8,15 @@
     <link rel="stylesheet" type="text/css" href="../stylesheet.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
+<style id="delbtns">
+    #delbtn{
+        display:none;
+    }
+    #orderbtngroup{
+        display:unset;
+    }
+</style>
 <div class=main-view>
     <div>
             <b>Image URL:</b><input id="img-url"><button onclick="loadurl()">Load</button>
@@ -19,16 +28,7 @@
     </div>
     <div class=view>
         <div id="render">
-            <svg id=image width="100%" height="100%" viewBox="0 0 600 450">
-                    <defs>
-                        <filter id="main">
-                            <feGaussianBlur in="SourceGraphic" stDeviation="15" />
-                        </filter>
-                    </defs>
-                    <image id="imgdata" xlink:href="https://wallpapercave.com/wp/YHSuCPt.jpg" 
-                            width="100%" height="100%" x="0" y="0"
-                            filter="url(#main)"></image>   
-            </svg>
+            <img id="image" class="center" src="https://wallpapercave.com/wp/YHSuCPt.jpg">
         </div>
         <div class=controls id="controlframe">
             <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
@@ -38,6 +38,43 @@
     </div>
     
 </div>
+
+<!-- Built in SVG filters -->
+<svg id=svg_builtin>
+    <filter id="GaussianBlur10">
+       <feGaussianBlur stdDeviation="10"/>
+    </filter>
+    <filter id="LumaToAlpha">
+        <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" />
+    </filter>
+    <filter id="turbulence">
+        <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="10" result="turbulence"/>
+        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="erode">
+        <feMorphology operator="erode" radius="1"/>
+    </filter>
+    <filter id="dilate">
+        <feMorphology operator="dilate" radius="2"/>
+    </filter>
+    <filter id="RedBlueSwap">    
+        <feColorMatrix type="matrix" values="0 0 0 1 0
+        0 1 0 0 0
+        1 0 0 0 0
+        0 0 0 500 -20" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic"/>
+    </filter>
+    <filter id="BrightBW">
+        <feColorMatrix type="matrix" values="0.7 0.7 0.7 0 0
+            0.7 0.7 0.7 0 0
+            0.7 0.7 0.7 0 0
+            0 0 0 500 -20" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" >
+        </feColorMatrix>
+    </filter>
+    <filter id="Blot" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="linearRGB">
+        <feDisplacementMap in="SourceGraphic" in2="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="B" x="0%" y="0%" width="100%" height="100%" result="displacementMap"/>
+        <feMorphology operator="erode" radius="3 3" x="0%" y="0%" width="100%" height="100%" in="displacementMap" result="morphology"/>
+    </filter>
+</svg>
 
 <script src="webphoto.js"></script>
 <script src="../utilities.js"></script>

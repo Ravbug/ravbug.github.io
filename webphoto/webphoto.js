@@ -14,6 +14,18 @@ const filters = {
     "svg":"",
 }
 
+/** User-defined SVG filters will be added here */
+const svgfilters = new Set();
+{
+    //load built in filters
+    let builtin = document.getElementById("svg_builtin");
+    let svgf = builtin.getElementsByTagName("filter");
+    for (let f of svgf){
+        svgfilters.add(f.id);
+    }
+}
+const svgelem = document.getElementById("svg_builtin");
+
 let renderview = document.getElementById("image")
 
 //the list of adjustment layer blocks
@@ -32,7 +44,9 @@ function render(event){
             for (let filter of group.adjustments){
                 //if not SVG
                 if (filter.name=="svg"){
-
+                    if (filter.enable.checked){
+                        queue.push(`url(#${filter.select.options[filter.select.selectedIndex].text})`);
+                    }
                 }
                 else{
                     //should enable adjustment?
@@ -70,19 +84,10 @@ function addAdjustment(filter,group){
         enable.type = "checkbox";
     let title = document.createElement('i');
         title.innerHTML = filter;
-    let slider = document.createElement('input');
-        slider.type="range"; slider.style="width:100%";
-        slider.min = d.min, slider.max = d.max; slider.value = d.val;
-        slider.step = d.step;
     let delbtn = document.createElement('button');
         delbtn.innerHTML = "❌"
         delbtn.id = "delbtn";
     let separator = document.createElement('br');
-    let numeric = document.createElement('input');
-        numeric.type="number"
-        numeric.value = slider.value;
-        numeric.min = d.min; numeric.max = d.max;
-        numeric.step = d.step;
     let btnup = document.createElement('button');
         btnup.innerHTML = "↑";
     let btndown = document.createElement('button');
@@ -91,6 +96,52 @@ function addAdjustment(filter,group){
         btngroup.id = "orderbtngroup";
     let btnmaster = document.createElement('div');
     let tgroup = document.createElement('div');
+
+    let slider, numeric, svgentry, svgselector;
+    if (filter == "svg"){
+        svgentry = document.createElement('div');
+        svgentry.innerHTML = 
+        `
+        Filter: <select onclick="loadFilters(this)"><option>${Array.from(svgfilters)[0]}</option></select>
+        <button onclick="importsvg()">+</button>
+        `
+        svgselector= svgentry.getElementsByTagName("select")[0];
+        svgselector.onchange = function(){
+            enable.checked=true;
+            render();
+        }
+        
+    }
+    else{
+        slider = document.createElement('input');
+            slider.type="range"; slider.style="width:100%";
+            slider.min = d.min, slider.max = d.max; slider.value = d.val;
+            slider.step = d.step;
+        numeric = document.createElement('input');
+            numeric.type="number"
+            numeric.value = slider.value;
+            numeric.min = d.min; numeric.max = d.max;
+            numeric.step = d.step;
+        //attach events
+        slider.oninput = function(event){
+            //update the number field
+            numeric.value = slider.value;
+            render(event);
+        }
+        numeric.oninput = function(event){
+            //constrain to acceptable range
+            if (numeric.value < d.min){
+                numeric.value = d.min;
+            }
+            if (numeric.value > d.max){
+                numeric.value = d.max;
+            }
+
+            //update the slider
+            slider.value = numeric.value;
+            render(event);
+        }
+    }
 
     //append the controls
     btnmaster.appendChild(delbtn);
@@ -101,8 +152,13 @@ function addAdjustment(filter,group){
     tgroup.appendChild(title);
     root.appendChild(tgroup);
     root.appendChild(btnmaster);
-    root.appendChild(slider);
-    root.appendChild(numeric);
+    if (filter == "svg"){
+        root.appendChild(svgentry);
+    }
+    else{
+        root.appendChild(slider);
+        root.appendChild(numeric);
+    }
     root.appendChild(separator);
     group.display.appendChild(root);
 
@@ -115,28 +171,10 @@ function addAdjustment(filter,group){
         "setvalue":function(newval){
             slider.value = newval;
             numeric.value = newval;
-        }
+        },
+        "select":svgselector
     };
 
-    //attach events
-    slider.oninput = function(event){
-        //update the number field
-        numeric.value = slider.value;
-        render(event);
-    }
-    numeric.oninput = function(event){
-        //constrain to acceptable range
-        if (numeric.value < d.min){
-            numeric.value = d.min;
-        }
-        if (numeric.value > d.max){
-            numeric.value = d.max;
-        }
-
-        //update the slider
-        slider.value = numeric.value;
-        render(event);
-    }
     enable.oninput = render;
     delbtn.onclick = function(){
         //find in the render queue
@@ -380,7 +418,7 @@ async function imgToDataURL(url) {
 async function dlEditDoc(name="adjustments",includeImg=false){
     let doc = {}
     if (includeImg){
-        doc["img"] = await imgToDataURL(document.getElementById("imgdata").href.baseVal)
+        doc["img"] = await imgToDataURL(document.getElementById("image").src)
     }
     let all = [];
     for (let group of order){
@@ -392,4 +430,37 @@ async function dlEditDoc(name="adjustments",includeImg=false){
     }
     doc["adj"] = all;
     download(name+".json",JSON.stringify(doc));
+}
+
+/**
+ * Prompts the user to upload an SVG filter file
+ */
+function importsvg(){
+    //prompt user for string representing svg filter
+    let svgstr = prompt("Paste complete SVG filter");
+    if (svgstr){
+        //create a filter element out of the string
+        let svg = document.createElement('svg');
+        svg.innerHTML = svgstr;
+        //get the ID of the filter element, add to the Set
+        let filterID = svg.getElementsByTagName('filter')[0].id;
+        //add the filter element to the SVG filters element
+        svgfilters.add(filterID);
+        svg.remove();
+        svgelem.innerHTML += svgstr;
+    }
+}
+
+/**
+ * Adds the currently loaded SVG filters as options to a select element
+ * @param {HTMLElement} select the element to add options to
+ */
+function loadFilters(select){
+    let selection = select.selectedIndex;
+    let html = [];
+    for (let name of svgfilters){
+        html.push(`<option>${name}</option>`)
+    }
+    select.innerHTML = html.join('');
+    select.selectedIndex = selection;
 }
