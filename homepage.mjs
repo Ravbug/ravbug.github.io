@@ -65,6 +65,12 @@ data = [
             title:"Web Development",
             content:[     
                 {
+                    title: "WebPhoto",
+                    img: "webphoto/icon.svg",
+                    tag: "A non-destructive image editor using CSS and SVG filters (beta)",
+                    ref: "webphoto/"
+                },
+                {
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
                     tag:"Quickly get a list of the best professors for your classes",
