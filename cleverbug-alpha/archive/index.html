@@ -64,12 +64,12 @@
     words as described by <code>cleverbug_badwords.txt</code>. If a bad word was found, the server rejected
     the request. This step helped prevent (and worked surprisingly well) the bot from learning
     racist or offensive phrases. The server also performed basic duplicate-detection by checking the input string
-    as lowercase with the spaces removed against a column in the spreadsheet which stored all the phrases lowercase without spaces.
-    The spreadsheet calculated those automatically via spreadsheet ArrayFormula. Like the bad word detection, this duplicate 
-    detection worked surprisingly well. 
+    as lowercase with the spaces and double letters removed against a column in the spreadsheet which stored all the phrases lowercase without spaces.
+    The spreadsheet calculated those automatically via spreadsheet ArrayFormula, so the server simply ran a select query on that column. 
+    Like the bad word detection, this duplicate detection worked surprisingly well. 
 
     <br><br>
-    If the code did not find a bad word (and it checked for variations), then it proceeded to the 
+    If the code did not find a bad word or a duplicate phrase (and it checked for variations), then it proceeded to the 
     next step of adding it to the database. Here, it initialized the Google Spreadsheet API library
     for php (verison 2.2.0) and authenticated using the credentials described in <code>client_secret.json</code>.
     <br><br>
