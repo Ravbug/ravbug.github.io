@@ -63,3 +63,22 @@ adjustment {
     display: grid;
     grid-template-columns: 1fr 60px;
 }
+
+.barheader{
+    height:100%;
+}
+
+.toolbar{
+    height:100%;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, 50px);
+}
+
+.toolbar button{
+    height:100%;
+}
+
+.title{
+    display:inline-block;
+    font-size:20px;
+}
