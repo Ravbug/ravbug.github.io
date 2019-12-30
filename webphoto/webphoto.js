@@ -196,11 +196,16 @@ function addAdjustment(filter,group){
     btnup.onclick = () => {
         for (let i = 0; i < group.adjustments.length; i++){
             let a = group.adjustments[i];
-            if (a["slider"]  == slider){
+            if ((a.name == "svg" && a.select == svgselector) || a["slider"]  == slider){
                 //move element towards front of list
                 if (i > 0){
                     //update display
-                    group.adjustments[i-1].slider.parentElement.insertAdjacentElement("beforebegin",root)
+                    if (group.adjustments[i-1].name == "svg"){
+                        group.adjustments[i-1].select.parentElement.parentElement.insertAdjacentElement("beforebegin",root)
+                    }
+                    else{
+                        group.adjustments[i-1].slider.parentElement.insertAdjacentElement("beforebegin",root)
+                    }
 
                     //update render order
                     array_move(group.adjustments,i, i - 1);
@@ -213,11 +218,16 @@ function addAdjustment(filter,group){
     btndown.onclick = () => {
         for (let i = 0; i < group.adjustments.length; i++){
             let a = group.adjustments[i];
-            if (a["slider"]  == slider){
+            if ((a.name == "svg" && a.select == svgselector) || a["slider"]  == slider){
                 //move element towards end of list
                 if (i < group.adjustments.length-1){
                     //update display
-                    group.adjustments[i+1].slider.parentElement.insertAdjacentElement("afterend",root)
+                    if (group.adjustments[i+1].name == "svg"){
+                        group.adjustments[i+1].select.parentElement.parentElement.insertAdjacentElement("afterend",root)
+                    }
+                    else{
+                        group.adjustments[i+1].slider.parentElement.insertAdjacentElement("afterend",root)
+                    }
 
                     //update render order
                     array_move(group.adjustments,i, i + 1);
