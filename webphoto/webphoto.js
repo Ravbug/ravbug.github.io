@@ -463,11 +463,14 @@ function importsvg(){
         let svg = document.createElement('svg');
         svg.innerHTML = svgstr;
         //get the ID of the filter element, add to the Set
-        let filterID = svg.getElementsByTagName('filter')[0].id;
-        //add the filter element to the SVG filters element
-        svgfilters.add(filterID);
-        svg.remove();
+
+        let filterIDs = svg.getElementsByTagName('filter');
+        for (let id of filterIDs){
+             //add the filter element to the SVG filters element
+            svgfilters.add(id.id);
+        }
         svgelem.innerHTML += svgstr;
+        svg.remove();
     }
 }
 

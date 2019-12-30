@@ -68,14 +68,14 @@
     <filter id="LumaToAlpha">
         <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" />
     </filter>
-    <filter id="turbulence">
+    <filter id="Turbulence">
         <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="10" result="turbulence"/>
         <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <filter id="erode">
+    <filter id="Erode">
         <feMorphology operator="erode" radius="1"/>
     </filter>
-    <filter id="dilate">
+    <filter id="Dilate">
         <feMorphology operator="dilate" radius="2"/>
     </filter>
     <filter id="RedBlueSwap">    
@@ -95,7 +95,7 @@
         <feDisplacementMap in="SourceGraphic" in2="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="B" x="0%" y="0%" width="100%" height="100%" result="displacementMap"/>
         <feMorphology operator="erode" radius="3 3" x="0%" y="0%" width="100%" height="100%" in="displacementMap" result="morphology"/>
     </filter>
-    <filter id="duotone">
+    <filter id="Duotone">
         <feColorMatrix type="matrix" values=".33 .33 .33 0 0
                 .33 .33 .33 0 0
                 .33 .33 .33 0 0
@@ -107,12 +107,20 @@
             <feFuncB type="table" tableValues=".552941176  .478431373"></feFuncB>
         </feComponentTransfer>
     </filter>
-    <filter id="posterize">
+    <filter id="Posterize">
         <feComponentTransfer>
               <feFuncR type="discrete" tableValues=".25 .4 .5 .75 1"/>
               <feFuncG type="discrete" tableValues=".25 .4 .5 .75 1"/>
               <feFuncB type="discrete" tableValues=".25 .4 .5 .75 1"/>
           </feComponentTransfer>
+    </filter>
+    <filter id="GreaseLensDarken" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="linearRGB">
+        <feGaussianBlur stdDeviation="3 10" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="none" result="blur1"/>
+        <feBlend mode="multiply" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" in2="blur1" result="blend"/>
+    </filter>
+    <filter id="GreaseLensLighten" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="linearRGB">
+        <feGaussianBlur stdDeviation="3 10" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="none" result="blur1"/>
+        <feBlend mode="screen" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" in2="blur1" result="blend"/>
     </filter>
 </svg>
 <svg id="svg_user">
