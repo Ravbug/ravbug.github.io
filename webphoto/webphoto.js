@@ -446,9 +446,9 @@ function importsvg(){
 function removesvg(select){
     let name = select.options[select.selectedIndex].text;
     if (confirm(`Remove filter ${name}?`)){
-        svgfilters.delete(name);
         try{
             svgelem.querySelector(`#${name}`).remove();
+            svgfilters.delete(name);
         }
         catch(e){alert(`Cannot remove filter ${name}`)}
     }
