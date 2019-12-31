@@ -35,7 +35,8 @@
             <button onclick="downloadEdit()"><i class="fas fa-save"></i></i></button>
             <button onclick="downloadPreset()"><i class="fas fa-sliders-h"></i></button>
             <button onclick="filePicker.click()"><i class="fas fa-file-upload"></i></button>
-            <input type="file" style="display:none;" id="inputfile" accept="text/json"/>
+            <input type="file" style="display:none;" id="inputfile" accept=".json"/>
+            <input type="file" style="display:none;" id="inputSVG" accept=".svg"/>
             <input type="file" style="display:none;" id="inputimage" accept="image/*"/>
             <button onmousedown="renderview.style.filter=''" onmouseup="render(this)"><i class="far fa-images"></i></button>
         </div>
@@ -73,10 +74,11 @@
             <button>↓</button>
         </div>
     </div>
-    <div>
+    <div style="grid-column: 1 / 3;">
         Filter: <select onclick="loadFilters(this)"></select>
         <button onclick="importsvg()">+</button>
-    </div><br>
+        <button onclick="uploadsvg.click()"><i class="fas fa-file-import"></i></button>
+    </div>
 </adjustment>
 
 <!-- Built in SVG filters -->
@@ -189,6 +191,7 @@
     }
     let filePicker = document.getElementById('inputfile');
     let uploadimg = document.getElementById("inputimage");
+    let uploadsvg = document.getElementById("inputSVG");
 
     uploadimg.onchange = function(){
         const reader = new FileReader();
@@ -196,6 +199,24 @@
             document.getElementById("image").src = e.target.result;
         }
         reader.readAsDataURL(uploadimg.files[0]);
+    }
+
+    uploadsvg.onchange = function(){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            let temp = document.createElement('svg');
+            temp.innerHTML = e.target.result;
+            let uploadfilters = temp.querySelectorAll('filter');
+            for (let filter of uploadfilters){
+               svgelem.innerHTML += filter.outerHTML;
+               svgfilters.add(filter.id);
+            }
+            temp.remove();
+        }
+        
+        for (let file of uploadsvg.files){
+            reader.readAsText(file);
+        }
     }
 
     //when a file is uploaded
