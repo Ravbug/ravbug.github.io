@@ -51,6 +51,34 @@
     </div>
 </div>
 
+<!-- Templates for creating new adjustments -->
+<adjustment id="adj-template" style="display:none">
+    <div><input id="template-checkbox" type="checkbox" onchange="render()"><i>contrast</i></div>
+    <div>
+        <button id="delbtn">❌</button>
+        <div id="orderbtngroup">
+            <button>↑</button>
+            <button>↓</button>
+        </div>
+    </div>
+    <input type="range" style="width: 100%;" min="0" max="200" step="1">
+    <input type="number" min="0" max="200" step="1"><br>
+</adjustment>
+<adjustment id="adj-template-svg" style="display:none">
+    <div><input id="template-checkbox" type="checkbox" onchange="render()"><i>svg</i></div>
+    <div>
+        <button id="delbtn">❌</button>
+        <div id="orderbtngroup">
+            <button>↑</button>
+            <button>↓</button>
+        </div>
+    </div>
+    <div>
+        Filter: <select onclick="loadFilters(this)"></select>
+        <button onclick="importsvg()">+</button>
+    </div><br>
+</adjustment>
+
 <!-- Built in SVG filters -->
 <svg id=svg_builtin>
     <filter id="GaussianBlur1">
@@ -123,9 +151,7 @@
         <feBlend mode="screen" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" in2="blur1" result="blend"/>
     </filter>
 </svg>
-<svg id="svg_user">
-
-</svg>
+<svg id="svg_user"></svg>
 
 <script src="webphoto.js"></script>
 <script src="../utilities.js"></script>

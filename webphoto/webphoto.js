@@ -80,45 +80,29 @@ function addAdjustment(filter,group){
     }
     //create the elements that make the adjustment
     let root = document.createElement('adjustment')
-    let enable = document.createElement('input');
-        enable.type = "checkbox";
-    let title = document.createElement('i');
-        title.innerHTML = filter;
-    let delbtn = document.createElement('button');
-        delbtn.innerHTML = "❌"
-        delbtn.id = "delbtn";
-    let separator = document.createElement('br');
-    let btnup = document.createElement('button');
-        btnup.innerHTML = "↑";
-    let btndown = document.createElement('button');
-        btndown.innerHTML = "↓";
-    let btngroup = document.createElement('div');
-        btngroup.id = "orderbtngroup";
-    let btnmaster = document.createElement('div');
-    let tgroup = document.createElement('div');
+        root.innerHTML = document.getElementById(`adj-template${filter=='svg'?"-svg":""}`).innerHTML;
 
-    let slider, numeric, svgentry, svgselector;
+    let enable = root.querySelector("#template-checkbox");
+    root.querySelector('i').innerHTML = filter;
+    let delbtn = root.querySelector('#delbtn');
+
+    let btnup = root.querySelector("#orderbtngroup").querySelector('button');
+    let btndown = root.querySelector("#orderbtngroup").querySelectorAll('button')[1];
+
+    let slider, numeric, svgselector;
     if (filter == "svg"){
-        svgentry = document.createElement('div');
-        svgentry.innerHTML = 
-        `
-        Filter: <select onclick="loadFilters(this)"><option>${Array.from(svgfilters)[0]}</option></select>
-        <button onclick="importsvg()">+</button>
-        `
-        svgselector= svgentry.getElementsByTagName("select")[0];
+        svgselector= root.getElementsByTagName("select")[0];
+        svgselector.innerHTML = `<option>${Array.from(svgfilters)[0]}</option>`;
         svgselector.onchange = function(){
             enable.checked=true;
             render();
         }
-        
     }
     else{
-        slider = document.createElement('input');
-            slider.type="range"; slider.style="width:100%";
+        slider = root.querySelector('[type="range"]');
             slider.min = d.min, slider.max = d.max; slider.value = d.val;
             slider.step = d.step;
-        numeric = document.createElement('input');
-            numeric.type="number"
+        numeric = root.querySelector('[type="number"]');
             numeric.value = slider.value;
             numeric.min = d.min; numeric.max = d.max;
             numeric.step = d.step;
@@ -141,26 +125,7 @@ function addAdjustment(filter,group){
             slider.value = numeric.value;
             render(event);
         }
-    }
-
-    //append the controls
-    btnmaster.appendChild(delbtn);
-    btngroup.appendChild(btnup);
-    btngroup.appendChild(btndown);
-    btnmaster.appendChild(btngroup);
-    tgroup.appendChild(enable);
-    tgroup.appendChild(title);
-    root.appendChild(tgroup);
-    root.appendChild(btnmaster);
-    if (filter == "svg"){
-        root.appendChild(svgentry);
-    }
-    else{
-        root.appendChild(slider);
-        root.appendChild(numeric);
-    }
-    root.appendChild(separator);
-    group.display.appendChild(root);
+    }    
 
     //create render object
     let adjustment = {
@@ -175,7 +140,6 @@ function addAdjustment(filter,group){
         "select":svgselector
     };
 
-    enable.oninput = render;
     delbtn.onclick = function(){
         //find in the render queue
         for (let i = 0; i < group.adjustments.length; i++){
@@ -240,6 +204,7 @@ function addAdjustment(filter,group){
 
     //add slider to render queue
     group.adjustments.push(adjustment);
+    group.display.appendChild(root);
 
     return adjustment;
 }
