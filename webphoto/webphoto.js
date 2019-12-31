@@ -440,6 +440,18 @@ function importsvg(){
 }
 
 /**
+ * Removes a selected uploaded SVG filter
+ * @param {HTMLSelectElement} select the select element to get the filter to remove
+ */
+function removesvg(select){
+    let name = select.options[select.selectedIndex].text;
+    if (confirm(`Remove filter ${name}?`)){
+        svgfilters.delete(name);
+        svgelem.querySelector(`#${name}`).remove();
+    }
+}
+
+/**
  * Adds the currently loaded SVG filters as options to a select element
  * @param {HTMLElement} select the element to add options to
  */
