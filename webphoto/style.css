@@ -1,6 +1,6 @@
 .view {
     display: grid;
-    grid-template-columns: 1fr 260px;
+    grid-template-columns: 1fr 280px;
     overflow: hidden;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .controls {
-    background-color: #CCC;
+    background-color: #ECECEC;
     padding: 10px;
     overflow: scroll;
 }
@@ -79,8 +79,9 @@ adjustment {
 }
 
 .title{
-    display:inline-block;
     font-size:20px;
+    text-align: center;
+    line-height:48px;
 }
 
 .svgfilter{
@@ -89,7 +90,23 @@ adjustment {
     position:absolute
 }
 
+.sidebtn, .generalbtn{
+    background-color: rgb(201, 201, 201);
+    border: none;  
+}
+
 .sidebtn{
     width:26px;
     height:26px;
+}
+
+.toolbar button{
+    border: none;
+    background-color: transparent;
+}
+.toolbar button:active{
+    color:tomato;
+}
+.toolbar button:hover{
+    color:gray;
 }

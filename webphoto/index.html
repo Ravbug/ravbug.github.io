@@ -28,7 +28,7 @@
 <div class=main-view>
     <div class=barheader>
         <div class="toolbar">
-            <span class="title" style="grid-column: 1 / 3;">WebPhoto</span>
+            <div class="title" style="grid-column: 1 / 3;">WebPhoto</div>
             <button onclick="window.location='/'"><i class="fas fa-home"></i></button>
             <button onclick="loadurl()"><i class="fas fa-link"></i></button>
             <button onclick="uploadimg.click()"><i class="fas fa-upload"></i></button>
@@ -46,8 +46,8 @@
             <img id="image" class="center" src="defaultimg.jpg">
         </div>
         <div class=controls id="controlframe">
-            <button onclick="addAdjustmentGroup()">Add Adjustment Group</button>
-            <button onclick="toggleDelete(this)">Del</button>
+            <button class=generalbtn onclick="addAdjustmentGroup()">Add Adjustment Group</button>
+            <button class=generalbtn onclick="toggleDelete(this)">❌</button>
         </div>   
     </div>
 </div>
@@ -68,7 +68,7 @@
 <adjustment id="adj-template-svg" style="display:none">
     <div><input id="template-checkbox" type="checkbox" onchange="render()"><i>svg</i></div>
     <div>
-        <button id="delbtn">❌</button>
+        <button class="sidebtn" id="delbtn">❌</button>
         <div id="orderbtngroup">
             <button class="sidebtn">↑</button>
             <button class="sidebtn">↓</button>
@@ -90,8 +90,9 @@
         <div id="orderbtngroup">
             <button class="sidebtn">↑</button>
             <button class="sidebtn">↓</button>
-        </div><button id="delbtn">❌</button>
+        </div><button class="sidebtn" style="width:56px" id="delbtn">❌</button>
     </div>
+    <br>
     <select></select>
     <button class="sidebtn" id="addbtn-template">+</button>
 </adjgroup>
@@ -182,7 +183,7 @@
     }
     function toggleDelete(btn){
         delmode = !delmode
-        btn.innerHTML = delmode? "Done" : "Del";
+        btn.innerHTML = delmode? "Done" : "❌";
         document.getElementById("delbtns").innerHTML = `
         #delbtn{
             display:${delmode? "unset" :"none"};
