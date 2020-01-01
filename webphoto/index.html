@@ -75,10 +75,10 @@
         </div>
     </div>
     <div style="grid-column: 1 / 3;">
-        Filter: <select onclick="loadFilters(this)"></select>
-        <button onclick="importsvg()">+</button>
-        <button onclick="removesvg(this.parentNode.querySelector('select'))">-</button>
-        <button onclick="uploadsvg.click()"><i class="fas fa-file-import"></i></button>
+        Filter: <select onfocus="loadFilters(this)"></select>
+        <button class="sidebtn" onclick="importsvg()">+</button>
+        <button class="sidebtn" onclick="removesvg(this.parentNode.querySelector('select'))">-</button>
+        <button class="sidebtn" onclick="uploadsvg.click()"><i class="fas fa-file-import"></i></button>
     </div>
 </adjustment>
 <!-- Templates for creating adjustment group -->
