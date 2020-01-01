@@ -58,8 +58,8 @@
     <div>
         <button id="delbtn">❌</button>
         <div id="orderbtngroup">
-            <button>↑</button>
-            <button>↓</button>
+            <button class="sidebtn">↑</button>
+            <button class="sidebtn">↓</button>
         </div>
     </div>
     <input type="range" style="width: 100%;" min="0" max="200" step="1">
@@ -70,8 +70,8 @@
     <div>
         <button id="delbtn">❌</button>
         <div id="orderbtngroup">
-            <button>↑</button>
-            <button>↓</button>
+            <button class="sidebtn">↑</button>
+            <button class="sidebtn">↓</button>
         </div>
     </div>
     <div style="grid-column: 1 / 3;">
@@ -81,9 +81,23 @@
         <button onclick="uploadsvg.click()"><i class="fas fa-file-import"></i></button>
     </div>
 </adjustment>
+<!-- Templates for creating adjustment group -->
+<adjgroup id="adjgroup-template" style="display:none">
+    <hr>
+    <input type="checkbox" checked="true">
+    <b>Adjust Group #ox9</b>
+    <div style="display: inline-block;">
+        <div id="orderbtngroup">
+            <button class="sidebtn">↑</button>
+            <button class="sidebtn">↓</button>
+        </div><button id="delbtn">❌</button>
+    </div>
+    <select></select>
+    <button class="sidebtn" id="addbtn-template">+</button>
+</adjgroup>
 
 <!-- Built in SVG filters -->
-<svg id=svg_builtin>
+<svg id=svg_builtin class="svgfilter">
     <filter id="GaussianBlur1">
         <feGaussianBlur stdDeviation="1" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" edgeMode="wrap"/>
     </filter>
@@ -154,7 +168,7 @@
         <feBlend mode="screen" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" in2="blur1" result="blend"/>
     </filter>
 </svg>
-<svg id="svg_user"></svg>
+<svg id="svg_user" class="svgfilter"></svg>
 
 <script src="webphoto.js"></script>
 <script src="../utilities.js"></script>
@@ -178,94 +192,7 @@
         }
         `;
     }
-    function downloadEdit(){
-        let name;
-        if (name = prompt("Name file","adjustments")){
-            dlEditDoc(name,true);
-        }
-    }
-    function downloadPreset(){
-        let name;
-        if (name = prompt("Name file","preset")){
-            dlEditDoc(name,false);
-        }
-    }
-    let filePicker = document.getElementById('inputfile');
-    let uploadimg = document.getElementById("inputimage");
-    let uploadsvg = document.getElementById("inputSVG");
 
-    uploadimg.onchange = function(){
-        const reader = new FileReader();
-        reader.onload = function(e){
-            document.getElementById("image").src = e.target.result;
-        }
-        reader.readAsDataURL(uploadimg.files[0]);
-    }
-
-    uploadsvg.onchange = function(){
-        const reader = new FileReader();
-        reader.onload = function(e){
-            let temp = document.createElement('svg');
-            temp.innerHTML = e.target.result;
-            let uploadfilters = temp.querySelectorAll('filter');
-            for (let filter of uploadfilters){
-               svgelem.innerHTML += filter.outerHTML;
-               svgfilters.add(filter.id);
-            }
-            temp.remove();
-        }
-        
-        for (let file of uploadsvg.files){
-            reader.readAsText(file);
-        }
-    }
-
-    //when a file is uploaded
-    filePicker.onchange = function(){
-        const reader = new FileReader();
-        reader.onload = function(e){
-            let doc = JSON.parse(e.target.result);
-            //load the image if the file describes one
-            if (doc["img"]){
-                document.getElementById("imgdata").href.baseVal = doc["img"]
-            }
-
-            //load custom SVG filters
-            svgelem.innerHTML = doc["filters"];
-            let usr_filters = svgelem.getElementsByTagName("filter");
-            for (let f of usr_filters){
-                svgfilters.add(f.id);
-            }
-
-            //clear the adjustment sidebar
-            {
-                let elements = document.getElementsByTagName("adjgroup");
-                for (let element of elements){
-                    element.remove();
-                }
-            }
-            order = [];
-
-            //add adjustment groups
-            for(let group of doc["adj"]){
-                let g = addAdjustmentGroup();
-                g.enable.checked = group["on"];
-                //add adjustments and set their values
-                for (let adjustment of group["adj"]){
-                    let a = addAdjustment(adjustment["name"],g);
-                    a.enable.checked = adjustment["on"];
-                    if (adjustment.name == "svg"){
-                        a.select.innerHTML = `<option>${adjustment["val"]}</option>`;
-                    }
-                    else{
-                        a.setvalue(adjustment["val"]);    
-                    }
-                }
-            }
-            render();
-        }
-        reader.readAsText(filePicker.files[0]);
-    }
     //start with one adustment group
     addAdjustmentGroup();
     render();

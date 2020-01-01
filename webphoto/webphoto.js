@@ -28,6 +28,11 @@ const svgelem = document.getElementById("svg_user");
 
 let renderview = document.getElementById("image")
 
+let filePicker = document.getElementById('inputfile');
+let uploadimg = document.getElementById("inputimage");
+let uploadsvg = document.getElementById("inputSVG");
+
+
 //the list of adjustment layer blocks
 let order = [];
 
@@ -216,26 +221,20 @@ function addAdjustment(filter,group){
 function addAdjustmentGroup(){
     //create html elements
     let root = document.createElement('adjgroup');
-    let select = document.createElement('select');
-    let enable = document.createElement('input');
-        enable.type = "checkbox";
-        enable.checked = true;
-    let name = document.createElement('b');
+        root.innerHTML = document.getElementById("adjgroup-template").innerHTML;
+
+    let select = root.querySelector('select');
+    let enable = root.querySelector('[type="checkbox"]');
+
+    //creation and deletion buttons
+    let name = root.querySelector('b');
         name.innerHTML = "Adjust Group #" + Math.random().toString(36).substring(10);;
-    let addbtn = document.createElement('button');
-        addbtn.innerHTML = "+";
-    let delbtn = document.createElement('button');
-        delbtn.innerHTML = "❌";
-        delbtn.id = "delbtn";
+    let addbtn = root.querySelector('#addbtn-template');
+    let delbtn = root.querySelector('#delbtn');
+    
     //reorder buttons
-    let btnssort = document.createElement('div');
-    let btnup = document.createElement('button');
-        btnup.innerHTML = "↑";
-    let btndown = document.createElement('button');
-        btndown.innerHTML = "↓";
-        btnssort.id = "orderbtngroup";
-    let btngroup = document.createElement('div');
-        btngroup.style = "display:inline-block";
+    let btnup = root.querySelector('#orderbtngroup').querySelector('button');
+    let btndown = root.querySelector('#orderbtngroup').querySelectorAll('button')[1];
 
 
     //setup combo box items
@@ -246,16 +245,6 @@ function addAdjustmentGroup(){
         option.value=name;
         select.appendChild(option);
     }
-    btnssort.appendChild(btnup);
-    btnssort.appendChild(btndown);
-    btngroup.appendChild(btnssort);
-    btngroup.appendChild(delbtn);
-    root.appendChild(document.createElement('hr'));
-    root.appendChild(enable);
-    root.appendChild(name);
-    root.appendChild(btngroup);
-    root.appendChild(select);
-    root.appendChild(addbtn);
 
     //create structure
     let group = {
@@ -312,7 +301,6 @@ function addAdjustmentGroup(){
             let g = order[i];
             if (g.display == root){
                 //move element towards end of list
-                console.log(i);
                 if (i < order.length-1){
                     //update display
                     order[i+1].display.insertAdjacentElement("afterend",root)
@@ -416,6 +404,19 @@ async function dlEditDoc(name="adjustments",includeImg=false){
     doc["adj"] = all;
     download(name+".json",JSON.stringify(doc));
 }
+//wrappers for dleditdoc
+function downloadEdit(){
+    let name;
+    if (name = prompt("Name file","adjustments")){
+        dlEditDoc(name,true);
+    }
+}
+function downloadPreset(){
+    let name;
+    if (name = prompt("Name file","preset")){
+        dlEditDoc(name,false);
+    }
+}
 
 /**
  * Prompts the user to upload an SVG filter file
@@ -456,7 +457,7 @@ function removesvg(select){
 
 /**
  * Adds the currently loaded SVG filters as options to a select element
- * @param {HTMLElement} select the element to add options to
+ * @param {HTMLSelectElement} select the element to add options to
  */
 function loadFilters(select){
     let selection = select.selectedIndex;
@@ -466,4 +467,79 @@ function loadFilters(select){
     }
     select.innerHTML = html.join('');
     select.selectedIndex = selection;
+}
+
+//when svg files are uploaded
+uploadsvg.onchange = function(){
+    const reader = new FileReader();
+    reader.onload = function(e){
+        let temp = document.createElement('svg');
+        temp.innerHTML = e.target.result;
+        let uploadfilters = temp.querySelectorAll('filter');
+        for (let filter of uploadfilters){
+           svgelem.innerHTML += filter.outerHTML;
+           svgfilters.add(filter.id);
+        }
+        temp.remove();
+    }
+    
+    for (let file of uploadsvg.files){
+        reader.readAsText(file);
+    }
+}
+
+//when an adjustments file is uploaded
+filePicker.onchange = function(){
+    const reader = new FileReader();
+    reader.onload = function(e){
+        let doc = JSON.parse(e.target.result);
+        //load the image if the file describes one
+        if (doc["img"]){
+            document.getElementById("imgdata").href.baseVal = doc["img"]
+        }
+
+        //load custom SVG filters
+        svgelem.innerHTML = doc["filters"];
+        let usr_filters = svgelem.getElementsByTagName("filter");
+        for (let f of usr_filters){
+            svgfilters.add(f.id);
+        }
+
+        //clear the adjustment sidebar
+        {
+            let elements = document.getElementsByTagName("adjgroup");
+            for (let element of elements){
+                element.remove();
+            }
+        }
+        order = [];
+
+        //add adjustment groups
+        for(let group of doc["adj"]){
+            let g = addAdjustmentGroup();
+            g.enable.checked = group["on"];
+            //add adjustments and set their values
+            for (let adjustment of group["adj"]){
+                let a = addAdjustment(adjustment["name"],g);
+                a.enable.checked = adjustment["on"];
+                if (adjustment.name == "svg"){
+                    a.select.innerHTML = `<option>${adjustment["val"]}</option>`;
+                }
+                else{
+                    a.setvalue(adjustment["val"]);    
+                }
+            }
+        }
+        render();
+    }
+    reader.readAsText(filePicker.files[0]);
+}
+
+//when an image is uploaded
+uploadimg.onchange = function(){
+    const reader = new FileReader();
+    reader.onload = function(e){
+        document.getElementById("image").src = e.target.result;
+    }
+    reader.readAsDataURL(uploadimg.files[0]);
 }

@@ -82,3 +82,14 @@ adjustment {
     display:inline-block;
     font-size:20px;
 }
+
+.svgfilter{
+    width:0px;
+    height:0px;
+    position:absolute
+}
+
+.sidebtn{
+    width:26px;
+    height:26px;
+}
