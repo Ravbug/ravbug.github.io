@@ -71,7 +71,7 @@ adjustment {
 .toolbar{
     height:100%;
     display:grid;
-    grid-template-columns: repeat(auto-fit, 50px);
+    grid-template-columns: repeat(auto-fit, 30px);
 }
 
 .toolbar button{
