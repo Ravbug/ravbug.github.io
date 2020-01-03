@@ -149,8 +149,8 @@ let player;
     else{
         //otherwise video only
         //get the video id
-        id = player.getVideoUrl();
-        writeURLArgs(["v="+YouTubeGetID(id)]);
+        id = YouTubeGetID(player.getVideoUrl());
+        writeURLArgs(["v="+id]);
         nameFieled.innerHTML = `Now Playing: Video <a href="https://youtube.com/watch?v=${id}" target="_blank">` + id + "</a>";
         document.getElementById("title").innerHTML = `YouTube Audio Player [${id}]`
     }
