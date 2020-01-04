@@ -1,12 +1,7 @@
 /*
 This file contains useful functions commonly shared between my webapps
-Simply link this file into HTML and call them with the correct parameters!
-Make sure to implement the success and failed methods these methods call on completion if necessary.
 
-Beware! I might change these methods at any moment so if you decide to use these check your webapps every now and then!
-	I will never change the method signatures, if that becomes necesarry I will create a second version of the method.
-
-Author: RavbugAnimations
+Author: Ravbug
 */
 
 /*
@@ -325,4 +320,23 @@ function urlArgsAsDict(){
       argdict[parts[0]] = parts[1];
 	}
 	return argdict;
+}
+/**
+ * Loads a resource as plain text
+ * @param {string} theUrl the URL to the resource to load
+ * @returns {Promise<string>} Resolves with the text on success, rejects on failure
+ */
+function httpGetPromise(theUrl)
+{
+    return new Promise(function(resolve,reject){
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                resolve(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous
+            xmlHttp.onerror = reject;
+        //xmlHttp.setRequestHeader("origin", true);
+        xmlHttp.send(null);
+    });
 }
