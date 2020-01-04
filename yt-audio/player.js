@@ -168,7 +168,7 @@ let player;
 
     function set(id,name,channel,playlist){
       nameFieled.innerHTML = `Now Playing: <a href="https://youtube.com/watch?v=${id}${playlist!=undefined?`&list=${playlist}`:""}" target="_blank">${name} [${channel}]</a> ${playlist!=undefined? `(${idx}/${len})`:""}`;
-      document.getElementById("title").innerHTML = `${name}${playlist!=undefined? `(${idx}/${len})`:""} - YouTube Audio Player`
+      document.getElementById("title").innerHTML = `${name}${playlist!=undefined? ` (${idx}/${len})`:""} - YouTube Audio Player`
     }
 
     //load instant data
