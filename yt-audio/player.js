@@ -136,7 +136,7 @@ let player;
   function updateUrlArgs(){
     //Is a playlist loaded?
     let id = player.getPlaylist();
-    if (id.length > 0){
+    if (id && id.length > 0){
         //get the playlist url
         //get current playlist id
         let idx = player.getPlaylistIndex();
@@ -149,7 +149,7 @@ let player;
     else{
         //otherwise video only
         //get the video id
-        id = YouTubeGetID(player.getVideoUrl());
+        let id = YouTubeGetID(player.getVideoUrl());
         writeURLArgs(["v="+id]);
         nameFieled.innerHTML = `Now Playing: Video <a href="https://youtube.com/watch?v=${id}" target="_blank">` + id + "</a>";
         document.getElementById("title").innerHTML = `YouTube Audio Player [${id}]`
