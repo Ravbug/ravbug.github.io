@@ -1,0 +1,99 @@
+<html>
+<head>
+    <title>Ironic Tech Drawings</title>
+    <meta name="description" content="Make fun of technologies using these crude drawings!">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
+
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/tutorials/optifine-no-java/optifine.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+</head>
+
+<div class="main">
+    <warn style="color:red">Applies to macOS and Windows Only. Linux users must manually install Java to play Minecraft, so this guide does not apply.</warn>
+    <br><br>
+    You can install OptiFine without also manually installing Java on macOS or Windows. 
+    It involves the command line but the process is very easy. On Windows and macOS, Minecraft Java Edition 
+    bundles and manages its own Java installation. We can use this Java to run the .jar OptiFine installer. 
+
+    <hr>
+    <h3>Part 1: Locate Minecraft's Java</h3>
+    On macOS, the bundled Java runtime is located inside the <code>minecraft/runtime/jre-x64</code> folder. On Windows, it is located 
+    inside the Launcher's Program Files folder at <code>Minecraft Launcher\runtime\jre-x64</code> for 64-bit computers, and
+    <code>Minecraft Launcher\runtime\jre-x86</code> for 32-bit computers.
+
+    <br><br>
+    If you installed Minecraft in the default locations, the full path to the Java executable is:
+    <ul>
+        <li>
+            macOS:<code>~/Library/Application Support/minecraft/runtime/jre-x64/jre.bundle/Contents/Home/bin/java</code>
+        </li>
+        <li>
+            Windows 64-bit: <code>\Program Files (x86)\Minecraft Launcher\runtime\jre-x64\bin\java.exe</code>
+        </li> 
+        <li>
+            Windows 32-bit: <code>\Program Files (x86)\Minecraft Launcher\runtime\jre-x86\bin\java.exe</code>
+        </li>    
+    </ul>
+    
+   
+    <hr>
+    <h3>Part 2: Invoke Minecraft's Java</h3>
+    You can run .jar files from the command line using the following command format: <code>java -jar path/to/program.jar</code>. However, if you 
+    tried this on your computer without Java manually installed, the command will fail. This is because your computer does not know where to find the
+    <code>java</code> command, so we will need to use the full path to Minecraft's Java. 
+
+    <br><br>
+
+    Using the aforementioned command format, we can run the OptiFine installer using the following steps.
+    <ol>
+        <li>
+            Open your operating system's command line interface. 
+            <br>
+            On macOS, this is Terminal, and you can find it by going to <code>/Applications/Utilities</code> in the Finder
+            and launching Terminal, or by searching for "Terminal" (without quotes) in Spotlight. 
+            <br>
+            On Windows, this is CMD, and you can find it by searching for "CMD" (without quotes) in the start-menu or taskbar
+            search field. 
+        </li>
+        <li>
+            Enter the path to Java, which you found in Part 1.
+            <br>
+            You will need to ensure special characters like spaces are properly escaped. On macOS, simply place a backslash (<code>\</code>)
+            before every space in your path, or surround the entire path in quotes. On Windows, surround the entire path in quotes.
+        </li>
+        <li>
+            Add <code> -jar </code> to the path in your command window. There should be a space between your path and the -, and after the r.
+        </li>
+        <li>
+            Find your OptiFine installer .jar file, and drag it on top of the command window. It should autofill the path. 
+        </li>
+        <li>
+            Press Enter to run the command. You should see the OptiFine installer window appear. Run it and play Minecraft!
+        </li>
+    </ol>
+
+    If you get an error message, ensure your command looks like this:
+    <ul>
+        <li>
+            macOS: <code>~/Library/Application\ Support/minecraft/runtime/jre-x64/jre.bundle/Contents/Home/bin/java -jar /users/your\ user/Downloads/OptiFine_1.14.4_HD_U_F5.jar</code>
+        </li>
+        <li>
+            Windows: <code>"\Program Files (x86)\Minecraft Launcher\runtime\jre-x64\bin\java.exe" -jar "C:\Users\your user\Downloads\OptiFine_1.14.4_HD_U_F5.jar</code>
+        </li>
+    </ul>
+    The path to the OptiFine jar file will vary.
+    
+    <br>
+    If you want, you can add Minecraft's Java to your PATH environment variable so that you only need to type <code>java -jar path/to/OptiFine_1.XX.X_HD_X_XX.jar</code>.
+    Search the internet for (without quotes) "add environment variable macOS" or "add environment variable Windows" to get guides about how to do this.
+
+</div>
+<script>    
+    stylesheet_depth = 2;
+    document.currentScript.remove();
+</script>
+<script src="../../header.js"></script>

@@ -267,6 +267,12 @@ data = [
                     ref:"tutorials/mc-textures",
                 },
                 {
+                    title: "Install OptiFine without installing Java",
+                    img:"tutorials/optifine-no-java/optifine.png",
+                    tag:"Use Minecraft's bundled Java to run the OptiFine installer",
+                    ref:"tutorials/optifine-no-java/"
+                },
+                {
                     title:"How to render and composite zDepth",
                     img:"img/layers.svg",
                     tag:"Set up Maya render layers and Nuke nodes",
