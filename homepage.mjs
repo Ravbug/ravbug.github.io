@@ -325,6 +325,12 @@ data = [
                     tag:"Various fun thought experiments I've conducted with math",
                     ref:"math/",
                 },
+                {
+                    title:"Ironic Tech Drawings",
+                    img:"ironic-drawings/intelhd.png",
+                    tag:"Make fun of tech using these crude drawings",
+                    ref:"ironic-drawings/"
+                }
             ]
         },
     ]

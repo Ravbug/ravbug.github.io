@@ -1,0 +1,72 @@
+<html>
+<head>
+    <title>Ironic Tech Drawings</title>
+    <meta name="description" content="Make fun of technologies using these crude drawings!">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
+
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/ironic-drawings/intelhd.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+</head>
+<div class="main">
+    <div class="breadcrumb">
+        You may use these images, no attribution necessary. I drew them myself using my laptop's trackpad. Each one is a ~ 500px png, compressed
+        to be as small as possible using <a href="https://compress-or-die.com" target="_blank">compress-or-die</a>. I periodically add new ones.
+        <br><br>
+        To download, click
+        any image to be redirected to the image, then save the image. Alternatively, right-click the image and press Save Image.
+    </div>
+</div>
+<div class="main" id="main">
+
+</div>
+<script>
+    let imgs = [
+        {
+            src:"amd.png",
+        },
+        {
+            src:"amdradeon.png",
+        },
+        {
+            src:"intelhd.png",
+        },
+        {
+            src:"rtx.png",
+        },
+        {
+            src:"java.png",
+        },
+        {
+            src:"js.png",
+        },
+        
+        {
+            src:"windows.png",
+        }
+    ];
+    let tags = [];
+    for (let img of imgs){
+        tags.push(`<a href="${img.src}" target="_blank"><img src="${img.src}"" class="responsiveimg"></a>`);
+    }
+    document.getElementById("main").innerHTML = tags.join('');
+
+    stylesheet_depth = 1;
+    document.currentScript.remove();
+</script>
+<script src="../header.js"></script>
+<style>
+    .responsiveimg{
+        max-width:100px;
+    }
+    #main{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, 110px);
+        gap:10px;
+        justify-content: center;
+    }
+</style>
+</html>
