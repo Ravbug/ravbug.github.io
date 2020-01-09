@@ -1,3 +1,5 @@
+const cors = "https://cors-anywhere.herokuapp.com/";
+const datacache = {};
 let player;
   let playpause = document.getElementById('playpause')
   let playhead = document.getElementById('playhead');
@@ -136,23 +138,48 @@ let player;
   function updateUrlArgs(){
     //Is a playlist loaded?
     let id = player.getPlaylist();
-    if (id.length > 0){
+    if (id && id.length > 0){
         //get the playlist url
         //get current playlist id
         let idx = player.getPlaylistIndex();
         writeURLArgs(["pl="+startPlId,"i="+idx]);
         let len = id.length-1;
         id = YouTubeGetID(player.getVideoUrl());
-        nameFieled.innerHTML = `Now Playing: Video <a href="https://youtube.com/watch?v=${id}&list=${startPlId}" target="_blank">` + id + `</a> (${idx}/${len})`;
-        document.getElementById("title").innerHTML = `YouTube Audio Player (${idx}/${len})`
+
+        updateLinkAndTitle(id,startPlId,idx,len);
     }
     else{
         //otherwise video only
         //get the video id
-        id = player.getVideoUrl();
-        writeURLArgs(["v="+YouTubeGetID(id)]);
-        nameFieled.innerHTML = `Now Playing: Video <a href="https://youtube.com/watch?v=${id}"> target="_blank` + id + "</a>";
-        document.getElementById("title").innerHTML = `YouTube Audio Player [${id}]`
+        let id = YouTubeGetID(player.getVideoUrl());
+        writeURLArgs(["v="+id]);
+        updateLinkAndTitle(id,undefined);
+    }
+  }
+
+  /**
+   * Update the display areas
+   * @param {string} id the ID of the YouTube video
+   * @param {string} playlist the ID of the playlist, or `undefined` if none
+   * @param {number} idx the index of the video in the playlist, or undefined if none
+   * @param {number} len the length of the playlist, or undefined if none 
+   */
+  async function updateLinkAndTitle(id,playlist,idx,len){
+
+    function set(id,name,channel,playlist){
+      nameFieled.innerHTML = `Now Playing: <a href="https://youtube.com/watch?v=${id}${playlist!=undefined?`&list=${playlist}`:""}" target="_blank">${name} [${channel}]</a> ${playlist!=undefined? `(${idx}/${len})`:""}`;
+      document.getElementById("title").innerHTML = `${name}${playlist!=undefined? ` (${idx}/${len})`:""} - YouTube Audio Player`
+    }
+
+    //load instant data
+    set(id,id,"Loading...",playlist);
+    
+    //load intelligent data when it is available
+    let stat = await getVideoStats(id,function(stat){
+      set(id,cleanYT(stat["videoDetails"]["title"]),cleanYT(stat["videoDetails"]["author"]),playlist);
+    });
+    if (typeof(stat) != "number"){
+      set(id,cleanYT(stat["videoDetails"]["title"]),cleanYT(stat["videoDetails"]["author"]),playlist);
     }
   }
 
@@ -316,4 +343,43 @@ function OnLoopPlaylist(button){
     }
 }
 
+/** Uses get_video_info to query video metadata
+ * @param id the id of the video to get stats
+ * @param callback the function to call if async loading
+ * @return resolved promise of key-value pairs
+ */
+async function getVideoStats(id, callback){
+  return new Promise(async function(resolve,reject){
+    //retrieve from cache
+    if (datacache.hasOwnProperty(id)){
+      //1 = not cached but loading
+      if (datacache[id] === 1){
+        resolve(id);
+        return;
+      }
+      else{
+        resolve(datacache[id]);
+        return;
+      }
+    }
+
+    datacache[id] = 1;
+    let res_str = await httpGetPromise(`${cors}https://www.youtube.com/get_video_info?video_id=${id}`);
+    let key = "player_response=";
+    let idx = res_str.indexOf(key);
+    res_str = JSON.parse(decodeURIComponent(res_str.substring(idx + key.length, res_str.indexOf("&",idx))));
+    datacache[id] = res_str;
+    callback(res_str);
+  });
+}
+
+
+
+/**
+ * Replace + with ' ' in YouTube encoded strings
+ * @param {string} str the string to clean
+ */
+function cleanYT(str){
+  return str.replace(/\+/g," ")
+}
 
