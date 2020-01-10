@@ -332,10 +332,10 @@ data = [
                     ref:"math/",
                 },
                 {
-                    title:"Ironic Tech Drawings",
-                    img:"ironic-drawings/intelhd.png",
+                    title:"Shoddy Tech Drawings",
+                    img:"shoddy-drawings/intelhd.png",
                     tag:"Make fun of tech using these crude drawings",
-                    ref:"ironic-drawings/"
+                    ref:"shoddy-drawings/"
                 }
             ]
         },
