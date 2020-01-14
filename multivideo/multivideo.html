@@ -1,0 +1,155 @@
+<head>
+    <meta charset="UTF-8">
+</head>
+<style>
+.textarea{
+    width:100%;
+    height:100%;
+    resize:none;
+    border:0;
+}
+.videoplayer{
+    width:100%;
+    height:100%;
+}
+</style>
+<title>MultiVideo</title>
+<body>
+    <table style="height:100%;width:100%">
+        <tr>
+            <td>
+                <table border=1 id=mainTab style="width:100%;height:100%">      
+                </table>
+            </td>
+        </tr>
+        <tr style="height:20px">
+            <div style="background-color:lightgray;border-radius:3px">
+                <button onclick="playpause();">⏯</button>
+                <button onclick="convertTextareas()">Add Videos</button>
+                <button>Delete</button>
+                <span>Seek to</span>
+                <input placeholder="seconds"></input>
+                <button onclick="syncAllTo(0)">Sync all to first</button>
+            </div>
+        </tr>
+    </table>
+</body>
+
+<!-- <script src="https://www.youtube.com/iframe_api"></script>-->
+<script>
+//add the script tag
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+var grid={rows:2,cols:2};
+var playing = false;
+var textareaTemplate = {"class":"textarea","placeholder":"Paste an URL to a video"};
+var videoTemplate = {"id":"video","class":"videoplayer"};
+
+var players = [];
+/*
+    Generates and assigns grid squares 
+    @rows: Number of rows in the grid
+    @cols: Number of cols in the grid
+*/
+function layoutGrid(rows,cols){
+    
+    for (var row = 0; row < rows; row++){
+        var tablerow = document.createElement("tr");
+        var rowarr = [];
+        for (var col =0; col < cols; col++){
+            var tableData = document.createElement("td");
+            var textarea = document.createElement("textarea",textareaTemplate);
+            //set attributes of text area
+            setAttributes(textarea,textareaTemplate);
+               
+            rowarr.push(textarea);
+            tableData.appendChild(textarea);
+            tablerow.appendChild(tableData);
+        }
+        document.getElementById("mainTab").appendChild(tablerow)
+    }
+}
+layoutGrid(grid.rows,grid.cols);
+//Sets attributes on an HTML element because create with options doesn't work for some reason
+function setAttributes(t,attributes){
+   for (var key of Object.keys(attributes)){
+       t.setAttribute(key,attributes[key]);
+   }
+}
+function makePlayer(replaceElement,videoID,options){
+    let player = new YT.Player(replaceElement,{videoId:videoID,...options});
+    return player;
+}
+//Converts all the text areas to video objects
+function convertTextareas(){
+    var elements = document.getElementsByClassName("textarea");
+    var toDelete=[];
+    var i = 0;
+    for (var element of elements){
+        if (element.value){
+            var div = document.createElement("div");
+            setAttributes(div,{id:i});
+            insertAfter(div,element);
+            let frame = makePlayer(div,YouTubeGetID(element.value),{width:"100%",height:"100%"});
+            players.push(frame);
+            // setAttributes(player,{...videoTemplate,src:element.value});
+             element.value="";
+             toDelete.push(element);
+             i++;
+        }
+    }
+    //cleanup garbage
+    for (var garbage of toDelete){
+        garbage.parentNode.removeChild(garbage);
+    }
+}
+//plays / pauses all the videos
+function playpause(){
+    playing = !playing;
+    if (playing){
+        for(let player of players){
+            player.playVideo();
+        }
+    }
+    else{
+        for(let player of players){
+            player.pauseVideo();
+        }
+    }
+}
+/**
+* Get YouTube ID from various YouTube URL
+* @author: takien
+* @url: http://takien.com
+*/
+function YouTubeGetID(url){
+  var ID = '';
+  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if(url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  }
+  else {
+    ID = url;
+  }
+    return ID;
+}
+//inserts an element after an existing element
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+//synchronizes all the players to the timecode of one player
+function syncAllTo(id){
+    let timecode = players[id].getCurrentTime();
+    for (let i = 0; i < players.length; i++){
+        if (i != id){
+            players[i].seekTo(timecode,true);
+        }
+    }
+}
+
+</script>
