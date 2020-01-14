@@ -101,6 +101,12 @@ data = [
                     img:"https://images-ext-1.discordapp.net/external/IQgrzgr3aTx3n93OQ4v4zgpIom92b8VDMcnox5VrcBg/%3Fsize%3D256/https/cdn.discordapp.com/avatars/592779132233056277/b1f8cbff5010de682266ed3073b69b4a.png"
                 },
                 {
+                    title:"QReaper",
+                    tag:"A Discord bot which deletes QR Codes it sees",
+                    ref:"https://qreaper.glitch.me",
+                    img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
+                },
+                {
                     title:"CodeVisualizer",
                     tag:"A live-updating webpage editor in your browser!",
                     ref:"codevisualizer/",
