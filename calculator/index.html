@@ -350,7 +350,7 @@
             sum += (value - mean) * (value - mean);
         }
         //divide by the number of values;
-        sum /= set.length;
+        sum /= (set.length-1);
         //square root
         return Math.sqrt(sum);
     }
