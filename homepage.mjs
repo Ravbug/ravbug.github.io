@@ -32,8 +32,8 @@ data = [
                 {
                     title:"FatFileFinder",
                     img: "img/broom.svg",
-                    tag: "A tiny, fast disk sweeper for Windows written in C#",
-                    ref: "https://github.com/Ravbug/FatFileFinder",
+                    tag: "A fast, native cross platform disk sweeper written in C++",
+                    ref: "https://github.com/Ravbug/FatFileFinderCPP",
                 },
                 {
                     title:"Unity Hub Native",
