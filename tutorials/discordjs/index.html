@@ -1,0 +1,67 @@
+<head>
+    <title>Discord.js Rapid Tutorial</title>
+    <meta name="description" content="Condensed tutorial for experienced developers">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+
+    <!-- Social icon -->
+    <meta property="og:image" content="https://discord.js.org/favicon.ico">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="../../highlight/styles/default.css" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="../../highlight/styles/darkula.css" media="(prefers-color-scheme: dark)">
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <div class="main">
+        This extremely condensed tutorial shows the steps for getting a Discord bot up and running using Node.js and Discord.js.
+        <ol>
+            <li>Register a new Bot application at <a href="https://discordapp.com/developers/applications/">the Discord Developer Portal.</a></li>
+            <li><a href="https://nodejs.org/en/">Download and install Node.js</a> for your platform. Make sure to also install npm.</li>
+            <li>Create a new folder on your computer for the bot's files.</li>
+            <li>Open a command prompt, cd to the folder, and run <code>npm init</code>. Follow the instructions, or press enter for all lines.</li>
+            <li>Create a new file <code>index.js</code>On *nix systems, you can do this with <code>touch index.js</code></li>
+            <li>With your terminal still in the folder, <code>npm install discord.js</code></li>
+            <li>
+                Paste this starter code into <code>index.js</code> (also available on the <a href="https://discord.js.org/#/">the official docs.</a>)
+                <pre><code class="js">
+  const Discord = require('discord.js');
+  const client = new Discord.Client();
+                    
+  client.on('ready', () => {
+      console.log(`${client.user.tag} logged in`);
+  });
+                    
+  client.on('message', msg => {
+      if (msg.content === 'ping') {
+          msg.reply('Pong!');
+      }
+  });                 
+  client.login('token');
+                </code></pre>
+                <a href="index.js" download>Download sample code</a>
+            </li>
+            <li>Replace <code>token</code> with your bot's token.</li>
+            <li>Run <code>node index.js</code> to launch your bot</li>
+        </ol>
+
+        <h3 id="ultra">Ultra condensed</h3>
+        <ol>
+            <li><a href="https://discordapp.com/developers/applications/">Register bot.</a></li>
+            <li><a href="https://nodejs.org/en/">Download Node.js.</a></li>
+            <li><code>mkdir discordbot && cd discordbot</code></li>
+            <li><code>npm init -y</code></li>
+            <li><code>npm install discord.js</code></li>
+            <li><code>wget <rs-dummy><script>document.currentScript.outerHTML = `${window.location.protocol}//${window.location.hostname}/`</script></rs-dummy>tutorials/discordjs/index.js</code></li>
+            <li>Replace token, run <code>node index.js</code></li>
+        </ol>
+    </div>
+</body>
+<script>
+    stylesheet_depth = 2;
+    document.currentScript.remove();
+</script>
+<script src="../../header.js"></script>

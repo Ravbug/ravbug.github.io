@@ -267,6 +267,12 @@ data = [
             title:"Tutorials",
             content:[
                 {
+                    title:"Rapid Discord.js tutorial",
+                    img:"https://discord.js.org/favicon.ico",
+                    tag:"A condensed Discord.js bot tutorial for experienced developers, includes starter code.",
+                    ref:"tutorials/discordjs"
+                },
+                {
                     title:"How To Extract Minecraft Textures",
                     img:"img/mcpainting.png",
                     tag:"Get the texture files from any minecraft version",
