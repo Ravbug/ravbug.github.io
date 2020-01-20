@@ -268,7 +268,7 @@ data = [
             content:[
                 {
                     title:"Rapid Discord.js tutorial",
-                    img:"https://discord.js.org/favicon.ico",
+                    img:"tutorials/discordjs/discordjs.png",
                     tag:"A condensed Discord.js bot tutorial for experienced developers, includes starter code.",
                     ref:"tutorials/discordjs"
                 },
