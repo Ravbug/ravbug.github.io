@@ -27,14 +27,14 @@
 
     <h2>N-Gon detector for Maya</h2>
     - Language: MEL
-    <p>This simple program scans any polygonal object and finds any N-Gons (or ngons). An N-gon is a polygon face that
-        has more vertices than 4 (or 3 if your program doesn't accept quads).
+    <p>This simple program scans any polygonal object and finds any N-Gons. An N-gon is a polygon face that
+        has more than 4 vertices (or 3 if your program doesn't accept quads).
 
-        To use, select any object or set of objects, launch the script, and press [Run]. You have the option of having
+        To use, select any object or set of objects, launch the script, and press <code>Run</code>. You have the option of having
         the program consider quads or tris (or both) to be N-Gons.
 
         The program will select all the N-Gons and report how many it found. With the N-Gons selected, you can delete
-        them, or assign them a material, or put them in a display layer, etc.</p>
+        them, or assign them a material, etc.</p>
     <article>
         <div>
             <img class="aligncenter" src="ngons1.png" />
@@ -53,13 +53,14 @@
     Language: Python
     <p>This program analyzes the camera view and animation and finds objects that are always outside the camera's view.
         It can also find objects that are always obscured by other objects. It selects these objects, so you can delete
-        them or put them on a display layer or what have you.
+        them, put them on a display layer, etc.
 
-        To use, Go into a single-panel layout that shows the view you want to scan. Then deselect everything and
+        To use, Go into a single-panel layout that shows the view you want to scan. Then deselect everything, c
+        onfigure the view, and press <code>Scan</code>
 
         You can also use this script to check an object's geometry to see if there are any faces the camera never sees.
-        Running this script this on environment geometry and then deleting the found faces can greatly improve render
-        times. Make sure to go into isolate select and then go into component mode if you decide to do this.
+        Running this script this on environment geometry and then deleting the detected faces can greatly improve render
+        times. Make sure to go enter isolate select and then go into component mode if you decide to do this.
 
         Objects whose LOD is set to Template or Reference will confuse the script. Set all objects to a LOD of Normal.
         Otherwise the script will flag them as being "invisible."</p>
@@ -98,7 +99,7 @@
     <h2>Auto Keyframe Camera Shake Generator</h2>
     Language: MEL
     <p>This simple utility adds customizable jitter to a camera (or any object with translate / rotate channels). Select
-        the objects, launch the script, and press [Shake!].</p>
+        the objects, launch the script, and press <code>Shake!</code></p>
     <article>
         <div>
             <img src="shake0.png" /><br>
@@ -125,7 +126,7 @@
     Language: Python
     <p>
         Creates a sphere that has no triangles or poles (vertex with many edges leading to it).
-        Note: The sphere isn't perfect, so if you have a way to fix the shape, please let me know.
+        Note: The sphere isn't perfect, so if you know a way to fix the shape, please let me know.
     </p>
     <div>
         <img src="quadsphere0.png" /><br>
@@ -150,9 +151,9 @@
     Language: MEL
     <p>
         Bulk direct-connects a set of objects to a master object. Useful for easily setting up direct-drive for a
-        controller, Rig-wide node caching or Rig-wide evaluation disabling
+        controller, Rig-wide node caching or Rig-wide evaluation disabling.<br><br>
 
-        Very simple, so just copy-paste the code into the script editor.
+        The script is very simple, so just copy-paste the code into the script editor.
     </p>
     <pre><code class="mel">
 /*
