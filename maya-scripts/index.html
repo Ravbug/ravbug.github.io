@@ -3,6 +3,12 @@
     <meta name="description" content="Scripts for Maya written in MEL and Python">
     <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
     <meta charset="UTF-8">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <style>
@@ -148,7 +154,7 @@
 
         Very simple, so just copy-paste the code into the script editor.
     </p>
-    <pre>
+    <pre><code class="mel">
 /*
  Created by Ravbug (ravbug.github.io)
  Simple program to mass connect the attributes of one object to many.
@@ -170,7 +176,7 @@ for ($obj in $objs){
  }
 }
 print ("Connected " + $count + " objects to " + $full);
-</pre>
+</code></pre>
 </div>
 <script>
     stylesheet_depth = 1;
