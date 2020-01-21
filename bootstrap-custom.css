@@ -834,6 +834,7 @@ hr {
     color: #bd4147;
     background-color: #f7f7f9;
     border-radius: 0.25rem;
+    overflow-wrap:break-word;
   }
   
   a > code {
