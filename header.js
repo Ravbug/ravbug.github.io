@@ -47,12 +47,28 @@
         }
     }
 
+    //derive the stylesheet relative position
+    let stylesheet_depth = 0;
+    //local or hosted relative paths
+    if (window.location.protocol === "file:"){
+        //substring to repository name: ravbug.github.io
+        const reponame = "ravbug.github.io";
+        let relativepath = window.location.pathname.substring(window.location.pathname.indexOf(reponame)+reponame.length+1);
+        //count slashes in path
+        stylesheet_depth = relativepath.match(/\//g).length;
+    }
+    else{
+        let path = window.location.pathname;
+        //count slashes in path and subtract one if last character in path is a /
+        stylesheet_depth = path.match(/\//g).length - (path[path.length-1] === "/"? 1 : 0);
+    }
+
     let stylesheetroot = [];
     for (let i = 0; i < stylesheet_depth; i++){
         stylesheetroot.push('../');
     }
 
-    delete stylesheet_depth;
+    //delete stylesheet_depth;
     stylesheetroot = stylesheetroot.join('');
     var script = document.createElement('script');
     script.onload = function() {
