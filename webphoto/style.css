@@ -74,10 +74,6 @@ adjustment {
     grid-template-columns: repeat(auto-fit, 30px);
 }
 
-.toolbar button{
-    height:100%;
-}
-
 .title{
     font-size:20px;
     text-align: center;
@@ -100,13 +96,40 @@ adjustment {
     height:26px;
 }
 
+#delbtn.sidebtn{
+    width:48px;
+}
+
 .toolbar button{
     border: none;
     background-color: transparent;
+    height: 100%;
 }
 .toolbar button:active{
     color:tomato;
 }
 .toolbar button:hover{
     color:gray;
+}
+
+@media (prefers-color-scheme: dark){
+    .controls{
+        background-color: #464a4c;
+    }
+    .sidebtn, .generalbtn, input, #delbtn{
+        background-color: #333;
+        color: #BBB 
+    }
+    .sidebtn:hover, .generalbtn:hover{
+        background-color: #555;
+    }
+    .toolbar button{
+        color: #BBB
+    }
+    .toolbar button:hover{
+        color:black;
+    }
+    #render{
+        background-color: rgb(53, 53, 53);
+    }
 }
