@@ -99,6 +99,9 @@ adjustment {
 #delbtn.sidebtn{
     width:48px;
 }
+.sidebtn:hover, .generalbtn:hover{
+    background-color: #AAA;
+}
 
 .toolbar button{
     border: none;
