@@ -11,11 +11,20 @@
    <!-- CodeMirror -->
    <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
    <link rel="stylesheet" href="../codemirror/theme/material.css">
+   <link rel="stylesheet" href="../codemirror/addon/hint/show-hint.css">
    <script src="../codemirror/lib/codemirror.js"></script>
    <script src="../codemirror/mode/xml/xml.js"></script>
    <script src="../codemirror/mode/javascript/javascript.js"></script>
    <script src="../codemirror/mode/css/css.js"></script>
    <script src="../codemirror/mode/htmlmixed/htmlmixed.js"></script>
+   <script src="../codemirror/addon/hint/show-hint.js"></script>
+   <script src="../codemirror/addon/hint/xml-hint.js"></script>
+   <script src="../codemirror/addon/hint/html-hint.js"></script>
+   <script src="../codemirror/addon/hint/javascript-hint.js"></script>
+   <script src="../codemirror/addon/hint/css-hint.js"></script>
+   <script src="../codemirror/addon/lint/html-lint.js"></script>
+   <script src="../codemirror/addon/lint/javascript-lint.js"></script>
+   <script src="../codemirror/addon/lint/css-lint.js"></script>
 
    <script src="samplecode.js"></script>
 
@@ -37,8 +46,8 @@
       <!-- The content Div -->
       <div class=maindisplay id="maindisplay">
         <!-- place to write code -->
-        <div class="codecontainer">
-          <textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;font-size:14px"></textarea>
+        <div class="codecontainer" id="codecontainer">
+          <textarea id="input"></textarea>
         </div>
         <!-- renderview -->
           <iframe id=render srcdoc="" class="render"></iframe>
@@ -46,7 +55,7 @@
     <!-- Bottom toolbar -->
     <div class=barheader>
       <div style="grid-column: 1/3">
-        Font Size <input value=14 type="number" style="width:100px" class="form-control" id="fontSize" onchange="changeFont(this.value)">
+        Font Size <input value=12 type="number" style="width:100px" class="form-control" id="fontSize" onchange="changeFont(this.value)">
       </div>
       <div style="grid-column: 3/5">
         Editor Width <input type="range" class="form-control" style="width:100%" min=0 max=1 value=0.5 step=0.001 id="editWidth"></input>
