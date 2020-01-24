@@ -5,7 +5,7 @@
  *  @param {number} stylesheetroot string containing "../" to get correct directories
  * 
  */{
-    function generate(stylesheetroot){
+    function generateHeaderContent(stylesheetroot){
         let body = document.getElementsByTagName("body")[0];
 
        
@@ -72,7 +72,7 @@
     stylesheetroot = stylesheetroot.join('');
     var script = document.createElement('script');
     script.onload = function() {
-      generate(stylesheetroot);
+      generateHeaderContent(stylesheetroot);
     };
     script.src=`${stylesheetroot}homepage.mjs`
     document.getElementsByTagName('head')[0].appendChild(script);
