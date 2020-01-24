@@ -6,17 +6,27 @@ var warned = false;
 var live = true;
 
 //create codemirror instance
-let editor = CodeMirror.fromTextArea(i,{
-  lineNumbers:true,
-  matchBrackets:true,
-  autoCloseBrackets: true,
-  highlightSelectionMatches: true,
-  styleActiveLine: true,
-  autohint: true,
-  htmlMode:true,
-  fixedGutter:true,
-  mode:"htmlmixed",
-});
+let editor;
+{
+    let config = {
+        lineNumbers:true,
+        matchBrackets:true,
+        autoCloseBrackets: true,
+        highlightSelectionMatches: true,
+        styleActiveLine: true,
+        autohint: true,
+        htmlMode:true,
+        fixedGutter:true,
+        mode:"htmlmixed",
+    }
+    //dark mode
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        config["theme"] = "material";
+    }
+    editor = CodeMirror.fromTextArea(i,config);
+}
+
+
 
 //on change events, update viewer
 editor.on("change",function(){
@@ -59,16 +69,12 @@ function generateEmbed(code){
   try{
     var str =  encodeURIComponent(btoa(code));
     warned=false;
-    document.getElementById('viewFull').disabled = false;
-    document.getElementById('viewFull').innerHTML = "<span style='font-size:20'>View Full Window</span>";
     document.getElementById('urlCopyBtn').style = "";
     return str;
   }
   catch(e){
     if (!warned){
 
-      document.getElementById('viewFull').disabled = true;
-      document.getElementById('viewFull').innerHTML = "<span style='font-size:20'>Disabled</span>";
       document.getElementById('urlCopyBtn').style = "color:gray;";
       warned=true;
       return undefined;
@@ -79,7 +85,7 @@ function generateEmbed(code){
 //creates a sharable link to the code. If the link is too long or cannot be encoded,
 //it uploads the code to a google sheet and generates a different URL
 function createShareLink(){
-    var link = generateEmbed(i.value);
+    var link = generateEmbed(editor.getValue());
     if (link != undefined){
       //use the base64 encoding
       document.getElementById('urlCopy').value=window.location.protocol + "//" + window.location.hostname+"/codevisualizer?c="+link;
@@ -127,7 +133,8 @@ function loadRemoteResource(){
         return false
       }
       swal({title:"Loading Resource", text:"Loading response from " + inputValue,  success:true,timer:2000});
-      httpGetAsync(inputValue,function onSuccess(data){i.value=data;setTimeout(render(),3000)},function onFailure(){swal("Oops!","Failed to load resouce at " + inputValue,"error")})
+      const cors = "https://cors-anywhere.herokuapp.com/";
+      httpGetAsync(cors+inputValue,function onSuccess(data){editor.setValue(data);setTimeout(render(),3000)},function onFailure(){swal("Oops!","Failed to load resouce at " + inputValue,"error")})
     });
 }
 
@@ -158,7 +165,7 @@ function downloadWrapper(){
 }
 
 function helpMenu(){
-  swal("Helpmeplz what does this page do??","This is a simple live HTML/JS code visualizer.\n\n Press the share (link) button to get a shareable link to your code!\n\nView Full Window redirects to a new page displaying your code without the editor or other elements.\n\nThis is an experimental code editor, and you use it at your own risk. I am not responsible if you lose data. But feel free to report bugs! Tweet them @ravbug on twitter.");
+  swal("About CodeVisualizer","This is a simple live webpage code visualizer.\n\nThe editor uses CodeMirror for syntax highlighting.\n\n Press the share (link) button to get a shareable link to your code!\n\nView Full Window creates a popup displaying your code without the editor or other elements.\n\nThis is an experimental code editor, and you use it at your own risk. If you encounter a bug, open an issue on this website's repository.");
 }
 
 function redirect(){
@@ -168,7 +175,7 @@ function redirect(){
 }
 
 slider.oninput = function(){
-  document.getElementById("editorWidth").style.width = this.value + "%";
+  document.getElementById("maindisplay").style.gridTemplateColumns = `${this.value}fr ${1-this.value}fr`;
 }
 
 //adjusts the fontsize and the line #s div if necessary

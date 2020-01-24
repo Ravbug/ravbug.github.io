@@ -31,8 +31,9 @@ html,body{
 
 .maindisplay{
     display:grid;
-    grid-template-columns: 600px 1fr;
+    grid-template-columns: 1fr 1fr;
     gap:3px;
+    background-color: #DDD
 }
 
 /* Toolbar */
@@ -46,7 +47,7 @@ html,body{
 
 .barheader button:not(.btn){
     all:unset;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .barheader button:active:not(.btn){
@@ -54,6 +55,9 @@ html,body{
 }
 
 @media (prefers-color-scheme: dark) {
+    .maindisplay{
+        background-color:#666
+    }
     /*.CodeMirror, .CodeMirror-gutter{
         background-color: #464a4c;
     }*/

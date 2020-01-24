@@ -10,6 +10,7 @@
 
    <!-- CodeMirror -->
    <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+   <link rel="stylesheet" href="../codemirror/theme/material.css">
    <script src="../codemirror/lib/codemirror.js"></script>
    <script src="../codemirror/mode/xml/xml.js"></script>
    <script src="../codemirror/mode/javascript/javascript.js"></script>
@@ -27,14 +28,14 @@
         <h4 style="grid-column: 1/4;">Code Visualizer</h4>
         <button onclick="window.location = '/'"><i class="fas fa-home"></i></button>
         <button onclick="downloadWrapper()"><i class="fas fa-save"></i></button>
-        <button onclick="copy(document.getElementById('input'))"><i class="far fa-copy"></i></button>
+        <!-- <button onclick="copy(document.getElementById('input'))"><i class="far fa-copy"></i></button> -->
         <button id=urlCopyBtn onclick="createShareLink()"><i class="fas fa-link"></i></button>
         <button onclick="loadRemoteResource()"><i class="fas fa-cloud-download-alt"></i></button>
         <button onclick="helpMenu()"><i class="fas fa-question-circle"></i></button>
         <button class="btn btn-primary" onclick="redirect()" style="grid-column: 10/13;"><span style="font-size:20;">View Full Window</span></button>
       </div>
       <!-- The content Div -->
-      <div class=maindisplay>
+      <div class=maindisplay id="maindisplay">
         <!-- place to write code -->
         <div class="codecontainer">
           <textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;font-size:14px"></textarea>
@@ -48,7 +49,7 @@
         Font Size <input value=14 type="number" style="width:100px" class="form-control" id="fontSize" onchange="changeFont(this.value)">
       </div>
       <div style="grid-column: 3/5">
-        Editor Width <input type="range" class="form-control" style="width:100%" min=1 max=100 value=50 step=0.001 id="editWidth"></input>
+        Editor Width <input type="range" class="form-control" style="width:100%" min=0 max=1 value=0.5 step=0.001 id="editWidth"></input>
       </div>
       <div style="grid-column: 5/7">
         <input type=checkbox class="magic-checkbox" id="allowLive" checked="false" onclick="toggleLive(this.checked)"></input>
