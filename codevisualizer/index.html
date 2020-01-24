@@ -15,9 +15,10 @@
    <script src="../codemirror/mode/javascript/javascript.js"></script>
    <script src="../codemirror/mode/css/css.js"></script>
    <script src="../codemirror/mode/htmlmixed/htmlmixed.js"></script>
-   <link rel="stylesheet" href="style.css">
 
    <script src="samplecode.js"></script>
+
+   <link rel="stylesheet" href="style.css">
 </head>
   <!-- Master table -->
   <div class="master">
@@ -35,11 +36,11 @@
       <!-- The content Div -->
       <div class=maindisplay>
         <!-- place to write code -->
-        <textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;font-size:14px"></textarea>
-        <!-- renderview -->
-        <div class=renderview-container>
-          <iframe id=render srcdoc="" class="render"></iframe>
+        <div>
+          <textarea autofocus wrap="off" spellcheck="false" id="input" class="form-control" onkeyup="Krender()" style="width:100%;height:100%;resize:none;font-size:14px"></textarea>
         </div>
+        <!-- renderview -->
+          <iframe id=render srcdoc="" class="render"></iframe>
       </div>
     <!-- Bottom toolbar -->
     <div class=barheader>
