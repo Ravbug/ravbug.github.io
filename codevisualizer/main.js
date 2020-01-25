@@ -109,7 +109,7 @@ function toggleDarkView(state){
 //if base64 encoded arg is present, load its contents
 var arg = getURLArgValue('c');
 if (arg != undefined){
-  i.value=atob(decodeURIComponent(arg))
+  editor.setValue(atob(decodeURIComponent(arg)));
   writeURLArgs([]);
 }
 else{
