@@ -252,3 +252,11 @@ function changeFont(newSize){
 
 //prompt for unsaved
 window.onbeforeunload = function(){return true;}
+
+document.getElementById('openFile').onchange = function(){
+  const reader = new FileReader();
+    reader.onload = function(e){
+        editor.setValue(e.target.result);
+    }
+    reader.readAsText(this.files[0]);
+}
