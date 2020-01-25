@@ -120,10 +120,6 @@ render();
 changeFont(document.getElementById("fontSize").value)
 
 function render(){
-//   if (!i.value.length == 0){
-//     //disables the UI
-//     generateEmbed(i.value)
-//   }
   //draw into iframe
   p.srcdoc = editor.getValue();
 }
@@ -150,9 +146,9 @@ function generateEmbed(code){
 //creates a sharable link to the code. If the link is too long or cannot be encoded,
 //it uploads the code to a google sheet and generates a different URL
 function createShareLink(){
-    var link = generateEmbed(editor.getValue());
-    if (link != undefined){
+    if (editor.getValue().length < 4096 && generateEmbed(editor.getValue()) != undefined){
       //use the base64 encoding
+      var link = generateEmbed(editor.getValue());
       document.getElementById('urlCopy').value=window.location.protocol + "//" + window.location.hostname+"/codevisualizer?c="+link;
       document.getElementById('urlCopy').style='display:;';copy(document.getElementById('urlCopy'));document.getElementById('urlCopy').style='display:none;'
     }
@@ -160,7 +156,7 @@ function createShareLink(){
       //Server upload to Google Sheet. For now, just warn user and fail out
       swal({
         title: "Heads Up!",
-        text: "This content could not be encoded into a URL. URL sharing is currently disabled.\n\nURL sharing will automatically resume at the next possible chance",
+        text: "This document could not be encoded into a URL. To share this document, use the Save File button in the top toolbar.",
         type: "error",
         closeOnConfirm: false,
       });
