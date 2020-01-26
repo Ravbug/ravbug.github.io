@@ -51,12 +51,26 @@
         <h3 id="ultra">Ultra condensed</h3>
         <ol>
             <li><a href="https://discordapp.com/developers/applications/" target="_blank">Register bot.</a></li>
-            <li><a href="https://nodejs.org/en/" target="_blank">Download Node.js.</a></li>
-            <li><code>mkdir discordbot && cd discordbot</code></li>
+            <li></li>
+            <li><code>mkdir discordbot && cd "$_"</code></li>
             <li><code>npm init -y</code></li>
             <li><code>npm install discord.js</code></li>
             <li><code><script>document.currentScript.outerHTML = `wget ${window.location.protocol}//${window.location.hostname}/tutorials/discordjs/index.js`</script></code></li>
             <li>Replace <code>token</code>, run <code>node index.js</code></li>
+        </ol>
+
+        <h3 id="superultra">Super-Ultra condensed</h3>
+        <ol>
+            <li>
+                <a href="https://discordapp.com/developers/applications/" target="_blank">Register bot</a> and <a href="https://nodejs.org/en/" target="_blank">download Node.js.</a>
+            </li>
+            <li>
+                Replace the <code>folder</code> and <code>token</code> variables at the beginning as appropriate. <br>
+                <code>folder=discordbot && token=your_token_here; mkdir $folder && cd "$_" && npm init -y && npm install discord.js && <script>document.currentScript.outerHTML = `wget ${window.location.protocol}//${window.location.hostname}/tutorials/discordjs/index.js`</script> && sed "s/'token'/'$token'/g" index.js</code></code>
+            </li>
+            <li>
+                <code>node index.js</code>
+            </li>
         </ol>
     </div>
 </body>
