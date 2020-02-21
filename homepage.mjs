@@ -24,7 +24,7 @@ data = [
                     ref:"https://github.com/Ravbug?tab=repositories",
                 },
                 {
-                    title:"wxWidgetsTemplate",
+                    title:"wxWidgets Template",
                     img:"img/wxwidgets.svg",
                     tag:"A template project for quickly developing cross-platform native apps in C++",
                     ref:"https://github.com/Ravbug/wxwidgetstemplate",
