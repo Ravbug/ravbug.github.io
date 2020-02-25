@@ -344,6 +344,12 @@ data = [
                     ref:"math/",
                 },
                 {
+                    title:"Mastermind Python",
+                    img:"img/pygame.png",
+                    tag:"The Mastermind game, written in python and pygame",
+                    ref:"https://github.com/ravbug/mastermind"
+                },
+                {
                     title:"Shoddy Tech Drawings",
                     img:"shoddy-drawings/intelhd.png",
                     tag:"Make fun of tech using these crude drawings",
