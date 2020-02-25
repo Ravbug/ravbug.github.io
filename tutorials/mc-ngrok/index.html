@@ -87,7 +87,7 @@ killall ngrok
 (./ngrok tcp 25565 -log=stdout &)
 
 # start the server
-java -Xmx1024M -Xms1024M -jar server-1.15.2.jar nogui
+java -Xmx1024M -Xms1024M -jar server.jar nogui
 
 # if the server stops (/stop or crash), stop ngrok
 killall ngrok
