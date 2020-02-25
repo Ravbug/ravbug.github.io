@@ -273,6 +273,12 @@ data = [
                     ref:"tutorials/discordjs"
                 },
                 {
+                    title:"Minecraft server without port forwarding",
+                    img:"img/server.svg",
+                    tag:"Let friends join your server without port forwarding using ngrok",
+                    ref:"tutorials/mc-ngrok/"
+                },
+                {
                     title:"How To Extract Minecraft Textures",
                     img:"img/mcpainting.png",
                     tag:"Get the texture files from any minecraft version",
