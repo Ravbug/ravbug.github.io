@@ -12,46 +12,69 @@
 
 <div class=main>
 
-	I cannot release a download to these images because that would violate the Minecraft license. However, I can tell
-	you how to get them off your
-	own computer.
-
-	To get the files, do the following:
+	To extract texture files out of Minecraft Java Edition, do the following:
 	<br>
-	<br>
-	<strong>All platforms:<br>
-	</strong>Legacy Java Launcher
 	<ol>
-		<li>Start the Minecraft launcher</li>
-		<li>Click the Edit Profile button</li>
-		<li>Click the Open Game Dir button (A Finder of File Explorer window will pop up)</li>
-		<li>Inside the Finder/File Explorer Window, go to the versions folder</li>
-		<li>Find the version you want and open the folder*</li>
-		<li>Follow your platform-specific instructions below</li>
-	</ol>
-	New (chromium) Launcher
-	<ol>
-		<li>Start the Minecraft launcher</li>
-		<li>Open the hamburger menu at the top right, and open Launch Options</li>
-		<li>Click on Latest release</li>
-		<li>Next to the row that says "Game Directory", click the little green arrow</li>
-		<li>Inside the Finder / File Explorer window, go to the versions folder</li>
-		<li>Find the version you want and open the folder*</li>
-		<li>Follow your platform-specific instructions below</li>
-	</ol>
-	<strong>Mac</strong>
-	<ol>
-		<li>Right-click the .jar folder and choose Open With -&gt; Archive Utility</li>
-		<li>Find the assets folder and go to assets/minecraft/textures</li>
-		<li>Enjoy the texture files!</li>
-	</ol>
-	<strong>Windows/Linux</strong>
-	<ol>
-		<li>Make a duplicate of the .jar file</li>
-		<li>Change the duplicate's extension to .zip</li>
-		<li>Open the .zip file</li>
-		<li>Find the assets folder and go to assets\minecraft\textures</li>
-		<li>Enjoy the texture files!</li>
+		<li>
+			Navigate to the folder where Minecraft is stored. The default locations are as follows:<br>
+			macOS: <code>~/Library/Application Support/minecraft</code><br>
+			Windows: <code>%APPDATA%\.minecraft</code>
+			Linux: <code>~/.minecraft</code>
+		</li>
+		<li>
+			Open the <code>versions</code> folder/
+		</li>
+		<li>
+			Find the version you want and open the folder*
+		</li>
+		<li>
+			Unzip the version JAR that you want to extract textures from.<br>
+			Recommended methods:
+			<ul>
+				<li>
+					macOS: 
+					<ol>
+						<li>
+							Right-click the version .jar file.
+						</li>
+						<li>
+							Choose <code>Open With -> Archive Utility</code>
+						</li>
+						<li>
+							Open the created folder and navigate to <code>assets/minecraft/textures</code>
+						</li>
+					</ol>
+				</li>
+				<li>
+					Windows
+					<ol>
+						<li>
+							Duplicate the version .jar files
+						</li>
+						<li>
+							Change the file extension of the duplicated jar to <code>.zip</code>
+						</li>
+						<li>
+							Double-click to open the zip file
+						</li>
+						<li>
+							Navigate to <code>assets\minecraft\textures</code>
+						</li>
+					</ol>
+				</li>
+				<li>
+					Linux
+					<ol>
+						<li>
+							Execute in terminal: <code>unzip [version].jar</code>
+						</li>
+						<li>
+							Navigate to <code>assets/minecraft/textures</code>
+						</li>
+					</ol>
+				</li>
+			</ul>
+		</li>
 	</ol>
 	*If you could not find the version you want, you will have to download it using the Minecraft launcher
 </div>
