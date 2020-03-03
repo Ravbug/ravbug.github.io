@@ -137,7 +137,7 @@ data = [
                     img:"img/t_pen.svg"
                 },
                 {
-                    title:"Editable Windows BSOD",
+                    title:"Editable BSODs",
                     tag:"An editable Windows blue screen of death, using content-editable divs",
                     ref:"bsod/",
                     img:"img/windows.svg"
