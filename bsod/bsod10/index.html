@@ -115,7 +115,7 @@ function deleteSelection() {
     let green = new URLSearchParams(window.location.search).has('g');
     if (green){
         document.getElementById('body').style.backgroundColor = "#3A6D2F"
-        document.getElementById('qr').contentDocument.getElementById('p').fill = "#3A6D2F"
+        document.getElementById('qr').style.filter = "hue-rotate(262deg)";
     }
 }
 
