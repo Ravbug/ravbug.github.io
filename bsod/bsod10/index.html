@@ -48,7 +48,7 @@
                             <td>
                                 <p style="font-size:20px">
 
-                                    Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.
+                                    Your <c id=devicename>PC</c> ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.
                                     <br>
                                     <br> 103% complete</p>
                             </td>
@@ -116,6 +116,7 @@ function deleteSelection() {
     if (green){
         document.getElementById('body').style.backgroundColor = "#3A6D2F"
         document.getElementById('qr').style.filter = "hue-rotate(262deg)";
+        document.getElementById('devicename').innerHTML = "Windows Insider Build"
     }
 }
 
