@@ -1,8 +1,8 @@
 <head>
-    <title>Windows 7 BSOD</title>
+    <title>Windows 7 Boot Error</title>
     <meta charset="UTF-8">
-    <meta name="description" content="Editable Windows 7 Blue Screen of Death">
-    <link id="favicon" rel="icon" href="win7.svg" type="image/x-icon">
+    <meta name="description" content="Editable Windows 7 Boot Failure screen">
+    <link id="favicon" rel="icon" href="../bsod7/win7.svg" type="image/x-icon">
     <!-- Social embed image -->
     <meta property="og:image" content="https://ravbug.github.io/bsod/bsod7/win7.png">
     <meta property="og:image:type" content="image/png">
@@ -12,7 +12,7 @@
 <style>
     .screen{
         padding: 10px;
-        background-color: #00097B;
+        background-color: #000;
         color: white;
         font-family: monospace;
         font-size:20px
@@ -29,31 +29,29 @@
 </style>
 <body class="screen noselect">
     <div contenteditable="true" id="edit" spellcheck="false">
-        A problem has been detected and Windows has been shut down to prevent damage to your computer.
+        We apologize for the inconvenience, but Windows did not start successfully. A recent
+        hardware or software change might have caused this.
         <br><br>
-        UNMOUNTABLE_BOOT_VOLUME
+        If your computer stopped responding, restarted unexpectedly, or was automatically shut down 
+        to protect your files and folders, choose Last Good Configuration to revert to the most 
+        recent settings that worked.
         <br><br>
-        If this is the first time you've seen this error screen, restart your computer. If this screen appears
-        again, follow these steps:
-        <br><br>
-        Check to make sure any new hardware or software is properly installed. If this is a new installation, 
-        ask your hardware or software manufacturer for any Windows updates you might need.
-        <br><br>
-        If problems continue, disable or remove any newly installed hardware or software. Disable BIOS memory options
-        such as caching or shadowing. If you need to use Safe Mode to remove or disable components, restart your computer,
-        press F8 to select Advanced Startup Options, and then select Safe Mode.
-        <br><br>
-        Technical Information:
-        <br><br>
-        *** STOP: 0x000000ED (0x80F128D0, 0x0000009c, 0x00000000, 0x0000000)
-
-        <br><br><br>
-        Collecting data for crash dump ... 
+        If a previous startup attempt was interrupted due to a power failure or the Power or Reset button
+        was pressed, or if you aren't sure what caused the problem, choose Start Windows Normally.
         <br>
-        Initializing disk for crash dump ...
-    </div>
-</body>
+<pre>
+    Safe Mode
+    Safe Mode with Networking
+    Safe Mode with Command Prompt
 
+    Last Known Good Configuration (your most recent settings that worked)
+
+<span style="color:black;background-color:white">     Start Windows Normally</span>
+</pre>
+            Use the up and down errors to move the highlight to your choice.
+            Seconds until Windows starts: -2
+    </div>
+</body> 
 <script>
     resize();
     function resize(secondCheck){
