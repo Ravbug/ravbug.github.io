@@ -1,107 +1,80 @@
-<style>
-    span,
-    p {
-        font-family: Segoe UI, "Helvetica Neue", sans-serif;
-        line-height: 30px;
-        color: white;
-    }
-    .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome and Opera */
-    }
-</style>
-
-<html>
-
 <head>
-    <title>:( Your PC ran into a problem</title>
-    <meta charset="UTF-8">
-    <meta name="description" content="Editable Windows Blue Screen of Death">
+	<title>Editable Fake Error Screens</title>
+	<meta name="description" content="Editable BSODs right in your browser!">
+    <link id="favicon" rel="icon" href="../img/windows.svg" type="image/x-icon">
+
+	<!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/bsod/bsod10/windows.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
 </head>
-
-<body class="noselect" style="background-color:#0078D7;" onresize="resize()">
-    <table id=masterTable style="width:100%;height:100%" cellpadding=80>
-        <tr>
-            <td>
-                <div id=edit contenteditable=true style="color:white;position:absolute;left:80px;top:100px" spellcheck="false">
-
-                    <table cellpadding=5>
-                        <tr> <td>
-                             <span style="font-size:100px">:(</span>
-                        </td></tr>
-                    </table>
-                    <br> <br> <br>
-
-                    <table cellpadding=10>
-                        <tr>
-                            <td>
-                                <p style="font-size:20px">
-
-                                    Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.
-                                    <br>
-                                    <br> 103% complete</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
-
-                    <table cellpadding=10>
-                        <tr><td>
-                            <div style="background:white">
-                                <img style="width:150px" src="bsod-qr.svg"></img>
-                            </dv>
-                        </td><td>
-                            <span style="font-size:20px">
-                                For more information about this issue and possible fixes, visit
-                                <br> http://windows.com/stopcode
-                                <br>
-                                <br> If you call a support person, give them this info:
-                                <br>Stop code: CRITICAL_PROCESS_DIED
-                            </span>
-                       </td></tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <body>
-</html>
-
+<style>
+	img{
+		width: 100%;
+		max-width: 300px;
+		display:block;
+		margin: auto;	
+	}
+	a{
+		font-size:30px;
+	}
+</style>
+<div class=main>
+	<article id="article">
+    </article>
+</div>
 <script>
-resize();
-function resize(secondCheck){
-    //resize check
-    var edit = document.getElementById("edit")
-    var masterTable = document.getElementById("masterTable")
-    
-    if (Math.abs(window.innerHeight - screen.height) < 5){
-        //disable editing
-        edit.contentEditable = "false";
-        masterTable.style.cursor = "none";
-        deleteSelection()
-    }
-   
-    //enable editing, show cursor
-    else{
-        edit.contentEditable = "true";
-        masterTable.style.cursor = "";
-    }
-}
+	{
+	 //array representing the card contents
+	 const content = [
+            {
+                title: "Windows 7 BSOD",
+                tag: "",
+                img: "bsod7/win7.svg",
+                ref: "bsod7"
+			},
+			{
+                title: "Windows 7 Boot Failure",
+                tag: "",
+                img: "bsod7/win7.svg",
+                ref: "booterror7"
+			},
+			{
+                title: "Windows 8 BSOD",
+                tag: "",
+                img: "../img/windows.svg",
+                ref: "bsod8"
+			},
+			{
+                title: "Windows 10 BSOD",
+                tag: "",
+                img: "../img/windows.svg",
+                ref: "bsod10"
+			},
+			{
+                title: "Windows 10 Beta GSOD",
+                tag: "",
+                img: "../img/windows.svg",
+                ref: "bsod10?g"
+			},
+		];
 
-function deleteSelection() {
-    if (window.getSelection) {
-        // Mozilla
-        var selection = window.getSelection();
-        if (selection.rangeCount > 0) {
-            window.getSelection().removeAllRanges();
+		// assemble each card's HTML
+		let components = [];
+        for (let card of content) {
+            components.push(`
+        <div class="card">
+            <a class="attention" href="${card.ref}">${card.title}<br>
+			<img src="${card.img}">
+			</a>
+            ${card.tag}
+        </div>
+        `);
         }
-    }
-}
-
+        //insert into page
+        document.getElementById("article").innerHTML = components.join('');
+	}
+	document.currentScript.remove();
 </script>
+<script src="../header.js"></script>

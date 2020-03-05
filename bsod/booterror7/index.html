@@ -1,0 +1,85 @@
+<head>
+    <title>Windows 7 Boot Error</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Editable Windows 7 Boot Failure screen">
+    <link id="favicon" rel="icon" href="../bsod7/win7.svg" type="image/x-icon">
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/bsod/bsod7/win7.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="81">
+</head>
+<style>
+    .screen{
+        padding: 10px;
+        background-color: #000;
+        color: white;
+        font-family: monospace;
+        font-size:20px
+    }
+    .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+    }
+</style>
+<body class="screen noselect">
+    <div contenteditable="true" id="edit" spellcheck="false">
+        We apologize for the inconvenience, but Windows did not start successfully. A recent
+        hardware or software change might have caused this.
+        <br><br>
+        If your computer stopped responding, restarted unexpectedly, or was automatically shut down 
+        to protect your files and folders, choose Last Good Configuration to revert to the most 
+        recent settings that worked.
+        <br><br>
+        If a previous startup attempt was interrupted due to a power failure or the Power or Reset button
+        was pressed, or if you aren't sure what caused the problem, choose Start Windows Normally.
+        <br>
+<pre>
+    Safe Mode
+    Safe Mode with Networking
+    Safe Mode with Command Prompt
+
+    Last Known Good Configuration (your most recent settings that worked)
+
+<span style="color:black;background-color:white">     Start Windows Normally</span>
+</pre>
+            Use the up and down errors to move the highlight to your choice.
+            Seconds until Windows starts: -2
+    </div>
+</body> 
+<script>
+    resize();
+    function resize(secondCheck){
+        //resize check
+        var edit = document.getElementById("edit")
+        
+        if (Math.abs(window.innerHeight - screen.height) < 5){
+            //disable editing
+            edit.contentEditable = "false";
+            edit.style.cursor = "none";
+            deleteSelection()
+        }
+       
+        //enable editing, show cursor
+        else{
+            edit.contentEditable = "true";
+            edit.style.cursor = "";
+        }
+    }
+    
+    function deleteSelection() {
+        if (window.getSelection) {
+            // Mozilla
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    }
+    
+    </script>
