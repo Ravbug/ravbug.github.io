@@ -275,7 +275,7 @@ data = [
                 {
                     title:"Minecraft server without port forwarding",
                     img:"img/server.svg",
-                    tag:"Let friends join your server without port forwarding using ngrok",
+                    tag:"Let friends join your Java Edition server without port forwarding using ngrok",
                     ref:"tutorials/mc-ngrok/"
                 },
                 {
