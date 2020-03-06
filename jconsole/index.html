@@ -7,6 +7,26 @@
 <meta name="description" content="Interactive JavaScript playground">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
+
+ <!-- CodeMirror -->
+ <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+ <link rel="stylesheet" href="../codemirror/theme/material.css">
+ <link rel="stylesheet" href="../codemirror/addon/hint/show-hint.css">
+ <link rel="stylesheet" href="../codemirror/addon/dialog/dialog.css">
+ <script src="../codemirror/lib/codemirror.js"></script>
+ <script src="../codemirror/mode/xml/xml.js"></script>
+ <script src="../codemirror/mode/javascript/javascript.js"></script>
+ <script src="../codemirror/mode/css/css.js"></script>
+ <script src="../codemirror/mode/htmlmixed/htmlmixed.js"></script>
+ <script src="../codemirror/addon/hint/show-hint.js"></script>
+ <script src="../codemirror/addon/hint/javascript-hint.js"></script>
+ <script src="../codemirror/addon/lint/javascript-lint.js"></script>
+ <script src="../codemirror/addon/search/search.js"></script>
+ <script src="../codemirror/addon/search/searchcursor.js"></script>
+ <script src="../codemirror/addon/search/jump-to-line.js"></script>
+ <script src="../codemirror/addon/dialog/dialog.js"></script>
+
+ <link rel="stylesheet" href="style.css">
 </head>
 <style id=embedStyles>
     .console {
@@ -19,49 +39,31 @@
         font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;   
         font-weight:bold;
     }
-
-    textarea{
-        font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
-    }
-    #linenums{
-        width:100%;
-    }
 </style>
 
-<!-- Toolbar -->
-<table style="width:100%;height:100%"><tr><td style="height:64px">
-    <div class=barheader>
-        <table cellpadding=10><tr>
-        <td><h2>JConsole</h2>  </td>
-        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></div></td>
-        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);downloadWrapper();"><i class="fas fa-save"  style="font-size:2em;"></i></div></td>
+<div class=display>
+    <div class="barheader toolbar">
+        <h2>JConsole</h2>
+        <button onclick="window.location='/'"> <i class="fas fa-home" style="font-size:2em;"></i></button>
+        <button onclick="downloadWrapper();"><i class="fas fa-save"  style="font-size:2em;"></i></button>
        <!-- <td><div id=urlCopyBtn onmousedown="clickEffect(this);" onmouseup="clickUp(this);createShareLink()"><i class="fas fa-link"  style="font-size:2em;"></i></div></td> -->
-        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);clearConsole();"><i class="fas fa-terminal"  style="font-size:2em;"></i></div></td>
-        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);helpMenu();"><i class="fas fa-question-circle"  style="font-size:2em;"></i></div></td>
-        <td><div onmousedown="clickEffect(this);" onmouseup="clickUp(this);stop();"><i class="far fa-stop-circle"  style="font-size:2em;"></i></div></td>
-        <td><button class="btn btn-primary" id=viewFull onclick="runWrapper()" style="float:right;"><span style="font-size:20">Run!</span></button></td>
-        </table>
+        <button onclick="clearConsole();"><i class="fas fa-terminal"  style="font-size:2em;"></i></button>
+        <button onclick="helpMenu();"><i class="fas fa-question-circle"  style="font-size:2em;"></i></button>
+        <button onclick="stop();"><i class="far fa-stop-circle"  style="font-size:2em;"></i></button>
+        <button class="btn btn-primary" id=viewFull onclick="runWrapper()" style="float:right;"><span style="font-size:20">Run!</span></button>
     </div>
-</td></tr><tr><td>
-    <!--Main Tables -->
-    <table style="width:100%;height:100%"><tr>
-    <td style="width:60px" id="lineContainer"><textarea disabled class="form-control" style="resize:none;height:100%;text-align:right;overflow:hidden;" id="lineNums" style=""></textarea></td>
-    </td>
-    <td>
-        <textarea class="form-control" spellcheck="false" style="width:100%;height:100%;" id=input onkeyup="lineNumbers()"></textarea>
-    </td><td>
-        <table style="width:100%;height:100%;"><tr><td>
-                <iframe id=output style="width:100%;height:100%"></iframe>
-            </td></tr><tr>
-                <td style="height:20px;">
-                    <form onsubmit="return execCommand2(document.getElementById('cmd').value)">
-                        <input id=cmd autocomplete="off" style="width:100%" class=form-control type="text" onkeyup="cliKey(event)" placeholder="Enter commands to console here, type help() for a command list"></input>
-                    </form>
-                </td>
-            </tr>
-        </table>
-    </td></tr></table>
-</td></tr></table>
+    <div class=editor>
+        <div class="codecontainer" id="codecontainer">
+            <textarea id=input></textarea>
+        </div>
+        <div class=consolearea>
+            <iframe id=output style="width:100%;height:100%"></iframe>
+            <form onsubmit="return execCommand2(document.getElementById('cmd').value)">
+                <input id=cmd autocomplete="off" style="width:100%" class=form-control type="text" onkeyup="cliKey(event)" placeholder="Enter commands to console here, type help() for a command list"></input>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="../utilities.js"></script>
 <script>
@@ -69,6 +71,95 @@
     var output = document.getElementById('output');
     var cli = document.getElementById('cmd');
     var cli_index = 0;
+
+    //create codemirror instance
+    let editor;
+    {
+        let config = {
+            lineNumbers:true,
+            matchBrackets:true,
+            autoCloseBrackets: true,
+            highlightSelectionMatches: true,
+            styleActiveLine: true,
+            autohint: true,
+            htmlMode:true,
+            fixedGutter:true,
+            lint: { lintOnChange: true },
+            mode:"javascript",
+        }
+        //dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            config["theme"] = "material";
+        }
+        editor = CodeMirror.fromTextArea(input,config);
+    }
+    //intellisense-like autocomplete: https://stackoverflow.com/questions/13744176/codemirror-autocomplete-after-any-keyup
+    editor.on('keyup', (editor,event) => {
+        let ExcludedIntelliSenseTriggerKeys =   {
+            "8": "backspace",
+            "9": "tab",
+            "13": "enter",
+            "16": "shift",
+            "17": "ctrl",
+            "18": "alt",
+            "19": "pause",
+            "20": "capslock",
+            "27": "escape",
+            "33": "pageup",
+            "34": "pagedown",
+            "35": "end",
+            "36": "home",
+            "37": "left",
+            "38": "up",
+            "39": "right",
+            "40": "down",
+            "45": "insert",
+            "46": "delete",
+            "91": "left window key",
+            "92": "right window key",
+            "93": "select",
+            "107": "add",
+            "109": "subtract",
+            "111": "divide",
+            "112": "f1",
+            "113": "f2",
+            "114": "f3",
+            "115": "f4",
+            "116": "f5",
+            "117": "f6",
+            "118": "f7",
+            "119": "f8",
+            "120": "f9",
+            "121": "f10",
+            "122": "f11",
+            "123": "f12",
+            "144": "numlock",
+            "145": "scrolllock",
+            "186": "semicolon",
+            "188": "comma",
+            "189": "dash",
+            "191": "slash",
+            "192": "graveaccent",
+            "220": "backslash",
+            "222": "quote"
+        }
+        var __Cursor = editor.getDoc().getCursor();
+        var __Token = editor.getTokenAt(__Cursor);
+
+        let funcTokens = new Set(["variable","keyword","property", "operator"]);
+
+        if (!editor.state.completionActive &&
+            !ExcludedIntelliSenseTriggerKeys[(event.keyCode || event.which).toString()] &&
+            ( __Token.string == " " || funcTokens.has(__Token.type)))
+        {
+            CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
+        }
+    });
+
+    editor.setSize(null,null);
+
+    input.remove()
+
    
     var worker = new Worker("exec.js");
     var cmdStack = [];
@@ -82,8 +173,7 @@
 
 
     //example text
-    input.value = 'print("no ")\nprintln("u");\nprintln(eval("2+2"))';
-    lineNumbers();
+    editor.setValue('print("no ")\nprintln("u");\nprintln(eval("2+2"))');
 
     function cliKey(event){
         var x = event.which || event.keyCode;
@@ -108,25 +198,16 @@
     }
 
     function run(data,type) {
-        worker.postMessage([data,type,input.value]);
+        worker.postMessage([data,type,editor.getValue()]);
         worker.onmessage = function(e){
             print(e.data);
         }
     }
     function runWrapper(){
         print(" run</span><br>")
-        run(input.value);
+        run(editor.getValue());
     }
 
-    function lineNumbers(){
-        //update line numbers
-        var numlines = input.value.split(/\r\n|\r|\n/).length;
-        var lineNums = document.getElementById("lineNums");
-        lineNums.value = "";
-        for (var n = 1; n <= numlines; n++){
-            lineNums.value += n + "\n" ;
-        }
-    }
 
     //the cmd entry field
     function execCommand2(cmd){
@@ -147,14 +228,6 @@
         }
         document.getElementById('cmd').value="";
         return false;
-    }
-
-    //orange flash for the div button icons at the top bar
-    function clickEffect(div){
-        div.style="color:tomato;";
-    }
-    function clickUp(div){
-        div.style="";
     }
 
     function clearConsole(){
@@ -194,15 +267,14 @@
       }
     }
     swal({title:"Downloading...", text:"Your browser should download your file shortly" + inputValue,  success:true,timer:2000});
-    download(inputValue,document.getElementById('input').value)
+    download(inputValue,editor.getValue())
   });
 }
 
 //help
 function helpMenu(){
-  swal("Helpmeplz what does this page do??","This is a simple JavaScript code visualizer.\n\n Press the share (link) btutton to get a shareable link to your code!\n\nPress Run to execute your code. >_ button clears the console. You can also type code to execute directly into the field under the console.\n\nI am not responsible if you lose data. But feel free to report bugs! Tweet them @ravbug on twitter.");
+  swal("Helpmeplz what does this page do??","This is a simple JavaScript code visualizer.\n\n Press the share (link) button to get a shareable link to your code!\n\nPress Run to execute your code. >_ button clears the console. You can also type code to execute directly into the field under the console.\n\nI am not responsible if you lose data. But feel free to report bugs! Tweet them @ravbug on twitter.");
 }
 
-enableTab("input");
 </script>
 <script src="../sweetalert.min.js" ></script>
