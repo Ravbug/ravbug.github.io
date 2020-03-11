@@ -364,7 +364,13 @@ async function imgToDataURL(url) {
             //resolve(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
     
             // ... or get as Data URI
-            resolve(canvas.toDataURL('image/png'));
+            let mime = prompt("Image mime type?","image/jpg");
+            if (mime){
+                resolve(canvas.toDataURL(mime));
+            }
+            else{
+                return;
+            }
     
             canvas.remove();
         };
@@ -379,6 +385,15 @@ async function imgToDataURL(url) {
  * @param {boolean} includeImg true to include the image as a data URL, false otherwise
  */
 async function dlEditDoc(name="adjustments",includeImg=false){
+    download(name+".json",JSON.stringify(await genEditDoc(includeImg)));
+}
+
+/**
+ * Generates an edit document
+ * @param {boolean} includeImg true to include the image represented as a DataURL
+ * @return an Object representing the document
+ */
+async function genEditDoc(includeImg=false){
     //get image
     let doc = {}
     if (includeImg){
@@ -402,8 +417,9 @@ async function dlEditDoc(name="adjustments",includeImg=false){
         all.push(g_adj);
     }
     doc["adj"] = all;
-    download(name+".json",JSON.stringify(doc));
+    return doc;
 }
+
 //wrappers for dleditdoc
 function downloadEdit(){
     let name;
@@ -542,4 +558,37 @@ uploadimg.onchange = function(){
         document.getElementById("image").src = e.target.result;
     }
     reader.readAsDataURL(uploadimg.files[0]);
+}
+
+async function exportHTML(){
+
+    let data = await genEditDoc(true);
+
+    let filtersInUse = [];
+
+    let systemSVG = document.getElementById('svg_builtin');
+    let userSVG = document.getElementById('svg_user');
+    let copySystemSVG = false;
+    let copyUserSVG = false;
+
+    for(let group of data["adj"]){
+        if (group["on"]){
+            for(let filter of group["adj"]){
+                if (filter["name"] != "svg"){
+                    filtersInUse.push(`${filter["name"]}(${filter["val"]}${filters[filter["name"]]["unit"]})`);
+                }
+                else if (filter["name"] == "svg"){
+                    filtersInUse.push(`url(#${filter["val"]})`);
+
+                    if (systemSVG.querySelector(`#${filter["val"]}`)){
+                        copySystemSVG = true;
+                    }
+                    else if (userSVG.querySelector(`#${filter["val"]}`)){
+                        copyUserSVG = true;
+                    }
+                }
+            }
+        }
+    }
+    download("webPhotoHTMLExport.html",`<img src='${data.img}' style='filter:${filtersInUse.join(" ")};'><svg>${copySystemSVG?systemSVG.innerHTML:""}${copyUserSVG?userSVG.innerHTML:""}</svg>`);
 }
