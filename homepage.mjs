@@ -137,7 +137,7 @@ data = [
                     img:"img/t_pen.svg"
                 },
                 {
-                    title:"Editable Windows BSOD",
+                    title:"Editable BSODs",
                     tag:"An editable Windows blue screen of death, using content-editable divs",
                     ref:"bsod/",
                     img:"img/windows.svg"
@@ -275,7 +275,7 @@ data = [
                 {
                     title:"Minecraft server without port forwarding",
                     img:"img/server.svg",
-                    tag:"Let friends join your server without port forwarding using ngrok",
+                    tag:"Let friends join your Java Edition server without port forwarding using ngrok",
                     ref:"tutorials/mc-ngrok/"
                 },
                 {

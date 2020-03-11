@@ -1,0 +1,63 @@
+<head>
+    <title>Windows 8 BSOD</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Editable Windows 8 Blue Screen of Death">
+    <link id="favicon" rel="icon" href="../../img/windows.svg" type="image/x-icon">
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/bsod/bsod10/windows.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+</head>
+<style>
+    .screen{
+        font-family: Segoe UI, "Helvetica Neue", sans-serif;
+        font-size: 35px;
+        color: white;
+        background-color:#0078D7;
+        padding: 50px;
+        padding-top:40px;
+    }
+</style>
+
+<body class="screen noselect">
+    <div contenteditable="true" id=edit spellcheck="false">
+        <span style="font-size:120px">:(</span><br><br>
+        Your PC ran into a problem and needs to restart. We're just collecting some error info, 
+        and then you can restart (12% complete)
+        <br><br>
+        <span style="font-size:15px">If you'd like to know more, you can search online for this error: INACCESSIBLE_BOOT_DEVICE</span>
+    </div>
+</body>
+
+<script>
+    resize();
+    function resize(secondCheck){
+        //resize check
+        var edit = document.getElementById("edit")
+        
+        if (Math.abs(window.innerHeight - screen.height) < 5){
+            //disable editing
+            edit.contentEditable = "false";
+            edit.style.cursor = "none";
+            deleteSelection()
+        }
+       
+        //enable editing, show cursor
+        else{
+            edit.contentEditable = "true";
+            edit.style.cursor = "";
+        }
+    }
+    
+    function deleteSelection() {
+        if (window.getSelection) {
+            // Mozilla
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    }
+    
+</script>

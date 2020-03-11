@@ -1,0 +1,87 @@
+<head>
+    <title>Windows 7 BSOD</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Editable Windows 7 Blue Screen of Death">
+    <link id="favicon" rel="icon" href="win7.svg" type="image/x-icon">
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/bsod/bsod7/win7.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="81">
+</head>
+<style>
+    .screen{
+        padding: 10px;
+        background-color: #00097B;
+        color: white;
+        font-family: monospace;
+        font-size:20px
+    }
+    .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+    }
+</style>
+<body class="screen noselect">
+    <div contenteditable="true" id="edit" spellcheck="false">
+        A problem has been detected and Windows has been shut down to prevent damage to your computer.
+        <br><br>
+        UNMOUNTABLE_BOOT_VOLUME
+        <br><br>
+        If this is the first time you've seen this error screen, restart your computer. If this screen appears
+        again, follow these steps:
+        <br><br>
+        Check to make sure any new hardware or software is properly installed. If this is a new installation, 
+        ask your hardware or software manufacturer for any Windows updates you might need.
+        <br><br>
+        If problems continue, disable or remove any newly installed hardware or software. Disable BIOS memory options
+        such as caching or shadowing. If you need to use Safe Mode to remove or disable components, restart your computer,
+        press F8 to select Advanced Startup Options, and then select Safe Mode.
+        <br><br>
+        Technical Information:
+        <br><br>
+        *** STOP: 0x000000ED (0x80F128D0, 0x0000009c, 0x00000000, 0x0000000)
+
+        <br><br><br>
+        Collecting data for crash dump ... 
+        <br>
+        Initializing disk for crash dump ...
+    </div>
+</body>
+
+<script>
+    resize();
+    function resize(secondCheck){
+        //resize check
+        var edit = document.getElementById("edit")
+        
+        if (Math.abs(window.innerHeight - screen.height) < 5){
+            //disable editing
+            edit.contentEditable = "false";
+            edit.style.cursor = "none";
+            deleteSelection()
+        }
+       
+        //enable editing, show cursor
+        else{
+            edit.contentEditable = "true";
+            edit.style.cursor = "";
+        }
+    }
+    
+    function deleteSelection() {
+        if (window.getSelection) {
+            // Mozilla
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    }
+    
+    </script>

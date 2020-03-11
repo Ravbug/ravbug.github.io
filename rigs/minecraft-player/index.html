@@ -6,6 +6,7 @@
 
 <style>
 	img {
+		width:100%;
 		max-width: 400px;
 	}
 
@@ -84,21 +85,28 @@
 		</li>
 	</ul>
 	<h2>Screenshots</h2>
-	<img class="size-medium" src="img/player1.png" alt="Default state screenshot" /> <br>
-	Screenshot of the rig in its default state
+	<div style="display:grid;grid-template-columns: repeat(auto-fit,400px); gap:10px;">
+		
+		<div>
+			<img class="size-medium" src="img/player1.png" alt="Default state screenshot" /> <br>
+		Screenshot of the rig in its default state
 
+		</div>
+		
+		<div>
+		<br><img class="size-medium" src="img/player2.png" alt="Posing screenshot" /> <br>
+		Screenshot showing posing capabilities<br>
+		</div>
 
-	<br><img class="size-medium" src="img/player2.png" alt="Posing screenshot" /> <br>
-	Screenshot showing posing capabilities<br>
-
-	<img class="size-medium" src="img/player3.png" alt="Villager mode screenshot" /> <br>
-	Villager mode enabled. When rendered, the nose and robe will be solid
-
+		<div>
+		<img class="size-medium" src="img/player3.png" alt="Villager mode screenshot" /> <br>
+		Villager mode enabled. When rendered, the nose and robe will be solid
+		</div>
+		</div>
 	<br>
-
 	<iframe src="https://www.youtube.com/embed/T3w05KFzOjQ" frameborder="0"
 		allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	<br>Automatic walk cycle helper video demo (Watch in 4K, YouTube messed up the compression)
+	<br>Automatic walk cycle helper video demo (Watch in 4K if possible)
 
 	<br>
 
@@ -133,10 +141,12 @@
 	Supported Maya versions: 2016 Extension 2 SP 2 or newer.
 
 	Please give credit! Copy-paste the following into your description:
-	<pre>Player and Villager rig by Ravbug Animations
-		YouTube: <a href="https://www.youtube.com/ravbuganimations"
-			data-slimstat="5">https://www.youtube.com/ravbuganimations</a></pre>
-	<br>
+	<br><br>
+	<code>
+	Player Rig by Ravbug Animations<br>
+		Youtube: https://www.youtube.com/ravbuganimations
+	</code>
+	<br><br>
 	I announce progress updates on my Twitter, which you can find here:
 
 	<a class="twitter-follow-button" href="https://twitter.com/ravbug?ref_src=twsrc%5Etfw"

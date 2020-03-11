@@ -17,18 +17,29 @@
     <script src="../../highlight/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
-
+<style>
+    sidebyside{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(430px,1fr));
+        width:100%;
+    }
+    @media only screen and (max-width: 430px) {
+        sidebyside{
+            display:unset;
+        }
+    }
+</style>
 <div class="main">
     Not everyone wants to or is able to port-forward their router so friends can join their Minecraft server. 
     Fortunately, it is easy to share your server without port forwarding using secure tunneling services like ngrok.
     Below is a condensed tutorial showing you how to use ngrok with your Minecraft server.
 
-    <br><br>
+    <p style="color:red">Note: This will only work with Java Edition servers because at the time of writing, ngrok does not support UDP, which Bedrock servers use.</p>
+
     <h3>Part 0: Download the Minecraft server software</h3>
     If you already have a server set up, you can skip to Part 1.<br>
     You can download the server software for the latest release version of 
-    <a href="https://www.minecraft.net/en-us/download/server/">Minecraft Java Edition here</a> and 
-    <a href="https://www.minecraft.net/en-us/download/server/bedrock/">Minecraft Bedrock Edition here</a>.
+    <a href="https://www.minecraft.net/en-us/download/server/">Minecraft Java Edition here</a>.
     <br>
     Create a new folder and place the server software in that folder.
 
@@ -44,16 +55,11 @@
     <h3>Part 2: Run the server with ngrok</h3>
     Steps 1 and 2 can be performed in any order.
     <ol>
-        <li>Start Ngrok <br>
-            Java edition: <code>./ngrok tcp 25565</code><br>
-            Bedrock edition: <code>./ngrok tcp 19132</code><br>
+        <li>Start Ngrok: <code>./ngrok tcp 25565</code><br>
             If you're using a port other than the default port, update the last argument above accordingly.
         </li>
         <li>
-            Start the Minecraft server<br>
-            Java edition: <code>java -jar server.jar nogui</code><br>
-            Bedrock edition: <code>LD_LIBRARY_PATH=. ./bedrock_server</code>
-            <br>
+            Start the Minecraft server: <code>java -jar server.jar nogui</code><br>
             You do not need to install Java separately to run Java edition if Minecraft is already installed on your system.
             See Part 1 of <a href="/tutorials/optifine-no-java">Installing Optifine Without Java</a> to find the path where Minecraft manages its own copy of Java.
         </li>
@@ -70,31 +76,70 @@
     </ol>
 
     <h3>Automating Part 2</h3>
-    With a simple script you can automate the startup and shutdown of ngrok and your server. Example (macOS and Linux):
-
+    With a simple script you can automate the startup and shutdown of ngrok and your server. Examples:
+    <br><br>
+    <sidebyside>
+        <div>macOS / Linux
 <pre><code class="sh">
-# Stop ngrok if the script is stopped with ctrl-c
-trap ctrl_c INT
-
-function ctrl_c() {
-        killall ngrok
-}
-
-# stop ngrok if it is already running
-killall ngrok
-
-# start ngrok
-(./ngrok tcp 25565 -log=stdout &)
-
-# start the server
-java -Xmx1024M -Xms1024M -jar server.jar nogui
-
-# if the server stops (/stop or crash), stop ngrok
-killall ngrok
+    # Stop ngrok if the script is stopped with ctrl-c
+    trap ctrl_c INT
+    
+    function ctrl_c() {
+            killall ngrok
+    }
+    
+    # stop ngrok if it is already running
+    killall ngrok
+    
+    # start ngrok
+    (./ngrok tcp 25565 -log=stdout &)
+    
+    # start the server
+    java -jar server.jar nogui
+    
+    # if the server stops (/stop or crash), stop ngrok
+    killall ngrok
 </code></pre>
+    </div>
+<div>
+    Windows (Batch)
+<pre><code class="bat">
+@echo off
+
+taskkill /f /im ngrok.exe 
+
+START /b cmd /c ngrok tcp 25565 -log=stdout
+java -jar server.jar nogui
+
+taskkill /f /im ngrok.exe 
+</code></pre>
+</div>
+<div>
+Windows (Powershell)
+<pre><code class="powershell">
+# Run using powershell -ExecutionPolicy Bypass -File script.ps1 
+
+# stop Ngrok it if is running
+ps ngrok -ErrorAction SilentlyContinue | kill -PassThru
+try
+{
+    cmd.exe /c "START /b cmd /c ngrok tcp 25565 -log=stdout"
+    java -jar server.jar nogui
+}
+finally
+{
+    # if the server is stopped, crashes, or the script is killed, stop ngrok
+    Stop-Process -Name "ngrok"
+    write-host "Stopped Ngrok"
+}
+</code></pre>
+</div>
+    </sidebyside>
+
 The <code>=log=stdout</code> flag tells ngrok to print to the shell normally, instead of displaying a custom shell UI. Your public address will be listed in the log as a message that looks like this: 
 <code>lvl=info msg="started tunnel" obj=tunnels name=command_line addr=//localhost:25565 url=tcp://0.tcp.ngrok.io:18239</code>
 <br><br>
+The Windows Batch script cannot detect when it is terminated, while the Powershell and *nix scripts can. 
 On macOS (zsh), the async ngrok process will automatically be stopped when the script is stopped. On Linux this is not always the case. 
 Test this on your distro and shell to determine the behavior and adjust the script accordingly.
 </div>
