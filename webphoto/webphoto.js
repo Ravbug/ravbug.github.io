@@ -511,7 +511,7 @@ filePicker.onchange = function(){
         let doc = JSON.parse(e.target.result);
         //load the image if the file describes one
         if (doc["img"]){
-            document.getElementById("imgdata").href.baseVal = doc["img"]
+            document.getElementById("image").src = doc["img"]
         }
 
         //load custom SVG filters
@@ -574,17 +574,19 @@ async function exportHTML(){
     for(let group of data["adj"]){
         if (group["on"]){
             for(let filter of group["adj"]){
-                if (filter["name"] != "svg"){
-                    filtersInUse.push(`${filter["name"]}(${filter["val"]}${filters[filter["name"]]["unit"]})`);
-                }
-                else if (filter["name"] == "svg"){
-                    filtersInUse.push(`url(#${filter["val"]})`);
-
-                    if (systemSVG.querySelector(`#${filter["val"]}`)){
-                        copySystemSVG = true;
+                if (filter["on"]){
+                    if (filter["name"] != "svg"){
+                        filtersInUse.push(`${filter["name"]}(${filter["val"]}${filters[filter["name"]]["unit"]})`);
                     }
-                    else if (userSVG.querySelector(`#${filter["val"]}`)){
-                        copyUserSVG = true;
+                    else if (filter["name"] == "svg"){
+                        filtersInUse.push(`url(#${filter["val"]})`);
+
+                        if (systemSVG.querySelector(`#${filter["val"]}`)){
+                            copySystemSVG = true;
+                        }
+                        else if (userSVG.querySelector(`#${filter["val"]}`)){
+                            copyUserSVG = true;
+                        }
                     }
                 }
             }
