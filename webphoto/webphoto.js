@@ -592,5 +592,5 @@ async function exportHTML(){
             }
         }
     }
-    download("webPhotoHTMLExport.html",`<img src='${data.img}' style='filter:${filtersInUse.join(" ")};'><svg>${copySystemSVG?systemSVG.innerHTML:""}${copyUserSVG?userSVG.innerHTML:""}</svg>`);
+    download("webPhotoHTMLExport.html",`<img src='${data.img}' style='filter:${filtersInUse.join(" ")};'><svg style="position:absolute;width:0px;height:0px">${copySystemSVG?systemSVG.innerHTML:""}${copyUserSVG?userSVG.innerHTML:""}</svg>`);
 }
