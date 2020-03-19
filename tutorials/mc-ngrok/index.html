@@ -38,6 +38,7 @@
 
     <h3>Part 0: Download the Minecraft server software</h3>
     If you already have a server set up, you can skip to Part 1.<br>
+    If you want to extend a LAN world instead of a dedicated server you can also skip to Part 1. <br>
     You can download the server software for the latest release version of 
     <a href="https://www.minecraft.net/en-us/download/server/">Minecraft Java Edition here</a>.
     <br>
@@ -57,6 +58,7 @@
     <ol>
         <li>Start Ngrok: <code>./ngrok tcp 25565</code><br>
             If you're using a port other than the default port, update the last argument above accordingly.
+            <br> <u>This works with LAN worlds too!</u> Upon opening the world to LAN, write the port listed in the game's chat instead of 25565 in the ngrok command. 
         </li>
         <li>
             Start the Minecraft server: <code>java -jar server.jar nogui</code><br>
