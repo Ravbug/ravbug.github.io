@@ -291,6 +291,12 @@ data = [
                     ref:"tutorials/optifine-no-java/"
                 },
                 {
+                    title: "Enable Touch Bar Function keys in Minecraft",
+                    img:"tutorials/mc-touchbar/touch.svg",
+                    tag:"Use the F1, F2, etc keys on the Touch Bar when playing Minecraft Java Edition",
+                    ref:"tutorials/mc-touchbar"
+                },
+                {
                     title:"How to render and composite zDepth",
                     img:"img/layers.svg",
                     tag:"Set up Maya render layers and Nuke nodes",

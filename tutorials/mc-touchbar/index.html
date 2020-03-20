@@ -1,0 +1,55 @@
+<html>
+<head>
+    <title>Enable Touch Bar Function keys in Minecraft </title>
+    <meta name="description" content="Use the F1, F2, etc keys on the Touch Bar when playing Minecraft Java Edition on Mac">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
+
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/tutorials/mc-touchbar/touch.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+</head>
+
+<div class="main">
+    Opening System Preferences and navigating to <code>Keyboard > Shortcuts > Function Keys</code> does not allow you to add 
+    the Java executable so that you can use the numbered function keys on the Touch Bar while playing Minecraft Java Edition.
+    Fortunately, you can work around this limitation with a simple terminal command. 
+
+    <ol>
+        <li><b>Open Terminal</b><br>
+            There are a few ways to do this. You can open <code>/Applications/Utilities</code> in the Finder and double-click Terminal,
+            or you can search for <code>Terminal</code> in spotlight.
+        </li>
+        <li>
+            <b>Paste the following command into terminal and press return:</b><br>
+            <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys</code>
+            <br><img class=responsiveimg src="terminal.png">
+            <br>
+            This will add Java to the list of programs set to display the numbered function row keys. It will not be visible in the
+            System Preferences window. 
+        </li>
+        <li>
+            <b>Open Activity Monitor.</b> <br> You can open this program with spotlight or by navigating to <code>/Applications/Utilities</code> 
+            in Finder like you did to open Terminal.
+        </li>
+        <li>
+            Search for <code>touch</code> and select all listed TouchBar processes. There may be more than just TouchBarServer listed. 
+            Select them in the list, press the gray x button in the toolbar, then press Quit on the dropdown. 
+            <br><img class="responsiveimg" src="activitymonitor.png">
+            <br>The TouchBar should go blank and then re-appear. 
+        </li>
+        <li>
+            <b>Open Minecraft.</b> The TouchBar should show the numbered function row keys instead of the Now Playing area and a large blank space.
+        </li>
+    </ol>
+    Once you have followed these steps, you can use the function row keys to easily bring up the debug screen, switch cameras, and take screenshots
+    without needing to press FN.
+    <br><br>
+    <h3 id="experts">Shortcut commands for power users <a href="#experts">🔗</a></h3>
+    <b>Enable: </b><code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys && sudo killall TouchBarServer NowPlayingTouchUI ControlStrip</code><br>
+</div>
+
+</html>
+<script src="../../header.js"></script>
