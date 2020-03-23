@@ -103,7 +103,7 @@ data = [
                 {
                     title:"QReaper",
                     tag:"A Discord bot which deletes QR Codes it sees",
-                    ref:"https://qreaper.glitch.me",
+                    ref:"https://github.com/ravbug/qreaper",
                     img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
                 },
                 {
