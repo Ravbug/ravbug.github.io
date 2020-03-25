@@ -1,0 +1,147 @@
+<head>
+    <title id="title">Ravbug Math Viewer</title>
+    <meta name="description" content="Dynamic Embedded Graph Viewer">
+    <link id="favicon" rel="icon" href="graph.svg" type="image/x-icon">
+
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://ravbug.github.io/math/view/graph.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+
+</head>
+<style>
+    body{
+        margin:0;
+    }
+    iframe{
+        width:100%;
+        height:100%;
+        border:none;
+    }
+</style>
+
+<body style="margin:0">
+    <iframe id="frame" src=""></iframe>
+    <meta charset="UTF-8">
+</body>
+
+<script src="../../utilities.js"></script>
+<script>
+    {
+
+        //use the "g" url argument
+        let args = urlArgsAsDict();
+
+        //query to graph URL table
+        const table = {
+            "autolinearization":{
+                "url":"https://www.desmos.com/calculator/0tlmnqkpvm",
+                "title":"Auto Linearization"
+            },
+            "cartanim":{
+                "url":"https://www.desmos.com/calculator/roztvsr7b0",
+                "title":"Cart Animation"
+            },
+            "cartanim2":{
+                "url":"https://www.desmos.com/calculator/wamtdno150",
+                "title":"Cart Animation 2"
+            },
+            "pi":{
+                "url":"https://www.desmos.com/calculator/mdlkem8s5y",
+                "title":"Calculating π"
+            },
+            "concavity":{
+                "url":"https://www.desmos.com/calculator/zfptmullil",
+                "title":"Concavity"
+            },
+            "inverse-extrapolate":{
+                "url":"https://www.desmos.com/calculator/20wvzuxvpm",
+                "title":"Extrapolating Inverse Functions"
+            },
+            "taylorpoly":{
+                "url":"https://www.desmos.com/calculator/naijl8uirz",
+                "title":"Taylor Polynomial"
+            },
+            "arclen":{
+                "url":"https://www.desmos.com/calculator/zdffgygj9b",
+                "title":"Arc Length"
+            },
+            "sdq":{
+                "url":"https://www.desmos.com/calculator/n6fm0zfoq8",
+                "title":"Derivative via SDQ"
+            },
+            "simple-harmonic":{
+                "url":"https://www.desmos.com/calculator/q3m5h3idjk",
+                "title":"Simple Harmonic"
+            },
+            "integral-approx":{
+                "url":"https://www.desmos.com/calculator/hjnw2i2oh2",
+                "title":"Integrals Approximation"
+            },
+            "simpleint":{
+                "url":"https://www.desmos.com/calculator/oqfpwypchw",
+                "title":"Simple Integrals"
+            },
+            "dualint":{
+                "url":"https://www.desmos.com/calculator/m17fi1la2i",
+                "title":"Dual Integrals"
+            },
+            "tableint":{
+                "url":"https://www.desmos.com/calculator/l0kgymnlgv",
+                "title":"Table integrals"
+            },
+            "local-linear":{
+                "url":"https://www.desmos.com/calculator/zdmxovhr3j",
+                "title":""
+            },
+            "differentiability":{
+                "url":"https://www.desmos.com/calculator/f7nkei6wid",
+                "title":"differentiability"
+            },
+            "c-finder":{
+                "url":"https://www.desmos.com/calculator/occbuvmky7",
+                "title":"Integral C Finder"
+            },
+            "anti-derivative":{
+                "url":"https://www.desmos.com/calculator/shwy9vrq4j",
+                "title":"Antiderivatives"
+            },
+            "inverse-function":{
+                "url":"https://www.desmos.com/calculator/j4qpcek13w",
+                "title":"Inverse Functions"
+            },
+            "planets-simple":{
+                "url":"https://www.desmos.com/calculator/vlruvxqnxz",
+                "title":"Planetary Model Circular"
+            },
+            "planets":{
+                "url":"https://www.desmos.com/calculator/1hf2j5wcev",
+                "title":"Planetary Model"
+            },
+            "slopefield":{
+                "url":"https://www.desmos.com/calculator/1pse6lzlen",
+                "title":"Slope Field Generator"
+            },
+            "derivatives":{
+                "url":"https://www.desmos.com/calculator/oekk6oefmk",
+                "title":"Tangent and Normal Line"
+            },
+            "slope":{
+                "url":"https://www.desmos.com/calculator/wp9vnhxpja",
+                "title":"Average Rate of Change"
+            }
+        }
+
+        let val = table[args["g"]];
+        
+        //go to notfound if the url is not present in the table
+        if (val == undefined){
+            window.location = "/404"
+        }
+
+        document.getElementById("frame").src=val.url;
+        document.getElementById("title").innerHTML = `${val.title} - Ravbug Graph View`;
+        document.currentScript.remove();
+    }
+</script>
