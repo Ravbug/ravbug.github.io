@@ -54,6 +54,30 @@ data = [
                     ref:"https://github.com/Ravbug/MCSoundsExtractorCPP",
                 },
                 {
+                    title:"Cleverbug",
+                    img:"https://images-ext-1.discordapp.net/external/FZ6XbC9DP_MCNKIog6TaBwbnO0qIW7mCAd7KGrUGkPs/%3Fsize%3D256/https/cdn.discordapp.com/avatars/374793801455108097/34cd9178a4f93f3dfb14fa55a0f3f74f.png",
+                    tag:"A fun chatbot for your Discord server",
+                    ref:"https://cleverbug.glitch.me"
+                },
+                {
+                    title:"AutoResponder",
+                    img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
+                    tag:"A customizable, regex-powered responder bot for your Discord server",
+                    ref:"https://autoresponder.glitch.me",
+                },
+                {
+                    title:"PoetryBot",
+                    tag:"A Discord bot which writes original poems using text from webpages",
+                    ref:"https://poetrybot.glitch.me",
+                    img:"https://images-ext-1.discordapp.net/external/IQgrzgr3aTx3n93OQ4v4zgpIom92b8VDMcnox5VrcBg/%3Fsize%3D256/https/cdn.discordapp.com/avatars/592779132233056277/b1f8cbff5010de682266ed3073b69b4a.png"
+                },
+                {
+                    title:"QReaper",
+                    tag:"A Discord bot which deletes QR Codes it sees (Self-host only)",
+                    ref:"https://github.com/ravbug/qreaper",
+                    img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
+                },
+                {
                     title:"Maya Scripts",
                     img:"img/maya.png",
                     tag:"MEL and Python tools for Autodesk Maya",
@@ -71,46 +95,28 @@ data = [
                     ref: "webphoto/"
                 },
                 {
+                    title:"CodeVisualizer",
+                    tag:"A live-updating webpage editor in your browser!",
+                    ref:"codevisualizer/",
+                    img:"img/code.svg"
+                },
+                {
+                    title:"Calculator",
+                    tag:"A fast scientific calculator in your browser",
+                    ref:"calculator/",
+                    img:"calculator/icon.svg"
+                },
+                {
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
                     tag:"Quickly get a list of the best professors for your classes",
                     ref:"rate-my-professors-scraper/",
                 },
                 {
-                    title:"AutoResponder",
-                    img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
-                    tag:"A customizable, regex-powered responder bot for your Discord server",
-                    ref:"https://autoresponder.glitch.me",
-                },
-                {
-                    title:"Cleverbug",
-                    img:"https://images-ext-1.discordapp.net/external/FZ6XbC9DP_MCNKIog6TaBwbnO0qIW7mCAd7KGrUGkPs/%3Fsize%3D256/https/cdn.discordapp.com/avatars/374793801455108097/34cd9178a4f93f3dfb14fa55a0f3f74f.png",
-                    tag:"A fun chatbot for your Discord server",
-                    ref:"https://cleverbug.glitch.me"
-                },
-                {
                     title:"Legacy Web Cleverbug",
                     img:"cleverbug-alpha/cleverbot.png",
                     tag:"The webpage-based ancestor to the Cleverbug Discord bot. Source available!",
                     ref:"cleverbug-alpha/"
-                },
-                {
-                    title:"PoetryBot",
-                    tag:"A Discord bot which writes original poems using text from webpages",
-                    ref:"https://poetrybot.glitch.me",
-                    img:"https://images-ext-1.discordapp.net/external/IQgrzgr3aTx3n93OQ4v4zgpIom92b8VDMcnox5VrcBg/%3Fsize%3D256/https/cdn.discordapp.com/avatars/592779132233056277/b1f8cbff5010de682266ed3073b69b4a.png"
-                },
-                {
-                    title:"QReaper",
-                    tag:"A Discord bot which deletes QR Codes it sees",
-                    ref:"https://github.com/ravbug/qreaper",
-                    img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
-                },
-                {
-                    title:"CodeVisualizer",
-                    tag:"A live-updating webpage editor in your browser!",
-                    ref:"codevisualizer/",
-                    img:"img/code.svg"
                 },
                 {
                     title:"Ravbug's Funetik Alphabet",
@@ -123,12 +129,6 @@ data = [
                     img: "yt-audio/yt.svg",
                     tag: "An audio-only player for YouTube videos and playlists. Does not (intentionally) reduce data usage.",
                     ref:"yt-audio/"
-                },
-                {
-                    title:"Calculator",
-                    tag:"A fast scientific calculator in your browser",
-                    ref:"calculator/",
-                    img:"calculator/icon.svg"
                 },
                 {
                     title:"Article Summarizer",
