@@ -147,7 +147,7 @@ function selectChanged(select){
             <tr><td>Audio Sample Rate</td><td> ${item['audioSampleRate']} Hz</td></tr>
             <tr><td>Duration in ms</td><td> ${item['approxDurationMs']}</td></tr>
             <tr><td>Bitrate </td><td> ${item['bitrate']} (avg ${item['averageBitrate']})</td></tr>
-            <tr><td>Content Length </td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
+            <tr><td>File Size </td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
             <tr><td>Quality </td><td> ${item['quality']}</td></tr>
             <tr><td>Mime type </td><td> ${item['mimeType']}</td></tr>
             </table>
@@ -167,7 +167,7 @@ function selectChanged(select){
             <table>
             <tr><td>Duration in ms</td><td> ${item['approxDurationMs']}</td></tr>
             <tr><td>Bitrate</td><td> ${item['bitrate']} (avg ${item['averageBitrate']})</td></tr>
-            <tr><td>Content Length</td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
+            <tr><td>File Size</td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
             <tr><td>Resolution</td><td> ${item['width']}✕${item['height']}</td></tr>
             <tr><td>Frame rate</td><td> ${item['fps']}</td></tr>
             <tr><td>Mime type</td><td> ${item['mimeType']}</td></tr>
