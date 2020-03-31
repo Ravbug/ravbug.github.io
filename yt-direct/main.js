@@ -4,16 +4,23 @@ const cors = "https://cors-anywhere.herokuapp.com/";
 const options = document.getElementById('optionSelector');
 const videoPlayer = document.getElementById('video');
 const audioPlayer = document.getElementById('audio');
+const info = document.getElementById('info');
 
 let videodata = [];
 
-async function run() {
+/**
+ * Runs the main process
+ * @require video field must be populated
+ */
+async function run(callback) {
+    info.innerHTML = "Loading";
+    info.style.display="";
     //get the video data structure from YouTube
-    let rawdata = await getVideoStats(document.getElementById('videoID').value);
+    let rawdata = await getVideoStats(YouTubeGetID(document.getElementById('videoID').value));
+    if (rawdata == undefined){
+        return;
+    }
     console.log(rawdata);
-
-    //download the manifest
-    //let manifestURL = getManifestURL(rawdata);
     
     videodata = [];
     let choices = [];
@@ -60,6 +67,9 @@ async function run() {
 
     //populate static video info section
     populateStaticData(rawdata);
+
+    info.style.display="none";
+    info.innerHTML = "";
 }
 
 /**
@@ -102,10 +112,12 @@ function selectChanged(select){
             document.getElementById('selectedVideoStats').innerHTML = 
             `
             <b>Selected Video Information</b><br>
-            Type: HLS Adaptive Bitrate Stream (.m3u8)<br>
-            Resolution: Variable<br>
-            Other information not available<br>
-            Not downloadable (select a different stream to download)
+            <table>
+            <tr><td>Type</td><td> HLS Adaptive Bitrate Stream (.m3u8)</td></tr>
+            <tr><td>Resolution</td><td> Variable</td></tr>
+            <tr><td>Other information</td><td> not available</td></tr>
+            </table>
+            Not accessible via direct link (select a different stream)
             `
         }
 
@@ -122,16 +134,18 @@ function selectChanged(select){
             //write audio details
             document.getElementById('selectedVideoStats').innerHTML = 
             `
+            <table>
             <b>Selected Audio Information</b><br>
-            Audio Channels: ${item['audioChannels']}<br>
-            Audio Quality: ${item['audioQuality']}<br>
-            Audio Sample Rate: ${item['audioSampleRate']} Hz<br>
-            Duration in ms: ${item['approxDurationMs']}<br>
-            Bitrate: ${item['bitrate']} (avg ${item['averageBitrate']})<br>
-            Content Length: ${item['contentLength']}<br>
-            Quality: ${item['quality']}<br>
-            Mime type: ${item['mimeType']}<br>
-            <a href="${item['url']}" target="_blank" download>Direct Resource Download Link</a>
+            <tr><td>Audio Channels</td><td> ${item['audioChannels']}</td></tr>
+            <tr><td>Audio Quality</td><td>${item['audioQuality']}</td></tr>
+            <tr><td>Audio Sample Rate</td><td> ${item['audioSampleRate']} Hz</td></tr>
+            <tr><td>Duration in ms</td><td> ${item['approxDurationMs']}</td></tr>
+            <tr><td>Bitrate </td><td> ${item['bitrate']} (avg ${item['averageBitrate']})</td></tr>
+            <tr><td>Content Length </td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
+            <tr><td>Quality </td><td> ${item['quality']}</td></tr>
+            <tr><td>Mime type </td><td> ${item['mimeType']}</td></tr>
+            </table>
+            <a href="${item['url']}" target="_blank" download>Direct GoogleVideo Resource Link</a>
             `;
         }
         //if video
@@ -144,15 +158,17 @@ function selectChanged(select){
             document.getElementById('selectedVideoStats').innerHTML = 
             `
             <b>Selected Video Information</b><br>
-            Duration in ms: ${item['approxDurationMs']}<br>
-            Bitrate: ${item['bitrate']} (avg ${item['averageBitrate']})<br>
-            Content Length: ${item['contentLength']}<br>
-            Resolution: ${item['width']}✕${item['height']}<br>
-            Frame rate: ${item['fps']}<br>
-            Mime type: ${item['mimeType']}<br>
-            Projection type: ${item['projectionType']}<br>
-            Quality: ${item['quality']} (${item['qualityLabel']})<br>
-            <a href="${item['url']}" target="_blank" download>Direct Resource Download Link</a>
+            <table>
+            <tr><td>Duration in ms</td><td> ${item['approxDurationMs']}</td></tr>
+            <tr><td>Bitrate</td><td> ${item['bitrate']} (avg ${item['averageBitrate']})</td></tr>
+            <tr><td>Content Length</td><td> ${item['contentLength']} (${contentLengthFormat(item['contentLength'])})</td></tr>
+            <tr><td>Resolution</td><td> ${item['width']}✕${item['height']}</td></tr>
+            <tr><td>Frame rate</td><td> ${item['fps']}</td></tr>
+            <tr><td>Mime type</td><td> ${item['mimeType']}</td></tr>
+            <tr><td>Projection type</td><td> ${item['projectionType']}</td></tr>
+            <tr><td>Quality</td><td> ${item['quality']} (${item['qualityLabel']})</td></tr>
+            </table>
+            <a href="${item['url']}" target="_blank" download>Direct GoogleVideo Resource Link</a>
             `;
         }
     }
@@ -172,6 +188,26 @@ function getManifestURL(rawdata){
         }
     }
     return undefined;
+}
+
+/**
+ * Formats a content length value
+ * @param {string} value the string content length value
+ */
+function contentLengthFormat(value){
+    value = parseInt(value);
+    let size = 1000;
+    let suffix = [" bytes", " KB", " MB", " GB", " TB"];
+    for (let i = 0; i < suffix.length; i++){
+        let compare = Math.pow(size,i);
+        if (value <= compare){
+            let minus = 0;
+            if (i > 0){
+                minus = 1;
+            }
+            return (value/Math.pow(size,i-minus)).toFixed(2) + suffix[i - minus];
+        }
+    }
 }
 
 /**
@@ -203,7 +239,32 @@ async function getVideoStats(id) {
         let res_str = await httpGetPromise(`${cors}https://www.youtube.com/get_video_info?video_id=${id}`);
         let key = "player_response=";
         let idx = res_str.indexOf(key);
-        res_str = JSON.parse(decodeURIComponent(res_str.substring(idx + key.length, res_str.indexOf("&", idx))));
+        try{
+            res_str = JSON.parse(decodeURIComponent(res_str.substring(idx + key.length, res_str.indexOf("&", idx))));
+        }
+        catch(e){
+            info.innerHTML="Error: Unable to load or parse response."
+            resolve(undefined);
+        }
         resolve(res_str);
     });
 }
+
+  /**
+  * Get YouTube ID from various YouTube URL
+  * @param {string} url the URL to extract
+  * @attribution: https://gist.github.com/takien/4077195
+  */
+
+ function YouTubeGetID(url) {
+    var ID = '';
+    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if (url[2] !== undefined) {
+      ID = url[2].split(/[^0-9a-z_\-]/i);
+      ID = ID[0];
+    }
+    else {
+      ID = url;
+    }
+    return typeof ID == "object"? ID[0] : ID;
+  }

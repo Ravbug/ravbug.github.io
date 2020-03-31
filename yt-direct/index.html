@@ -1,18 +1,59 @@
 <head>
-    <meta charset='utf-8'>
     <title>YouTube Direct Video</title>
-    <meta description="Access the direct resource URLs for YouTube media">
+    <meta name="description" content="Access the direct resource URLs for YouTube media">
+    <link id="favicon" rel="icon" href="../img/youtube.svg" type="image/x-icon">
+    <meta charset='utf-8'>
 </head>
 
-<input id="videoID" value=""></input>
-<button onclick="run()">Get Data</button>
-<select id="optionSelector" onchange='selectChanged(this)'></select>
+<style>
+.jumbotron{
+    margin-bottom:0 !important; 
+}
+table,td{
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+tr:nth-child(even){
+    background-color: #EEEE;
+}
+video,audio{
+    width:100%;
+}
+.responsive{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
+.space{
+    margin-bottom:5px;
+}
 
-<br>
-<video style="display:none;" controls id="video"></video>
-<audio style="display:none;" controls id="audio"></audio>
-<p id="selectedVideoStats"></p>
-<p id="staticVidStats"></p>
+</style>
 
+<div class="main">
+    <div class="input-group" style="margin-bottom:7px">
+        <input class="form-control" id="videoID" value="" placeholder="Paste a YouTube video ID or full YouTube URL"></input>
+        <span class="input-group-append">
+            <button class="btn btn-primary" onclick="run((a)=>{alert(a)})">Get Data</button>
+        </span>
+    </div>
+    <div class='space'>
+        Select resource: <select id="optionSelector" onchange='selectChanged(this)'>
+            <option disabled>Load a video first</option>
+        </select>
+    </div>
+    <div class='space'>
+        <video style="display:none;" controls id="video"></video>
+        <audio style="display:none;" controls id="audio"></audio>
+    </div>
+    <div style="display:none" id="info" class="alert-info"></div>
+    <div class="responsive">
+        <p id="selectedVideoStats"></p>
+        <p id="staticVidStats"></p>   
+    </div>
+    <div class="breadcrumb">
+        Note: Not every YouTube video's media is accessible. Only download or access videos that you have rights to.
+    </div>
+</div>
 
 <script src="main.js"></script>
+<script src="../header.js"></script>
