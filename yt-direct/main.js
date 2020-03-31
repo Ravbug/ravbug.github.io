@@ -72,6 +72,12 @@ async function run(callback) {
     info.innerHTML = "";
 }
 
+function keyPress(event){
+    if (event.keyCode == 13){
+        run();
+    }
+}
+
 /**
  * Writes values into the static video details section
  * @param {Object} rawdata the get_video_info structure

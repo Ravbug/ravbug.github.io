@@ -31,7 +31,7 @@ video,audio{
 
 <div class="main">
     <div class="input-group" style="margin-bottom:7px">
-        <input class="form-control" id="videoID" value="" placeholder="Paste a YouTube video ID or full YouTube URL"></input>
+        <input class="form-control" id="videoID" value="" onkeyup="keyPress(event)" placeholder="Paste a YouTube video ID or full YouTube URL"></input>
         <span class="input-group-append">
             <button class="btn btn-primary" onclick="run((a)=>{alert(a)})">Get Data</button>
         </span>
@@ -51,7 +51,8 @@ video,audio{
         <p id="staticVidStats"></p>   
     </div>
     <div class="breadcrumb">
-        Note: Not every YouTube video's media is accessible. Only download or access videos that you have rights to.
+        Note: Not every YouTube video's media is accessible, and not every format available in the resource picker is compatible with your browser or available to access. 
+        <br>To download a video, right-click it in the player and select Download / Save Video. Only download videos that you have rights to.
     </div>
 </div>
 
