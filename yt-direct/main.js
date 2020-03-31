@@ -99,6 +99,14 @@ function selectChanged(select){
         //Safari supports .m3u8 but Firefox does not
         if (videodata[i]['type'] = 'hlsManifestUrl'){
             videoPlayer.src = videodata[i]['url'];
+            document.getElementById('selectedVideoStats').innerHTML = 
+            `
+            <b>Selected Video Information</b><br>
+            Type: HLS Adaptive Bitrate Stream (.m3u8)<br>
+            Resolution: Variable<br>
+            Other information not available<br>
+            Not downloadable (select a different stream to download)
+            `
         }
 
         //if this is a DashManifest then more work is required
@@ -110,12 +118,42 @@ function selectChanged(select){
             videoPlayer.style.display = 'none';
             audioPlayer.style.display = '';
             audioPlayer.src = item['url'];
+
+            //write audio details
+            document.getElementById('selectedVideoStats').innerHTML = 
+            `
+            <b>Selected Audio Information</b><br>
+            Audio Channels: ${item['audioChannels']}<br>
+            Audio Quality: ${item['audioQuality']}<br>
+            Audio Sample Rate: ${item['audioSampleRate']} Hz<br>
+            Duration in ms: ${item['approxDurationMs']}<br>
+            Bitrate: ${item['bitrate']} (avg ${item['averageBitrate']})<br>
+            Content Length: ${item['contentLength']}<br>
+            Quality: ${item['quality']}<br>
+            Mime type: ${item['mimeType']}<br>
+            <a href="${item['url']}" target="_blank" download>Direct Resource Download Link</a>
+            `;
         }
         //if video
         else{
             audioPlayer.style.display = 'none';
             videoPlayer.style.display = '';
             videoPlayer.src = item['url'];
+
+            //write video details
+            document.getElementById('selectedVideoStats').innerHTML = 
+            `
+            <b>Selected Video Information</b><br>
+            Duration in ms: ${item['approxDurationMs']}<br>
+            Bitrate: ${item['bitrate']} (avg ${item['averageBitrate']})<br>
+            Content Length: ${item['contentLength']}<br>
+            Resolution: ${item['width']}✕${item['height']}<br>
+            Frame rate: ${item['fps']}<br>
+            Mime type: ${item['mimeType']}<br>
+            Projection type: ${item['projectionType']}<br>
+            Quality: ${item['quality']} (${item['qualityLabel']})<br>
+            <a href="${item['url']}" target="_blank" download>Direct Resource Download Link</a>
+            `;
         }
     }
 }
