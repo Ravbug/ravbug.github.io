@@ -20,7 +20,6 @@ async function run(callback) {
     if (rawdata == undefined){
         return;
     }
-    console.log(rawdata);
     
     videodata = [];
     let choices = [];
