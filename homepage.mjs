@@ -137,12 +137,6 @@ data = [
                     img:"img/t_pen.svg"
                 },
                 {
-                    title:"Editable BSODs",
-                    tag:"An editable Windows blue screen of death, using content-editable divs",
-                    ref:"bsod/",
-                    img:"img/windows.svg"
-                },
-                {
                     title:"Emojitizer",
                     tag:"Convert text into Emojis like it's the year 2100",
                     ref:"emojitizer/",
@@ -167,12 +161,6 @@ data = [
                     img:"img/t_camera_flash.svg"
                 },
                 {
-                    title:"Random Number Generator",
-                    tag:"Generate random numbers in a range and guarantee no repeats",
-                    ref:"rng/",
-                    img:"img/t_dice.svg"
-                },
-                {
                     title:"Text Transformer",
                     tag:"Fun typo generator",
                     ref:"texttransformer/",
@@ -183,6 +171,18 @@ data = [
                     tag:"Download the full-size thumbnail for a YouTube video",
                     ref:"thumbnaildownloader/",
                     img:"img/youtube.svg"
+                },
+                {
+                    title: "YouTube Direct Video downloader",
+                    tag: "Access the direct high-quality media URLs of YouTube videos",
+                    ref: "yt-direct/",
+                    img: "yt-direct/icon.svg"
+                },
+                {
+                    title:"Editable BSODs",
+                    tag:"An editable Windows blue screen of death, using content-editable divs",
+                    ref:"bsod/",
+                    img:"img/windows.svg"
                 },
                 {
                     title:"Discord Block Letters",
@@ -201,6 +201,12 @@ data = [
                     tag:"Find factors and common factors of numbers",
                     ref:"factors/",
                     img:"img/t_obelus.svg"
+                },
+                {
+                    title:"Random Number Generator",
+                    tag:"Generate random numbers in a range and guarantee no repeats",
+                    ref:"rng/",
+                    img:"img/t_dice.svg"
                 },
             ]
         },
