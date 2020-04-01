@@ -20,8 +20,14 @@ table,td{
     padding: 5px;
 }
 tr:nth-child(even){
-    background-color: #EEEE;
+    background-color:#EEE
 }
+@media (prefers-color-scheme: dark) {
+    tr:nth-child(even){
+        background-color: rgba(30,30,30);
+    }
+}
+
 video,audio{
     width:100%;
 }
