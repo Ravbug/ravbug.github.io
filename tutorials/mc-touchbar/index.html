@@ -25,7 +25,11 @@
         <li>
             <b>Paste the following command into terminal and press return:</b><br>
             <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys</code>
-            <br><img class=responsiveimg src="terminal.png">
+            <br><picture>
+                    <source srcset="terminal.png" media="(prefers-color-scheme: light)"></source>
+                    <source srcset="terminal_dark.png" media="(prefers-color-scheme: dark)"></source>
+                    <img src="terminal.png" class=responsiveimg>
+                </picture>
             <br>
             This will add Java to the list of programs set to display the numbered function row keys. It will not be visible in the
             System Preferences window. 
@@ -37,7 +41,13 @@
         <li>
             Search for <code>touch</code> and select all listed TouchBar processes. There may be more than just TouchBarServer listed. 
             Select them in the list, press the gray x button in the toolbar, then press Quit on the dropdown. 
-            <br><img class="responsiveimg" src="activitymonitor.png">
+            <br>
+            <picture>
+                <source srcset="activitymonitor.png" media="(prefers-color-scheme: light)"></source>
+                <source srcset="activitymonitor_dark.png" media="(prefers-color-scheme: dark)"></source>
+                <img class="responsiveimg" src="activitymonitor.png">
+            </picture>
+            
             <br>The TouchBar should go blank and then re-appear. 
         </li>
         <li>
