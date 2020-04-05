@@ -1,0 +1,30 @@
+
+<head>
+    <title>Web Knowledge</title>
+    <meta name="description" content="Ask a question, get answers">
+    <meta charset="utf-8">
+</head>
+
+<style>
+    .jumbotron{
+        margin-bottom:0px !important;
+    }
+    #output{
+        overflow:scroll;
+    }
+</style>
+
+
+<div class="main">
+    <div class="input-group" style="margin-bottom:7px">
+        <input id="input" placeholder="Enter a topic" class="form-control" value="Valley Forge National Park" onkeyup="keyhandle(event)"></input>
+        <span class="input-group-append">
+            <button class="btn btn-success" onclick="search()">Get Info</button>
+        </span>
+    </div>
+    <div id="output"></div>
+</div>
+
+
+<script src="main.js"></script>
+<script src="../header.js"></script>
