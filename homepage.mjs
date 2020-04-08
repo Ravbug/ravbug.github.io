@@ -66,12 +66,6 @@ data = [
                     ref:"https://autoresponder.glitch.me",
                 },
                 {
-                    title:"PoetryBot",
-                    tag:"A Discord bot which writes original poems using text from webpages",
-                    ref:"https://poetrybot.glitch.me",
-                    img:"https://images-ext-1.discordapp.net/external/IQgrzgr3aTx3n93OQ4v4zgpIom92b8VDMcnox5VrcBg/%3Fsize%3D256/https/cdn.discordapp.com/avatars/592779132233056277/b1f8cbff5010de682266ed3073b69b4a.png"
-                },
-                {
                     title:"QReaper",
                     tag:"A Discord bot which deletes QR Codes it sees (Self-host only)",
                     ref:"https://github.com/ravbug/qreaper",
@@ -105,6 +99,12 @@ data = [
                     tag:"A fast scientific calculator in your browser",
                     ref:"calculator/",
                     img:"calculator/icon.svg"
+                },
+                {
+                    title:"PoetryBot Web",
+                    tag:"Writes original poems using the text on webpages",
+                    ref:"poetry/",
+                    img:"poetry/icon.png"
                 },
                 {
                     title:"Rate My Professors Scraper",
