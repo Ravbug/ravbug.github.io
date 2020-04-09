@@ -119,6 +119,12 @@ data = [
                     ref:"cleverbug-alpha/"
                 },
                 {
+                    title:"Instabook",
+                    img:"instabook/encyclopedia.svg",
+                    tag:"Get a short blurb about anything",
+                    ref:"instabook/",
+                },
+                {
                     title:"Ravbug's Funetik Alphabet",
                     img:"img/dictionary.svg",
                     tag:"What if English spelling was phonetic?",
