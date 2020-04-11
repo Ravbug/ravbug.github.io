@@ -74,7 +74,7 @@ async function processURL(url,school,classname){
         catch(e){resolve();return;}
 
         //sanity check: correct classes listed?
-        let classes = dummy.getElementsByClassName('RatingHeader__StyledClass-sc-1dlkqw1-2 hBbYdP');
+        let classes = dummy.getElementsByClassName('RatingHeader__StyledClass-sc-1dlkqw1-2');
         let correct = 0;
         for (let cl of classes){
             if (cl.innerText.toLowerCase() == classname){
@@ -88,17 +88,17 @@ async function processURL(url,school,classname){
 
         //get the name
         let summary = {};
-        let name = dummy.getElementsByClassName('NameTitle__Name-dowf0z-0 cjgLEI')[0];
+        let name = dummy.getElementsByClassName('NameTitle__Name-dowf0z-0')[0];
         name = name.innerText.trim().split(' ');
         name = name[0] + " " + name[name.length-1];
         summary["Name"] = name;
 
         //get the rating info
-        let scores = dummy.getElementsByClassName('RatingValue__Numerator-qw8sqy-2 gxuTRq')[0];
+        let scores = dummy.getElementsByClassName('RatingValue__Numerator-qw8sqy-2')[0];
         summary["Grade"] = parseFloat(scores.innerText);
 
         //calculate the average difficulty (Rate my professors removed this summary stat)
-        let diffs = dummy.getElementsByClassName("RatingValues__RatingValue-sc-6dc747-3 cKZySD");
+        let diffs = dummy.getElementsByClassName("RatingValues__RatingValue-sc-6dc747-3");
         let difficulty = 0;
         for (let diff of diffs){
             difficulty += parseFloat(diff.innerText);
