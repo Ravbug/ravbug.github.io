@@ -106,11 +106,11 @@ async function processURL(url,school,classname){
         summary["Difficulty"] = (difficulty/diffs.length).toFixed(2);
 
         //get the number of ratings
-        let nratings = dummy.getElementsByClassName("TeacherRatingTabs__StyledTab-pnmswv-1 cuqpDu react-tabs__tab--selected")[0];
+        let nratings = dummy.getElementsByClassName("TeacherRatingTabs__StyledTab-pnmswv-1")[0];
         summary["Ratings"] = parseInt(nratings.innerHTML);
 
         //get the review dates, find the most recent
-        let dates = dummy.getElementsByClassName("TimeStamp__StyledTimeStamp-sc-9q2r30-0 huIsPy RatingHeader__RatingTimeStamp-sc-1dlkqw1-3 ctCDUI")
+        let dates = dummy.getElementsByClassName("TimeStamp__StyledTimeStamp-sc-9q2r30-0")
         let newest = new Date(0);
         let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         for (let date of dates){
