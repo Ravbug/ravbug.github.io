@@ -29,6 +29,13 @@
     article {
         gap: 10px;
     }
+
+    /* Auto darkmode the images with some filters */
+    @media (prefers-color-scheme: dark) {
+        img{
+            filter: invert() hue-rotate(180deg);
+        }
+    }
 </style>
 
 <div class="main">
