@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Minecraft Google Translate Resource Packs</title>
-    <meta name="description" content="'Google Mineral Reserve Packs'">
+    <meta name="description" content="Translating Minecraft too many times">
     <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
     <meta property="og:image" content="https://ravbug.github.io/mc-googletranslate/main.png">
     <meta property="og:image:type" content="image/png">
@@ -21,38 +21,41 @@
     <p>
         Inspired by <a target="_blank"
             href="https://www.reddit.com/r/PhoenixSC/comments/cnbe4l/google_translate_minecraft/">DutChen18</a>,
-        I created two Google Translate resource packs for Minecraft Java Edition 1.14. All text in the game has been translated,
+        I created two Google Translate resource packs for Minecraft Java Edition 1.16. All text in the game has been translated,
         including the splash texts, the end poem, and the game's credits.
     </p>
     <p>
-        There are two packs available: a 10x translation and a 30x translation. 
+        There are two versions available: a 10x translation and a 30x translation. 
     </p>
     <p>
         To get around Google's IP tempban (which they impose if you spam the translation URL too much), I created a
         Google Spreadsheet which performs the translations using the <code>GOOGLETRANSLATE()</code> call. Then, I
-        wrote a program which takes the JSON langauge file and converts it to a CSV. I pasted
-        the CSV's cells into the spreadsheet and waited until the next day. After downloading the results as a CSV, 
-        I wrote a second program to convert the CSV back to JSON. 
-    </p>
-    <p>
-        Unlike DutChen18 I didn't think to pre-process the <code>%s</code> / <code>%1$s</code> special tokens in the
-        language file before dumping as a CSV, so I had to fix those manually. If anything is broken, 
-        please tell me (comment on the <a href="https://www.reddit.com/r/Minecraft/comments/e6itja/google_translate_resource_packs_10x_and_30x/">reddit thread</a>) so I can fix it.
+        wrote a C++ program which takes the JSON langauge file and coverts it to a TSV (Tab-separated values). I pasted
+        the TSV's cells into the spreadsheet and waited a couple hours. I wrote a pnython script to download the spreadsheet directly as plain text and 
+        used a second C++ program I wrote to convert the spreadsheet back to JSON. The source code for these programs is available <a target="_blank" href="https://github.com/Ravbug/GameGoogleTranslate">on GitHub</a>.
     </p>
     <p>
         If you want to mess around with translation telephone, I made a webpage which lets you do that easily. 
         You can visit it here: <a href="../hypertranslate/">Hypertranslate</a>. Note that if you use this too much
-        Google will temporarily block your IP (since it runs clientside) and it will stop working. 
+        Google will temporarily block your IP (it runs client-side) and it will stop working. 
     </p>
     <h4>How to use</h4>
         <ol>
-            <li>Place the .zip files inside <code>minecraft/resourcepacks</code> and extract them.</li>
-            <li>Open Minecraft, select Options > Resource Packs, and enable the resource pack you want to use.</li>
-            <li>Return to the Options menu, select Language, then find Google Translate in the list and select it.</li>
+            <li>Place the .zip files inside your resourcepacks folder at <code>minecraft/resourcepacks</code> and extract them.</li>
+            <li>Open Minecraft, select Options > Resource Packs, and enable the resource pack you want to use. <b>It will not be active right away.</b></li>
+            <li><b>Important!</b> Return to the Options menu, select Language, then find Google Translate in the list and select it.</li>
             <li>Return to the menu. The text should be changed.</li>
         </ol>
-        <h6><a href="http://bit.ly/37ZW6iO">Download 10x pack</a></h6>
-        <h6><a href="http://bit.ly/2DXYNnv">Download 30x pack</a></h6>
+    <hr>
+    <h4>Downloads</h4>
+        
+        <h6><a href="https://bit.ly/3h3e3kX">Download 10x pack for 1.16+</a></h6>
+        <h6>Download 30x pack for 1.16+ coming soon</h6>
+        <details>
+            <summary>Older Downloads</summary>
+            <h6><a href="http://bit.ly/37ZW6iO">10x pack for 1.14</a></h6>
+            <h6><a href="http://bit.ly/2DXYNnv">30x pack for 1.14</a></h6>
+        </details>
     <hr>
     <img src="main.png">
     <img src="options.png">
