@@ -311,7 +311,7 @@ data = [
                 {
                     title:"How to render and composite zDepth",
                     img:"img/layers.svg",
-                    tag:"Set up Maya render layers and Nuke nodes",
+                    tag:"Set up Maya render layers and Nuke nodes for a fast hardware-accelerated depth pass",
                     ref:"tutorials/zdepth",
                 },
                 {
