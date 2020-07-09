@@ -154,12 +154,12 @@ data = [
                     ref:"hypertranslate/",
                     img:"img/googletranslate.svg"
                 },
-                {
-                    title:"JConsole",
-                    tag:"An interactive JavaScript playground",
-                    ref:"jconsole/",
-                    img:"img/t_pager.svg"
-                },
+                // {
+                //     title:"JConsole",
+                //     tag:"An interactive JavaScript playground",
+                //     ref:"jconsole/",
+                //     img:"img/t_pager.svg"
+                // },
                 {
                     title:"Motion Remover",
                     tag:"Generate a clean still image from a video by removing the moving objects",
