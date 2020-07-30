@@ -46,7 +46,7 @@
         header.className = "jumbotron header";
         header.innerHTML = `
         <div style="display:grid;grid-template-columns:100px 1fr;grid-template-rows:1fr;gap:10px;padding-bottom:10px">
-            <img src=${getFavicon()} style="width:100%;height:100%;">
+            <img src=${getFavicon()} style="width:100%;height:100%;max-width:100px;max-height:100px">
             <div>
                 <span style="color:white">${page_title}</span>
                 <p style="color:white">${page_desc}</p> 
