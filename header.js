@@ -27,12 +27,31 @@
         for (let card of data){
             menus.push(`<a class="headerlink btn btn-primary header-nonessential" href="/#${card.title.toLowerCase().replace(/ /g,'_')}">${card.title}</a>`);
         }
+
+        function getFavicon(){
+            let favicon = undefined;
+            let nodeList = document.getElementsByTagName("link");
+            for (let i = 0; i < nodeList.length; i++)
+            {
+                if((nodeList[i].getAttribute("rel") == "icon")||(nodeList[i].getAttribute("rel") == "shortcut icon"))
+                {
+                    favicon = nodeList[i].getAttribute("href");
+                }
+            }
+            return favicon;
+        }
+
         //construct jumbotron
         let header = document.createElement('div');
         header.className = "jumbotron header";
         header.innerHTML = `
-        <span style="color:white">${page_title}</span>
-        <p style="color:white">${page_desc}</p> 
+        <div style="display:grid;grid-template-columns:100px 1fr;grid-template-rows:1fr;gap:10px;padding-bottom:10px">
+            <img src=${getFavicon()} style="width:100%;height:100%;">
+            <div>
+                <span style="color:white">${page_title}</span>
+                <p style="color:white">${page_desc}</p> 
+            </div>
+        </div>
         ${menus.join(' ')}
         `;
 
