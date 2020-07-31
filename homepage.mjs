@@ -38,7 +38,7 @@ data = [
                 {
                     title:"Unity Hub Native",
                     tag:"A lighting-fast native rewrite of the Unity Hub in C++",
-                    ref:"https://github.com/ravbug/unityhubnative/",
+                    ref:"unityhubnative/",
                     img:"img/unityhubnative.png"
                 },
                 {
@@ -51,7 +51,7 @@ data = [
                     title:"Minecraft Sounds Extractor",
                     img:"img/mcextractor.png",
                     tag:"Extract the audio files from Minecraft Java Edition",
-                    ref:"https://github.com/Ravbug/MCSoundsExtractorCPP",
+                    ref:"mcsounds-extractor/",
                 },
                 {
                     title:"Cleverbug",
