@@ -95,6 +95,12 @@ data = [
                     img:"img/code.svg"
                 },
                 {
+                    title:"MarkdownViz",
+                    tag:"A live markdown editor in your browser!",
+                    ref:"markdownviz/",
+                    img:"markdownviz/markdown.svg"
+                },
+                {
                     title:"Calculator",
                     tag:"A fast scientific calculator in your browser",
                     ref:"calculator/",
