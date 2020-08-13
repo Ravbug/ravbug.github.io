@@ -110,6 +110,10 @@ if (arg != undefined){
   editor.setValue(atob(decodeURIComponent(arg)));
   writeURLArgs([]);
 }
+else{
+  editor.setValue(samplecode);
+}
+delete samplecode;
 
 render();
 changeFont(document.getElementById("fontSize").value)
