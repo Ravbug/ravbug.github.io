@@ -10,7 +10,7 @@ On load, the script will hit that url. To minimize overhead, point the bitly url
 //do not load if local file
 {
     async function load(sourcescript){
-        if(!window.location.protocol === "file:"){
+        if(window.location.protocol != "file:"){
             //load url
            await fetch(document.currentScript.getAttribute('url'));
         }
