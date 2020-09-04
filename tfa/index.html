@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Ravbug's Funetik Alphabet</title>
+    <title>Twain's Funetik Alphabet</title>
     <meta name="description" content="A consistent spelling for English. (Ä kunsistunt speling for Inglish) ">
     <link id="favicon" rel="icon" href="../img/dictionary.svg" type="image/x-icon">
     <meta charset="UTF-8">
@@ -45,7 +45,7 @@
             </div>
             <div>
                 <article style="grid-template-columns: 1fr 100px">
-                    <h3>RFA English</h3>
+                    <h3>Phonetic English</h3>
                    <button onclick="onCopy()" class="btn btn-primary">Copy Text</button>
                 </article>
                 <div id=output class="breadcrumb">Tïp or päst ingglish tekst hër. Werdz hïlïtid in <err>red</err> küd
@@ -61,41 +61,43 @@
         
         <br>
         <article style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));">
-            <div class="breadcrumb">
-                <h3>What is RFA?</h3>
-                English is an incredibly inconsistent language, especially when it comes to spelling.
-                The inconsistency stems mainly from the language's tendency to borrow words from other languages,
-                and then Englishify their spellings (or not!). <br><br>
+            <div class="breadcrumb">    
+            <h3>A Plan for the Improvement of English Spelling</h3>
+            <p>by Mark Twain</p>
+            <blockquote>
+                <p>
+                For example, in Year 1 that useless letter "c" would be dropped to be replased either by "k" or "s", 
+                and likewise "x" would no longer be part of the alphabet. The only kase in which "c" would be retained 
+                would be the "ch" formation, which will be dealt with later. Year 2 might reform "w" spelling, so that 
+                "which" and "one" would take the same konsonant, wile Year 3 might well abolish "y" replasing it with 
+                "i" and Iear 4 might fiks the "g/j" anomali wonse and for all.
+                </p>
 
-                Well we can't have that, can we! This tool proposes a consistent, phonetic spelling for English.
-                After all, if the Germans could do it, so can we!<br><br>
+                <p>
+                Jenerally, then, the improvement would kontinue iear bai iear with Iear 5 doing awai with useless double 
+                konsonants, and Iears 6-12 or so modifaiing vowlz and the rimeining voist and unvoist konsonants. 
+                Bai Iear 15 or sou, it wud fainali bi posibl tu meik ius ov thi ridandant letez "c", "y" and "x" -- bai 
+                now jast a memori in the maindz ov ould doderez -- tu riplais "ch", "sh", and "th" rispektivli.
+                </p>
 
+                <p>
+                Fainali, xen, aafte sam 20 iers ov orxogrefkl riform, wi wud hev a lojikl, kohirnt speling in ius xrewawt 
+                xe Ingliy-spiking werld. 
+                </p>
+            </blockquote>
+
+                This tool proposes a consistent, phonetic spelling for English, using Twain as inspiration.
                 The table to the right (or below, for mobile users) shows the complete symbol map of the new spelling
-                system. English has 26 letters, but there are 84 (counting lexical stress) possible sounds!
-                Since many of the sounds are very similar, I condensed the character set by using the same
-                character for all the lexical stress variants. If a word turns <err>red</err>, it means
-                the tool does not know the pronunciation for that word, so it did not translate it. <br><br>
-
-                But what about homophones or homonyms? English is kind of garbage that way, and this tool cannot rectify
-                this inherent English flaw without fancy AI that wouldn't run well the browser. <br><br>
+                system. It accounts for the 84 possible sounds (counting lexical stress) in English with additional letters where necessary.
+                If a word turns <err>red</err>, it means the tool does not know the pronunciation for that word and left it untranslated. <br><br>
 
                 Carnegie Mellon University created and is currently maintaining a large pronunciation dictionary, which
-                this tool uses underneath. You can find out more about the
+                this tool uses. You can find out more about the
                 <a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict">CMU Pronunciation Dictionary</a> here.
                 <br><br>
 
-                In addition, this tool has some fun ECMAScript6 features, namely running the "translation" on a
-                background
-                thread via <a
-                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">WebWorkers</a>.
-                It shouldn't (hopefully) lag your browser when processing a lot of text. However, you will need a <a
-                    href="https://caniuse.com/#feat=webworkers">modern browser</a>
-                to use this tool.
-                <br><br>
-                If it wasn't obvious, <b>this is satire.</b> This spelling system looks like the Norwegian and German
-                languages had a
-                child and raised it in the southern United States.
-
+                You will need a <a href="https://caniuse.com/#feat=webworkers">modern browser</a> to use this tool because it uses 
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">WebWorkers</a>.
             </div>
             <div>
                 <h3>Symbol mapping</h3>
@@ -126,7 +128,7 @@
         //statistics
         const alphabet = new Set("abcdefghijklmnopqrstuvwxyz".split(''));
 
-        //unique letters in RFA
+        //unique letters in TFA
         rfa_s = new Set(Object.values(charset));
 
         //calculate removed letters

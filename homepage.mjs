@@ -131,10 +131,10 @@ data = [
                     ref:"instabook/",
                 },
                 {
-                    title:"Ravbug's Funetik Alphabet",
+                    title:"Twain's Funetik Alphabet",
                     img:"img/dictionary.svg",
                     tag:"What if English spelling was phonetic?",
-                    ref:"rfa/"
+                    ref:"tfa/"
                 },
                 {
                     title:"YouTube Audio Player",

@@ -59,7 +59,7 @@ onmessage = function(e){
         //look up token
         let pronounciation = dict[word];
         if (pronounciation != undefined){
-            //convert the symbols to RFA
+            //convert the symbols to TFA
             let translated = [];
             for (let i in pronounciation){
                 translated[i] = symlist[e.data[1]][pronounciation[i]];
