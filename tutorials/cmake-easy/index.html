@@ -70,7 +70,7 @@ cmake_minimum_required(VERSION 3.17)
  </code></pre>
             Next, we need to declare our project. We do this with the <code>project</code> command:
 <pre><code class="cmake">
-project("my-proect") 
+project("my-project") 
 </code></pre>
             This creates a project named <code>my-project</code>. Use your project's name.<br>
             After that, you need to set what C++ version your project uses. You do this with the following code:
@@ -88,7 +88,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 <pre><code class="cmake">
 add_executable("${PROJECT_NAME}" "src/main.cpp" "src/helper.cpp" "include/your-project/main.hpp" "include/your-project/helper.hpp")
 </code></pre>
-            This will create an executable program using the four files listed above. Paths are relative to the location of the CMakeLists.txt.
+            This will create an executable program using the four files listed above. Paths are relative to the location of the CMakeLists.txt. Note <code>${PROJECT_NAME}</code> CMake will substitute this variable to the name of your project. 
+            This way, if you update the name of your project, your targets also update.
 </p>
 <p>
             But, you may ask, what if I have many files? I do not want to type all of them in manually! Fortunately, we can have CMake find the files we want using a GLOB. Replace the above line with the code below:
@@ -189,7 +190,7 @@ target_link_libraries("${PROJECT_NAME}"
 cmake_minimum_required(VERSION 3.17)   
 
 # Declare our project and set it to use C++17
-project("my-proect") 
+project("my-project") 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
