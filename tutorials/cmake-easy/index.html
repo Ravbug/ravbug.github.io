@@ -224,7 +224,7 @@ target_link_libraries("${PROJECT_NAME}"
     Now that our <code>CMakeLists.txt</code> is complete, we can use it to generate our build system and compile our program. First, we want to create a build directory for our program:
 <pre><code class="bash">
 cd your-project
-mkdir -p buiild && cd build
+mkdir -p build && cd build
 </code></pre>
     This is because we always want to build out-of-source, or in other words, we want to isolate all of the compiled data from our project from our source code. This makes it much easier to manage our project, for example, to
     ignore all compiled data we simply add <code>build/</code> to our <code>.gitignore</code>, and to create a completely fresh build, we just delete the build directory.
