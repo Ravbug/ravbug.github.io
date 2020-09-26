@@ -1,0 +1,278 @@
+<html>
+<head>
+    <title>CMake Made Easy</title>
+    <meta name="description" content="A simple but effective CMake tutorial for beginners">
+    <link id="favicon" rel="icon" href="cmake_icon.svg" type="image/x-icon">
+    <meta charset="utf-8">
+    
+     <!-- Social icon -->
+     <meta property="og:image" content="https://www.ravbug.com/tutorials/cmake/cmake_icon.png">
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="256">
+     <meta property="og:image:height" content="256">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+    <div class="main">
+        <p>
+       
+            Cross-platform build systems are a must for any cross-platform project. For C and C++, CMake is the defacto standard. 
+            However, CMake can be difficult to learn for beginners, especially given the amount of outdated or incorrect information on the internet.
+        </p>
+        <p>
+       
+            This guide provides a simple but complete getting started tutorial for modern CMake. Open your favorite text editor and let's go!
+        </p>
+        <p>
+        
+            Note: this guide assumes you have CMake installed. See <a href="https://cmake.org/download/">CMake Downloads</a> for a version for your platform.
+        </p>
+
+        <h2>File structure</h2>
+        <p>
+            A CMake project typically has the following structure:<br>
+            <pre>
+└── 📂 your-project/
+    ├── 📄 CMakeLists.txt
+    ├── 📂 src/
+    │   ├── 📝 main.cpp
+    │   └── 📝 helper.cpp
+    ├── 📂 include/
+    │   └── 📂 your-project
+    │       ├── 📝 main.hpp
+    │       └── 📝 helper.hpp
+    ├── 📂 helper_library/
+    |   ├──  📂 src/
+    |   |   └── 📝 lib.cpp
+    |   └── 📂 include/
+    |       └── 📂 helper_library/
+    |           └── 📝 lib.hpp
+    └── 📂 3rdparty
+        ├── 📂 external_library1
+        └── 📂 external_library2
+            </pre>
+            If your project does not have a similar structure, the first thing you will want to do is reorganize it to match. This guide will refer to items in the above diagram. 
+        </p>
+        <hr>
+        <h3>Initial setup</h3>
+        <p>
+            The first thing a CMakeLists.txt needs is the minimum CMake version your project works with. 
+            I recommend setting this to your currently installed CMake version, which you can get by running <code>cmake --version</code>. 
+            In my case, I have CMake 3.17 intalled, so at the top of my CMakeLists.txt, I write:
+<pre><code class="cmake">
+cmake_minimum_required(VERSION 3.17)   
+ </code></pre>
+            Next, we need to declare our project. We do this with the <code>project</code>> command:
+<pre><code class="cmake">
+project("my-proect") 
+</code></pre>
+            This creates a project named <code>my-project</code>. Use your project's name.<br>
+            After that, you need to set what C++ version your project uses. You do this with the following code:
+<pre><code class="cmake">
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+</code></pre>
+            This will set the current project to use C++17. 
+        </p>
+        <hr>
+        <h3>Creating an Executable</h3>
+        <p>
+            Once you have your main project set up, the next step is to create an executable. 
+            To do this, we need to tell CMake which source files to use for our executable.
+<pre><code class="cmake">
+add_executable("${PROJECT_NAME}" "src/main.cpp" "src/helper.cpp" "include/your-project/main.hpp" "include/your-project/helper.hpp")
+</code></pre>
+            This will create an executable program using the four files listed above. Paths are relative to the location of the CMakeLists.txt.
+</p>
+<p>
+            But, you may ask, what if I have many files? I do not want to type all of them in manually! Fortunately, we can have CMake find the files we want using a GLOB. Replace the above line with the code below:
+<pre><code class="cmake">
+file(GLOB MY_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
+add_executable("${PROJECT_NAME}" ${MY_SOURCES})
+</code></pre>            
+        This will instruct CMake to find all of the files with the file extensions .cpp, .h, and .hpp, in the directories <code>src</code> and <code>include/your-project</code>, and add them to a variable named <code>MY_SOURCES</code>. 
+        We then instruct CMake to create the executable using the filenames written to <code>MY_SOURCES</code>. 
+        </p>            
+            In general, use GLOB if:
+            <ol>
+                <li>Your project has > 10 files</li>
+                <li>You anticipate adding many new files</li>
+            </ol>
+            Here, GLOB will help you by automatically adding the new files as you add or rename them. Note that GLOB does not search recursively. GLOB does have a recursive mode but it is not covered in this guide.
+            <br><br>
+            In general, hard-code filenames if:
+            <ol>
+                <li>Your project has < 10 files</li>
+                <li>You do not anticipate adding many new files or renaming many files</li>
+            </ol>
+            In the case of small projects, the filesystem search cost of GLOB is not worth the convenience afforded by it. 
+        </p>
+        <hr>
+        <h3>Creating a Library</h3>
+        <p>
+            Creating a library is identical to creating an executable. However, instead of using <code>add_executable</code>, use <code>add_library</code>:
+<pre><code class="cmake">
+add_library("${PROJECT_NAME}_helper_lib" "helper_library/src/lib.cpp" "helper_library/include/helper_library/lib.hpp")
+</code></pre>
+            By default, this will create a static library. For the purposes of this guide, a static library is fine.
+            <p>
+                However, in the case of a library, we want to make our header files available to executables or other libraries that link to it. We do this with the <code>target_include_directories</code> command:
+<pre><code class="cmake">
+target_include_directories("${PROJECT_NAME}_helper_lib"
+    PUBLIC 
+    "helper_library/include"
+    PRIVATE
+    "include/helper_library/include"
+)
+</code></pre>
+        Notice that we seem to add the include directories twice. This serves two purposes: 
+        <ol>
+            <li>
+                Expose our <code>helper_library/include</code> directory as a <u>public</u> include directory, so that code using our. 
+                library can include files from it using <code class="cpp">#include &lt;your_library/lib.hpp&gt</code>
+            </li>
+            <li>
+                Expose files in our <code>helper_library/include</code> directory as <u>private</u>-includable items. 
+                This will allow us to simply <code class="cpp">#include "lib.hpp"</code> directly within any C++ file that is part of the library. 
+                However, code using the library must include it with the angle brackets and specify the directlory. 
+            </li>
+        </ol>
+            </p>
+        </p>
+
+        <hr>
+        <h3>Adding third-party CMake Libraries</h3>
+        <p>
+        You will often want to use one of the many thousands of free open-source C++ libraries in your projects. 
+        You probably know the pain of manually figuring out how to link those libraries to your project for each platform you support.
+        Fortunately, CMake makes linking libraries cross-platform easy, with the <code>add_subdirectory</code> command.
+<pre><code class="cmake">
+add_subdirectory("3rdparty/external_library1")
+add_subdirectory("3rdparty/external_library2")
+</code></pre>
+        This will instruct CMake to visit the directories <code>3rdparty/external_library1</code> and <code>3rdparty/external_library1</code>, execute their <code>CMakeLists.txt</code> files, 
+        and make the resulting libraries, executables, and targets available to your <code>CMakeLists.txt</code>. <code>add_subdirectory</code> only works if that directory has a <code>CMakeLists.txt</code>,
+        but it does not have to be used exclusively for third party libraries. In fact, combining <code>add_subdirectory</code> with separated CMake projects is an excellent way to modularize your code. 
+</p>
+
+        <hr>
+        <h3>Linking libraries</h3>
+        <p>
+        Now that we've added our own library and two third party libraries, we want to make them available to our executable. We do this by linking them. 
+<pre><code class="cmake">
+target_link_libraries("${PROJECT_NAME}"
+    PRIVATE 
+    "helper_lib"
+    "external_library1"
+    "external_library2"
+)
+</code></pre>
+    This will take our executable, and link it to our three libraries. Note the <code>PRIVATE</code> access specifier. In the case of an executable it does not matter, but when linking libraries to other libraries,
+    you can enforce encapsulation by preventing include directories from the component libraries being made available to the library or executable that links to the main library. In general, you 
+    will want to use PRIVATE as much as possible when linking libraries.
+    </p>
+    <p>
+        Note: Some older CMake libraries do not work with <code>PRIVATE</code>. In that case, you will need to use <code>PUBLIC</code> when linking those libraries.
+    </p>
+
+    <hr>
+    <h3>The complete sample CMakeLists.txt</h3>
+    Compare your CMakeLists.txt with this one. If something goes wrong in the steps to follow, use this as a template:
+<pre><code class="cmake">
+# CMakeLists.txt
+cmake_minimum_required(VERSION 3.17)   
+
+# Declare our project and set it to use C++17
+project("my-proect") 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Add our main executable
+file(GLOB MY_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
+add_executable("${PROJECT_NAME}" ${MY_SOURCES})
+
+# Add our library and make its headers available
+add_library("${PROJECT_NAME}_helper_lib" "helper_library/src/lib.cpp" "helper_library/include/helper_library/lib.hpp")
+target_include_directories("${PROJECT_NAME}_helper_lib"
+    PUBLIC 
+    "helper_library/include"
+    PRIVATE
+    "include/helper_library/include"
+)
+
+# Add third party libraries
+add_subdirectory("3rdparty/external_library1")
+add_subdirectory("3rdparty/external_library2")
+
+# Link everything together
+target_link_libraries("${PROJECT_NAME}"
+    PRIVATE 
+    "helper_lib"
+    "external_library1"
+    "external_library2"
+)
+</code></pre>
+    <hr>
+    <h3>Generating build systems with CMake</h3>
+    <p>
+    Now that our <code>CMakeLists.txt</code> is complete, we can use it to generate our build system and compile our program. First, we want to create a build directory for our program:
+<pre><code class="bash">
+cd your-project
+mkdir -p buiild && cd build
+</code></pre>
+    This is because we always want to build out-of-source, or in other words, we want to isolate all of the compiled data from our project from our source code. This makes it much easier to manage our project, for example, to
+    ignore all compiled data we simply add <code>build/</code> to our <code>.gitignore</code>, and to create a completely fresh build, we just delete the build directory.
+    </p>
+    <p>
+    With our terminal cd'ed into our build directory, we can instruct CMake to generate a build system for us. CMake supports a wide variety of IDEs and build systems for many platforms.
+    To get the list of supported systems, known as <u>generators</u>, simply run <code>cmake --help</code> and look at the bottom of the output. On a typical Linux or macOS computer,
+    you will see something similar to the following
+<pre>
+    * Unix Makefiles             = Generates standard UNIX makefiles.
+    Ninja                        = Generates build.ninja files.
+    Ninja Multi-Config           = Generates build&lt;Config&gt;.ninja files.
+    Xcode                        = Generate Xcode project files.
+    CodeBlocks - Ninja           = Generates CodeBlocks project files.
+    CodeBlocks - Unix Makefiles  = Generates CodeBlocks project files.
+    CodeLite - Ninja             = Generates CodeLite project files.
+    CodeLite - Unix Makefiles    = Generates CodeLite project files.
+    Sublime Text 2 - Ninja       = Generates Sublime Text 2 project files.
+    Sublime Text 2 - Unix Makefiles
+                                 = Generates Sublime Text 2 project files.
+    Kate - Ninja                 = Generates Kate project files.
+    Kate - Unix Makefiles        = Generates Kate project files.
+    Eclipse CDT4 - Ninja         = Generates Eclipse CDT 4.0 project files.
+    Eclipse CDT4 - Unix Makefiles= Generates Eclipse CDT 4.0 project files.
+</pre>
+    To generate a build system, run the following: <code>cmake -G "generator name here" ..</code>. This will instruct CMake to use the generator you chose to generate a build system for the parent directory (<code>..</code>),
+    which is where our top-level <code>CMakeLists.txt</code> is. If you leave out the -G flag, CMake will use the default generator for your computer.
+    </p>
+    <p>
+        Upon executing the command, you will see CMake looking for compiler features. This may take a while depending on the generator you chose. Once it has completed we are ready to build!
+    </p>
+
+    <hr>
+    <h3>Compiling with CMake</h3>
+    <p>
+        If you want to compile with an IDE, simply open the generated project file for that IDE and press build inside it as you normally would. For example, if you used the Xcode generator, you would open <code>build/your-project.xcodeproj</code> 
+    </p>
+    <p>
+        If you want to build from the shell, you should not invoke the build system's commands directly. Instead, use CMake's build command inside your build directory:
+<pre><code class="sh">
+cmake --build . --config Debug --target ALL_BUILD --parallel
+</code></pre>
+        This will work regardless of the build system you chose, even if it is an IDE. 
+    </p>
+
+    Next simply look inside the folder for the configuration you chose, and execute your program!
+    </div>
+</body>
+
+<script src="../../header.js"></script>
+<script src="../../statistics.js" url="https://bit.ly/2EGRgNO"></script>  

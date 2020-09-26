@@ -285,6 +285,12 @@ data = [
             title:"Tutorials",
             content:[
                 {
+                    title:"CMake Made Easy",
+                    img:"tutorials/cmake-easy/cmake_icon.svg",
+                    tag:"A simple but effective CMake tutorial for beginners",
+                    ref:"tutorials/cmake-easy"
+                },
+                {
                     title:"Rapid Discord.js tutorial",
                     img:"tutorials/discordjs/discordjs.png",
                     tag:"A condensed Discord.js bot tutorial for experienced developers, includes starter code.",
