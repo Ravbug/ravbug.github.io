@@ -116,7 +116,7 @@ add_executable("${PROJECT_NAME}" ${MY_SOURCES})
         <hr>
         <h3>Creating a Library</h3>
         <p>
-            Creating a library is identical to creating an executable. However, instead of using <code>add_executable</code>, use <code>add_library</code>:
+            Creating a library is nearly identical to creating an executable. However, instead of using <code>add_executable</code>, use <code>add_library</code>:
 <pre><code class="cmake">
 add_library("${PROJECT_NAME}_helper_lib" "helper_library/src/lib.cpp" "helper_library/include/helper_library/lib.hpp")
 </code></pre>
@@ -128,7 +128,7 @@ target_include_directories("${PROJECT_NAME}_helper_lib"
     PUBLIC 
     "helper_library/include"
     PRIVATE
-    "include/helper_library/include"
+    "helper_library/include/helper_library"
 )
 </code></pre>
         Notice that we seem to add the include directories twice. This serves two purposes: 
