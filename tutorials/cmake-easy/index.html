@@ -214,7 +214,7 @@ add_subdirectory("3rdparty/external_library2")
 # Link everything together
 target_link_libraries("${PROJECT_NAME}"
     PRIVATE 
-    "helper_lib"
+    "${PROJECT_NAME}_helper_lib"
     "external_library1"
     "external_library2"
 )
