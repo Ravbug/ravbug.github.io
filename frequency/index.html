@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>Frequency to Period</title>
+        <meta name="description" content="Convert frequency to period with customizable units">
+        <link id="favicon" rel="icon" href="lambda.svg" type="image/x-icon">
+
+         <!-- Social icon -->
+        <meta property="og:image" content="https://www.ravbug.com/frequency/lambda.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="128">
+        <meta property="og:image:height" content="134">
+    </head>
+    <style>
+        .grid{
+            display:grid;
+            grid-template-columns: 80px 1fr 80px;
+        }
+    </style>
+    <body>
+        <div class="main">
+            <p>
+                <div class="grid">
+                    Frequency
+                    <input type="number" id="frequency" onchange="calculate(true)"></input>
+                    <select name="freq" id="freq" onchange="calculate(lastConversion)">
+                        <option value="GHz">GHz</option>
+                        <option value="MHz">MHz</option>
+                        <option value="KHz">KHz</option>
+                        <option value="Hz">Hz</option>
+                    </select>
+                    Period
+                    <input type="number" id="period" onchange="calculate(false)"></input>
+                    <select name="per" id="per" onchange="calculate(lastConversion)">
+                        <option value="ps">ps</option>
+                        <option value="ns">ns</option>
+                        <option value="us">μs</option>
+                        <option value="ms">ms</option>
+                        <option value="s">s</option>
+                    </select>
+                </div>
+            </p>
+            <p>
+                <div class="breadcrumb">
+                    Type a valid number into either field, then press the enter key. 
+                    The converted unit will appear in the opposite field.
+                </div>
+            </p> 
+        </div>
+    </body>
+    <script>
+        const frequency = document.getElementById('frequency');
+        const period = document.getElementById('period');
+        const frequnits = document.getElementById('freq');
+        const perunits = document.getElementById('per');
+
+        const frequencies = {
+            "Hz" : 1,
+            "KHz" : 1/(1e-3),
+            "MHz" : 1/(1e-6),
+            "GHz" : 1/(1e-9)
+        };
+
+        const periods  = {
+            "ps" : 1/(1e-12),
+            "ns" : 1/(1e-9),
+            "μs" : 1/(1e-6),
+            "ms" : 1/(1e-3),
+            "s" : 1
+        };
+
+        lastConversion = false;
+
+        /**
+         * Get the selected item as text
+         * @param sel a HTML <select> element
+         * @return the string label for this element
+         */ 
+        function selectedText(sel) {
+            return sel.options[sel.selectedIndex].text;
+        }
+
+
+        /**
+         * Calculate the frequency or period
+         * @param direction true for F->P, false for P->F
+         */
+        function calculate(direction){
+            if(direction){
+                let freqInHz = frequency.value * frequencies[selectedText(frequnits)];
+                
+                let pInS = 1/freqInHz;
+                
+                period.value = pInS * periods[selectedText(perunits)];
+            }
+            else{
+                let pInS = period.value * periods[selectedText(perunits)];
+                
+                let freqInHz = 1/pInS;
+
+                frequency.value = freqInHz * frequencies[selectedText(frequnits)];
+            }
+            lastConversion = direction;
+        }
+
+        calculate();
+    </script>
+</html>
+<script src="../header.js"></script>
+<script src="../statistics.js" url="https://bit.ly/"></script>
