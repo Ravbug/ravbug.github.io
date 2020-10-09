@@ -1,0 +1,153 @@
+
+<h2>2: Structuring and Libraries</h2>
+
+<p>
+    Now that I've decided to reinvent the wheel, it is time to decide how not to reinvent the wheel. Which brings me to my first rule: always plan before you program!
+    I plan out everything ahead of time on a simple text document, from what the code will do to how the API will look. This saves a lot
+    of time, because iterating on paper is cheap. I've spent far less time rewriting code after adopting this strategy.
+</p>
+<p>
+    Since I am writing my engine in C++, I have access to the wealth of open source C++ libraries that have been developed over the lifetime of C++.
+    Indeed, if you can think it, there is a C++ library for it. Mostly. There may be a library, but not the way that you want.
+</p>
+<p>
+    Ultimately I decided to provide a unified interface which may or may not call into a library underneath. Ideally, a client programmer should not need
+    to know or care that a library is in use, and this also leaves me free to switch out underlying libraries as long as I keep the API's behavior the same.
+</p>
+<p>
+    Scratching the surface of the libraries I researched for this project:
+    <ul>
+        <li>
+            Physics:
+            <ul>
+                <li>
+                    Bullet
+                </li>
+                <li>
+                    PhysX
+                </li>
+            </ul>
+        </li>
+        <li>
+            Windowing & Input
+            <ul>
+                <li>
+                    SDL2
+                </li>
+                <li>
+                    GLFW
+                </li>
+            </ul>
+        </li>
+        <li>
+            Math
+            <ul>
+                <li>
+                    glm
+                </li>
+            </ul>
+        </li>
+        <li>
+            Rendering
+            <ul>
+                <li>
+                    BGFX
+                </li>
+                <li>
+                    MethaneKit
+                </li>
+                <li>
+                    LLGL
+                </li>
+                <li>
+                    Ogre NEXT
+                </li>
+                <li>
+                    DiligentEngine
+                </li>
+                <li>
+                    Google Filament
+                </li>
+            </ul>
+        </li>
+    </ul>
+</p>
+<p>
+    But how to integrate these libraries? In the past, I manually created IDE projects for each platform that I supported. Typically, I supported macOS and Windows, with some Linux support. 
+    This practice was fine for small projects, like my Minecraft Sounds Extractor, but with a project the size of a game engine, it could not work.
+    In general, this practice has a few main issues:
+    <ol>
+        <li>
+            IDE configuration must be manually repeated for every supported platform
+        </li>
+        <li>
+            It forces the client programmers to use a specific toolchain (Xcode on Mac, Visual Studio on Windows) rather than use what they are comfortable with
+        </li>
+        <li>
+            Each build system has a different way of doing things, all of which must be learned
+        </li>
+        <li>
+            Client programmers must deal with all of the aforementioned problems
+        </li>
+    </ol>
+    </p>
+    <p>
+        In a future post, I will cover how I leverage CMake to streamline the user experience.
+    </p>
+    <p>
+        As I was researching libraries to use for my project, I saw that the vast majority used as system named CMake to generate an IDE project of your choice. I didn't know what it was,
+        and used it to generate the projects so that I could link them all together manually. However, I found that IDEs weren't designed to do this and so I ran into many strange errors when 
+        trying to compile my engine, many of which only happened sometimes and were not repeatable.  
+    </p>
+    <p>
+        I decided that I would learn how to use CMake, and make it the main build system of my engine. This was probably the best decision I have made in the making of this project. Yes, CMake 
+        is not perfect and can be obtuse at times, but all of the aforementioned main issues disappeared. In addition, I can automate aspects of the build process of my 
+        engine in ways that would be difficult to do in a cross-platform way, something which you can read about in a later post. 
+    </p>
+    <p>
+        If you want to learn CMake quickly and easily, I wrote a tutorial, which you can read here: <a href="../../../tutorials/cmake-easy/">CMake Made Easy</a>
+    </p>
+    <p>
+        As I was researching Entity-Component-System (ECS) libraries, I found a consistent but undesirable pattern to them: they try to be as "bare metal" as possible. In essence, they only use bare pointers
+        to stack memory and extremely simplistic structures in order to be as fast as possible. There is no memory sharing, everything is a fixed size, and often because of this, they are difficult to multithread and impose
+        many upwards-scalability issues. This is unfriendly to my design goals - I want to provide free multithreading and not impose arbitrary limitations about the number of objects a game can have at once - remember
+        that the default stack size on Windows is only 2 MB and does not dynamically scale! 
+    </p>
+    <p>
+        To solve this, I implemented a custom Entity-Component-System library which in which Entities, Components, and Systems are all classes. At first, this seems to violate the whole point of ECS - data first, not object first.
+        However, a data oriented design is not perfect, and in many ways, a data-oriented design is worse than an object-oriented design from a code maintainability perspective. However, complex object graphs 
+        can severely limit threading abilities. So I settled on a compromise:
+        <ul>
+            <li>
+                Entities are created via their constructors, and with inheritance, they can share construction implementations. This also allows them to be reference counted, which becomes important later.
+            </li>
+            <li>
+                An Entity and the World share ownership of components, via a hashing data structure. In this way, I can more smartly manage locking instead of require a global lock when creating, destroying, or querying resources.
+                In addition, I can query the components on an entity, or get all the entities with a particular component in a world, in constant time with no global locks. This is very important for multi threading.
+            </li>
+            <li>
+                Components are allowed to have code in them. In a Pure ECS model, this is very much banned. However any pure system imposes more limitations than it solves.
+            </li>
+            <li>
+                I implemented the ScriptComponent, which is essentially a parallelized Unity Monobehavior. The ScriptSystem executes a virtual <code>Tick()</code> on all enabled ScriptComponents after all other systems have run.
+                With this component, a programmer can elect to implement stateful logic in the objects themselves, and stateless logic in the Systems, leading to a cleaner and more maintainable codebase with appropriate separation of concerns.
+            </li>
+            <li>
+                Systems are allowed to maintain state. This also violates a core principle of ECS, but because Systems are a class instead of a function, they can have additional flexibility.
+                In addition, Systems can define their sort order via overriding an inherited function, leading to a very clean automatic implementation.
+            </li>
+        </ul> 
+        <p>
+            Basically, I used Object-Oriented Programming to implement Data Oriented Programming to implement Object Oriented Programming. You can use both design paradigms at the same time, depending on your needs, without feeling
+            hamstrung by the API. In addition, this design lends itself directly to multithreaded evaluation, so any overhead I introduced with this classes design I more than make up for with my threading implementation.
+            On a Ryzen 7 1700x, my engine can simulate over 150,000 entities at once at 60 frames per second. Currently, the bottleneck is the render engine, not the object model. In the future I can make this even better with smarter optimizations.     
+        </p>
+        <p>
+            This does not mean that my design is without fault - far from it. My design does not store all of its data as a contiguous block of memory. Because of this, my design cannot leverage features of some CPUs
+            such as SIMD to get some performance improvements. Instead my design favors parallelism via mutlicore instead of SIMD, which for now, provides performance that is more than good enough for my goals. 
+        </p>
+    </p>
+    <p>
+        Next Up: Memory Management via Automatic Reference Counting 
+    </p>
+</p>

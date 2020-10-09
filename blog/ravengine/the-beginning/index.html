@@ -1,0 +1,115 @@
+
+<h2>1: Writing a game engine, without writing a game engine</h2>
+Last updated: [today's date]
+
+<p>
+    I've been writing software since 2010, and have always been fascinated with game development. 
+    I got into the game development space in 2015, using engines like Unreal, Unity, and Godot. 
+</p>
+<p>
+    While each of these engines are extremely powerful and in dedicated hands will produce stunning results, I was always dissatisfied. My main gripes with each:
+</p>
+
+<ul>
+    <li>Unreal
+        <ul>
+            <li>
+                Extremely heavy (20+ GB!)
+            </li>
+            <li>
+                C++ documentation is poor to non-existent
+            </li>
+            <li>
+                Obtuse C++ API
+            </li>
+            <li>
+                Terrible performance on everything except high-end desktop and console.
+            </li>
+            <li>
+                UAsset format is binary, so hard to diff with git, and prone to corruption
+            </li>
+            <li>
+                Dreadfully slow iteration with C++
+            </li>
+            <li>
+                Lack of community-made resources and tutorials, compared to Unity and Godot
+            </li>
+        </ul>
+    </li>
+    <li>
+        Unity
+        <ul>
+            <li>
+                Editor is buggy and unresponsive
+            </li>
+            <li>
+                Painfully slow asset importing times
+            </li>
+            <li>
+                Users are constantly waiting for updates to fix editor bugs, which add more bugs
+            </li>
+            <li>
+                Features ship incomplete with no guarantee of future progress (RIP UNET)
+            </li>
+        </ul>
+       
+    </li>
+    <li>
+        Godot
+        <ul>
+            <li>
+                Does not scale upwards
+            </li>
+            <li>
+                Requires a custom slow programming language, bindings to other languages have poor documentation and/or are incomplete
+            </li>
+            <li>
+                Features behave in unexpected or incorrect ways, especially physics
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+    As COVID-19 hit and my second semester at the University of Michigan finished, I found myself in need of a summer project. I decided that I would write my own game engine.
+</p>
+<p>
+    I have a few major goals for my engine:
+    <ol>
+        <li>
+            Cross-platform, native, on mobile and desktop
+        </li>
+        <li>
+            Free automatic multi-threading via an Entity-Component-System model, while also supporting OOP
+        </li>
+        <li>
+            Offer a clean, well-documented, and easy to use Modern C++ API
+        </li>
+        <li>
+            Provide automatic memory management through reference counting instead of a garbage collector, to provide control over memory without risking leaks
+        </li>
+        <li>
+            Support modern rendering backends, like Metal, Vulkan, and DirectX
+        </li>
+    </ol>
+</p>
+<p>
+    There's one problem with that idea: writing your own game engine from the ground up is a colossal waste of time, and with these goals, I would have no hope of finishing. 
+    So instead, I decided to find out if I could write a game engine, without <i>writing</i> a game engine. I added two more goals:
+
+    <ul>
+        <li>
+            Leverage existing technology wherever possible
+        </li>
+        <li>
+            No GUI
+        </li>
+    </ul>
+    In essence: Don't reinvent the wheel (at least, not more than I already am by writing a game engine). The second one may seem a little odd though - how is no GUI better? 
+    It offers a few advantages: the complexity of creating a good UI is gone, and an engine GUI is often not necessary for the vast majority of engine tasks. Rather than design
+    my own workflow, I can design my engine as a library and leverage existing C++ compilers to do the work for me.
+</p>
+
+<p>
+    Next article: Structuring the engine, and libraries
+</p>
