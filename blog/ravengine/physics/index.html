@@ -1,0 +1,79 @@
+<h2>4: Physics simulation</h2>
+<script src="../date.js" date="9/15/2020"></script>
+<link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+<script src="../../../highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<p>
+    I cannot realistically implement a custom physics engine, nor should I. In fact, even Unity and Unreal (until recently)
+    use off-the-shelf physics engines. I decided to do the same.
+</p>
+<p>
+    I want my engine to take advantage of modern hardware. To that end, I one main requirement for physics engines:
+    <ol>
+        <li>
+            Multi-threaded evaluation (GPU if possible)
+        </li>
+    </ol>
+    After looking around, I found Bullet and PhysX as my top choices that satisfied this requirement. However, while Bullet had multi-threaded evaluation in the past, 
+    and an experimental OpenCL evaluator, both of those features were removed in recent versions for being unpredictable or 
+    unstable. That left only PhysX, which provides multi-threaded simulation on all platforms and GPU-accelerated simulation on 
+    Microsoft Windows on NVIDIA GPUs. Incidentally, both Unity and Unreal (prior to 4.26) use PhysX.
+</p>
+<p>
+    While PhysX uses CMake to build, the way you do this is not documented. You have to set up variables 
+    before you call <code>add_subdirectory</code> otherwise configure will fail. Code from my CMakeLists:
+<pre><code class="cmake"># PhysX-specific CMake project setup
+set(NV_USE_DEBUG_WINCRT ON CACHE BOOL "Use the debug version of the CRT")
+set(PHYSX_ROOT_DIR ${DEPS_DIR}/physx/physx CACHE INTERNAL "")
+set(PXSHARED_PATH ${PHYSX_ROOT_DIR}/../pxshared CACHE INTERNAL "")
+set(PXSHARED_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE INTERNAL "")
+set(PX_PHYSX_ ${CMAKE_INSTALL_PREFIX} CACHE INTERNAL "")
+set(CMAKEMODULES_VERSION "1.27" CACHE INTERNAL "")
+set(CMAKEMODULES_PATH ${PHYSX_ROOT_DIR}/../externals/cmakemodules CACHE INTERNAL "")
+set(PX_OUTPUT_LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE INTERNAL "")
+set(PX_OUTPUT_BIN_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} CACHE INTERNAL "")
+set(PX_GENERATE_STATIC_LIBRARIES ON CACHE INTERNAL "")
+#set(PX_FLOAT_POINT_PRECISE_MATH OFF)
+if (WIN32)
+    set(TARGET_BUILD_PLATFORM "windows" CACHE INTERNAL "")
+    set(PLATFORM "Windows")
+elseif(APPLE)
+    set(TARGET_BUILD_PLATFORM "mac" CACHE INTERNAL "")
+    set(PLATFORM "macOS")
+elseif(LINUX)
+    set(TARGET_BUILD_PLATFORM "linux" CACHE INTERNAL "")
+    set(CMAKE_LIBRARY_ARCHITECTURE "x86_64-linux-gnu" CACHE INTERNAL "")
+    set(PLATFORM "Linux")
+    #set(CMAKE_LIBRARY_ARCHITECTURE "aarch64-linux-gnu" CACHE INTERNAL "")
+endif()
+
+# Call into PhysX's CMake scripts
+add_subdirectory("${PHYSX_ROOT_DIR}/compiler/public")
+</code></pre>
+    <blockquote>What a mess!</blockquote>
+</p>
+<p>
+    Once I had PhysX compiling, I needed to integrate it into my engine. Because I wanted physics to be intuitive, I did not want
+    a solution like Unity's where if you have a rigid body, you have to call separate RigidBody methods to correctly
+    reposition a physics body. Instead, simply setting the transform component's position should automatically update the rigid body's 
+    position if the object is a physics body. But how to integrate this as cleanly as possible? ECS to the rescue!
+</p>
+<p>
+    I created two Systems: <code>PhysicsLinkSystemRead</code> and <code>PhysicsLinkSystemWrite</code>, which run at the beginning and end of a tick, respectively. 
+    Each does what its name suggests - the former reads the transform values in PhysX and updates the Transform with those values, and the latter reads the transform's values
+    and updates the underlying PhysX transform. Each performs appropriate locking within PhysX. In addition, there is no extra code required
+    for the client programmers - adding a Physics body component will automatically turn that object into one. Duck typing at its best. Now there is only one way
+    to update an object's position, and it just works, regardless of the object's attachment to the physics system.
+</p>
+<p>
+    This method has additional benefits. For example, I am not tied to PhysX, I can swap this out for any physics engine. In fact, I originally designed
+    the System pairs with the Bullet Physics library in mind instead of PhysX. PhysX was essentially a drop-in replacement.
+</p>
+<p>
+    After that I simply needed to wrap PhysX's calls. This is currently an ongoing process, and since PhysX provides so many features, I am only wrapping
+    the ones that I currently need. Over time, I hope to have complete coverage.
+</p>
+<p>
+    Next up: Learning graphics programming
+</p>

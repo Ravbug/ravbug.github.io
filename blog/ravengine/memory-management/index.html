@@ -1,0 +1,180 @@
+<h2>3: Memory Management</h3>
+<script src="../date.js" date="8/26/2020"></script>
+
+ <!-- Highlight.js -->
+ <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+ <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+ <script src="../../../highlight/highlight.pack.js"></script>
+ <script>hljs.initHighlightingOnLoad();</script>
+
+<p>
+    Memory management is an essential part of game development. In engines like Unity and Unreal, this is taken care of for you
+    by means of a garbage collector. In a garbage collected system, you simply leak everything, and periodically, your process halts
+    so that the collector can analyze your process's memory to figure out what is no longer in use, and free that memory.
+    <ul>
+        Garbage collector pros and cons
+        <li>
+            Pros
+            <ul>
+                <li>
+                    Programmer doesn't need to manually free dynamically allocated memory
+                </li>
+                <li>
+                    Garbage Collector can spread out load of deallocation over many frames to reduce load
+                </li>
+            </ul>
+        </li>
+        <li>
+            Cons
+            <ul>
+                <li>
+                    The programmer cannot deallocate memory when they want to. Instead, all a programmer can do is set it to null and
+                    hope that the garbage collector takes care of it in a timely manner 
+                </li>
+                <li>
+                    Garbage collectors are known to cause micro-stuttering, and in some cases, large lag spikes
+                </li>
+                <li>
+                    Garbage collected systems require on average 30-40% more RAM than a manual system. This is especially a problem on mobile, where
+                    RAM is scarce and the OS will terminate your process if you use too much.
+                </li>
+            </ul>
+        </li>
+    </ul>
+</p>
+<p>
+    When writing a typical application, garbage collectors offer more benefits than negatives, because fine control over memory is rarely rquired. 
+    However, in game development, smart use of resources is paramount, so the programmer can never escape manual memory management. 
+    In my experience, garbage collectors make memory management in games more difficult because instead of having control, the programmer must dance
+    around an external system by providing it suggestions.
+</p>
+<p>
+    Unlike Unity and Unreal, the Godot game engine makes use of a simpler yet effective system: Automatic Reference Counting. In this system, 
+    dynamically allocated objects are informed of all their strong references in real time. When an object's reference count reaches 0, it knows that
+    it is no longer needed and frees itself on the spot.
+</p>
+<p>
+    Reference counting addresses many of the concerns that garbage collectors have. In particular:
+    <ul>
+        <li>
+            The programmer has control over when objects are freed, and can intelligently design their game to deallocate when most appropriate.
+        </li>
+        <li>
+            A deallocation-related performance problem will show up in a profiler, making optimization easy.
+        </li>
+        <li>
+            Only RAM that is currently in use is held, which is especially important for mobile devices.
+        </li>
+    </ul>
+    In fact, Apple uses this technique extensively with its Swift and Objective-C programming languages,
+    which is why iPhones can get away with having half the physical RAM compared to a similar    Android phones and provide a smoother experience simultaneously.
+</p>
+<p>
+    However, it is still possible to leak in a reference-counted system with a reference cycle. If two objects, A and B, both have strong references to 
+    each other, their reference counts will never reach 0 and the objects will leak. To solve this, the reference counting system must provide a non-owning (weak) reference, 
+    and the programmer must know when to use them. 
+</p>
+<p>
+    As of C++11, the STL provides many smart pointers for a variety of ownership models, including reference counting. 
+    However, using it is clunky and error prone. For example:
+    <pre><code class="cpp">std::shared_ptr&lt;Object&gt; = std::make_shared&lt;Object&gt;(param1, param2);</code></pre>
+    That's a lot of code to write for every allocation! 
+    In addition, because <code class="cpp">std::shared_ptr&lt;T&gt;</code> can apply to anything, it does not store the reference count in the object, meaning you can easily
+    accidentally end up with two counts for the same object and prematurely delete an object. In addition, casting between types requires 
+    even more unpleasant verbose syntax.
+    </p>
+<p>
+    I wanted the experience to feel like using a language like Java:
+    <pre><code>ObjectRef = new Object(param1, param2);</code></pre>
+
+    and I also wanted to make it impossible to accidentally create two counts for the same object. In addition, casting should be automatic
+    wherever possible. Solving the double-counting problem is easy with a base class: <code>RavEngine::SharedObject</code>. This object 
+    exposed <code>retain()</code> and <code>release()</code> methods to manage an atomic count. Any reference countable object simply derives from <code>RavEngine::SharedObject</code> 
+    But <code>retain()</code> and <code>release()</code> won't call themselves, so I needed to implement my own smart pointer class.
+</p>
+<p>
+    The smart pointer class must have a few features:
+    <ol>
+        <li>
+            Properly overload the <code>-></code> operator to access members on the object for the appropriate derivation level
+        </li>
+        <li>
+            Retain on assignment or construction, and release on destruction
+        </li>
+        <li>
+            Casting up or down the inheritance hierarchy should be automatic.
+        </li>
+        <li>
+            Implement <code>std::hash</code> to be storable in hashing data structures like <code>std::unordered_set</code> and <code>std::unordered_map</code>
+        </li>
+    </ol>
+    I was not familiar with how templates worked, so in my quest for ease-of-use I mistakenly turned to macros. I needed to have a parallel hierarchy of inheritance between the SharedObjects and their 
+    smart "Ref" pointers, in order to satisfy requirements 1, 3, and 4, so I created a macro that generated the appropriate class.
+    <pre><code class="cpp">//this macro creates a NameRef class given a class Name and its base		
+//also define its == and hash function			
+#define MakeSharedRef(name,base)\		
+class name ## Ref : public base ## Ref { \		
+public:\		
+    name ## Ref() : base ## Ref(){}\		
+    name ## Ref(name* ptr) : base ## Ref(ptr){assert(dynamic_cast<name*>(ptr) != nullptr);}\		
+    name ## Ref(SharedObject* ptr) : name ## Ref(static_cast<name*>(ptr)){assert(dynamic_cast<name*>(ptr) != nullptr);}\		
+    name* operator->(){ return static_cast<name*>(get()); } \		
+    name* operator*(){ return static_cast<name*>(get()); } \		
+    bool operator==(const name ## Ref other) const{ return other.get() == get();}\		
+};\		
+namespace std {template<> struct hash<name ## Ref> {\		
+    std::size_t operator()(const name ## Ref& k) const{return k.get()->Hash();}\		
+};}\		
+</code></pre>
+The the client programmer would simply include the macro to generate the appropriate class:
+<pre><code class="cpp">class A : public RavEngine::SharedObject{
+    // ...
+}
+class B : public A{
+    // ...
+}
+MakeSharedRef(A, RavEngine::SharedObject);
+MakeSharedRef(B, A);
+</code></pre>
+Horrible, isn't it? While in the short term this provided what I needed, maintaining and debugging a macro like this quickly became a nightmare. 
+I realized that I had implemented a really terrible template system using macros. The real answer is to implement it with templates:
+<pre><code class="cpp">template&lt;typename T&gt;
+class Ref{
+    T* ptr = nullptr;
+
+    // ... 
+
+    // conversion operator
+    template&lt;typename U&gt;
+    operator Ref&lt;U&gt;() const {
+        static_assert(std::is_base_of&lt;RavEngine::SharedObject, U&gt;::value, "U is not a base class of SharedObject");
+        static_assert(std::is_base_of&lt;U, T&gt;::value || std::is_base_of&lt;T,U&gt;::value,"This conversion is not an upcast or downcast");
+        return static_cast&lt;U*&gt;(ptr);
+    }
+    
+    // less (for std::set / std::multiset), requires T and U to have &lt operator defined
+    template&lt;typename U&gt;
+    bool operator&lt;(const Ref&lt;U&gt;& other) const {
+        return *get() &lt; *other.get();
+    }
+};
+//hash function for ref
+namespace std {
+	template&lt;typename T&gt;
+	struct hash&lt;Ref&lt;T&gt;&gt; {
+		//Strong pointer hash uses the object it is pointing at
+		std::size_t operator()(const Ref&lt;T&gt;& k) const
+		{
+			return k-&gt;Hash();
+		}
+	};
+}
+</code></pre>
+    This provides all that the macro did, without any extra code from client programmers, and is debuggable. In addition, I built a <code>WeakRef&lt;T&gt;</code> 
+    which is similar to Ref except it doesn't call retain or release. Since WeakRef has to deal with dangling pointers, SharedObjects store their weak references
+    inside them, and on destruction, all current WeakRefs are notified to be set to nullptr. In this way, no smart pointer has a dangling pointer, and testing for nullptr 
+    is a valid way to check if a smart pointer is allocated.
+</p>
+<p>
+    Next up: Physics in ECS
+</p>
