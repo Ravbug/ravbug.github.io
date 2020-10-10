@@ -1,0 +1,74 @@
+<h2>6: Build Systems</h2>
+<script src="../date.js" date="10/3/2020"></script>
+<p>
+    In the past, I manually created IDE projects for each platform that I supported. Typically, I supported macOS and Windows, with some Linux support. 
+    This practice was fine for small projects, like my Minecraft Sounds Extractor, but with a project the size of a game engine, it could not work.
+    In general, this practice has a few main issues:
+</p>
+<ol>
+    <li>
+        IDE configuration must be manually repeated for every supported platform
+    </li>
+    <li>
+        It forces the client programmers to use a specific toolchain (Xcode on Mac, Visual Studio on Windows) rather than use what they are comfortable with
+    </li>
+    <li>
+        Each build system has a different way of doing things, all of which must be learned
+    </li>
+    <li>
+        Client programmers must deal with all of the aforementioned problems
+    </li>
+</ol>
+</p>
+<p>
+    As I was researching libraries to use for my project, I noticed that the vast majority used as system named CMake to generate an IDE project of your choice. I didn't know what it was,
+    and used it to generate the projects so that I could link them all together manually. However, I found that IDEs weren't designed to do this and so I ran into many strange errors when 
+    trying to compile my engine, many of which only happened sometimes and were not repeatable.  
+</p>
+<p>
+    I decided that I would learn how to use CMake, and make it the main build system of my engine. This was probably the best decision I have made in the making of this project. Yes, CMake 
+    is not perfect and can be obtuse at times, but all of the aforementioned main issues disappeared. In addition, I can automate aspects of the build process of my 
+    engine in ways that would be difficult to do in a cross-platform way. 
+</p>
+<h3>Automating shader compilation</h3>
+<p>
+    CMake allows the creation of custom targets. With these targets, one can execute command line calls. I leverage this to compile shaders and pack resources all
+    completely automatically. To compile shaders, first the client programmer must instruct the engine where their shaders directory is, using a macro exposed by the engine's 
+    CMakeLists.txt. 
+    <pre><code class="cmake">compile_shader_dir("YourRavEngineGame" "src/shaders")</code></pre>
+    CMake then knows to execute my shader compiler on the files in that directory as a pre-build action. Only files that have changed are evaluated. 
+    Client programmers create shader descriptor JSON files which tell the shader compiler what shader source files to use in the compilation. Shown below is an example of a shader descriptor:
+    <pre><code class="json">{
+	"varying" : "varying.def.sc",
+	"stages":[
+		{
+			"file":"vs_cubes.sc",
+			"stage":"vertex"
+		},
+		{
+			"file":"fs_cubes.sc",
+			"stage":"fragment"
+		}
+	]
+}
+</code></pre>
+    Of course, I did not write a shader compiler. Instead, I call into the BGFX shader compiler and pass it the correct arguments, based on the current target platform. 
+    This process is hidden from the client programmer, making the engine easier to use. To the client programmer, there is only one compilation step. 
+</p>
+
+<h3>Packing resources</h3>
+<p>
+    To consolidate resources for easier loading within the engine across platforms, RavEngine packs all game assets into a single .zip file, which it then mounts like a disk at runtime.
+    It builds this asset package automatically in a similar method to the shader compilation step. Fist, the programmer instructs the engine where to find assets such as meshes by invoking
+    the proper macro:
+<pre><code class="cmake">file(GLOB meshes "assets/meshes/*.obj")
+add_meshes("YourRavEngineGame" "${meshes}")</code></pre>
+    These macros simply copy those resources to a staging directory in the build directory if they have changed. After the programmer names all assets to include, they must then instruct the 
+    toolchain to pack them all together. To do this, simply invoke another macro:
+    <pre><code class="cmake">pack_resources("YourRavEngineGame")</code></pre>
+    This instructs CMake to execute a second tool I wrote which takes all the assets and creates a compressed Zip file. On Mac, this zip file is placed inside the app bundle, and on Linux, I plan 
+    to include it inside the .appimage. 
+</p>
+<p>
+    If you want to learn CMake quickly and easily, I wrote a tutorial, which you can read here: <a href="../../../tutorials/cmake-easy/">CMake Made Easy</a>
+</p>
