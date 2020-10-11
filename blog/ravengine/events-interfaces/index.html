@@ -1,0 +1,163 @@
+<head>
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+    <script src="../../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<h2>7: Events, Templates, and Interfaces</h2>
+<script src="../date.js" date="10/8/2020"></script>
+
+<p>
+    Up to this point I was hard-coding listeners for PhysX events to test with, but I needed a more robust solution. I needed any object to be able to subscribe
+    to certain types of events, track their senders, and automatically manage cleanup when one or the other is deallocated. Enter Interfaces. Since C++
+    does not have interfaces as a concept, I implemented them as classes and leveraged multi-inheritance. However, because of the way multi-inheritance works in C++, 
+    interfaces cannot descend from a base class to avoid the <a href="https://en.wikipedia.org/wiki/Multiple_inheritance">Diamond Inheritance Problem</a>.
+<p>
+    <h3>IPhysicsActor</h3>
+    This interface allows an object to receive physics object collision events. The client programmer simply inherits from this interface, and then registers
+    the object to receive events from any PhysicsBodyComponent. The receiver does not need to be the same object as the sender, and if the receiver is deallocated 
+    before the sender, the receiver removes itself from the sender's list on destruction. Event listeners follow a weak ownership model, they do not have strong pointers 
+    to their senders. An example of this is shown below:
+<pre><code class="cpp">//the controller script
+class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
+public:
+    //override the collision entered event
+    void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& c) override{
+       std::cout &lt;&lt; "Hit by collider @ " &lt;&lt; &c.get()-&gt;getOwner() &lt;&lt; std::endl;
+    }    
+};
+
+//the entity itself
+class TestEntity : public RavEngine::Entity {
+protected:
+    static Ref<RavEngine::PhysicsMaterial> sharedMat;   //all the objects can share a single instance of the physics material
+public:
+    TestEntity() : Entity(){
+
+        //attach the script
+        auto script = AddComponent<TestEntityController>(new TestEntityController());
+    
+        //create a dynamic rigid body
+        auto r = AddComponent<RigidBodyDynamicComponent>(new RigidBodyDynamicComponent(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1));
+
+        //set the script to be an events receiver for the rigid body
+        r->AddReceiver(script.get());
+    
+        //add a box collision to the PhysX component
+        if (sharedMat.isNull()) {
+            //note: if constructing on multiple threads, this static must be locked or made atomic
+            sharedMat = new PhysicsMaterial(0.5, 0.5, 0.5);
+        }
+        AddComponent<BoxCollider>(new BoxCollider(vector3(1, 1, 1),sharedMat));
+    }
+    
+};    
+</code></pre>
+    Because the class is not abstract, only the events that the client programmer cares about need to be overridden.
+</p>
+<p>
+    <h3>IInputListener</h3>
+    This interface allows any object to receive input events from a connected controller, like a keyboard or gamepad. This one works differently from
+    the physics event listener. Unlike the physics system, which has a fixed set of possible events, there is no way to predict ahead of time how many 
+    input events a given object may receive. Additionally, I did not want to require programmers to use a giant if-statement or switch to check which 
+    event is received through a single entry method. IInputListener serves mainly to track senders and mark the object as receivable. 
+</p>
+<p>
+    The magic happens with templates. The InputManager class contains templated methods to bind and unbind an event to any method the programmer wants 
+    on their object as long as it meets the signature requirement. It does this using nested classes which contain std::functions that are bound from 
+    plain C function pointers.
+
+    <pre><code class="cpp">
+template&lt;class U&gt;
+void BindAction(const std::string& name, IInputListener* thisptr, void(U::* f)(), ActionState type, CID controllers);
+
+template&lt;typename U&gt;
+void BindAxis(const std::string& name, IInputListener* thisptr, void(U::* f)(float), CID controllers, float deadZone = AxisCallback::defaultDeadzone);
+    </code></pre>
+    Note the second and third parameters. The second parameter requires the object be an IInputListener so that it correctly cleans up when it is deallocated, 
+    and the third parameter allows proper scoping with the function pointer. With this setup, a programmer can easily bind functions to their classes with 
+    clean syntax, UE4 style:
+<pre><code class="cpp">// PlayerScript.hpp
+class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
+public:
+    void MoveForward(float amt){
+        printf("Forward axis activated! Amount = %f\n",amt);
+    }
+    
+    void Jump(){
+        printf("Jump Action was Pressed!\n")
+    }
+};
+
+//GameWorld.hpp
+
+Ref&lt;RavEngine::InputManager&gt; is = new RavEngine::InputManager();
+//setup control mappings
+is-&gt;AddAxisMap("MoveForward", SDL_SCANCODE_W);
+is-&gt;AddAxisMap("MoveForward", SDL_SCANCODE_S, -1);  //go backwards
+is-&gt;AddAxisMap("MoveForward", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY, -1);   //gamepad
+is-&gt;AddActionMap("Jump", SDL_SCANCODE_SPACE);
+is-&gt;AddActionMap("SampleFPS", ControllerButton::SDL_CONTROLLER_BUTTON_Y);   //gamepad
+
+//bind the actions
+auto con = CID::C0; //only bind to the first controller
+
+auto playerscript = player-&gt;Components().GetComponent&lt;PlayerScript&gt;().get();
+
+//since the bind calls are templated, you can pass the address of the method on the class without issues
+is-&gt;BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
+is-&gt;BindAxis("MoveRight", playerscript, &PlayerScript::Jump,con);
+</code></pre>
+    You can even get input events directly in the World, which is very useful for debugging or having global events like pausing. 
+</p>
+
+<p>
+    <h3>Telling controllers apart</h3>
+    Notice in the above code sample the variable <code>con</code>. The final parameter in the bind methods requires the programmer to pass which 
+    controller the events should respond to. I implemented controller binding in such a way that a binding can listen to any number of different controllers, 
+    or all of them at once, with control. I implemented this using bitmasks. Each controller is registered internally simply with a number, with the keyboard 
+    and mouse hardcoded to index 0, and gamepads using any id above that. When the engine gets an input event, it creates a CID bitmask on it, and checks if 
+    any bits match between the mapping and the input. If so, the event is triggered. Since I use a 32 bit int as the bit mask, in theory RavEngine can support
+    up to 32 controllers. I currently limit it to 16 but I can't even test that many since I only have my keyboard and a single Xbox One controller. Shown below 
+    is the implementation of the CID enum:
+</p>
+<pre><code class="cpp">
+//controller IDs
+enum class CID{
+    NONE = 0,
+    C0 = 1 &lt;&lt; 0,    //reserved for the Keyboard and Mouse
+    C1 = 1 &lt;&lt; 1,    
+    C2 = 1 &lt;&lt; 2,
+    C3 = 1 &lt;&lt; 3,
+    C4 = 1 &lt;&lt; 4,
+    // ...
+    ANY = ~0        //all bits set, so any controller will trigger
+};
+//bitwise operators for enum class
+inline CID operator | (CID lhs, CID rhs)
+{
+    using T = std::underlying_type_t&lt;CID&gt;;
+    return static_cast&lt;CID&gt;(static_cast&lt;T&gt;(lhs) | static_cast&lt;T&gt;(rhs));
+}
+
+inline CID& operator |= (CID& lhs, CID rhs)
+{
+    lhs = lhs | rhs;
+    return lhs;
+}
+inline CID operator & (CID lhs, CID rhs)
+{
+    using T = std::underlying_type_t&lt;CID&gt;;
+    return static_cast&lt;CID&gt;(static_cast&lt;T&gt;(lhs) & static_cast&lt;T&gt;(rhs));
+}
+
+inline CID& operator &= (CID& lhs, CID rhs)
+{
+    lhs = lhs & rhs;
+    return lhs;
+}
+</code></pre>
+<p>
+    Next up: ECS Megapost
+</p>
