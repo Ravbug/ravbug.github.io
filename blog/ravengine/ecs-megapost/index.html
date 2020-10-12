@@ -1,0 +1,195 @@
+<head>
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+    <script src="../../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<h2>7: ECS Megapost</h2>
+<script src="../date.js" date="10/11/2020"></script>
+
+<p>
+    As I was researching Entity-Component-System (ECS) libraries, I found a consistent but undesirable recurring theme in: they try to be as "bare metal" as possible. In essence, they only use bare pointers
+    to stack memory and extremely simplistic structures in order to be as fast as possible. There is no memory sharing, everything is a fixed size, and often because of this, they are difficult to multithread and impose
+    many upwards-scalability issues, in the effort to keep the entire allocation contiguous and entirely resident on the stack. This is unfriendly to my design goals - I want to provide free multithreading and not impose arbitrary limitations about the number of objects a game can have at once - remember
+    that the default stack size on some platforms is very small and cannot be resized! I instead decided to write my own ECS. 
+</p>
+<p>
+    <h3>My Hybrid ECS</h3>
+    In many ways, a data-oriented design is worse than an object-oriented design from a code maintainability perspective. However, complex object graphs 
+    can severely limit threading abilities. So I settled on a compromise which provides the performance of ECS but the development ease of OOP.
+</p>
+<p>
+    In my design, Entities, Components, and Systems are all classes. This contrasts starkly from a Pure ECS, where entities are integers, components are structs, and 
+    systems are stateless functions. The reason for my design change is it's easier for most people to think in terms of object concepts: A plant is made of models and materials, a player has 
+    animations, as opposed to in a data-oriented design where a plant and a player are just a lose collection of small parts, like an AnimationStart and Vertex Buffer.
+    My classes design also provides benefits in threading. With a Pure ECS, construction must occur through global factory functions to avoid copy-pasting a lot of code, however 
+    in threaded environments this often leads to lots of locks that limit construction speed. In my design, you simply use the object's constructor like normal and then add it to 
+    the world you want it to be part of. The constructor only needs to lock the occasional shared access.
+</p>
+<pre><code class="cpp">//Entity code sample
+class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor{
+protected:
+    static Ref<RavEngine::PhysicsMaterial> sharedMat;
+    static Ref<RavEngine::DefaultMaterialInstance> sharedMatInst;
+    static Ref<RavEngine::MeshAsset> sharedMesh;
+public:
+    TestEntity() : Entity(){
+
+        //Add a physics body component
+        auto r = AddComponent<RigidBodyDynamicComponent>(new RigidBodyDynamicComponent(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1));
+    
+        //add a box collision to the PhysX component
+        if (sharedMat.isNull()) {
+            //note: must lock if constructing from multiple threads
+            sharedMat = new PhysicsMaterial(0.5, 0.5, 0.5);
+        }
+        AddComponent<BoxCollider>(new BoxCollider(vector3(1, 1, 1),sharedMat));
+        
+        if (sharedMesh.isNull()){
+            //note: must lock if constructing from multiple threads
+            sharedMesh = new MeshAsset("bunny_decimated.obj");
+        }
+    
+        //Add a static mesh to draw
+        auto mesh = AddComponent<StaticMesh>(new StaticMesh(sharedMesh));
+        if (sharedMatInst.isNull()) {
+            //note: must lock if constructing from multiple threads
+            sharedMatInst = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
+        }
+        //set the material to draw with
+        mesh->SetMaterial(sharedMatInst);
+    }
+};
+        
+</code></pre>
+<p>
+    In my design, the Entities and the World share ownership of Components. Components contain a weak pointer to their owning Entity. An Entity contains within it a hashing data structure which keys components by their inheritance
+    hierarchy. This allows me to query a component or all the components of a given type on the Entity in constant time. In addition, the World contains the same data structure,
+    but includes all of the components of every entity in the world. This allows the world to get all of the components of a particular type, and by extension all the entities 
+    with those components, in constant time. Since Entities know what components they own, moving an Entity from one world to another is easy - simply remove it from one world 
+    and add it to the other. These movements get applied between frames to keep everything running smoothly.
+</p>
+<p>
+    <h3>Systems and Dependency Sorting</h3>
+    Systems are classes which must contain two things: 1) an overridden <code>Tick(float,entity)</code> method, a method which returns what types of component this system 
+    acts upon, and a method <code>MustRunBefore</code> which is used to decide dependency order. When the World executes all the currently loaded systems, it first executes the System's query method. 
+    Then for each component that matches, the World invokes the System's <code>Tick</code> method with each entity and the current frame scale factor, for frame rate scaling.
+</p>
+<p>
+    Systems are automatically dependency sorted using their <code>MustRunBefore</code> method. The World stores all of the currently loaded Systems in a <code>std::multiset</code>.
+    Because multisets are sorted structures, the structure invokes the class's &lt; operator, which I defined to call <code>MustRunBefore</code> with the System's type. 
+    A System is considered "less" than another system if it must run before the other system, so <code>MustRunBefore</code> must return true in that case, and false otherwise.
+    This ensures that Systems are automatically sorted at registration time to an appropriate execution order, regardless of the order that they are sorted in.
+</p>
+<pre><code class="cpp">//The Physics Link System in RavEngine
+class PhysicsLinkSystemWrite : public System {
+public:
+    physx::PxScene* dynamicsWorld = nullptr;    //Example of state maintaining 
+    virtual ~PhysicsLinkSystemWrite() {}
+
+    void Tick(float fpsScale, Ref<Entity> e) const override;    //processes the entity
+
+    std::list<std::type_index> QueryTypes() const override {    //only operates on Entities with a Physics body
+        return { typeid(PhysicsBodyComponent) };
+    }
+
+    
+    bool MustRunBefore(const std::type_index& other) const override {    //must run before the write system
+        return other == std::type_index(typeid(ScriptSystem));
+    }
+};
+</code></pre>
+
+<p>
+    <h3>Multithreading, and why threading is easier with ECS</h3>
+    It's easy to iterate down a flat list and assign tasks compared to recursing down a deep hierarchy. 
+    The main App object contains a static thread pool, which when the application launches, assigns threads such that the number of threads in the pool is equal to the number 
+    of logical processors on the device. Then when the World needs to tick a frame, it simply iterates down the multiset containing all the Systems, looks up the entities that system needs in constant time, and 
+    what system should run them, and enqueues them as tasks on the thread pool. Then it blocks until they are all complete before moving to the next System. Core load is automatically balanced nearly perfectly in this setup.
+    In addition, only entities that need to be processed are even accessed during this process. If I had used a traditional object hierarchical graph like most object-oriented engines, where no Systems 
+    exist, I would need to call <code>Tick(float)</code> on every single entity just in case it had code to run. Caching would only help so much.
+</p>
+<p>
+    <h3>ScriptComponent, and performance</h3>
+    Separating everything in components can get messy quickly, and there is a certain elegance to object-oriented programming that makes it easy to conceptualize and maintain. I wanted 
+    to have Scripts the way Unity does with its MonoBehaviour, but I did not want to give up all the benefits of ECS. My solution? Implement OOP <i>inside</i> ECS.
+</p><p>
+    Because my components are classes, they can have methods. I defined a component named <code>ScriptComponent</code> which simply defines an abstract <code>Tick(float)</code>
+    method. Programmers can treat this component exactly like a MonoBehaviour, however, since the threaded ECS engine executes it, all modified values must be properly thread-safe.
+    Then a ScriptSystem runs after all other systems (hardcoded, you cannot change when ScriptSystem runs) and executes all the scripts. Only objects that have scripts are executed, 
+    and all of the threading benefits are maintained. It's the best of both worlds. 
+</p>
+<pre><code class="cpp">//ScriptComponents lend themselves especially to player-related code
+class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
+public:
+    Ref<RavEngine::Entity> cameraEntity;
+    Ref<RavEngine::Transform> trans;
+    decimalType dt = 0;
+    decimalType movementSpeed = 0.3;
+    decimalType sensitivity = 0.1;
+
+    decimalType scaleMovement(decimalType f) {
+        return f * dt * movementSpeed;
+    }
+
+    decimalType scaleRotation(decimalType f) {
+        return glm::radians(sensitivity * dt * f);
+    }
+
+    void Start() override {
+        Ref<RavEngine::Entity> owner(getOwner());
+        trans = transform();
+        Ref<RavEngine::World>(GetWorld())->Spawn(cameraEntity);
+    }
+
+    void MoveForward(float amt) {
+        trans->LocalTranslateDelta(scaleMovement(amt) * trans->Forward());
+    }
+    void MoveRight(float amt) {
+        trans->LocalTranslateDelta(scaleMovement(amt) * trans->Right());
+    }
+
+    void MoveUp(float amt) {
+        trans->LocalTranslateDelta(scaleMovement(amt) * trans->Up());
+    }
+
+    void LookUp(float amt) {
+        cameraEntity->transform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
+    }
+    void LookRight(float amt) {
+        trans->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
+    }
+
+    virtual void Tick(float scale) {
+        dt = scale;
+    }
+};   
+</code></pre>
+<p>
+    Basically, I used Object-Oriented Programming to implement Data Oriented Programming to implement Object Oriented Programming. You can use both design paradigms at the same time, depending on your needs, without feeling
+    hamstrung by the API. In addition, this design lends itself directly to multithreaded evaluation, so any overhead I introduced with this classes design I more than make up for with my threading implementation.
+
+    This does not mean that my design is without fault - far from it. My design does not store all of its data as a contiguous block of memory. Because of this, my design cannot leverage features of some CPUs
+    such as SIMD to get some performance improvements. Instead my design favors parallelism via mutlicore instead of SIMD, which for now, provides performance that is more than good enough for my goals. 
+</p>
+<p>
+    <h3>ECS Misconceptions: Cache Misses and SIMD</h3>
+    I see many people cite cache misses as the primary reason to use ECS, however, this is not the case at all. For the most part, optimizing CPU cache is a micro-optimization. Furthermore,
+    you have much less control over the CPU cache than you think - 
+    especially considering you are sharing that CPU and its cache with many other programs on the computer. Secondly, to properly take advantage of CPU cache (and also SIMD), your memory 
+    must be contiguous. However, trying to keep the entire allocation contiguous raises its own problems. For example, once allocated, resizing the allocation is expensive, and without that feature,
+    the engine would have an arbitrary hard limit to how many components it could have loaded at once. I did not want to impose such a limitation.
+</p>
+<p>
+    I find it especially humorous when Unity C# or UE4 Blueprint developers talk about the merits of avoiding cache misses - those languages are one giant cache miss.
+</p>
+<p>
+    <h3>Performance metrics</h3>
+    My engine has zero SIMD support (excluding libraries I use that have it) and every single operation in my ECS is a cache miss because the entire allocation is not contiguous. However, on a Ryzen 7 1700x, my engine can simulate over 150,000 entities at once at 60 frames per second. 
+    Currently, the bottleneck is the render engine, not the object model. In the future I can make this even better with smarter optimizations. As core counts increase on consumer CPUs, this number 
+    will only go up. 
+</p>
+<p>
+    Next up: Meshes, Shaders, and Variadic Templates
+</p>

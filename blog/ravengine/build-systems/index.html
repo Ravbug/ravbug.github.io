@@ -1,4 +1,4 @@
-<h2>6: Build Systems</h2>
+<h2>5: Build Systems</h2>
 <script src="../date.js" date="10/3/2020"></script>
 <p>
     In the past, I manually created IDE projects for each platform that I supported. Typically, I supported macOS and Windows, with some Linux support. 
@@ -19,6 +19,73 @@
         Client programmers must deal with all of the aforementioned problems
     </li>
 </ol>
+</p>
+<p>
+    Since I am writing my engine in C++, I have access to the wealth of open source C++ libraries that have been developed over the lifetime of C++.
+    Indeed, if you can think it, there is a C++ library for it. Mostly. There may be a library, but not the way that you want. For each task I evaluated multiple libraries 
+    and weighed their ease of use against the time cost for implementing a custom solution.
+</p>
+<p>
+    Ultimately I decided to provide a unified interface which may or may not call into a library underneath. Ideally, a client programmer should not need
+    to know or care that a library is in use, and this also leaves me free to switch out underlying libraries as long as I keep the API's behavior the same.
+</p>
+<p>
+    Scratching the surface of the libraries I researched for this project:
+    <ul>
+        <li>
+            Physics:
+            <ul>
+                <li>
+                    Bullet
+                </li>
+                <li>
+                    PhysX
+                </li>
+            </ul>
+        </li>
+        <li>
+            Windowing & Input
+            <ul>
+                <li>
+                    SDL2
+                </li>
+                <li>
+                    GLFW
+                </li>
+            </ul>
+        </li>
+        <li>
+            Math
+            <ul>
+                <li>
+                    glm
+                </li>
+            </ul>
+        </li>
+        <li>
+            Rendering
+            <ul>
+                <li>
+                    BGFX
+                </li>
+                <li>
+                    MethaneKit
+                </li>
+                <li>
+                    LLGL
+                </li>
+                <li>
+                    Ogre NEXT
+                </li>
+                <li>
+                    DiligentEngine
+                </li>
+                <li>
+                    Google Filament
+                </li>
+            </ul>
+        </li>
+    </ul>
 </p>
 <p>
     As I was researching libraries to use for my project, I noticed that the vast majority used as system named CMake to generate an IDE project of your choice. I didn't know what it was,
