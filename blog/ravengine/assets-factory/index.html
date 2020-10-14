@@ -39,7 +39,7 @@ static Ref&lt;T&gt; AccessMaterialOfType(A ... args){
 }</code></pre>
     And sample usage:
     <pre><code class="cpp">int a =3, b = 5, c = 4;
-auto cachedMat = Material::Manager::AccessMaterialOfType&lt;CustomMaterial&gt;>(a, b, c);</code></pre>
+auto cachedMat = Material::Manager::AccessMaterialOfType&lt;CustomMaterial&gt;(a, b, c);</code></pre>
     The Material::Manager class maintains a thread-safe cache. The AccessMaterialOfType method checks the cache,
     and if the material of that type is already loaded, it simply returns the cached material. Otherwise, the appropriate constructor 
     is selected via the variadic arguments, and a reference to that is stored in the cache and returned. 

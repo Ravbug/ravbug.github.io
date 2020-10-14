@@ -182,9 +182,6 @@ public:
     the engine would have an arbitrary hard limit to how many components it could have loaded at once. I did not want to impose such a limitation.
 </p>
 <p>
-    I find it especially humorous when Unity C# or UE4 Blueprint developers talk about the merits of avoiding cache misses - those languages are one giant cache miss.
-</p>
-<p>
     <h3>Performance metrics</h3>
     My engine has zero SIMD support (excluding libraries I use that have it) and every single operation in my ECS is a cache miss because the entire allocation is not contiguous. However, on a Ryzen 7 1700x, my engine can simulate over 150,000 entities at once at 60 frames per second. 
     Currently, the bottleneck is the render engine, not the object model. In the future I can make this even better with smarter optimizations. As core counts increase on consumer CPUs, this number 
