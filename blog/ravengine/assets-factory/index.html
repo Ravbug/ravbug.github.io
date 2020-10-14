@@ -11,9 +11,9 @@
 <p>
     Loading meshes, textures, and shaders can be computationally expensive, especially on slower hardware. The engine 
     should avoid doing expensive work and cache wherever possible. However, the typical way of doing this involves 
-    rigid factory functions, however I want to avoid that as much as possible because it breaks OOP. But requiring the 
+    rigid factory functions, but I want to avoid that as much as possible because it breaks OOP. Requiring the 
     client programmers to manage all assets manually in a thread-safe way would lead to a lot of duplicated code or additional 
-    boilerplate.
+    boilerplate, which is undesirable. 
 </p>
 <p>
     <h3>Variadic templates to the rescue</h3>
@@ -39,9 +39,9 @@ static Ref&lt;T&gt; AccessMaterialOfType(A ... args){
 }</code></pre>
     And sample usage:
     <pre><code class="cpp">int a =3, b = 5, c = 4;
-auto cachedMat = Material::Manager&lt;CustomMaterial&gt;>(a, b, c);</code></pre>
+auto cachedMat = Material::Manager::AccessMaterialOfType&lt;CustomMaterial&gt;>(a, b, c);</code></pre>
     The Material::Manager class maintains a thread-safe cache. The AccessMaterialOfType method checks the cache,
-    and if the material of that type is already loaded, it simply returns it. Otherwise, the appropriate constructor 
+    and if the material of that type is already loaded, it simply returns the cached material. Otherwise, the appropriate constructor 
     is selected via the variadic arguments, and a reference to that is stored in the cache and returned. 
 </p>
 <p>
@@ -50,7 +50,7 @@ auto cachedMat = Material::Manager&lt;CustomMaterial&gt;>(a, b, c);</code></pre>
     However, there are undoubtedly situations where multiple materials of the same type need to be loaded. 
     In that case, the client programmer does not need to use the factory function at all and instead construct their Material normally and manage it themselves.
     <pre><code class="cpp">Ref&lt;CustomMaterial&gt; mat(new CustomMaterial(a,b,c));</code></pre>
-    In the cases where the default behavior is appropriate, I provide a thread-safe cached factory that does not break OOP. 
+    In the cases where the default behavior is appropriate, Material::Manager provides this thread-safe cached factory that does not break OOP. 
 </p>
 <p>
     <h3>Leveraging reference counting</h3>
