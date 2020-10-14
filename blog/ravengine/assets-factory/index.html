@@ -1,0 +1,62 @@
+<head>
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+    <script src="../../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<h2>8: Assets and Factories</h2>
+<script src="../date.js" date="10/14/2020"></script>
+
+<p>
+    Loading meshes, textures, and shaders can be computationally expensive, especially on slower hardware. The engine 
+    should avoid doing expensive work and cache wherever possible. However, the typical way of doing this involves 
+    rigid factory functions, however I want to avoid that as much as possible because it breaks OOP. But requiring the 
+    client programmers to manage all assets manually in a thread-safe way would lead to a lot of duplicated code or additional 
+    boilerplate.
+</p>
+<p>
+    <h3>Variadic templates to the rescue</h3>
+    My compromise is a variadic-template manager factory cache that calls constructors. Here is the material variant, shown below:
+<pre><code class="cpp">/**
+    Helper to get a material by type. If one is not allocated, it will be created. Supports constructors via parameter pack
+    @param args arguments to pass to material constructor if needed
+    */
+template&lt;typename T, typename ... A&gt;
+static Ref&lt;T&gt; AccessMaterialOfType(A ... args){
+    Ref&lt;T&gt; mat;
+    mtx.lock();
+    std::type_index t(typeid(T));
+    if (materials.find(t) != materials.end()){
+        mat = materials.at(t);
+    }
+    else{
+        mat = new T(args...);
+        materials.insert(std::make_pair(t,mat));
+    }
+    mtx.unlock();
+    return mat;
+}</code></pre>
+    And sample usage:
+    <pre><code class="cpp">int a =3, b = 5, c = 4;
+auto cachedMat = Material::Manager&lt;CustomMaterial&gt;>(a, b, c);</code></pre>
+    The Material::Manager class maintains a thread-safe cache. The AccessMaterialOfType method checks the cache,
+    and if the material of that type is already loaded, it simply returns it. Otherwise, the appropriate constructor 
+    is selected via the variadic arguments, and a reference to that is stored in the cache and returned. 
+</p>
+<p>
+    For the material system, checking by type alone is enough most of the time because generally only one instance of a particular 
+    type of material needs to be loaded, because draw settings are stored in MaterialInstances, which reference a single material. 
+    However, there are undoubtedly situations where multiple materials of the same type need to be loaded. 
+    In that case, the client programmer does not need to use the factory function at all and instead construct their Material normally and manage it themselves.
+    <pre><code class="cpp">Ref&lt;CustomMaterial&gt; mat(new CustomMaterial(a,b,c));</code></pre>
+    In the cases where the default behavior is appropriate, I provide a thread-safe cached factory that does not break OOP. 
+</p>
+<p>
+    <h3>Leveraging reference counting</h3>
+    Because all materials and mesh assets are reference counted, once a material is in the cache, it will not be deallocated unless 
+    it is first removed from the cache. The Material Manager provides a thread-safe method to achieve this. But since assets are reference 
+    counted, it is safe to remove a material or mesh asset from the cache while it is still in use. It will remain allocated until 
+    its last user is deallocated, then its reference count will reach 0 and it will be deallocated. This is useful in dynamic-loading maps 
+    where you know that a material is not needed anymore but do not know what order the assets will be deallocated in. The system takes care of it for you. 
+</p>
