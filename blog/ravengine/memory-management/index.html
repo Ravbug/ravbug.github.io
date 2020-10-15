@@ -1,11 +1,28 @@
+<head>
+        <!-- Highlight.js -->
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+    <script src="../../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <title>
+        Memory Management
+    </title>
+    <meta name="description" content="RavEngine Development Blog">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+
+<div class="main split">
+<div>
 <h2>2: Memory Management</h3>
 <script src="../date.js" date="8/26/2020"></script>
-
- <!-- Highlight.js -->
- <link rel="stylesheet" href="../../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
- <link rel="stylesheet" href="../../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
- <script src="../../../highlight/highlight.pack.js"></script>
- <script>hljs.initHighlightingOnLoad();</script>
 
 <p>
     Memory management is an essential part of game development. In engines like Unity and Unreal, this is taken care of for you
@@ -160,14 +177,14 @@ class Ref{
 };
 //hash function for ref
 namespace std {
-	template&lt;typename T&gt;
-	struct hash&lt;Ref&lt;T&gt;&gt; {
-		//Strong pointer hash uses the object it is pointing at
-		std::size_t operator()(const Ref&lt;T&gt;& k) const
-		{
-			return k-&gt;Hash();
-		}
-	};
+    template&lt;typename T&gt;
+    struct hash&lt;Ref&lt;T&gt;&gt; {
+        //Strong pointer hash uses the object it is pointing at
+        std::size_t operator()(const Ref&lt;T&gt;& k) const
+        {
+            return k-&gt;Hash();
+        }
+    };
 }
 </code></pre>
     This provides all that the macro did, without any extra code from client programmers, and is debuggable. In addition, I built a <code>WeakRef&lt;T&gt;</code> 
@@ -176,5 +193,12 @@ namespace std {
     is a valid way to check if a smart pointer is allocated.
 </p>
 <p>
-    Next up: Physics in ECS
+    Next up: <a href="../physics/"> Physics in ECS</a>
 </p>
+</div>
+<div>
+    <script src="../../table-contents.js"></script>
+    <script src="../display.js" pathroot=".."></script>
+</div>
+</div>
+<script src="../../../header.js"></script>
