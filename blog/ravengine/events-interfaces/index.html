@@ -17,7 +17,15 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="../../blog.css">
 </head>
-
+<style>
+    img, video{
+        width:100%;
+        max-width:400px;
+    }
+    video{
+        max-width:500px;
+    }
+</style>
 <div class="main split">
     <div>
 <p>
@@ -175,6 +183,15 @@ inline CID& operator &= (CID& lhs, CID rhs)
     return lhs;
 }
 </code></pre>
+<p>
+    A side note: I noticed that Xbox controllers have a very high amount of stick drift. I am not pressing anything in the video below:
+</p>
+<video controls>
+    <source src="stick_drift.mp4">
+</video>
+<p>
+    Xbox analog sticks need a deadzone of around 10% in order to eliminate the drift, which I think is quite high.
+</p>
 <p>
     Next up: <a href="../ecs-megapost/"> ECS Megapost</a>
 </p>
