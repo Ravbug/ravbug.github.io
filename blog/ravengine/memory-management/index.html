@@ -155,7 +155,8 @@ MakeSharedRef(A, RavEngine::SharedObject);
 MakeSharedRef(B, A);
 </code></pre>
 Horrible, isn't it? While in the short term this provided what I needed, maintaining and debugging a macro like this quickly became a nightmare. 
-I realized that I had implemented a really terrible template system using macros. The real answer is to implement it with templates:
+I realized that I had implemented a really terrible template system using macros. The real answer is to implement it with templates. Shown below is 
+part of my Ref class, with trivial parts such as copy constructors omitted:
 <pre><code class="cpp">template&lt;typename T&gt;
 class Ref{
     T* ptr = nullptr;
@@ -191,7 +192,7 @@ namespace std {
     This provides all that the macro did, without any extra code from client programmers, and is debuggable. In addition, I built a <code>WeakRef&lt;T&gt;</code> 
     which is similar to Ref except it doesn't call retain or release. Since WeakRef has to deal with dangling pointers, SharedObjects store their weak references
     inside them, and on destruction, all current WeakRefs are notified to be set to nullptr. In this way, no smart pointer has a dangling pointer, and testing for nullptr 
-    is a valid way to check if a smart pointer is allocated.
+    is a valid way to check if a smart pointer is allocated. One can easily create a Shared pointer from a weak pointer and vice versa, using the relevant constructors. 
 </p>
 <p>
     Next up: <a href="../physics/"> Physics in ECS</a>

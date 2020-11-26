@@ -23,29 +23,25 @@
     I got into the game development space in 2015, using engines like Unreal, Unity, and Godot. 
 </p>
 <p>
-    While each of these engines are extremely powerful and in dedicated hands will produce stunning results, I was always dissatisfied. My main gripes with each:
+    While each of these engines are extremely powerful and in dedicated hands will produce stunning results, I could never get into any of them.
 </p>
-
 <ul>
     <li>Unreal
         <ul>
             <li>
-                Extremely heavy (20+ GB!)
+                Designed for Triple-A titles, so requires a lot of disk space (20+ GB!) and a powerful PC to run the editor
             </li>
             <li>
-                C++ documentation is poor to non-existent
+                C++ documentation is poor to non-existent, and C++ API is not intuitive
             </li>
             <li>
-                Obtuse C++ API
+                Poor performance on mobile or low end PCs, especially compared to Unity and Godot
             </li>
             <li>
-                Terrible performance on everything except high-end desktop and console.
+                Lots of bugs in C++/blueprint interop leading to blueprint corruption
             </li>
             <li>
-                UAsset format is binary, so hard to diff with git, and prone to corruption
-            </li>
-            <li>
-                Dreadfully slow iteration with C++
+                C++ incremental compile times are very slow
             </li>
             <li>
                 Lack of community-made resources and tutorials, compared to Unity and Godot
@@ -59,10 +55,14 @@
                 Editor is buggy and unresponsive
             </li>
             <li>
-                Painfully slow asset importing times
+                Slow asset importing times
             </li>
             <li>
-                Users are constantly waiting for updates to fix editor bugs, which add more bugs
+                No built-in networking workflow. You must create symlinks of your project to trick the editor into opening the project twice, or 
+                create builds every time you need to test a change.
+            </li>
+            <li>
+                High percentage of broken or rushed updates with regressions, compared to Unreal or Godot
             </li>
             <li>
                 Features ship incomplete with no guarantee of future progress (RIP UNET)
@@ -111,6 +111,7 @@
 </p>
 <p>
     There's one problem with that idea: writing your own game engine from the ground up is a colossal waste of time, and with these goals, I would have no hope of finishing. 
+    I know that I cannot replicate the work of hundreds of talented, experienced developers, by myself. 
     So instead, I decided to find out if I could write a game engine, without <i>writing</i> a game engine. I added two more goals:
 
     <ul>
@@ -123,7 +124,7 @@
     </ul>
     In essence: Don't reinvent the wheel (at least, not more than I already am by writing a game engine). The second one may seem a little odd though - how is no GUI better? 
     It offers a few advantages: the complexity of creating a good UI is gone, and an engine GUI is often not necessary for the vast majority of engine tasks. Rather than design
-    my own workflow, I can design my engine as a library and leverage existing C++ compilers to do the work for me.
+    my own workflow, I can design my engine as a library and leverage existing creation tools.
 </p>
 <p>
     This brings me to my first rule: always plan before you program!
