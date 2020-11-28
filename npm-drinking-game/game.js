@@ -10,6 +10,9 @@
 let numPackages = 0;
 
 async function analyzePackage(packageName, packageVersion){
+    if (numPackages > 500){
+        return;     //prevent it from hitting a nuclear package 
+    }
     const data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`));
     if (typeof data == "string" || data["error"] != undefined){
         return;
@@ -79,17 +82,17 @@ async function intoxicate(){
     const scores = {};
 
     //determine which tests pass
-    for(const package of results){
-        //determine relevance
-        if (package.searchScore > 1){
-            const key = package.package.name
-            
-            scores[key] = {"relevance":true};
-            scores[key]["data"] = package;
+    const package = results[0]
+    //determine relevance
+    if (package.searchScore > 1){
+        const key = package.package.name
+        
+        scores[key] = {"relevance":true};
+        scores[key]["data"] = package;
 
-            scores[key] = {...scores[key],...(await analyzePackage(package.package.name,package.package.version))}
-        }
+        scores[key] = {...scores[key],...(await analyzePackage(package.package.name,package.package.version))}
     }
+    
     if (Object.keys(scores).length == 0){
         return "No packages with a similar name found. Try a different name!";
     }
