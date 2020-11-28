@@ -126,7 +126,7 @@ data = [
                 {
                     title: "The NPM Drinking Game",
                     tag: "Your liver will not like this",
-                    ref:"npm-drinking-game"
+                    ref:"npm-drinking-game",
                     img:"npm-drinking-game/npm-logo.svg"
                 },
                 {
