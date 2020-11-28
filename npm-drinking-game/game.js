@@ -10,8 +10,8 @@
 let numPackages = 0;
 
 async function analyzePackage(packageName, packageVersion){
-    const data = await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`);
-    if (typeof data == "string"){
+    const data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`));
+    if (typeof data == "string" || data["error"] != undefined){
         return;
     }
     numPackages++;
@@ -35,30 +35,33 @@ async function analyzePackage(packageName, packageVersion){
         }
     }
 
+    //implementation complexity, determined by the size of the package
+    scores["lines"] = (data["dist"]["size"] == undefined ? -1 : data["dist"]["size"]);
+
     //determine implementation complexity
     //this is determined by the amount of "bytes" of code
-    if (data.repository && data.repository.url.includes("github")){
-        //find location of "github.com"
-        let pos = data.repository.url.indexOf("github.com");
-        let repo = data.repository.url.substring(pos + "github.com/".length);
+    // if (data.repository && data.repository.url.includes("github")){
+    //     //find location of "github.com"
+    //     let pos = data.repository.url.indexOf("github.com");
+    //     let repo = data.repository.url.substring(pos + "github.com/".length);
 
-        //find location of ".git"
-        pos = repo.includes(".git")
+    //     //find location of ".git"
+    //     pos = repo.includes(".git")
 
-        //query github
-        repo = repo.substring(0,repo.length - (pos ? ".git".length : 0));
-        let url = `https://api.github.com/repos/${repo}/languages`;
-        const langs = (await httpget(url).catch(()=>{alert("Too fast! Wait a minute and try again")}));
+    //     //query github
+    //     repo = repo.substring(0,repo.length - (pos ? ".git".length : 0));
+    //     let url = `https://api.github.com/repos/${repo}/languages`;
+    //     const langs = (await httpget(url).catch(()=>{alert("Too fast! Wait a minute and try again")}));
 
-        let total = 0;  //amount of "bytes" of code present in this repo
-        for(let val of Object.values(langs)){
-            total += val;
-        }
-        scores["lines"] = total;
-    }
-    else{
-        scores["lines"] = -1; //cannot verify
-    }
+    //     let total = 0;  //amount of "bytes" of code present in this repo
+    //     for(let val of Object.values(langs)){
+    //         total += val;
+    //     }
+    //     scores["lines"] = total;
+    // }
+    // else{
+    //     scores["lines"] = -1; //cannot verify
+    // }
 
     return scores;
 }
@@ -82,16 +85,21 @@ async function intoxicate(){
             scores[key] = {...scores[key],...(await analyzePackage(package.package.name,package.package.version))}
         }
     }
-    console.log(scores);
+    if (Object.keys(scores).length == 0){
+        return "No packages with a similar name found. Try a different name!";
+    }
 
     let score = 0;
 
     function tallyPrintScore(package, existsPenalty = false){
+        if (package == undefined){
+            return;
+        }
         const html = [];
 
         score += (existsPenalty) ? 1 : 0;
         
-        let isTrivial = package.lines <= 10000;
+        let isTrivial = package.lines <= 40000;
         let isOverrated = package.downloads >= 1000;
         
         score += isTrivial;
@@ -101,7 +109,7 @@ async function intoxicate(){
         Name: ${package.data.name}<br>
         Description: ${package.data.description}<br>
         ${existsPenalty ? "Exists: ✅ (+1 🍺)<br>" : ""}
-        &lt; 10kb of code: ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
+        &lt; 40kb of code: ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
         &gt; 1K weekly downloads: ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
         `);
 
