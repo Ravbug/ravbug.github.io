@@ -20,20 +20,6 @@ async function analyzePackage(packageName, packageVersion){
 
     const scores = {};
 
-    //determine implementation complexity
-    if (data.repository && data.repository.url.includes("github")){
-        //TODO: use github api to determine complexity
-        //iterate and count lines, skip files with "test" in the name or path
-        const repo = data.repository.url.substring("https://github.com/".length);
-       // console.log(repo)
-
-        //const files = httpget(`https://api.github.com/search/code?q=extension:js+repo:${repo}`);
-        scores["lines"] = 30;
-    }
-    else{
-        scores["lines"] = -1; //cannot verify
-    }
-
     //determine download count
     const downloads = (await httpget(`https://api.npmjs.org/downloads/point/last-week/${packageName}`)).downloads;
     scores["downloads"] = downloads;
@@ -47,6 +33,31 @@ async function analyzePackage(packageName, packageVersion){
             const version = data.dependencies[name].replace(/[^0-9.]/g,'');
             scores["deps"][name] = await analyzePackage(name,version); 
         }
+    }
+
+    //determine implementation complexity
+    //this is determined by the amount of "bytes" of code
+    if (data.repository && data.repository.url.includes("github")){
+        //find location of "github.com"
+        let pos = data.repository.url.indexOf("github.com");
+        let repo = data.repository.url.substring(pos + "github.com/".length);
+
+        //find location of ".git"
+        pos = repo.includes(".git")
+
+        //query github
+        repo = repo.substring(0,repo.length - (pos ? ".git".length : 0));
+        let url = `https://api.github.com/repos/${repo}/languages`;
+        const langs = (await httpget(url).catch(()=>{alert("Too fast! Wait a minute and try again")}));
+
+        let total = 0;  //amount of "bytes" of code present in this repo
+        for(let val of Object.values(langs)){
+            total += val;
+        }
+        scores["lines"] = total;
+    }
+    else{
+        scores["lines"] = -1; //cannot verify
     }
 
     return scores;
@@ -73,51 +84,41 @@ async function intoxicate(){
     }
     console.log(scores);
 
-    const html = [];
-    //tally up the scores
-    for(const package of Object.values(scores)){
+    let score = 0;
 
-        let immediateScore = 1;
-        if (package.lines >= 30) immediateScore++;
-        if (package.downloads > 100) immediateScore++;
+    function tallyPrintScore(package, existsPenalty = false){
+        const html = [];
+
+        score += (existsPenalty) ? 1 : 0;
+        
+        let isTrivial = package.lines <= 10000;
+        let isOverrated = package.downloads >= 1000;
+        
+        score += isTrivial;
+        score += isOverrated;
 
         html.push(`
         Name: ${package.data.name}<br>
         Description: ${package.data.description}<br>
-        Exists: ✅ (+1 🍺)<br>
-        &lt; 30 lines: ${package.lines >= 30 ? "✅ (+1 🍺)" : "❌"}<br>
-        &gt; 1K weekly downloads: ${package.downloads} > 1000 ${package.downloads >= 1000 ? "✅ (+1 🍺)" : "❌"}<br>
+        ${existsPenalty ? "Exists: ✅ (+1 🍺)<br>" : ""}
+        &lt; 10kb of code: ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
+        &gt; 1K weekly downloads: ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
         `);
 
-        function evaluate_deps(pkg){
-            if (pkg == undefined){
-                return;
-            }
-            if (pkg.lines >= 30) immediateScore++;
-            if (pkg.downloads > 100) immediateScore++;
-            html.push(`
-            Name: ${pkg.data.name}<br>
-            Description: ${pkg.data.description}<br>
-            &lt; 30 lines: ${pkg.lines >= 30 ? "✅ (+1 🍺)" : "❌"}<br>
-            &gt; 1K weekly downloads: ${pkg.downloads} > 1000 ${pkg.downloads >= 1000 ? "✅ (+1 🍺)" : "❌"}<br>
-            `);
-            if (pkg.deps && Object.keys(pkg.deps).length > 0){
-                html.push("Dependencies:<blockquote>")
-                for(const dep of Object.values(pkg.deps)){
-                    evaluate_deps(dep);
-                }
-                html.push("</blockquote>")
-            }
-        }
         if (package.deps && Object.keys(package.deps).length > 0){
             html.push("Dependencies:<blockquote>")
             for(const dep of Object.values(package.deps)){
-                evaluate_deps(dep);
+                html.push(tallyPrintScore(dep));
             }
             html.push("</blockquote>")
         }
-        html.push(`<h2>This package is worth ${immediateScore}x🍺`)
+
+        if(existsPenalty){
+            html.push(`<h2>This package is worth ${score}x🍺`)
+        }
+
+        return html.join('');
     }
 
-    return html.join('');
+    return tallyPrintScore(Object.values(scores)[0],true);
 }
