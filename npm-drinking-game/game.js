@@ -21,9 +21,9 @@ const downloadcache = {
 }
 
 async function analyzePackage(packageName, packageVersion){
-    if (numPackages > 1000){
+    if (numPackages > 2000){
         if (!hasAlerted){
-            alert("Maximum recursion depth of 1000 hit! The real cost of this package is higher.")
+            alert("Maximum recursion depth of 2000 hit! The real cost of this package is higher.")
             hasAlerted = true;
         }
         return;     //prevent it from hitting a nuclear package 
