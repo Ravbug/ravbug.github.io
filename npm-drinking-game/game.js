@@ -8,10 +8,14 @@
 }
 
 let numPackages = 0;
+let hasAlerted = false;
 
 async function analyzePackage(packageName, packageVersion){
     if (numPackages > 1000){
-        alert("Maximum recursion depth of 1000 hit! The real cost of this package is higher.")
+        if (!hasAlerted){
+            alert("Maximum recursion depth of 1000 hit! The real cost of this package is higher.")
+            hasAlerted = true;
+        }
         return;     //prevent it from hitting a nuclear package 
     }
     const data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`));
@@ -78,6 +82,7 @@ async function analyzePackage(packageName, packageVersion){
 
 async function intoxicate(){
     numPackages = 0;
+    hasAlerted = false;
     const query = encodeURIComponent(document.getElementById("search").value);
     const results = (await httpget(`https://registry.npmjs.com/-/v1/search?text=${query}&size=5`)).objects;
     const scores = {};
