@@ -107,8 +107,8 @@ async function intoxicate(){
 
         score += (existsPenalty) ? 1 : 0;
         
-        let isTrivial = package.lines <= 40000;
-        let isOverrated = package.downloads >= 1000;
+        let isTrivial = package.lines <= 20000;
+        let isOverrated = (package.downloads >= 1000) && isTrivial;
         
         score += isTrivial;
         score += isOverrated;
@@ -117,8 +117,8 @@ async function intoxicate(){
         Name: ${package.data.name}<br>
         Description: ${package.data.description}<br>
         ${existsPenalty ? "Exists: ✅ (+1 🍺)<br>" : ""}
-        &lt; 40kb of code: ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
-        &gt; 1K weekly downloads: ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
+        Is Trivial: &lt; 20kb of code? ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
+        Is Overrated: Trivial and &gt; 1K weekly downloads? ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
         `);
 
         if (package.deps && Object.keys(package.deps).length > 0){
