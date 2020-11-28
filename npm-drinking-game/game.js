@@ -144,10 +144,9 @@ async function intoxicate(){
         
         score += isTrivial;
         score += isOverrated;
-
         html.push(`
         <p>
-        Name: ${package.data.name}<br>
+        Name: <a href="${package.data.homepage}" target="_blank">${package.data.name}</a><br>
         Description: ${package.data.description}<br>
         ${/*existsPenalty*/ false ? "Exists: ✅ (+1 🍺)<br>" : ""}
         Is Trivial: &lt; 20kb of code? ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
