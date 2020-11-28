@@ -146,7 +146,7 @@ async function intoxicate(){
         score += isOverrated;
         html.push(`
         <p>
-        Name: <a href="${package.data.homepage}" target="_blank">${package.data.name}</a><br>
+        Name: <a href="https://www.npmjs.com/package/${package.data.name}" target="_blank">${package.data.name}</a><br>
         Description: ${package.data.description}<br>
         ${/*existsPenalty*/ false ? "Exists: ✅ (+1 🍺)<br>" : ""}
         Is Trivial: &lt; 20kb of code? ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
