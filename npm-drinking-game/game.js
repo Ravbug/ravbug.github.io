@@ -115,6 +115,7 @@ async function intoxicate(){
         score += isOverrated;
 
         html.push(`
+        <p>
         Name: ${package.data.name}<br>
         Description: ${package.data.description}<br>
         ${existsPenalty ? "Exists: ✅ (+1 🍺)<br>" : ""}
@@ -138,7 +139,10 @@ async function intoxicate(){
             for(const dep of Object.values(package.deps)){
                 html.push(tallyPrintScore(dep));
             }
-            html.push("</blockquote>")
+            html.push("</blockquote></p>")
+        }
+        else{
+            html.push('</p>')
         }
 
         if(existsPenalty){
