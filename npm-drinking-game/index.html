@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>The NPM Drinking Game</title>
+        <meta name="description" content="Your liver will not like this">
+        <link id="favicon" rel="icon" href="npm-logo.svg" type="image/x-icon">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div class="main">
+            <p>
+                <b>Welcome to the NPM Drinking Game!</b> This game calls attention to the absurd levels JavaScript developers will go to avoid writing code. 
+                Because code written by strangers on the internet is guaranteed to be safe, secure, and performant, right?
+            </p>
+            <p>
+                The rules of the game are very simple. 
+                <ol>
+                    <li>
+                        Think of a trivial programming task. The more trivial, the better.
+                    </li>
+                    <li>
+                        Think of a likely name for an NPM module that solves that task.
+                    </li>
+                    <li>
+                        If a module exists to solve that problem, take 1 shot.
+                    </li>
+                    <li>
+                        If that module has over 1,000 weekly downloads, take 1 more shot.
+                    </li>
+                    <li>
+                        If the module's ratio of top-level files to dependencies is less than 2, take one more shot
+                    </li>
+                    <li>
+                        If the module has dependencies, take 1 shot for every additional module that satisfies any of the above criteria.
+                    </li>
+                </ol>
+            </p>
+            <p>
+                Use the search bar below to play!
+            </p>
+            <input id="search" placeholder="Search NPM..."></input>
+            <button onclick="go()">Search!</button>
+            <div id="output"></div>
+        </div>
+    </body>
+    <script>
+        async function go(){
+            document.getElementById('output').innerHTML = await intoxicate()
+        }
+    </script>
+    <script src="game.js"></script>
+    <script src="../header.js"></script>
+    <script src="../statistics.js" url="https://bit.ly/3fWU5Xv"></script> 
+</html>
