@@ -131,6 +131,8 @@ async function intoxicate(){
 
     let score = 0;
 
+    const alreadyCounted = new Set();
+
     function tallyPrintScore(package, existsPenalty = false){
         if (package == undefined){
             return;
@@ -142,8 +144,15 @@ async function intoxicate(){
         let isTrivial = package.lines <= 20000;
         let isOverrated = (package.downloads >= 1000) && isTrivial;
         
-        score += isTrivial;
-        score += isOverrated;
+        const verstr = `${package.data.name}@${package.data.version}`;
+        
+        if (!alreadyCounted.has(verstr)){
+            score += isTrivial;
+            score += isOverrated;
+            alreadyCounted.add(verstr);
+        }
+        
+        
         html.push(`
         <p>
         Name: <a href="https://www.npmjs.com/package/${package.data.name}" target="_blank">${package.data.name}</a><br>
