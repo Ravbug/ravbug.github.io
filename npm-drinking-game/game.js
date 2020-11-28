@@ -10,6 +10,16 @@
 let numPackages = 0;
 let hasAlerted = false;
 
+//store as pkg@version : data
+const pkgcache = {
+
+}
+
+//store as pkg : data
+const downloadcache = {
+
+}
+
 async function analyzePackage(packageName, packageVersion){
     if (numPackages > 1000){
         if (!hasAlerted){
@@ -18,9 +28,18 @@ async function analyzePackage(packageName, packageVersion){
         }
         return;     //prevent it from hitting a nuclear package 
     }
-    const data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`));
-    if (typeof data == "string" || data["error"] != undefined){
-        return;
+    const vstr = `${packageName}@${packageVersion}`;
+
+    let data;
+    if (!pkgcache[vstr]){
+        data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`).catch(()=>{alert("Rate limit error. Please wait a few minutes, then try again.")}));
+        if (typeof data == "string" || data["error"] != undefined){
+            return;
+        }
+        pkgcache[vstr] = data;
+    }
+    else{
+        data = pkgcache[vstr];
     }
     numPackages++;
 
@@ -28,8 +47,15 @@ async function analyzePackage(packageName, packageVersion){
 
     const scores = {};
 
+    let downloads;
     //determine download count
-    const downloads = (await httpget(`https://api.npmjs.org/downloads/point/last-week/${packageName}`)).downloads;
+    if (!downloadcache[packageName]){
+        downloads = (await httpget(`https://api.npmjs.org/downloads/point/last-week/${packageName}`)).downloads;
+        downloadcache[packageName] = downloads;
+    }
+    else{
+        downloads = downloadcache[packageName];
+    } 
     scores["downloads"] = downloads;
 
     scores["data"] = data;
@@ -111,7 +137,7 @@ async function intoxicate(){
         }
         const html = [];
 
-        score += (existsPenalty) ? 1 : 0;
+        //score += (existsPenalty) ? 1 : 0;
         
         let isTrivial = package.lines <= 20000;
         let isOverrated = (package.downloads >= 1000) && isTrivial;
@@ -123,7 +149,7 @@ async function intoxicate(){
         <p>
         Name: ${package.data.name}<br>
         Description: ${package.data.description}<br>
-        ${existsPenalty ? "Exists: ✅ (+1 🍺)<br>" : ""}
+        ${/*existsPenalty*/ false ? "Exists: ✅ (+1 🍺)<br>" : ""}
         Is Trivial: &lt; 20kb of code? ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
         Is Overrated: Trivial and &gt; 1K weekly downloads? ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
         `);
