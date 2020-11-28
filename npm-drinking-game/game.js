@@ -82,9 +82,9 @@ async function intoxicate(){
     const scores = {};
 
     //determine which tests pass
-    const package = results[0]
+    const package = results[0];
     //determine relevance
-    if (package.searchScore > 1){
+    if (package && package.searchScore > 1){
         const key = package.package.name
         
         scores[key] = {"relevance":true};

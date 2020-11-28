@@ -124,6 +124,12 @@ data = [
                     img:"poetry/icon.png"
                 },
                 {
+                    title: "The NPM Drinking Game",
+                    tag: "Your liver will not like this",
+                    ref:"npm-drinking-game"
+                    img:"npm-drinking-game/npm-logo.svg"
+                },
+                {
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
                     tag:"Quickly get a list of the best professors for your classes",

@@ -52,11 +52,11 @@
                      I am not liable if you hurt anyone or damage anything playing this game. 
                 </div>
             </p>
-            
         </div>
     </body>
     <script>
         async function go(){
+            document.getElementById('output').innerHTML = "Searching...";
             document.getElementById('output').innerHTML = await intoxicate()
         }
         function checkKey(event){
