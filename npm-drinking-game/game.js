@@ -14,6 +14,7 @@ let hasAlerted = false;
 const pkgcache = {
 
 }
+const failedSet = new Set();
 
 //store as pkg : data
 const downloadcache = {
@@ -21,19 +22,24 @@ const downloadcache = {
 }
 
 async function analyzePackage(packageName, packageVersion){
-    if (numPackages > 2000){
+    if (numPackages > 4000){
         if (!hasAlerted){
-            alert("Maximum recursion depth of 2000 hit! The real cost of this package is higher.")
+            alert("Maximum search limit of 4000 hit! The real cost of this package is higher.")
             hasAlerted = true;
         }
         return;     //prevent it from hitting a nuclear package 
     }
     const vstr = `${packageName}@${packageVersion}`;
 
+    if (failedSet.has(vstr)){
+        return; //avoid repeating failed requests
+    }
+
     let data;
     if (!pkgcache[vstr]){
         data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`).catch(()=>{alert("Rate limit error. Please wait a few minutes, then try again.")}));
         if (typeof data == "string" || data["error"] != undefined){
+            failedSet.add(vstr);
             return;
         }
         pkgcache[vstr] = data;
