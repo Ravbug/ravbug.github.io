@@ -43,7 +43,7 @@
             <p>
                 Use the search bar below to play!
             </p>
-            <input id="search" placeholder="Search NPM..."></input>
+            <input id="search" placeholder="Search NPM..." onkeyup="checkKey(event)"></input>
             <button onclick="go()">Search!</button>
             <div id="output"></div>
         </div>
@@ -51,6 +51,11 @@
     <script>
         async function go(){
             document.getElementById('output').innerHTML = await intoxicate()
+        }
+        function checkKey(event){
+            if(event.keyCode == 13){
+                go();
+            }
         }
     </script>
     <script src="game.js"></script>
