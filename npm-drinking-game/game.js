@@ -122,7 +122,7 @@ async function intoxicate(){
         }
 
         if(existsPenalty){
-            html.push(`<h2>This package is worth ${score}x🍺`)
+            html.unshift(`<h2>This package is worth ${score}x🍺</h2>`)
         }
 
         return html.join('');
