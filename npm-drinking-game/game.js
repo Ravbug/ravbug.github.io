@@ -10,7 +10,8 @@
 let numPackages = 0;
 
 async function analyzePackage(packageName, packageVersion){
-    if (numPackages > 500){
+    if (numPackages > 1000){
+        alert("Maximum recursion depth of 1000 hit! The real cost of this package is higher.")
         return;     //prevent it from hitting a nuclear package 
     }
     const data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`));
