@@ -36,7 +36,12 @@ async function analyzePackage(packageName, packageVersion){
     }
 
     //implementation complexity, determined by the size of the package
-    scores["lines"] = (data["dist"]["size"] == undefined ? -1 : data["dist"]["size"]);
+    try{
+        scores["lines"] = (data["dist"]["size"] == undefined ? -1 : data["dist"]["size"]);
+    }
+    catch(e){
+        return;
+    }
 
     //determine implementation complexity
     //this is determined by the amount of "bytes" of code
