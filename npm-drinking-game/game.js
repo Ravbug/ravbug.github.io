@@ -122,8 +122,19 @@ async function intoxicate(){
         Is Overrated: Trivial and &gt; 1K weekly downloads? ${package.downloads} > 1000 ${isOverrated ? "✅ (+1 🍺)" : "❌"}<br>
         `);
 
+        //get total number of dependencies
+        function getDeps(p){
+            let depcount = 0;
+            if (p && p["deps"]){
+                for(let pkg of Object.keys(p["deps"])){
+                    depcount += getDeps(p["deps"][pkg]) + 1;
+                }
+            }
+            return depcount;
+        }
+
         if (package.deps && Object.keys(package.deps).length > 0){
-            html.push("Dependencies:<blockquote>")
+            html.push(`Dependencies (${getDeps(package)}):<blockquote>`)
             for(const dep of Object.values(package.deps)){
                 html.push(tallyPrintScore(dep));
             }
