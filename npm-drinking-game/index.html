@@ -43,8 +43,13 @@
             <p>
                 Use the search bar below to play!
             </p>
-            <input id="search" placeholder="Search NPM..." onkeyup="checkKey(event)"></input>
-            <button onclick="go()">Search!</button>
+            <div class="input-group" style="min-width:200px;float:left;margin:auto">
+                <input id="search" placeholder="Search NPM..." onkeyup="checkKey(event)" class="form-control"></input>
+                <button onclick="go()" class="btn btn-primary">Search!</button>
+            </div>
+
+            <br><br>
+            
             <div id="output"></div>
             <p>
                 <div class="breadcrumb">
