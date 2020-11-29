@@ -138,6 +138,7 @@ async function intoxicate(){
     let score = 0;
 
     const alreadyCounted = new Set();
+    const alreadyRecursed = new Set();
 
     function tallyPrintScore(package, existsPenalty = false){
         if (package == undefined){
@@ -152,10 +153,15 @@ async function intoxicate(){
         
         const verstr = `${package.data.name}@${package.data.version}`;
         
+        let include = false;
         if (!alreadyCounted.has(verstr)){
             score += isTrivial;
             score += isOverrated;
             alreadyCounted.add(verstr);
+        }
+        else{
+            //already processed this one, stop
+            return;
         }
         
         
@@ -173,7 +179,11 @@ async function intoxicate(){
             let depcount = 0;
             if (p && p["deps"]){
                 for(let pkg of Object.keys(p["deps"])){
-                    depcount += getDeps(p["deps"][pkg]) + 1;
+                    const t = p["deps"][pkg];
+                    if(t && !alreadyCounted.has(`${t.data.name}@${t.data.version}`) && !alreadyRecursed.has(`${t.data.name}@${t.data.version}`)){
+                        depcount += getDeps(t) + 1;
+                        alreadyRecursed.add(`${t.data.name}@${t.data.version}`)
+                    }
                 }
             }
             return depcount;
@@ -182,7 +192,9 @@ async function intoxicate(){
         if (package.deps && Object.keys(package.deps).length > 0){
             html.push(`Dependencies (${getDeps(package)}):<blockquote>`)
             for(const dep of Object.values(package.deps)){
-                html.push(tallyPrintScore(dep));
+                if (dep && !alreadyCounted.has(`${dep.data.name}@${dep.data.version}`)){
+                    html.push(tallyPrintScore(dep));
+                }
             }
             html.push("</blockquote></p>")
         }
