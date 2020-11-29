@@ -16,6 +16,8 @@ const pkgcache = {
 }
 const failedSet = new Set();
 
+const counted = new Set();
+
 //store as pkg : data
 const downloadcache = {
 
@@ -45,10 +47,13 @@ async function analyzePackage(packageName, packageVersion){
         pkgcache[vstr] = data;
     }
     else{
-        //data = pkgcache[vstr];
-        //already did this one, no need to add it again
-        return;
+        data = pkgcache[vstr];
     }
+    if (counted.has(vstr)){
+        return; //already did this one, no need to add it again
+    }
+    counted.add(vstr);
+
     numPackages++;
 
     document.getElementById("output").innerHTML = `Analyzed ${numPackages} packages...`;
@@ -120,6 +125,7 @@ async function intoxicate(){
     const query = encodeURIComponent(document.getElementById("search").value);
     const results = (await httpget(`https://registry.npmjs.com/-/v1/search?text=${query}&size=5`)).objects;
     const scores = {};
+    counted.clear();
 
     //determine which tests pass
     const package = results[0];
