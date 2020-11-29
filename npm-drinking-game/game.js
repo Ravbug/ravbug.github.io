@@ -45,7 +45,9 @@ async function analyzePackage(packageName, packageVersion){
         pkgcache[vstr] = data;
     }
     else{
-        data = pkgcache[vstr];
+        //data = pkgcache[vstr];
+        //already did this one, no need to add it again
+        return;
     }
     numPackages++;
 
@@ -138,7 +140,6 @@ async function intoxicate(){
     let score = 0;
 
     const alreadyCounted = new Set();
-    const alreadyRecursed = new Set();
 
     function tallyPrintScore(package, existsPenalty = false){
         if (package == undefined){
@@ -167,7 +168,7 @@ async function intoxicate(){
         
         html.push(`
         <p>
-        Name: <a href="https://www.npmjs.com/package/${package.data.name}" target="_blank">${package.data.name}</a><br>
+        Name: <a href="https://www.npmjs.com/package/${package.data.name}" target="_blank">${package.data.name} v${package.data.version}</a><br>
         Description: ${package.data.description}<br>
         ${/*existsPenalty*/ false ? "Exists: ✅ (+1 🍺)<br>" : ""}
         Is Trivial: &lt; 20kb of code? ${package.lines} ${isTrivial ? "✅ (+1 🍺)" : "❌"}<br>
@@ -180,9 +181,8 @@ async function intoxicate(){
             if (p && p["deps"]){
                 for(let pkg of Object.keys(p["deps"])){
                     const t = p["deps"][pkg];
-                    if(t && !alreadyCounted.has(`${t.data.name}@${t.data.version}`) && !alreadyRecursed.has(`${t.data.name}@${t.data.version}`)){
+                    if(t && !alreadyCounted.has(`${t.data.name}@${t.data.version}`)){
                         depcount += getDeps(t) + 1;
-                        alreadyRecursed.add(`${t.data.name}@${t.data.version}`)
                     }
                 }
             }
