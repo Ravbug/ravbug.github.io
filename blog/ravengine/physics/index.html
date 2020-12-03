@@ -17,6 +17,15 @@
     <meta property="og:image:height" content="512">
     <meta charset="utf-8">
     <link rel="stylesheet" href="../../blog.css">
+    <style>
+    img, video{
+        width:100%;
+        max-width:400px;
+    }
+    video{
+        max-width:500px;
+    }
+    </style>
 </head>
 
 <div class="main split">
@@ -94,6 +103,13 @@ add_subdirectory("${PHYSX_ROOT_DIR}/compiler/public")
 <p>
     After that I simply needed to wrap PhysX's calls. This is currently an ongoing process, and since PhysX provides so many features, I am only wrapping
     the ones that I currently need. Over time, I hope to have complete coverage.
+</p>
+<p>
+    Shown below is my early test with PhysX<br>
+    <video controls>
+        <source src="physicserrors.mov">
+    </video>
+    
 </p>
 <p>
     Next up: <a href="../rendering-megapost/"> Learning graphics programming</a>
