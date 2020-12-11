@@ -192,20 +192,6 @@ public:
     such as SIMD to get some performance improvements. Instead my design favors parallelism via mutlicore instead of SIMD, which for now, provides performance that is more than good enough for my goals. 
 </p>
 <p>
-    <h3>ECS Misconceptions: Cache Misses and SIMD</h3>
-    I see many people cite cache misses as the primary reason to use ECS, however, this is not the case at all. For the most part, optimizing CPU cache is a micro-optimization. Furthermore,
-    you have much less control over the CPU cache than you think - 
-    especially considering you are sharing that CPU and its cache with many other programs on the computer. Secondly, to properly take advantage of CPU cache (and also SIMD), your memory 
-    must be contiguous. However, trying to keep the entire allocation contiguous raises its own problems. For example, once allocated, resizing the allocation is expensive, and without that feature,
-    the engine would have an arbitrary hard limit to how many components it could have loaded at once. I did not want to impose such a limitation.
-</p>
-<p>
-    <h3>Performance metrics</h3>
-    My engine has zero SIMD support (excluding libraries I use that have it) and every single operation in my ECS is a cache miss because the entire allocation is not contiguous. However, on a Ryzen 7 1700x, my engine can simulate over 150,000 entities at once at 60 frames per second. 
-    Currently, the bottleneck is the render engine, not the object model. In the future I can make this even better with smarter optimizations. As core counts increase on consumer CPUs, this number 
-    will only go up. 
-</p>
-<p>
     Next up: <a href="../assets-factory/">Meshes, Shaders, and Variadic Templates</a> 
 </p>
 </div>
