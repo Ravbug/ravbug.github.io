@@ -124,24 +124,31 @@
     <h3>Automating shader compilation</h3>
     <p>
         CMake allows the creation of custom targets. With these targets, one can execute command line calls. I leverage this to compile shaders and pack resources all
-        completely automatically. To compile shaders, first the client programmer must instruct the engine where their shaders directory is, using a macro exposed by the engine's 
+        completely automatically. To compile shaders, first the client programmer must inform the engine about their shader files, through a separate cmake file: 
         CMakeLists.txt. 
-        <pre><code class="cmake">compile_shader_dir("YourRavEngineGame" "src/shaders")</code></pre>
-        CMake then knows to execute my shader compiler on the files in that directory as a pre-build action. Only files that have changed are evaluated. 
-        Client programmers create shader descriptor JSON files which tell the shader compiler what shader source files to use in the compilation. Shown below is an example of a shader descriptor:
-        <pre><code class="json">{
-    "varying" : "varying.def.sc",
-    "stages":[
-        {
-            "file":"vs_cubes.sc",
-            "stage":"vertex"
-        },
-        {
-            "file":"fs_cubes.sc",
-            "stage":"fragment"
-        }
-    ]
-} </code></pre>
+        <pre><code class="cmake"># debug wireframes shader
+declare_shader("debug" "${CMAKE_CURRENT_LIST_DIR}/vs_debug.glsl" "${CMAKE_CURRENT_LIST_DIR}/fs_debug.glsl" "${CMAKE_CURRENT_LIST_DIR}/debug_varying.def.hlsl")
+
+# deferred geometry material
+declare_shader("pbrmaterial" "${CMAKE_CURRENT_LIST_DIR}/vs_deferred_geo.glsl" "${CMAKE_CURRENT_LIST_DIR}/fs_deferred_geo.glsl" "${CMAKE_CURRENT_LIST_DIR}/deferred_varying.def.hlsl")
+
+declare_shader("deferred_blit" "${CMAKE_CURRENT_LIST_DIR}/deferred_blit.vsh" "${CMAKE_CURRENT_LIST_DIR}/deferred_blit.fsh" "${CMAKE_CURRENT_LIST_DIR}/blit_varying.def.hlsl")
+
+# lighting shaders
+declare_shader("pointlightvolume" "${CMAKE_CURRENT_LIST_DIR}/pointlight.vsh" "${CMAKE_CURRENT_LIST_DIR}/pointlight.fsh" "${CMAKE_CURRENT_LIST_DIR}/pointlight_varying.def.hlsl") </code></pre>
+        Afterwards, the client programmer simply tells the engine about this cmake file:
+<pre><code class="cmake">file(GLOB meshes "${sample_dir}/meshes/*.obj")
+file(GLOB textures "${sample_dir}/textures/*")
+file(GLOB shaders "${sample_dir}/shaders/*.cmake")
+
+pack_resources(TARGET "${APPNAME}" 
+    MESHES ${meshes}
+    SHADERS ${shaders}
+    TEXTURES ${textures}
+)</code></pre>
+
+        CMake then knows to execute my shader compiler on the files in that directory as a pre-build action. Only files that have changed are evaluated each build. 
+    
         Of course, I did not write a shader compiler. Instead, I call into the BGFX shader compiler and pass it the correct arguments, based on the current target platform. 
         This process is hidden from the client programmer, making the engine easier to use. To the client programmer, there is only one compilation step. 
     </p>
@@ -149,14 +156,8 @@
     <h3>Packing resources</h3>
     <p>
         To consolidate resources for easier loading within the engine across platforms, RavEngine packs all game assets into a single .zip file, which it then mounts like a disk at runtime.
-        It builds this asset package automatically in a similar method to the shader compilation step. Fist, the programmer instructs the engine where to find assets such as meshes by invoking
-        the proper macro:
-    <pre><code class="cmake">file(GLOB meshes "assets/meshes/*.obj")
-add_meshes("YourRavEngineGame" "${meshes}")</code></pre>
-        These macros simply copy those resources to a staging directory in the build directory if they have changed. After the programmer names all assets to include, they must then instruct the 
-        toolchain to pack them all together. To do this, simply invoke another macro:
-        <pre><code class="cmake">pack_resources("YourRavEngineGame")</code></pre>
-        This instructs CMake to execute a second tool I wrote which takes all the assets and creates a compressed Zip file. On Mac, this zip file is placed inside the app bundle, and on Linux, I plan 
+        It builds this asset package automatically in a similar method to the shader compilation step. The <code>pack_resources</code> command instructs the engine which
+        files to pack and what types they are. CMake executes a second tool I wrote which takes all the assets and creates a compressed Zip file. On Mac, this zip file is placed inside the app bundle, and on Linux, I plan 
         to include it inside the .appimage. 
     </p>
     <p>
