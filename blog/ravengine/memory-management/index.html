@@ -191,7 +191,7 @@ namespace std {
 </code></pre>
     This provides all that the macro did, without any extra code from client programmers, and is debuggable. In addition, I built a <code>WeakRef&lt;T&gt;</code> 
     which is similar to Ref except it doesn't call retain or release. Since WeakRef has to deal with dangling pointers, SharedObjects store their weak references
-    inside them, and on destruction, all current WeakRefs are notified to be set to nullptr. In this way, no smart pointer has a dangling pointer, and testing for nullptr 
+    inside them using a fast thread-safe hashset, and on destruction, all current WeakRefs are notified to be set to nullptr. This is a technique known as Zeroing Weak References, and in this way, no smart pointer has a dangling pointer, and testing for nullptr 
     is a valid way to check if a smart pointer is allocated. One can easily create a Shared pointer from a weak pointer and vice versa, using the relevant constructors. 
 </p>
 <p>

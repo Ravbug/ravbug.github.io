@@ -29,7 +29,7 @@
 <p>
     As I was researching Entity-Component-System (ECS) libraries, I found a consistent but undesirable recurring theme in: they try to be as "bare metal" as possible. In essence, they only use bare pointers
     to stack memory and extremely simplistic structures in order to be as fast as possible. There is no memory sharing, everything is a fixed size, and often because of this, they are difficult to multithread and impose
-    many upwards-scalability issues, in the effort to keep the entire allocation contiguous and entirely resident on the stack. This is unfriendly to my design goals - I want to provide free multithreading and not impose arbitrary limitations about the number of objects a game can have at once - remember
+    many upwards-scalability issues, in the effort to keep the allocations contiguous and entirely resident on the stack. This is unfriendly to my design goals - I do not want to impose arbitrary limitations about the number of objects a game can have at once - remember
     that the default stack size on some platforms is very small and cannot be resized! I instead decided to write my own ECS. 
 </p>
 <p>
@@ -188,8 +188,7 @@ public:
     Basically, I used Object-Oriented Programming to implement Data Oriented Programming to implement Object Oriented Programming. You can use both design paradigms at the same time, depending on your needs, without feeling
     hamstrung by the API. In addition, this design lends itself directly to multithreaded evaluation, so any overhead I introduced with this classes design I more than make up for with my threading implementation.
 
-    This does not mean that my design is without fault - far from it. My design does not store all of its data as a contiguous block of memory. Because of this, my design cannot leverage features of some CPUs
-    such as SIMD to get some performance improvements. Instead my design favors parallelism via mutlicore instead of SIMD, which for now, provides performance that is more than good enough for my goals. 
+    This does not mean that my design is without fault - far from it. My design does not take advantage of vectorization. Instead my design favors parallelism via mutlicore instead of SIMD, which for now, provides performance that is more than good enough for my goals. 
 </p>
 <p>
     Next up: <a href="../assets-factory/">Meshes, Shaders, and Variadic Templates</a> 
