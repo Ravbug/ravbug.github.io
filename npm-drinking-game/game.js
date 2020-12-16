@@ -39,8 +39,8 @@ async function analyzePackage(packageName, packageVersion){
 
     let data;
     if (!pkgcache[vstr]){
-        data = (await httpget(`https://r.cnpmjs.org/${packageName}/${packageVersion}`).catch(()=>{alert("Rate limit error. Please wait a few minutes, then try again.")}));
-        if (typeof data == "string" || data["error"] != undefined){
+        data = (await httpget(`https://unpkg.com/${vstr}/package.json`));
+        if (data == undefined || typeof data == "string" || data["error"] != undefined){
             failedSet.add(vstr);
             return;
         }
@@ -56,7 +56,7 @@ async function analyzePackage(packageName, packageVersion){
 
     numPackages++;
 
-    document.getElementById("output").innerHTML = `Analyzed ${numPackages} packages...`;
+    document.getElementById("output").innerHTML = `Analyzed ${numPackages} dependencies...`;
 
     const scores = {};
 
@@ -70,7 +70,6 @@ async function analyzePackage(packageName, packageVersion){
         downloads = downloadcache[packageName];
     } 
     scores["downloads"] = downloads;
-
     scores["data"] = data;
 
     //recurse dependencies
@@ -84,36 +83,28 @@ async function analyzePackage(packageName, packageVersion){
 
     //implementation complexity, determined by the size of the package
     try{
-        scores["lines"] = (data["dist"]["size"] == undefined ? -1 : data["dist"]["size"]);
+        //Query the module's directory structure
+        const dirstructure = await httpget(`https://unpkg.com/${vstr}/?meta`);
+        let totalSize = 0;
+
+        function recurse_size(root){
+            for(const file of root["files"]){
+                if (file["type"] == "directory"){
+                    recurse_size(file);
+                }
+                else{
+                    totalSize += file["size"];
+                }
+            }
+        }
+        recurse_size(dirstructure);
+
+        scores["lines"] = totalSize;
     }
     catch(e){
+        console.error(e);
         return;
     }
-
-    //determine implementation complexity
-    //this is determined by the amount of "bytes" of code
-    // if (data.repository && data.repository.url.includes("github")){
-    //     //find location of "github.com"
-    //     let pos = data.repository.url.indexOf("github.com");
-    //     let repo = data.repository.url.substring(pos + "github.com/".length);
-
-    //     //find location of ".git"
-    //     pos = repo.includes(".git")
-
-    //     //query github
-    //     repo = repo.substring(0,repo.length - (pos ? ".git".length : 0));
-    //     let url = `https://api.github.com/repos/${repo}/languages`;
-    //     const langs = (await httpget(url).catch(()=>{alert("Too fast! Wait a minute and try again")}));
-
-    //     let total = 0;  //amount of "bytes" of code present in this repo
-    //     for(let val of Object.values(langs)){
-    //         total += val;
-    //     }
-    //     scores["lines"] = total;
-    // }
-    // else{
-    //     scores["lines"] = -1; //cannot verify
-    // }
 
     return scores;
 }
@@ -196,7 +187,7 @@ async function intoxicate(){
         }
 
         if (package.deps && Object.keys(package.deps).length > 0){
-            html.push(`Dependencies (${getDeps(package)}):<blockquote>`)
+            html.push(`Unique dependencies (${getDeps(package)}):<blockquote>`)
             for(const dep of Object.values(package.deps)){
                 if (dep && !alreadyCounted.has(`${dep.data.name}@${dep.data.version}`)){
                     html.push(tallyPrintScore(dep));
@@ -209,11 +200,34 @@ async function intoxicate(){
         }
 
         if(existsPenalty){
-            html.unshift(`<h2>This package is worth ${score}x🍺</h2>`)
+            html.unshift(`<h2>${package.data.name} v${package.data.version} is worth ${score}x🍺</h2>`)
         }
 
+        document.getElementById('exportbtn').onclick = () => {exportFullHierarchy(`${package.data.name}@${package.data.version}`)};
+        document.getElementById('exportbtn').style.display="";
         return html.join('');
     }
 
     return tallyPrintScore(Object.values(scores)[0],true);
 }
+
+function exportFullHierarchy(name){
+    const full_str = document.getElementById("output").innerHTML;
+    download(`${name}.html`,full_str);
+}
+
+/**
+	Generates a file download with supplied content and filename
+*/
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+  }
