@@ -2,8 +2,13 @@
     Get data from remote resource
     */
    async function httpget(url){
-    let temp;
-    await fetch(url).then(response => response.json()).then(data=>{temp=data});
+    let temp = undefined;
+    try{
+        await fetch(url).then(response => response.json()).then(data=>{temp=data});
+    }
+    catch(e){
+        return undefined;
+    }
     return temp;
 }
 
