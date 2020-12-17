@@ -218,7 +218,7 @@ async function intoxicate(){
 
 function exportFullHierarchy(name){
     const full_str = document.getElementById("output").innerHTML;
-    download(`${name}.html`,full_str);
+    download(`${name}.html`,`<head><title>${name} Dependencies</title><meta charset=\"utf-8\"</head>` + full_str);
 }
 
 /**
