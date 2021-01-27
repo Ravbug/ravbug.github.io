@@ -29,6 +29,18 @@ data = [
             title:"Software Development",
             content:[
                 {
+                    title:"RavEngine",
+                    img:"https://avatars2.githubusercontent.com/u/22283943",
+                    tag:"Fast and flexible C++ game engine leveraging both OOP and ECS",
+                    ref:"https://github.com/Ravbug/RavEngine",
+                },
+                {
+                    title:"Tankista",
+                    img:"https://rrsoftware.github.io/images/appicon.png",
+                    tag:"Mulitplayer tank battle game in development",
+                    ref:"https://rrsoftware.github.io",
+                },
+                {
                     title:"Open Source Software",
                     img:"img/github.svg",
                     tag:"View my public open source software repositories",
