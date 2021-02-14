@@ -320,6 +320,12 @@ data = [
                     ref:"tutorials/cmake-easy"
                 },
                 {
+                    title:"Simulate a Raspberry Pi",
+                    img:"tutorials/virtual-rpi/pi.svg",
+                    tag:"Emulate a full Raspberry Pi on your PC",
+                    ref:"tutorials/virtual-rpi"
+                },
+                {
                     title:"Rapid Discord.js tutorial",
                     img:"tutorials/discordjs/discordjs.png",
                     tag:"A condensed Discord.js bot tutorial for experienced developers, includes starter code.",

@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>Virtual Pi Tutorial</title>
+    <meta name="description" content="Run a simulated Raspberry Pi on your PC">
+    <link id="favicon" rel="icon" href="pi.svg" type="image/x-icon">
+    <meta charset="utf-8">
+    
+     <!-- Social icon -->
+     <meta property="og:image" content="https://www.ravbug.com/tutorials/virtual-rpi/pi.png">
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="252">
+     <meta property="og:image:height" content="322">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+    <div class="main">
+        <p>
+            Want to experiment with writing or running software on a raspberry pi, but don't have a pi? You can create a virtual pi on your PC
+       using the Qemu VM software.
+        </p>
+        <p>
+            <img class="responsiveimg" src="versatilepb.png">
+        </p>
+       <p>
+           <strong>Note: </strong> Depending on your hardware, this will likely be much slower than a real pi.
+       </p>
+       <h4>Prerequisites</h4>
+       <p>
+           You need a few things first:
+           <ol>
+               <li>
+                   Qemu. Download the version for your platform here: <a href="https://www.qemu.org/download/" target="_blank">Qemu downloads</a>
+               </li>
+               <li>
+                   Rasbian. Dwnload the version of raspbian you want to run from <a href="https://downloads.raspberrypi.org/raspbian/images/" target="_blank">Raspbian Downloads</a>. In this tutorial, I am using 
+                   <code>2020-02-14-raspbian-buster</code>. You should have a .img file after extracting it. I recommend the 
+               </li>
+           </ol>
+       </p>
+       <h4>Method 1: versatilepb</h4>
+       You need to download two files:
+       <ol>
+           <li>
+            A kernel. Download one from <a href="https://github.com/dhruvvyas90/qemu-rpi-kernel" target="_blank">GitHub</a>. I recommend the Stretch kernel even if using buster, the buster kernel 
+            has some stability issues as the time of writing.
+           </li>
+           <li>
+           The Qemu DTB file. You can get it <a href="https://github.com/dhruvvyas90/qemu-rpi-kernel/blob/master/versatile-pb-buster-5.4.51.dtb" target="_blank">here</a>.
+           </li>
+       </ol>
+       <p>
+           After downloading those files, create a startup script with the following contents:
+<pre><code class="sh">#!/bin/sh
+# Edit these to match the files you downloaded
+KERNEL=kernel-qemu-4.14.79-stretch 
+DTB=versatile-pb-buster-5.4.51.dtb
+DRIVE=2020-02-13-raspbian-buster.img
+
+qemu-system-arm -kernel ${KERNEL} \
+    -cpu arm1176 -m 256 -M versatilepb \
+    -dtb ${DTB} -no-reboot \
+    -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw accel=hvt" \
+    -drive "file=${DRIVE},index=0,media=disk,format=raw" \
+    -net user,hostfwd=tcp::5022-:22 -net nic \
+    -smp 1
+    </code>
+</pre>
+       </p>
+       <p>
+           Afterwards, simply execute the script: <code>./start.sh</code>
+       </p>
+
+       <hr>
+       <h4>Method 2: raspi2 and raspi3</h4>
+       <p>
+        Qemu has a dedicated device for the raspi2 and raspi3. To use these devices, you must extract some files from the raspbian <code>img</code>.
+       </p>
+       <ol>
+           <li>
+               The kernel. For raspi2, copy <code>kernel7.img</code> or <code>kernel7l.img</code> out of the .img. For raspi3, use <code>kernel8.img</code>
+           </li>
+           <li>
+               The DTB. For raspi2, copy <code>bcm2710-rpi-3-b-plus.dtb</code> out of the .img. For raspi3, use <code>bcm2710-rpi-3-b-plus.dtb</code>
+           </li>
+       </ol>
+       <p>
+           The commands for both devices are similar.<br>
+           <b>Raspberry Pi 2:</b>
+<pre><code class="sh">#!/bin/sh
+# Edit these to match the files you downloaded
+KERNEL=kernel7.img
+DRIVE=2020-02-13-raspbian-buster.img
+DTB=bcm2710-rpi-3-b-plus.dtb
+
+qemu-system-arm -M raspi2 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -device usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22 
+</code></pre>
+<b>Raspberry Pi 3:</b>
+<pre><code class="sh">#!/bin/sh
+# Edit these to match the files you downloaded
+KERNEL=kernel8.img
+DTB=bcm2710-rpi-3-b-plus.dtb
+DRIVE=2020-02-13-raspbian-buster.img
+
+qemu-system-aarch64 -M raspi3 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -device usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22
+</code></pre>
+       </p>
+       <p>
+        To launch in headless mode, add the <code>-nographic</code> argument.
+       </p>
+       <p>
+           If you the command fails complaining about the size of the image not being a power of 2, simply run the command it suggests:
+            <code>qemu-img resize 2020-02-13-raspbian-buster.img 8G</code>, then rerun the qemu command.
+       </p>
+    </div>
+</body>
+
+<script src="../../header.js"></script>
+<script src="../../statistics.js" url="https://bit.ly/2EGRgNO"></script>  
