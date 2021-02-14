@@ -118,7 +118,7 @@ qemu-system-aarch64 -M raspi3 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append
         To launch in headless mode, add the <code>-nographic</code> argument.
        </p>
        <p>
-           If you the command fails complaining about the size of the image not being a power of 2, simply run the command it suggests:
+           If the command fails complaining about the size of the image not being a power of 2, simply run the command it suggests:
             <code>qemu-img resize 2020-02-13-raspbian-buster.img 8G</code>, then rerun the qemu command.
        </p>
     </div>
