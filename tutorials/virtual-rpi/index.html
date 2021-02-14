@@ -39,15 +39,16 @@
                </li>
                <li>
                    Rasbian. Dwnload the version of raspbian you want to run from <a href="https://downloads.raspberrypi.org/raspbian/images/" target="_blank">Raspbian Downloads</a>. In this tutorial, I am using 
-                   <code>2020-02-14-raspbian-buster</code>. You should have a .img file after extracting it. I recommend the 
+                   <code>2020-02-14-raspbian-buster</code>. You should have a .img file after extracting it. 
                </li>
            </ol>
        </p>
        <h4>Method 1: versatilepb</h4>
+       The Qemu versatilepb machine type allows you to construct a generic pi-like device. While slow and limited to 1 virtual core and 256mb of RAM, it is the most likely to work.
        You need to download two files:
        <ol>
            <li>
-            A kernel. Download one from <a href="https://github.com/dhruvvyas90/qemu-rpi-kernel" target="_blank">GitHub</a>. I recommend the Stretch kernel even if using buster, the buster kernel 
+            A versatilepb kernel. Download one from <a href="https://github.com/dhruvvyas90/qemu-rpi-kernel" target="_blank">GitHub</a>. I recommend the Stretch kernel even if using Buster, the Buster kernel 
             has some stability issues as the time of writing.
            </li>
            <li>
@@ -79,7 +80,10 @@ qemu-system-arm -kernel ${KERNEL} \
        <hr>
        <h4>Method 2: raspi2 and raspi3</h4>
        <p>
-        Qemu has a dedicated device for the raspi2 and raspi3. To use these devices, you must extract some files from the raspbian <code>img</code>.
+       </p>
+        Qemu has a dedicated device for the raspi2 and raspi3. These devices more closely model the real pi boards, but they also may have unpredictable stability and performance issues, especially in graphics mode. 
+        <p>
+        To use these devices, you must extract some files from the raspbian <code>img</code>.
        </p>
        <ol>
            <li>
@@ -91,16 +95,16 @@ qemu-system-arm -kernel ${KERNEL} \
        </ol>
        <p>
            The commands for both devices are similar.<br>
-           <b>Raspberry Pi 2:</b>
+           <b>Raspberry Pi 2 (32 bit):</b>
 <pre><code class="sh">#!/bin/sh
 # Edit these to match the files you downloaded
 KERNEL=kernel7.img
 DRIVE=2020-02-13-raspbian-buster.img
 DTB=bcm2710-rpi-3-b-plus.dtb
-
+# Warning: may crash!
 qemu-system-arm -M raspi2 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -device usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22 
 </code></pre>
-<b>Raspberry Pi 3:</b>
+<b>Raspberry Pi 3 (64 bit):</b>
 <pre><code class="sh">#!/bin/sh
 # Edit these to match the files you downloaded
 KERNEL=kernel8.img
