@@ -102,7 +102,7 @@ KERNEL=kernel7.img
 DRIVE=2020-02-13-raspbian-buster.img
 DTB=bcm2710-rpi-3-b-plus.dtb
 
-qemu-system-arm -M raspi2 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -usb -device usb-mouse -device usb-kbd -netdev user,id=net0,hostfwd=tcp::5555-:22
+qemu-system-arm -M raspi2 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -usb -device usb-mouse -device usb-kbd -device usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22 -no-reboot
 </code></pre>
 <b>Raspberry Pi 3 (64 bit):</b>
 <pre><code class="sh">#!/bin/sh
@@ -112,7 +112,7 @@ KERNEL=kernel8.img
 DRIVE=2020-02-13-raspbian-buster.img
 DTB=bcm2710-rpi-3-b-plus.dtb
 
-qemu-system-aarch64 -M raspi3 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -usb -device usb-mouse -device usb-kbd -netdev user,id=net0,hostfwd=tcp::5555-:22    
+qemu-system-aarch64 -M raspi3 -kernel ${KERNEL} -dtb ${DTB} -sd ${DRIVE} -append "console=ttyAMA0 root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4" -usb -device usb-mouse -device usb-kbd -device usb-net,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22 -no-reboot    
 </code></pre>
        </p>
        <p>
