@@ -93,17 +93,17 @@ add_executable("${PROJECT_NAME}" ${MY_SOURCES})</code></pre>
         </p>            
             In general, use GLOB if:
             <ol>
-                <li>Your project has > 10 files</li>
-                <li>You anticipate adding many new files</li>
+                <li>Your project has a large number of files</li>
+                <li>You anticipate adding many new files or renaming files</li>
             </ol>
             Here, GLOB will help you by automatically adding the new files as you add or rename them. Note that GLOB does not search recursively. GLOB does have a recursive mode but it is not covered in this guide.
             <br><br>
             In general, hard-code filenames if:
             <ol>
-                <li>Your project has < 10 files</li>
+                <li>Your project has a small number of files</li>
                 <li>You do not anticipate adding many new files or renaming many files</li>
+                <li>You want to control which files are included with other logic</li>
             </ol>
-            In the case of small projects, the filesystem search cost of GLOB is not worth the convenience afforded by it. 
         </p>
         <hr>
         <h3>Creating a Library</h3>
