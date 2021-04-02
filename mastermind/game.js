@@ -179,6 +179,8 @@ function checkMove(sender){
                 if (code[j] == currentCode[i] && ! haveCountedInCode[j]){
                     n_white++;
                     haveCountedInCode[j] = true;
+                    haveCounted[j] = true;
+                    break;
                 }
             }
         }
