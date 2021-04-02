@@ -145,7 +145,12 @@ function prepareTurn() {
     currentRow++;
     //has the game been lost?
     if (currentRow == 10) {
-        alert("You lose!")
+        let losestr = [];
+        for(let i = 0; i < 4; i++){
+            losestr.push(`<div class="colorpin" style="background-color: ${possibleColors[code[i]]}"></div>`);
+        }
+
+        swal({ html:true, title:'You lose!', text:losestr.join(''), icon:"error"})
         //disable the final row
         for (let pin of pins[currentRow - 1]) {
             pin.disabled = true;
@@ -216,7 +221,12 @@ function checkMove(sender) {
 
     //do we need another turn?
     if (n_red == 4) {
-        alert("You win!")
+        let winstr = [];
+        for(let i = 0; i < 4; i++){
+            winstr.push(`<div class="hintpin" style="background-color:red"></div>`);
+        }
+
+        swal({ html:true, title:'You win!', text:winstr.join(''), icon:"success"})
         //disable the row of pins
         for (let pin of pins[currentRow]) {
             pin.disabled = true;

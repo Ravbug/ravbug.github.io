@@ -74,7 +74,7 @@
   /* The actual popup */
   .popup .popuptext {
     visibility: hidden;
-    width: 160px;
+    width: 140px;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -84,7 +84,7 @@
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -80px;
+    margin-left: -70px;
     box-shadow: 10px 5px 5px rgba(0,0,0,0.3);
   }
   
