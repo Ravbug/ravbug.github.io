@@ -10,6 +10,28 @@ const checkbtns = [];
 let currentRow = -1;
 let currentCode;
 
+function createPopup(owner){
+    //the popup tooltip
+    const popup = document.createElement('div');
+    popup.className = "popup";
+    const content = document.createElement('span');
+    content.className = "popuptext";
+    for(let i = 0; i < possibleColors.length; i++){
+        const btn = document.createElement('button');
+        btn.className = 'colorpin';
+        btn.style.backgroundColor = possibleColors[i];
+        content.appendChild(btn);
+        btn.onclick = (event) => {
+            currentCode[owner.getAttribute('pos')] = i;
+            owner.style.backgroundColor = possibleColors[i];
+            content.classList.remove('show')
+            event.stopPropagation();
+        }
+    }
+    popup.appendChild(content);
+    return popup;
+}
+
 /**
  * Create a pin for the user to enter a code value
  * @param {Number} pos the location of the pin (0-3), used for inserting the code
@@ -19,19 +41,21 @@ function createPin(pos){
     const pin = document.createElement('button');
     pin.className = "colorpin";
     //pin.disabled = true;
-    pin.onclick = () => {pinEnter(pin,pos)}
+    pin.onclick = () => {pinEnter(pin)}
+    pin.setAttribute("pos",pos);
+
+    pin.appendChild(createPopup(pin));
     return pin;
 }
 
 /**
  * Called when a pin is clicked
  * @param {HTMLButtonElement} sender the pin that was clicked
- * @param {number} pos the position of the sender pin
  */
-function pinEnter(sender,pos){
-    let idx = prompt("enter index");
-    currentCode[pos] = Number(idx);
-    sender.style.backgroundColor = possibleColors[idx];
+function pinEnter(sender){
+    //trigger the button's popup
+    const popup = sender.querySelector('.popup').childNodes[0];
+    popup.classList.toggle('show');
 }
 
 /**
