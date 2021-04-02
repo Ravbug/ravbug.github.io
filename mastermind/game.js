@@ -40,7 +40,7 @@ function createPopup(owner){
 function createPin(pos){
     const pin = document.createElement('button');
     pin.className = "colorpin";
-    //pin.disabled = true;
+    pin.disabled = true;
     pin.onclick = () => {pinEnter(pin)}
     pin.setAttribute("pos",pos);
 
@@ -129,8 +129,15 @@ function prepareTurn(){
         alert("You lose!")
         return;
     }
-    for(let pin of pins){
+    //enable the row of pins
+    for(let pin of pins[currentRow]){
         pin.disabled = false;
+    }
+    //disable the previous row
+    if (currentRow != 0){
+        for(let pin of pins[currentRow-1]){
+            pin.disabled = true;
+        }
     }
     checkbtns[currentRow].hidden = false;
 }
