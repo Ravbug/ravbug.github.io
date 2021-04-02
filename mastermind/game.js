@@ -163,6 +163,11 @@ function prepareTurn(){
  */
 function checkMove(sender){
     sender.hidden = true;
+    //hide all other popups
+    const allpopups = document.querySelectorAll('.popup');
+    for(let p of allpopups){
+        p.childNodes[0].classList.remove('show')
+    }
 
     //red pegs - correct color, correct location
     let haveCounted = [false,false,false,false];
