@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="style.css">
         <meta name="description" content="Play Mastermind in your browser!">
         <link id="favicon" rel="icon" href="pin.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <meta property="og:image" content="https://www.ravbug.com/mastermind/pin.png">
         <meta property="og:image:type" content="image/png">
@@ -18,12 +19,51 @@
             <d></d>
             <d></d>
             <d></d>
-            <div class="board" id="board"></div>
+            <div>
+                <div class="board" id="board"></div>
+                <button onclick="tutorial()">How to play</button>
+            </div>
             <d></d>
             <d></d>
             <d></d>
             <d></d>
         </div>
+
+        <div id="tutorial" class="overlay" hidden>
+            <!-- Button to close the overlay navigation -->
+            <div class="container" style="grid-template-columns: 0.2fr 1fr 0.2fr;">
+                <d></d>
+                <d></d>
+                <d></d>
+                <d></d>
+                <div class=tutorial>
+                    <button class="closebtn" onclick="closeNav()">Close Help</button>
+                    <h2>How to Play: </h2>    
+                    <p>
+                        I have created a secret code of 4 colors! You must guess it.    
+                    </p>
+                    <p>
+                        Click the round pegs on the left column of the board to select their color.
+                        Then press Check if you think you have the correct answer.
+                    </p>
+                    <p>
+                        <div class="hintpin" style="background-color:red"></div><br>
+                        If you have a pin in the correct position with the correct color, you will see a red pin on the right side of the board, as shown above.<br>
+                        <div class="hintpin" style="background-color:white"></div><br>
+                        If you have a pin with the correct color but <u>incorrect position</u>, you will see a white pin as shown above. 
+                        <br><br>
+                        The placement of my hint pins does not correspond to which pin. That is for you to determine!
+                    </p>
+                    <p>
+                        If you correctly guess my secret code within 10 attempts, you win! 
+                    </p>
+                </div>
+                <d></d>
+                <d></d>
+                <d></d>
+                <d></d>
+            </div>
+          </div>
     </body>
     <script src="game.js"></script>
 </html>
