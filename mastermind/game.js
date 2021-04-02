@@ -10,6 +10,11 @@ const checkbtns = [];
 let currentRow = -1;
 let currentCode;
 
+/**
+ * Create a popup element for a pin. Insert the element as a child of the owner
+ * @param {HTMLButtonElement} owner 
+ * @returns the created popup element
+ */
 function createPopup(owner){
     //the popup tooltip
     const popup = document.createElement('div');
