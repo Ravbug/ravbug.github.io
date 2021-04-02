@@ -58,6 +58,12 @@ function createPin(pos){
  * @param {HTMLButtonElement} sender the pin that was clicked
  */
 function pinEnter(sender){
+    //hide all other popups
+    const allpopups = document.querySelectorAll('.popup');
+    for(let p of allpopups){
+        p.childNodes[0].classList.remove('show')
+    }
+
     //trigger the button's popup
     const popup = sender.querySelector('.popup').childNodes[0];
     popup.classList.toggle('show');
