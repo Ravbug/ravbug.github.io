@@ -1,0 +1,32 @@
+body{
+    background-color:cornflowerblue
+}
+
+.board{
+    border: 5px solid black;
+    width: 500px;
+    height: 800px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.colorpin,.hintpin{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-color:white;
+    margin: 5px;
+    margin-top:30px;
+}
+
+.hintpin{
+    width: 20px;
+    height: 20px;
+    background-color:lightgray;
+}
+
+
+.colorpin:active{
+    opacity: 0.8;
+}
