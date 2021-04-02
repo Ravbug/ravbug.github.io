@@ -124,6 +124,12 @@ data = [
                     img:"markdownviz/markdown.svg"
                 },
                 {
+                    title:"Mastermind",
+                    tag:"The classic code-breaking game in your browser",
+                    ref:"mastermind/",
+                    img:"mastermind/pin.svg"
+                },
+                {
                     title:"Calculator",
                     tag:"A fast scientific calculator in your browser",
                     ref:"calculator/",
