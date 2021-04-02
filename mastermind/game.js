@@ -1,5 +1,5 @@
 
-//I'm aware that it's trivial to cheat at this game with the element inspector.
+console.log("%cI'm aware that it's trivial to cheat at this game with the element inspector.","color:red;font-size:30px");
 let code = [];
 
 const possibleColors = ["#FF0000","#00FF00","#0000FF","#00FFFF"]
