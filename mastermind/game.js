@@ -87,6 +87,7 @@ function createCheckbtn(){
     const btn = document.createElement('button');
     btn.innerHTML = "Check";
     btn.hidden = true;
+    btn.className = "chkbtn";
     btn.onclick = () => {checkMove(btn)};
     return btn;
 }
@@ -95,29 +96,38 @@ function createCheckbtn(){
  * Setup the game
  */
 function init(){
-    const answers = document.getElementById('answers');
-    const hints = document.getElementById('hints');
-    answers.innerHTML = '';
-    hints.innerHTML = '';
+    const board = document.getElementById('board')
+    board.innerHTML = '';
 
     //generate html
     for(let r = 0; r < 10; r++){
         let answerpins = [];
         let hintpinrow = [];
+
+        let answerCel = document.createElement('div');
+        let hintCel = document.createElement('div');
+
+        let btncell = document.createElement('div');
+        btncell.className = "btncell";
         for(let c = 0; c < 4; c++){
             let answerpin = createPin(c);
-            answers.appendChild(answerpin);
+            answerCel.appendChild(answerpin);
             answerpins.push(answerpin);
+
             let hintpin = createHintPin();
-            hints.appendChild(hintpin)
+            hintCel.appendChild(hintpin)
             hintpinrow.push(hintpin);
         }
         const checkbtn = createCheckbtn();
         checkbtns.push(checkbtn);
-        answers.appendChild(checkbtn);
+        btncell.appendChild(checkbtn)
 
-        answers.appendChild(document.createElement('br'));
-        hints.appendChild(document.createElement('br'));
+        board.appendChild(answerCel);
+        board.appendChild(btncell);
+        board.appendChild(hintCel);
+
+        //answers.appendChild(document.createElement('br'));
+        //hints.appendChild(document.createElement('br'));
         pins.push(answerpins);
         hintpins.push(hintpinrow);
     }
