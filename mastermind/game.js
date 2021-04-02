@@ -155,30 +155,31 @@ function checkMove(sender){
     sender.hidden = true;
 
     //red pegs - correct color, correct location
-    let haveCounted = [];
+    let haveCounted = [false,false,false,false];
+    let haveCountedInCode = [false,false,false,false]; 
     let n_red = 0;
     let n_white = 0;
     for(let i = 0; i < 4; i++){
         if (currentCode[i] == code[i]){
             n_red++;
             haveCounted[i] = true;
+            haveCountedInCode[i] = true;
         }
-        else{
-            haveCounted[i] = false;
-        }
-        
     }
     //white pegs - correct color, wrong location
-    index = possibleColors.length;
     for(let i = 0; i < 4; i++){
-        if (!haveCounted[index]){
-            if (code.includes(currentCode[index])){
-                n_white++;
+        //have we already given feedback on this pin?
+        if(!haveCounted[i]){
+            //does this pin exist elsewhere in the code?
+            for(let j = 0; j < 4; j++){
+                if (code[j] == currentCode[i] && ! haveCountedInCode[j]){
+                    n_white++;
+                    haveCountedInCode[j] = true;
+                }
             }
         }
-        index--;
     }
-
+    
     //render hint
     let i = 0;
     for(; i < n_red; i++){
