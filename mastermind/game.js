@@ -132,6 +132,10 @@ function prepareTurn(){
     //has the game been lost?
     if(currentRow == 10){
         alert("You lose!")
+        //disable the final row
+        for(let pin of pins[currentRow-1]){
+            pin.disabled = true;
+        }
         return;
     }
     //enable the row of pins
