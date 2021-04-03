@@ -184,25 +184,22 @@ function checkMove(sender) {
 
     //red pegs - correct color, correct location
     let haveCounted = [false, false, false, false];
-    let haveCountedInCode = [false, false, false, false];
     let n_red = 0;
     let n_white = 0;
     for (let i = 0; i < 4; i++) {
         if (currentCode[i] == code[i]) {
             n_red++;
             haveCounted[i] = true;
-            haveCountedInCode[i] = true;
         }
     }
-    //white pegs - correct color, wrong location
-    for (let i = 0; i < 4; i++) {
-        //have we already given feedback on this pin?
-        if (!haveCounted[i]) {
-            //does this pin exist elsewhere in the code?
-            for (let j = 0; j < 4; j++) {
-                if (code[j] == currentCode[i] && !haveCountedInCode[j]) {
+
+    //loop over the correct answer
+    for(let i = 0; i < 4; i++){
+        //is the current pin in the user's answer?
+        for(let j = 0; j < 4; j++){
+            if (code[i] == currentCode[j]){
+                if (!haveCounted[j]){
                     n_white++;
-                    haveCountedInCode[j] = true;
                     haveCounted[j] = true;
                     break;
                 }
