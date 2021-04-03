@@ -4,9 +4,9 @@ let code = [];
 
 const possibleColors = ["red", "orange", "yellow", "green", "purple", "blue"]
 
-const pins = [];
-const hintpins = [];
-const checkbtns = [];
+let pins = [];
+let hintpins = [];
+let checkbtns = [];
 let currentRow = -1;
 let currentCode;
 
@@ -99,6 +99,11 @@ function init() {
     const board = document.getElementById('board')
     board.innerHTML = '';
 
+    pins = [];
+    hintpins = [];
+    checkbtns = [];
+    currentRow = -1;
+    
     //generate html
     for (let r = 0; r < 10; r++) {
         let answerpins = [];
@@ -246,6 +251,13 @@ function tutorial() {
 /* Close */
 function closeNav() {
     document.getElementById("tutorial").hidden = true;
+}
+
+function reset(){
+    if (confirm("Really reset?")){
+        init();
+        prepareTurn();
+    }
 }
 
 //start game
