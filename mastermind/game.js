@@ -9,6 +9,7 @@ let hintpins = [];
 let checkbtns = [];
 let currentRow = -1;
 let currentCode;
+let gameHasEnded = false;
 
 /**
  * Create a popup element for a pin. Insert the element as a child of the owner
@@ -103,6 +104,7 @@ function init() {
     hintpins = [];
     checkbtns = [];
     currentRow = -1;
+    gameHasEnded = false;
     
     //generate html
     for (let r = 0; r < 10; r++) {
@@ -156,6 +158,7 @@ function prepareTurn() {
         }
 
         swal({ html:true, title:'You lose!', text:losestr.join(''), icon:"error"})
+        gameHasEnded = true;
         //disable the final row
         for (let pin of pins[currentRow - 1]) {
             pin.disabled = true;
@@ -233,6 +236,7 @@ function checkMove(sender) {
         }
 
         swal({ html:true, title:'You win!', text:winstr.join(''), icon:"success"})
+        gameHasEnded = true;
         //disable the row of pins
         for (let pin of pins[currentRow]) {
             pin.disabled = true;
@@ -254,7 +258,7 @@ function closeNav() {
 }
 
 function reset(){
-    if (confirm("Really reset?")){
+    if (gameHasEnded || confirm("Really reset?")){
         init();
         prepareTurn();
     }
