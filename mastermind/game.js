@@ -183,26 +183,30 @@ function checkMove(sender) {
     }
 
     //red pegs - correct color, correct location
-    let haveCounted = [false, false, false, false];
+    let colorCounts = [];
+    for(let i = 0; i < possibleColors.length; i++){
+        colorCounts.push(0);
+    }
+    for(let i = 0; i < possibleColors.length; i++){
+        colorCounts[code[i]]++;
+    }
+    let counted = [false, false, false, false];
     let n_red = 0;
     let n_white = 0;
     for (let i = 0; i < 4; i++) {
         if (currentCode[i] == code[i]) {
             n_red++;
-            haveCounted[i] = true;
+            colorCounts[code[i]]--;
+            counted[i] = true;
         }
     }
 
-    //loop over the correct answer
-    for(let i = 0; i < 4; i++){
-        //is the current pin in the user's answer?
-        for(let j = 0; j < 4; j++){
-            if (code[i] == currentCode[j]){
-                if (!haveCounted[j]){
-                    n_white++;
-                    haveCounted[j] = true;
-                    break;
-                }
+    //white pins - correct color, wrong location
+    for (let i = 0; i < 4; i++) {
+        if (!counted[i]){
+            if (colorCounts[currentCode[i]] > 0) {
+            n_white++;
+            colorCounts[currentCode[i]]--;
             }
         }
     }
