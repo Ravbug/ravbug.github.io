@@ -12,7 +12,7 @@ On load, the script will hit that url. To minimize overhead, point the bitly url
     async function load(sourcescript){
         if(window.location.protocol != "file:"){
             //load url
-           await fetch(document.currentScript.getAttribute('url'));
+           await fetch(document.currentScript.getAttribute('url')).catch(e){};
         }
         sourcescript.remove();
     }
