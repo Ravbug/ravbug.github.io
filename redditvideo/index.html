@@ -1,0 +1,111 @@
+<html>
+    <head>
+        <title>Reddit Video Downloader</title>
+        <meta name="description" content="Get direct links to Reddit videos">
+        <link id="favicon" rel="icon" href="reddit.svg" type="image/x-icon">
+        <meta charset="UTF-8">
+
+         <!-- Social embed image -->
+        <meta property="og:image" content="https://ravbug.github.io/redditvideo/reddit.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="512">
+        <meta property="og:image:height" content="512">
+    </head>
+    <body>
+        <div class="main">
+            Enter Reddit post URL:
+            <div class="input-group">
+                <input class="form-control" style="width:100%" id="url_field" value="https://www.reddit.com/r/gay/comments/nn02hb/yes/?utm_codes=hhhhhh"></input>
+                <button class="btn btn-success" onclick="getcontent()">Go!</button>
+            </div>
+            <br>
+            <div id="out-container" class="breadcrumb" style="display:none">
+                <a id="out_v_link" href="">Video link</a>
+                <a id="out_a_link" href="">Audio link</a>
+                <br>
+                <video controls id="out_video" onload="video_loaded()" onerror="video_noload()"></video><br>
+                <audio controls id="out_audio" onload="audio_loaded()" onerror="audio_noload()"></audio>
+            </div>
+            <div id="out-error" class="breadcrumb" style="display:none;color:red">
+            </div>
+        </div>
+    </body>
+    <script>
+        const input = document.getElementById("url_field");
+        const out_v = document.getElementById("out_video");
+        const out_a = document.getElementById("out_audio");
+        const out_vl = document.getElementById("out_v_link")
+        const out_al = document.getElementById("out_a_link")
+        const container = document.getElementById("out-container");
+        const container_err = document.getElementById("out-error");
+
+        function trimTrailingChars(s, charToTrim) {
+            const regExp = new RegExp(charToTrim + "+$");
+            return s.replace(regExp, "");
+        }
+
+        function audio_loaded(){
+            out_al.style.display = ""
+        }
+
+        function audio_noload(){
+            out_al.style.display = "none"
+            container_err.style.display = ""
+            container_err.innerHTML += "No audio for this post."
+        }
+
+        function video_loaded(){
+            out_vl.style.display = ""
+        }
+
+        function video_noload(){
+            out_vl.style.display = "none"
+            container_err.style.display = ""
+            container_err.innerHTML += "No video for this post."
+        }
+
+        function display_output(video_url,audio_url){
+            out_v.src = video_url
+            out_a.src = audio_url
+            out_vl.href = video_url
+            out_al.href = audio_url
+
+            container.style.display = ""
+        }
+
+        async function getcontent(){
+            container.style.display = "none"
+            container_err.style.display = "none"
+            container_err.innerHTML = ""
+
+            // remove trailing / and UTM tracking codes
+            const url = `${trimTrailingChars(input.value.split('?')[0],'/')}.json`;
+
+            // get data
+            const data = await fetch(url).catch(()=>{})
+            if (data != undefined){
+
+                // get video stream info
+                const parsed = await data.json();
+                try{
+                    const viddata = parsed[0]["data"]["children"][0]["data"]["secure_media"]["reddit_video"];
+                    const video_url = viddata["fallback_url"].split('?')[0];
+
+                    //derive the audio stream from the video stream
+                    const audio_url = `${video_url.substring(0,video_url.lastIndexOf('/'))}/audio.mp4`;
+
+                    display_output(video_url,audio_url);
+                }
+                catch(e){
+                    container_err.style.display = ""
+                    container_err.innerHTML += "No video at this URL."
+                }
+            }
+            else{
+                container_err.style.display = ""
+                container_err.innerHTML = "No media at this URL."
+            }
+        }
+    </script>
+    <script src="../header.js"></script>
+</html>
