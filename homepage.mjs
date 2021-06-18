@@ -148,6 +148,12 @@ data = [
                     img:"npm-drinking-game/npm-logo.svg"
                 },
                 {
+                    title: "The PyPi Drinking Game",
+                    tag: "Your liver might not like this",
+                    ref:"pypi-drinking-game",
+                    img:"pypi-drinking-game/pypi-logo.svg"
+                },
+                {
                     title: "The Cargo Drinking Game",
                     tag: "Your liver might be ok with this",
                     ref:"cargo-drinking-game",

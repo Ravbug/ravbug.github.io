@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>The PyPi Drinking Game</title>
+        <meta name="description" content="Your liver will not be ok with this">
+        <link id="favicon" rel="icon" href="pypi-logo.svg" type="image/x-icon">
+        <meta charset="UTF-8">
+
+         <!-- Social embed image -->
+        <meta property="og:image" content="https://ravbug.github.io/pypi-drinking-game/pypi-logo.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="306">
+        <meta property="og:image:height" content="275">
+    </head>
+    <body>
+        <div class="main">
+            <p>
+                <b>Welcome to the PyPi Drinking Game!</b> "Python enables you to write code faster" ... if you make extensive use of third party libraries. 
+                Because code written by strangers on the internet is guaranteed to be safe, secure, and performant, right?
+            </p>
+            <p>
+                The rules of the game are very simple. 
+                <ol>
+                    <li>
+                        Think of a trivial programming task. The more trivial, the better.
+                    </li>
+                    <li>
+                        Think of a likely name for a PyPi module that solves that task.
+                    </li>
+                    <li>
+                        If a module exists to solve that problem, check the following criteria:
+                        <ol>
+                            <li>
+                                If the module has less than 50kb of code, excluding dependencies, take 1 shot.
+                            </li>
+                            <li>
+                                if the module is small and has 3 or more dependencies, take 1 more shot
+                            </li>
+                            <li>
+                                If the module has dependencies, take 1 shot for every additional module, for each of the above criteria it satisfies.
+                            </li>
+                        </ol>
+                    </li>
+                   <li>
+                       Tally up your score and drink up! (please don't actually drink)
+                   </li>
+                </ol>
+            </p>
+            <p>
+                Use the search bar below to play!
+            </p>
+            <div class="input-group" style="min-width:200px;float:left;margin:auto">
+                <input id="search" placeholder="Search pypi.org..." onkeyup="checkKey(event)" class="form-control"></input>
+                <button onclick="go()" class="btn btn-primary">Search!</button>
+            </div>
+
+            <br><br>
+            <p>
+                <button id="exportbtn" class="btn btn-success" style="display:none;" onclick="">Export full hierarchy</button>
+            </p>
+            <div id="output"></div>
+            <p>
+                <div class="breadcrumb">
+                    <b>Be Responsible!!</b> Please do not actually drink 300 shots if you find some nuclear package.
+                     I am not liable if you hurt anyone or damage anything playing this game. 
+                </div>
+                <div class="breadcrumb">
+                    <b>Stuck?</b> It's possible that you have encountered a rate limit. Simply wait 1 minute, then without refreshing the page, 
+                    rerun your search. This keeps the cache intact and will help the game complete the search.  
+                </div>
+            </p>
+        </div>
+    </body>
+    <script>
+        async function go(){
+            document.getElementById('output').innerHTML = "Searching...";
+            document.getElementById('output').innerHTML = await intoxicate(document.getElementById('search').value)
+        }
+        function checkKey(event){
+            if(event.keyCode == 13){
+                go();
+            }
+        }
+    </script>
+    <script src="game.js"></script>
+    <script src="../header.js"></script>
+</html>
