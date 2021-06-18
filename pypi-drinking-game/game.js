@@ -6,12 +6,18 @@ async function httpget(url){
     // have we cached this?
     let temp = undefined;
     if (temp = cache[url]){
-        return temp;
+        if (Object.keys(temp).length == 0){
+            return undefined
+        }
+        else{
+            return temp;
+        }
     }
     try{
         await fetch(url).then(response => response.json()).then(data=>{temp=data});
     }
     catch(e){
+        cache[url] = {}
         return undefined;
     }
     cache[url] = temp
@@ -103,6 +109,10 @@ async function intoxicate(in_name){
     totalpackages = 0
     // query cargo to determine if a package exists
     const package = await interrogate_package(in_name,undefined,true)
+
+    if (package == undefined){
+        return `No package found for <code>${in_name}</code>`
+    }
 
     const final_html = []
     let total = 0;
