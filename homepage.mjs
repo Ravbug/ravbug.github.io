@@ -148,6 +148,12 @@ data = [
                     img:"npm-drinking-game/npm-logo.svg"
                 },
                 {
+                    title: "The Cargo Drinking Game",
+                    tag: "Your liver might be ok with this",
+                    ref:"cargo-drinking-game",
+                    img:"cargo-drinking-game/cargo-logo.png"
+                },
+                {
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
                     tag:"Quickly get a list of the best professors for your classes",

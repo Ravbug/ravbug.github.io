@@ -1,21 +1,20 @@
 <html>
     <head>
-        <title>The NPM Drinking Game</title>
-        <meta name="description" content="Your liver will not like this">
-        <link id="favicon" rel="icon" href="npm-logo.svg" type="image/x-icon">
+        <title>The Cargo Drinking Game</title>
+        <meta name="description" content="Your liver might be ok with this">
+        <link id="favicon" rel="icon" href="cargo-logo.png" type="image/x-icon">
         <meta charset="UTF-8">
 
          <!-- Social embed image -->
-        <meta property="og:image" content="https://ravbug.github.io/npm-drinking-game/npm-logo.png">
+        <meta property="og:image" content="https://ravbug.github.io/npm-drinking-game/cargo-logo.png">
         <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1317">
-        <meta property="og:image:height" content="512">
+        <meta property="og:image:width" content="306">
+        <meta property="og:image:height" content="275">
     </head>
     <body>
         <div class="main">
             <p>
-                <b>Welcome to the NPM Drinking Game!</b> This game calls attention to the absurd levels JavaScript developers will go to avoid writing code. 
-                Because code written by strangers on the internet is guaranteed to be safe, secure, and performant, right?
+                <b>Welcome to the Cargo Drinking Game!</b> [insert quip here]
             </p>
             <p>
                 The rules of the game are very simple. 
@@ -24,24 +23,27 @@
                         Think of a trivial programming task. The more trivial, the better.
                     </li>
                     <li>
-                        Think of a likely name for an NPM module that solves that task.
+                        Think of a likely name for a rust crate that solves that task.
                     </li>
                     <li>
-                        If a module exists to solve that problem, check the following criteria:
-                        <li>
+                        If a crate exists to solve that problem, check the following criteria:
+                        <ol>
                             <li>
-                                If the module has less than 20kb of code, excluding dependencies, take 1 more shot.
+                                If the crate has less than 200kb of code, excluding dependencies, take 1 more shot.
                             </li>
                             <li>
                                 If that module has over 1,000 weekly downloads, and the above is satisfied, take 1 more shot.
                             </li>
                             <li>
+                                If the crate satisfies any of the above and has more than 50 users, take 1 more shot.
+                            </li>
+                            <li>
                                 If the module has dependencies, take 1 shot for every additional module, for each of the above criteria it satisfies.
                             </li>
-                        </li>
+                        </ol>
                     </li>
                    <li>
-                       Then tally your score and drink up! (please don't actually drink)
+                       Tally up your score and drink up! (please don't actually drink)
                    </li>
                 </ol>
             </p>
@@ -49,7 +51,7 @@
                 Use the search bar below to play!
             </p>
             <div class="input-group" style="min-width:200px;float:left;margin:auto">
-                <input id="search" placeholder="Search NPM..." onkeyup="checkKey(event)" class="form-control"></input>
+                <input id="search" placeholder="Search crates.io..." onkeyup="checkKey(event)" class="form-control"></input>
                 <button onclick="go()" class="btn btn-primary">Search!</button>
             </div>
 
@@ -73,7 +75,7 @@
     <script>
         async function go(){
             document.getElementById('output').innerHTML = "Searching...";
-            document.getElementById('output').innerHTML = await intoxicate()
+            document.getElementById('output').innerHTML = await intoxicate(document.getElementById('search').value)
         }
         function checkKey(event){
             if(event.keyCode == 13){
@@ -83,5 +85,4 @@
     </script>
     <script src="game.js"></script>
     <script src="../header.js"></script>
-    <script src="../statistics.js" url="https://bit.ly/37k6aUj"></script> 
 </html>

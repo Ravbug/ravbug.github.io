@@ -205,7 +205,7 @@ async function intoxicate(){
         }
 
         if(existsPenalty){
-            html.unshift(`<h2>${package.data.name} v${package.data.version} is worth ${score}x🍺</h2>`)
+            html.unshift(`<h2>${package.data.name} v${package.data.version} is worth ${score} ✖ 🍺</h2>`)
         }
 
         document.getElementById('exportbtn').onclick = () => {exportFullHierarchy(`${package.data.name}@${package.data.version}`)};
