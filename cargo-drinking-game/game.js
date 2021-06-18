@@ -139,11 +139,14 @@ async function intoxicate(in_name){
         const pointless = doTest(pkg["n_users"] > 50 && trivial)
 
         // recurse dependencies
-        for(const dep of pkg["deps"]){
+        if (pkg["deps"].length > 0){
             final_html.push(`<br> Unique dependencies (${total_deps_for(pkg)}): <blockquote>`)
-            gen_package(dep)
+            for(const dep of pkg["deps"]){
+                gen_package(dep)
+            }
             final_html.push(`</blockquote>`)
         }
+        final_html.push(`<br><br>`)
     }
 
     // rank the package by recursively descending the tree
