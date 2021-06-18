@@ -101,6 +101,10 @@ async function intoxicate(in_name){
     // query cargo to determine if a package exists
     const package = await interrogate_package(in_name,undefined,true)
 
+    if (Object.keys(package).length == 0){
+        return `No package found for <code>${in_name}</code>`
+    }
+
     const final_html = []
     let total = 0;
 

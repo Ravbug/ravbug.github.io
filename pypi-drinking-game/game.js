@@ -40,7 +40,7 @@ async function interrogate_package(package_name,version=undefined,override=false
     }
 
     let url;
-    if (/*version == undefined*/true){
+    if (version == undefined){
         url = `https://pypi.org/pypi/${package_name}/json`
     }
     else{
@@ -59,13 +59,12 @@ async function interrogate_package(package_name,version=undefined,override=false
         details["desc"] = packagedetails["info"]["summary"]
 
         pkg_cache[name_for_pkg(package_name,version)] = details
-        const allvers = Object.keys(packagedetails["releases"])
-        if (version == undefined || packagedetails["releases"][version] == undefined){
-            version = allvers[allvers.length - 1]
-        }
+        
+        version = packagedetails["info"]["version"]
 
         details["version"] = version
 
+        // get the size for the version
         const all_versions = packagedetails["releases"][version]
         let size = 0
         for (const ver of all_versions){
@@ -83,14 +82,17 @@ async function interrogate_package(package_name,version=undefined,override=false
         details["deps"] = []
         if (deps != null){
             for(const dep of deps){
-                const depinfo = dep.split('(')
-                let name = depinfo[0].split(' ')[0].trim();
-                name = name.match(/^[a-z0-9._-]+/)
 
-                let version = depinfo.length > 1 ? depinfo[1].match(/\d+/g) : undefined
-                if (version != undefined){
-                    version = version.join('.')
-                }
+                // extract the dependency's name
+                const name = dep.match(/^[a-z0-9._-]+/i)[0];
+
+                // assume latest, versions here are difficult to parse
+                version = undefined;
+
+                // let version = depinfo.length > 1 ? depinfo[1].match(/\d+/g) : undefined
+                // if (version != undefined){
+                //     version = version.join('.')
+                // }
 
                 const dep_data = await interrogate_package(name, version);
                 if (dep_data != undefined){
@@ -140,8 +142,8 @@ async function intoxicate(in_name){
         final_html.push(`<a href="https://pypi.org/project/${pkg["name"]}">${pkg["name"]} v${pkg["version"]}</a><br>${pkg["desc"]}`);
 
         // is trivial? 
-        final_html.push(`<br> Is Trivial? Size: ${pkg["size"]} < 50,000? `)
-        const trivial = doTest(pkg["size"] == undefined || pkg["size"] < 50000)
+        final_html.push(`<br> Is Trivial? Size: ${pkg["size"]} < 10,000? `)
+        const trivial = doTest(pkg["size"] == undefined || pkg["size"] < 10000)
 
        // dependencyitis?
        const num_deps = total_deps_for(pkg);
