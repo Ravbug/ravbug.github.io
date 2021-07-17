@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>No Context Reddit</title>
+        <meta name="description" content="Where did *this* comment come from?!">
+        <link id="favicon" rel="icon" href="../redditvideo/reddit.svg" type="image/x-icon">
+        <link href="style.css" rel="stylesheet">
+        <meta charset="UTF-8">
+
+         <!-- Social embed image -->
+        <meta property="og:image" content="https://ravbug.github.io/redditvideo/reddit.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="306">
+        <meta property="og:image:height" content="275">
+    </head>
+    <body>
+        <div class="main">
+            <div class="master" id="progresscontainer" style="opacity:1">
+                Loading question...
+                <progress id="loadingbar" value=0 max=100></progress>
+            </div>
+            <div class="master" id="container">
+                <div class="card">
+                    <div id="author"></div>
+                    <div id="quote"></div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                Which post is this from?
+                <div class="threeup">
+                    <div class="card angle1">
+                        <input type="radio" id="p1" name="post" value="1">
+                        <label id="post1" for="p1"></label>
+                    </div>
+                    <div class="card angle2">
+                        <input type="radio" id="p2" name="post" value="2">
+                        <label id="post2" for="p2"></label>
+                    </div>
+                    <div class="card angle3">
+                        <input type="radio" id="p3" name="post" value="3">
+                        <label id="post3" for="p3"></label>
+                    </div>
+                </div>
+
+                Which subreddit is this post from?
+                <br>
+                <div class="threeup">
+                    <div class="card angle2">
+                        <input type="radio" id="s1" name="sub" value="1">
+                        <label id="sub1" for="s1"></label><br>
+                    </div>
+                    <div class="card angle3">
+                        <input type="radio" id="s2" name="sub" value="2">
+                        <label id="sub2" for="s2"></label><br>  
+                    </div>
+                    <div class="card angle1">
+                        <input type="radio" id="s3" name="sub" value="3">
+                        <label id="sub3" for="s3"></label>
+                    </div>
+                </div>
+
+                <div id=verdict class="card"></div>
+                <br>
+
+                <button id="checkbtn">Check</button>
+                <button id="nextbtn" onclick="do_round()">Next</button>
+
+            </div>
+        </div>
+    </body>
+    <script src="game.js"></script>
+    <script>
+        do_round()
+     </script>
+    <script src="../header.js"></script>
+    <script src="../statistics.js" url="https://bit.ly/2TeU6Rc"></script> 
+</html>

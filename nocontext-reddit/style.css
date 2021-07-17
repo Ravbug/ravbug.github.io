@@ -1,0 +1,40 @@
+
+.card{
+    margin: 5px;
+    transition: background-color 0.5s
+}
+
+.threeup{
+    display:grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.angle1{
+    transform: rotate(1deg)
+}
+
+.angle2{
+    transform: rotate(-0.8deg)
+}
+
+.angle3{
+    transform: rotate(1.2deg)
+}
+
+#author{
+    font-size:10px;
+}
+
+.incorrect{
+    background-color: tomato !important;
+}
+.correct{
+    background-color: green !important;
+}
+
+.master{
+    opacity: 0;
+    transition: all 0.5s
+}
