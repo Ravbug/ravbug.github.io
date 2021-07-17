@@ -163,7 +163,7 @@ async function do_round(){
         // check the subreddit
         let correctsub = false
         for(let radio of subradios){
-            if(radio.post === post){
+            if(radio.post.subreddit === post.subreddit){
                 if (radio.checked){
                     correctsub = true;
                 }
