@@ -1,7 +1,6 @@
 const allowed_subs = [
     "all",
     "okbuddyhetero",
-    "specializedtools",
     "cursedcomments",
     "holdup",
     "okbuddyretard",
@@ -15,6 +14,15 @@ const allowed_subs = [
     "youngpeopleyoutube",
     "memes",
     "dankmemes",
+    "abruptchaos",
+    "blursedimages",
+    "boneappletea",
+    "cutegayshit",
+    "funny",
+    "GTAorRussia",
+    "notopbutok",
+    "theyknew",
+    "gamingcirclejerk"
 ]
 
 async function httpget(url){
@@ -93,7 +101,12 @@ async function do_round(){
 
     // get the comment
     const commentdata = await httpget(`https://www.reddit.com${post["permalink"]}.json`);
-    const comment = randomElement(commentdata[1]["data"]["children"])["data"]
+    const cdata = randomElement(commentdata[1]["data"]["children"])
+    if (!cdata){
+        do_round();
+        return;
+    }
+    const comment = cdata["data"]
     progressbar.value += 25
     // present to the user
     document.getElementById("quote").innerHTML = `${comment["body"]}`
