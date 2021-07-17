@@ -1,6 +1,5 @@
 const allowed_subs = [
     "all",
-    "ask",
     "okbuddyhetero",
     "specializedtools",
     "cursedcomments",
@@ -28,7 +27,7 @@ function getRandom(min, max){
 	return parseInt(Math.random() * (max-min) + min);
 }
 
-function randomElement(arr){
+const randomElement = function(arr){
     const i = getRandom(0,arr.length);
     return arr[i];
 }
@@ -55,8 +54,8 @@ async function do_round(){
     // reset UI
     const nextbtn = document.getElementById("nextbtn");
     const checkbtn = document.getElementById("checkbtn")
-    checkbtn.hidden = true
-    nextbtn.hidden = true
+    checkbtn.style.display = "none"
+    nextbtn.style.display = "none"
     const verdict = document.getElementById("verdict")
     verdict.hidden = true
 
@@ -127,7 +126,7 @@ async function do_round(){
         subradios.push(rbtn)
     }
 
-    checkbtn.hidden = false
+    checkbtn.style.display = ""
     checkbtn.onclick = function(){
         // check the title
         let correcttitle = false
@@ -169,8 +168,8 @@ async function do_round(){
         }
 
         // enable the next button
-        nextbtn.hidden = false
-        checkbtn.hidden = true
+        nextbtn.style.display = ""
+        checkbtn.style.display = "none"
     }
 
 }

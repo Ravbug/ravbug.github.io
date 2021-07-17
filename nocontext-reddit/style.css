@@ -11,6 +11,13 @@
     gap: 10px;
 }
 
+@media only screen and (max-width:500px){
+    .threeup{
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr;
+    }
+}
+
 .angle1{
     transform: rotate(1deg)
 }
@@ -25,6 +32,9 @@
 
 #author{
     font-size:10px;
+}
+#quote{
+    font-size:20px;  
 }
 
 .incorrect{
