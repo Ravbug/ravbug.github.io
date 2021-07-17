@@ -83,6 +83,11 @@ async function do_round(){
     verdict.classList.remove("correct")
     verdict.classList.remove("incorrect")
 
+    let inputs = document.querySelectorAll("input")
+    for(let input of inputs){
+        input.checked = false
+    }
+
     // get the top posts on the subreddit
     const selected_posts = []
 
