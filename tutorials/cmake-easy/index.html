@@ -144,12 +144,12 @@ add_executable("${PROJECT_NAME}" ${MY_SOURCES})</code></pre>
         <hr>
         <h3>Adding third-party CMake Libraries</h3>
         <p>
-        You will often want to use one of the many thousands of free open-source C++ libraries in your projects. 
+        You will often want to use some of the many thousands of free open-source C++ libraries in your projects. 
         You probably know the pain of manually figuring out how to link those libraries to your project for each platform you support.
         Fortunately, CMake makes linking libraries cross-platform easy, with the <code>add_subdirectory</code> command.
 <pre><code class="cmake">add_subdirectory("3rdparty/external_library1")
 add_subdirectory("3rdparty/external_library2")</code></pre>
-        This will instruct CMake to visit the directories <code>3rdparty/external_library1</code> and <code>3rdparty/external_library1</code>, execute their <code>CMakeLists.txt</code> files, 
+        This will instruct CMake to visit the directories <code>3rdparty/external_library1</code> and <code>3rdparty/external_library2</code>, execute their <code>CMakeLists.txt</code> files, 
         and make the resulting libraries, executables, and targets available to your <code>CMakeLists.txt</code>. <code>add_subdirectory</code> only works if that directory has a <code>CMakeLists.txt</code>,
         but it does not have to be used exclusively for third party libraries. In fact, combining <code>add_subdirectory</code> with separated CMake projects is an excellent way to modularize your code. 
 </p>
