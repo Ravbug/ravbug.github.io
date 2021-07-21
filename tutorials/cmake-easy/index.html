@@ -69,11 +69,6 @@
             Next, we need to declare our project. We do this with the <code>project</code> command:
             <pre><code class="cmake">project("my-project")</code></pre>
             This creates a project named <code>my-project</code>. Use your project's name.<br>
-            After that, you need to set what C++ version your project uses. You do this with the following code:
-<pre><code class="cmake">set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)</code></pre>
-
-            This will set the current project to use C++17. 
         </p>
         <hr>
         <h3>Creating an Executable</h3>
@@ -134,7 +129,18 @@ add_executable("${PROJECT_NAME}" ${MY_SOURCES})</code></pre>
         </ol>
             </p>
         </p>
-
+        <hr>
+        <p>
+            <h3>Setting the C++ Version</h3>
+            Once we have created an executable or library, we must next set what version of C++ you want it to use.
+            We do that with the <code>target_compile_features</code> function:
+<pre><code class="cmake">target_compile_features(your_exe_or_library PRIVATE cxx_std_17)</code></pre>   
+            This will set that target to use C++17.
+            <br>
+            <br>
+            Note: Do not use the global <code>CMAKE_CXX_STANDARD</code> variable to set the C++ version. This variable will pollute across your whole solution,
+            including into higher scopes! It has wrecked my build multiple times and cost me countless hours. Always use <code>target_compile_features</code>.
+        </p>
         <hr>
         <h3>Adding third-party CMake Libraries</h3>
         <p>
@@ -173,10 +179,8 @@ add_subdirectory("3rdparty/external_library2")</code></pre>
 <pre><code class="cmake"># CMakeLists.txt
 cmake_minimum_required(VERSION 3.17)   
 
-# Declare our project and set it to use C++17
+# Declare our project
 project("my-project") 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add our main executable
 file(GLOB MY_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
@@ -190,6 +194,10 @@ target_include_directories("${PROJECT_NAME}_helper_lib"
     PRIVATE
     "include/helper_library/include"
 )
+
+# set C++ version for both targets
+target_compile_features("${PROJECT_NAME}" PRIVATE cxx_std_17)
+target_compile_features("${PROJECT_NAME}_helper_lib" PRIVATE cxx_std_17)
 
 # Add third party libraries
 add_subdirectory("3rdparty/external_library1")
