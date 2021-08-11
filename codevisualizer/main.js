@@ -177,28 +177,6 @@ function copyFailed(){
   swal("Copy Failed!", "Either there is nothing to copy, or you are using a mobile device.\nIf you are using a mobile device, please select and copy manually. Sorry!", "error");
 }
 
-function loadRemoteResource(){
-    swal({
-      title: "Load Remote Resource",
-      text: "This feature could cause unexpected results",
-      type: "input",
-      showCancelButton: true,
-      closeOnConfirm: false,
-      inputPlaceholder: "Enter URL to load"
-    },
-    function(inputValue){
-      if (inputValue === false) return false;
-
-      if (inputValue === "") {
-        swal.showInputError("You must enter a URL to load.");
-        return false
-      }
-      swal({title:"Loading Resource", text:"Loading response from " + inputValue,  success:true,timer:2000});
-      const cors = "https://cors-anywhere.herokuapp.com/";
-      httpGetAsync(cors+inputValue,function onSuccess(data){editor.setValue(data);setTimeout(render(),3000)},function onFailure(){swal("Oops!","Failed to load resouce at " + inputValue,"error")})
-    });
-}
-
 function downloadWrapper(){
   swal({
     title: "Save HTML file",

@@ -159,24 +159,24 @@ data = [
                     ref:"cargo-drinking-game",
                     img:"cargo-drinking-game/cargo-logo.png"
                 },
-                {
+                /*{
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
                     tag:"Quickly get a list of the best professors for your classes",
                     ref:"rate-my-professors-scraper/",
-                },
+                },*/
                 {
                     title:"Legacy Web Cleverbug",
                     img:"cleverbug-alpha/cleverbot.png",
                     tag:"The webpage-based ancestor to the Cleverbug Discord bot. Source available!",
                     ref:"cleverbug-alpha/"
                 },
-                {
+                /*{
                     title:"Instabook",
                     img:"instabook/encyclopedia.svg",
                     tag:"Get a short blurb about anything",
                     ref:"instabook/",
-                },
+                },*/
                 {
                     title:"Twain's Funetik Alphabet",
                     img:"img/dictionary.svg",
@@ -219,12 +219,12 @@ data = [
                     ref:"motionremover/",
                     img:"img/t_camera_flash.svg"
                 },
-                {
+                /*{
                     title:"Text Transformer",
                     tag:"Fun typo generator",
                     ref:"texttransformer/",
                     img:"img/t_abc.svg"
-                },
+                },*/
                 {
                     title:"YouTube Thumbnail Downloader",
                     tag:"Download the full-size thumbnail for a YouTube video",
@@ -255,24 +255,24 @@ data = [
                     ref:"discordblockletters/",
                     img:"img/t_regional_s.svg"
                 },
-                {
+                /*{
                     title:"Full Window YouTube",
                     tag:"Scale a YouTube video to fill the whole browser window",
                     ref:"fullwindowvideo/",
                     img:"img/fullscreen.svg"
-                },
+                },*/
                 {
                     title:"Factorizer",
                     tag:"Find factors and common factors of numbers",
                     ref:"factors/",
                     img:"img/t_obelus.svg"
                 },
-                {
+                /*{
                     title:"Random Number Generator",
                     tag:"Generate random numbers in a range and guarantee no repeats",
                     ref:"rng/",
                     img:"img/t_dice.svg"
-                },
+                },*/
             ]
         },
         {

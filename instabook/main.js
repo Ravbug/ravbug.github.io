@@ -14,14 +14,14 @@ async function search(){
     }
 }
 
-const cors = 'https://cors-anywhere.herokuapp.com'
+const cors = "https://corsanywhere.herokuapp.com"
 
 /**
  * Search DuckDuckGo Instant Answers API
  * @param {string} query the string to search for
  */
 async function tryDuckDuckGo(query){
-    let queryurl = `https://api.duckduckgo.com/?q=${spaceToPlus(searchBar.value)}&format=json`
+    let queryurl = `${cors}/https://api.duckduckgo.com/?q=${spaceToPlus(searchBar.value)}&format=json`
     let result = JSON.parse(await httpGetPromise(queryurl));
 
     //if there's an AbstractText
