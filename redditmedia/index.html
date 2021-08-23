@@ -6,11 +6,16 @@
         <meta charset="UTF-8">
 
          <!-- Social embed image -->
-        <meta property="og:image" content="https://ravbug.github.io/redditvideo/reddit.png">
+        <meta property="og:image" content="https://ravbug.github.io/redditmedia/reddit.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="512">
         <meta property="og:image:height" content="512">
     </head>
+    <style>
+        .responsiveimg{
+            padding: 5px;
+        }
+    </style>
     <body>
         <div class="main">
             Enter Reddit post URL:
@@ -20,11 +25,20 @@
             </div>
             <br>
             <div id="out-container" class="breadcrumb" style="display:none">
-                <a id="out_v_link" href="">Video link</a>
-                <a id="out_a_link" href="">Audio link</a>
-                <br>
-                <video controls id="out_video" onload="video_loaded()" onerror="video_noload()"></video><br>
-                <audio controls id="out_audio" onload="audio_loaded()" onerror="audio_noload()"></audio>
+                <p>
+                    <a id="out_v_link" href="">Video link</a>
+                    <a id="out_a_link" href="">Audio link</a>
+                </p>
+                <p>
+                    <video controls id="out_video" onload="video_loaded()" onerror="video_noload()"></video>
+                </p>
+                <p>
+                    <audio controls id="out_audio" onload="audio_loaded()" onerror="audio_noload()"></audio>
+                </p>
+                <p>
+                    <details id="out-images"></details>
+                </p>
+               
             </div>
             <div id="out-error" class="breadcrumb" style="display:none;color:red">
             </div>
@@ -38,6 +52,7 @@
         const out_al = document.getElementById("out_a_link")
         const container = document.getElementById("out-container");
         const container_err = document.getElementById("out-error");
+        const out_i = document.getElementById("out-images");
 
         function trimTrailingChars(s, charToTrim) {
             const regExp = new RegExp(charToTrim + "+$");
@@ -51,7 +66,7 @@
         function audio_noload(){
             out_al.style.display = "none"
             container_err.style.display = ""
-            container_err.innerHTML += "No audio for this post."
+            container_err.innerHTML += " No audio for this post."
         }
 
         function video_loaded(){
@@ -61,14 +76,28 @@
         function video_noload(){
             out_vl.style.display = "none"
             container_err.style.display = ""
-            container_err.innerHTML += "No video for this post."
+            container_err.innerHTML += " No video for this post."
         }
 
-        function display_output(video_url,audio_url){
+        function display_output(video_url,audio_url,images){
             out_v.src = video_url
             out_a.src = audio_url
             out_vl.href = video_url
             out_al.href = audio_url
+            if (video_url == undefined){
+                out_v.style.display = "none"
+            }
+            if (audio_url == undefined){
+                out_a.style.display = "none"
+            }
+
+            out_i.innerHTML = ""
+            const all_img = []
+            for(const image of images){
+                all_img.push(`<img class="responsiveimg" src=${image}></img>`)
+            }
+            all_img.push(`<summary>Images (${images.length})</summary>`)
+            out_i.innerHTML = all_img.join('')
 
             container.style.display = ""
         }
@@ -84,21 +113,34 @@
             // get data
             const data = await fetch(url).catch(()=>{})
             if (data != undefined){
-
+                let has_data = false;
                 // get video stream info
                 const parsed = await data.json();
+                let video_url = undefined
+                let audio_url = undefined;
                 try{
                     const viddata = parsed[0]["data"]["children"][0]["data"]["secure_media"]["reddit_video"];
-                    const video_url = viddata["fallback_url"].split('?')[0];
+                    video_url = viddata["fallback_url"].split('?')[0];
 
                     //derive the audio stream from the video stream
-                    const audio_url = `${video_url.substring(0,video_url.lastIndexOf('/'))}/audio.mp4`;
-
-                    display_output(video_url,audio_url);
+                    audio_url = `${video_url.substring(0,video_url.lastIndexOf('/'))}/DASH_audio.mp4`;
+                    has_data = true;
                 }
                 catch(e){
                     container_err.style.display = ""
-                    container_err.innerHTML += "No video at this URL."
+                    container_err.innerHTML += "No video at this URL. "
+                }
+                //if post contains images, there's a gallery_data url
+                const images = []
+                if (parsed[0]["data"]["children"][0]["data"].hasOwnProperty("gallery_data")){
+                    for(let stub of parsed[0]["data"]["children"][0]["data"]["gallery_data"]["items"]){
+                        images.push(`https://i.redd.it/${stub["media_id"]}.jpg`);
+                    }
+                    has_data = true;
+                }
+
+                if(has_data){
+                    display_output(video_url,audio_url,images);
                 }
             }
             else{

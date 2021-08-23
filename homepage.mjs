@@ -232,10 +232,10 @@ data = [
                     img:"img/youtube.svg"
                 },
                 {
-                    title:"Reddit Video Downloader",
-                    tag:"Get direct links to reddit video and audio",
-                    ref:"redditvideo/",
-                    img:"redditvideo/reddit.svg"
+                    title:"Reddit Media Downloader",
+                    tag:"Get direct links to reddit video, audio, and images",
+                    ref:"redditmedia/",
+                    img:"redditmedia/reddit.svg"
                 },
                 {
                     title: "YouTube Direct Video downloader",
