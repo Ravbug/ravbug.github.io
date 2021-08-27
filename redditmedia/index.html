@@ -36,7 +36,7 @@
                     <audio controls id="out_audio" onload="audio_loaded()" onerror="audio_noload()"></audio>
                 </p>
                 <p>
-                    <details id="out-images"></details>
+                    <details open id="out-images"></details>
                 </p>
                
             </div>
@@ -128,7 +128,7 @@
                 }
                 catch(e){
                     container_err.style.display = ""
-                    container_err.innerHTML += "No video at this URL. "
+                    container_err.innerHTML += "No video or audio at this URL. "
                 }
                 //if post contains images, there's a gallery_data url
                 const images = []
@@ -137,6 +137,14 @@
                         images.push(`https://i.redd.it/${stub["media_id"]}.jpg`);
                     }
                     has_data = true;
+                }
+                // try second method
+                else if (parsed[0]["data"]["children"][0]["data"].hasOwnProperty("url") && parsed[0]["data"]["children"][0]["data"]["url"].includes("i.redd.it")){
+                    images.push(parsed[0]["data"]["children"][0]["data"]["url"])
+                    has_data = true;
+                }
+                else{
+                    container_err.innerHTML += " No images at this URL."
                 }
 
                 if(has_data){
