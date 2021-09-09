@@ -22,7 +22,18 @@ const allowed_subs = [
     "GTAorRussia",
     "notopbutok",
     "theyknew",
-    "gamingcirclejerk"
+    "gamingcirclejerk",
+    "crappydesign",
+    "engrish",
+    "femboymemes",
+    "gaymemes",
+    "wtfstockphotos",
+    "yesyesyesno",
+    "pics",
+    "unexpected",
+    "tiktokcringe",
+    "cringetopia",
+    "tinder"
 ]
 
 async function httpget(url){
