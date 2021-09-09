@@ -159,6 +159,12 @@ data = [
                     ref:"cargo-drinking-game",
                     img:"cargo-drinking-game/cargo-logo.png"
                 },
+                {
+                    title: "Graphics API support chart",
+                    tag: "A table of reliably supported graphics APIs, by platform",
+                    ref:"graphics",
+                    img:"graphics/gpu.svg"
+                },
                 /*{
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
