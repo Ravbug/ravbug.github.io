@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>How to run a Linux QEMU VM</title>
+    <meta name="description" content="Run Linux on macOS, Windows, or Linux">
+    <link id="favicon" rel="icon" href="https://avatars2.githubusercontent.com/u/22283943" type="image/x-icon">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="main">
+        <h2>Part 1: Install the distro to a virtual hard drive</h2>
+        <ol>
+            <li>
+                <a href="https://www.qemu.org/download/#macos">Install QEMU</a> 
+            </li>
+            <li>
+                Create your installation disk
+                <p>
+                    <code>qemu-img create -f qcow2 install-disk.img 16G</code>
+                </p>
+                Name the disk anything you want, and use the final argument to set the initial size.
+            </li>
+            <li>
+                Download the live installer for the distro of your choice.
+            </li>
+            <li>
+                Use QEMU to boot the installer
+                <p>
+                    <code>
+                        qemu-system-x86_64 -m 2048 -boot -d -accel hvf -smp 4 -net nic -net user -hdd testing-image.img -cdrom Fedora-Cinnamon-Live-x86_64-34-1.2.iso
+                    </code>
+                </p>
+                Flags explanation:
+                <ul>
+                    <li>
+                        <code>-m 2048</code> - Set the amount of RAM in megabytes for the VM
+                    </li>
+                    <li>
+                        <code>-boot -d</code> - boot to the CD-ROM (containing the live installer) first, before trying virtual hard disk
+                    </li>
+                    <li>
+                        <code>-accel hvf</code> - the Hypervisor framework to use. on Mac, use hvf, on Linux, use kvm
+                    </li>
+                    <li>
+                        <code>-smp 4</code> - the number of virtual CPU cores to provide to the VM.
+                    </li>
+                    <li>
+                        <code>-net nic -net user</code> - make an Ethernet adapter available to the VM, so that it has internet access
+                    </li>
+                    <li>
+                        <code>-hdd testing-image.img</code> The virtual hard drive to use. 
+                    </li>
+                    <li>
+                        <code>-cdrom Fedora-Cinnamon-Live-x86_64-34-1.2.iso</code> - the disk image to put in the VM's CDROM slot. Set this to the live installer iso you downloaded.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Follow the instructions in the on-screen installer. <br>
+                <img class="responsiveimg" src="installer.png">
+            </li>
+        </ol>
+        <hr>
+        <h2>Part 2: Use after installation</h2>
+        Now that the distro has been installed to the virtual hard drive, we can simplify our command 
+        <ol>
+            <li>
+                Copy the command you used earlier to launch the VM, but do not run it
+            </li>
+            <li>
+                Remove the <code>-cdrom</code> flag from the command. Since the OS is installed, we no longer need the installer ISO
+            </li>
+            <li>
+                Save the command to a shell script
+            </li>
+        </ol>
+        You can now use the shell script to launch the VM whenever you want to use it. 
+    </div> 
+</body>
+<script src="../../header.js"></script>
+
+<style>
+    .header {
+        margin-bottom: 5px;
+    }
+</style>
+<script src="../../statistics.js" url="https://bit.ly/2XYlKB3"></script>
+</html>
