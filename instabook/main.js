@@ -39,7 +39,7 @@ async function tryDuckDuckGo(query){
                 dummy.innerHTML = content;
                 let newQuery = dummy.querySelector('a').innerText;
                 dummy.remove();
-                let res = await httpGetPromise(`https://api.duckduckgo.com/?q=${spaceToPlus(newQuery)}&format=json`);
+                let res = await httpGetPromise(`${cors}/https://api.duckduckgo.com/?q=${spaceToPlus(newQuery)}&format=json`);
                 res = JSON.parse(res);
                 if(res['AbstractText'] != ""){
                     foundDetail = res['AbstractText'] + "<br><br>" + `<a href="${result['AbstractURL']}">${result['AbstractURL']}</a>`;
@@ -81,7 +81,7 @@ async function tryWikipedia(query){
     let content = [`"${query}" may refer to: <br><br>`];
 
     query = encodeURIComponent(query);
-    let queryurl=`${cors}/https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&utf8=&format=json&srlimit=5`;
+    let queryurl=`https://en.wikipedia.org/w/api.php?action=query&list=search&origin=*&srsearch=${query}&utf8=&format=json&srlimit=5`;
     let result = JSON.parse(await httpGetPromise(queryurl));
 
     //interested in the query->search part
@@ -89,7 +89,7 @@ async function tryWikipedia(query){
 
     //now get more text from each page
     for(let page of pages){
-        let pageData = JSON.parse(await httpGetPromise(`${cors}/https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=6&exlimit=1&titles=${page['title'].replace(/ /gm,'_')}&explaintext=1&formatversion=2&format=json&exsectionformat=plain`));
+        let pageData = JSON.parse(await httpGetPromise(`https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&exsentences=6&exlimit=1&titles=${page['title'].replace(/ /gm,'_')}&explaintext=1&formatversion=2&format=json&exsectionformat=plain`));
         content.push(`<a href='${wpTitleToURL(page['title'])}'>${page['title']}</a><br>${pageData['query']['pages'][0]['extract']}`);
     }
     return content.join('<hr>')
