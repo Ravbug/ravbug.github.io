@@ -2,6 +2,7 @@ function entry(){
     this.timezone = 0
     this.name = "";
     this.people = []
+    this.disabled = false;
 }
 
 function range(min,max){
@@ -25,14 +26,14 @@ const localUserOffset = - new Date().getTimezoneOffset()/60;
  * @param {HTMLElement} container container to write output
  */
 function render(container){
+    const allNotOkRanges = [];  // collect all the unavailability ranges here
+
     container.innerHTML = "";
     let idx = 0;
     for(elt of entries){
         const local = idx;
         // root element
         const root = document.createElement("div");
-        const data = document.createElement("inline");
-        data.innerHTML = `zone = ${elt.timezone}, name = ${elt.name}, people = ${elt.people}`
 
         // management controls
         const delBtn = document.createElement("button")
@@ -41,7 +42,6 @@ function render(container){
             deleteElement(local);
         }
 
-        root.appendChild(data);
         root.appendChild(delBtn);
 
         if (local != 0){
@@ -62,12 +62,17 @@ function render(container){
             root.appendChild(downBtn);
         }
 
+        // info
+        const data = document.createElement("inline");
+        data.innerHTML = `zone = ${elt.timezone}, name = ${elt.name}, people = ${elt.people}`
+        root.appendChild(data);
+
         // representation
         // for sanity, we use 24-hour time internally, where 0:00 = midnight and 23:59 = 11:59pm
         const notOkRanges = [new range(0,8),new range(23,23.999)];   //assume (unrealistically) that people sleep from 11pm -> 8am
 
         //Offset the ranges
-        const offset = parseInt(elt.timezone);
+        const offset = parseInt(elt.timezone) + localUserOffset;
         for(const range of notOkRanges){
             range.min += offset;
             range.max += offset;
@@ -107,11 +112,28 @@ function render(container){
             rdiv.style.marginLeft = `${range.min}%`
             rdiv.style.width = `${(range.max-range.min)}%`
             bgdiv.appendChild(rdiv);
+
+            allNotOkRanges.push(range);
         }
 
         idx++
         container.appendChild(root);
     }
+
+    // now we add the final availability bar, containing the intersection of all unavailabilities
+    const masterBar = document.createElement('bar')
+    const hr = document.createElement('hr')
+    container.firstChild.prepend(hr);
+    container.firstChild.prepend(masterBar);
+    for(const range of allNotOkRanges){
+        const rdiv = document.createElement('innerbar')
+        rdiv.style.marginLeft = `${range.min}%`
+        rdiv.style.width = `${(range.max-range.min)}%`
+        masterBar.appendChild(rdiv);
+    }
+    const title = document.createElement('h3')
+    title.innerHTML = "All Availability"
+    container.firstChild.prepend(title)
 }   
 
 /**
