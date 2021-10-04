@@ -1,0 +1,58 @@
+<head>
+    <title>Who's Up?</title>
+    <meta name="description" content="Create a graph of availability across timezones">
+    <link id="favicon" rel="icon" href="alarmclock.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+
+    <meta charset="utf-8">
+    <meta property="og:image" content="https://ravbug.github.io/whosup/alarmclock.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+</head>
+<body>
+    <div class="main">
+        <div style="width:100%;background-color: lightgray;">
+            <button onclick="addnew()">+</button>
+            <select id="mainsel"> 
+                <option value=-11>Midway Islands</option>
+                <option value=-10>Hawaii</option>
+                <option value=-9>Alaska</option>
+                <option value=-8>Pacific</option>
+                <option value=-7>NA-West</option>
+                <option value=-6>NA-Central</option>
+                <option value=-5>NA-Eastern</option>
+                <option value=-4>Puerto Rico, US Virgin Islands</option>
+                <option value=-3>Newfoundland</option>
+                <option value=-2>Brazil Eastern</option>
+                <option value=-1>Central Africa</option>
+                <option value=0 selected>UK</option>
+                <option value=1>Central Europe</option>
+                <option value=2>Eastern Europe</option>
+                <option value=3>East Africa, Middle East</option>
+                <option value=4>Near East</option>
+                <option value=5>Pakistan-Lahore</option>
+                <option value=5.5>India</option>
+                <option value=6>Bangladesh</option>
+                <option value=7>Vietnam</option>
+                <option value=8>China-Mainland</option>
+                <option value=9>Japan</option>
+                <option value=9.5>Australia-Central</option>
+                <option value=10>Australia-Eastern</option>
+                <option value=11>Solomon</option>
+                <option value=12>New Zealand</option>
+            </select>
+            <input placeholder="(optional) names of people" id="peoplelist"></input>
+        </div>
+       <div id="graphroot" style="width:100%"></div>
+    </div>
+</body>
+<script>
+    // onload
+    const opts = document.getElementById("mainsel").querySelectorAll("option")
+    for(let opt of opts){
+        opt.innerHTML = `(GMT${opt.value >= 0 ?'+':''}${opt.value}) ${opt.innerHTML}`;
+    }
+</script>
+<script src="main.js"></script>
+<script src="../header.js"></script>

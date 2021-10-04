@@ -1,0 +1,19 @@
+bar{
+    height: 20px;
+    display: block;
+    width: 100%;
+    background-color:green;
+    position:relative;
+}
+
+innerbar{
+    height: 20px;
+    background-color:red;
+    width: 100%;
+    z-index:9999;
+    display:inline-block;
+    position:absolute;
+    top:0;
+    left:0;
+    margin-right:auto
+}
