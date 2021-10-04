@@ -77,7 +77,7 @@ function render(container){
 
         // representation
         // for sanity, we use 24-hour time internally, where 0:00 = midnight and 23:59 = 11:59pm
-        const notOkRanges = [new range(0,8),new range(23,23.999)];   //assume (unrealistically) that people sleep from 11pm -> 8am
+        const notOkRanges = [new range(0,8),new range(23,24)];   //assume (unrealistically) that people sleep from 11pm -> 8am
 
         //Offset the ranges
         const offset = parseInt(elt.timezone) + localUserOffset;
@@ -85,11 +85,10 @@ function render(container){
             range.min += offset;
             range.max += offset;
             
-            range.min = mod(range.min,24);
-            range.max = mod(range.max,24);
+            range.min = mod(range.min,24.001);
+            range.max = mod(range.max,24.001);
         }
         // if a range is split by the beginning and end of the day, create two ranges out of it
-        console.log(notOkRanges)
         const rangesToAdd = []
         for (const r of notOkRanges){
             if (r.max < r.min){          
@@ -125,7 +124,7 @@ function render(container){
                 allNotOkRanges.push(range);
             }
             else{
-                root.style.opacity = 0.5;
+                bgdiv.style.opacity = 0.5;
             }
         }
 
