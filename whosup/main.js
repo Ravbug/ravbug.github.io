@@ -2,7 +2,7 @@ function entry(){
     this.timezone = 0
     this.name = "";
     this.people = []
-    this.disabled = false;
+    this.enabled = true;
 }
 
 function range(min,max){
@@ -36,8 +36,16 @@ function render(container){
         const root = document.createElement("div");
 
         // management controls
+        const chckbx = document.createElement("input")
+        chckbx.type = "checkbox"
+        chckbx.onchange = (evt)=>{
+            setEnabled(local,evt.srcElement.checked)
+        }
+        chckbx.checked = elt.enabled;
+        root.appendChild(chckbx);
+
         const delBtn = document.createElement("button")
-        delBtn.innerHTML = "delete";
+        delBtn.innerHTML = "❌";
         delBtn.onclick = ()=>{
             deleteElement(local);
         }
@@ -95,11 +103,11 @@ function render(container){
                 r.min = 0;
             }
         }
+        
         for(const range of rangesToAdd){
             notOkRanges.push(range);
         }
         
-
         const bgdiv = document.createElement('bar')
         root.appendChild(bgdiv);
 
@@ -113,7 +121,12 @@ function render(container){
             rdiv.style.width = `${(range.max-range.min)}%`
             bgdiv.appendChild(rdiv);
 
-            allNotOkRanges.push(range);
+            if (elt.enabled){
+                allNotOkRanges.push(range);
+            }
+            else{
+                root.style.opacity = 0.5;
+            }
         }
 
         idx++
@@ -184,6 +197,16 @@ function swapGreater(i){
 function deleteElement(idx){
     entries.splice(idx,1);
     render(rendertarget);
+}
+
+/**
+ * Change enabled state
+ * @param {Number} idx index into array
+ * @param {Boolean} state new enabled state
+ */
+function setEnabled(idx, state){
+    entries[idx].enabled = state
+    render(rendertarget);   
 }
 
 function rangeRemap(value, low1, high1, low2, high2){
