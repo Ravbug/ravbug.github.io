@@ -95,8 +95,8 @@ function render(container){
         //Offset the ranges
         const offset = parseInt(elt.timezone) + localUserOffset;
         for(const range of notOkRanges){
-            range.min += offset;
-            range.max += offset;
+            range.min -= offset;
+            range.max -= offset;
             
             range.min = mod(range.min,24.001);
             range.max = mod(range.max,24.001);
