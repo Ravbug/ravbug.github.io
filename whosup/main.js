@@ -15,14 +15,6 @@ function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
-const numberlineStr = `
-<div class="stretcher">
-  12 1 2 3 4 5 6 7 8 9 10 11 12 1 2 3 4 5 6 7 8 9 10 11
-  <span class="stretcherSpan"></span>
-</div>
-`;
-
-
 // stores entry objects
 let entries = []
 const rendertarget = document.getElementById("graphroot")
@@ -36,7 +28,7 @@ document.getElementById("postinfo").innerHTML = `Relative to your timezone (GMT$
     const urlparam = params.get("t")
     if (urlparam != null){
         
-        const dec = decode(urlparam);
+        const dec = decodeCompress(urlparam);
         entries = JSON.parse(dec)
         render(rendertarget)
     }
@@ -148,7 +140,8 @@ function render(container){
                 bgdiv.style.opacity = 0.5;
             }
         }
-        root.innerHTML += numberlineStr
+       
+        root.appendChild(genNumline())
 
         idx++
         container.appendChild(root);
@@ -170,16 +163,14 @@ function render(container){
     title.innerHTML = "All Availability"
     allContainer.firstChild.prepend(title)
 
-    const numline = document.createElement('div')
-    numline.innerHTML = numberlineStr
-    allContainer.appendChild(numline)
+    allContainer.appendChild(genNumline())
 
     container.firstChild.prepend(allContainer)
    
 
     // lastly, save the data to the URL bar as a compressed string
     let str = JSON.stringify(entries);
-    const enc = encode(str);
+    const enc = encodeCompress(str);
 
     window.history.pushState("", "", document.URL.substring(0,document.URL.indexOf('?')) + "?t=" + enc);;
 }   
@@ -248,25 +239,7 @@ function rangeRemap(value, low1, high1, low2, high2){
      return low2 + (value - low1) * (high2 - low2) / (high1 - low1)
 }
 
-/**
- * ASCII to Unicode (decode Base64 to original data)
- * @param {string} b64
- * @return {string}
- */
- function atou(b64) {
-    return decodeURIComponent(escape(atob(b64)));
-  }
-
-  /**
- * Unicode to ASCII (encode data to Base64)
- * @param {string} data
- * @return {string}
- */
-function utoa(data) {
-    return btoa(unescape(encodeURIComponent(data)));
-  }
-
-function encode(str){
+function encodeCompress(str){
     const compressed = LZString.compressToUint8Array(str);
     const arr = [];
     for(let byte of compressed){
@@ -276,7 +249,7 @@ function encode(str){
     return arr.join('')
 }
 
-function decode(str){
+function decodeCompress(str){
     // convert to pairs
     const pairs = str.match(/.{1,2}/g);
     let dec = [];
@@ -287,4 +260,14 @@ function decode(str){
     Uint8Array.from(dec);
     dec = LZString.decompressFromUint8Array(dec);
     return dec;
+}
+
+function genNumline(){
+    const numLineWrapper = document.createElement("div")
+    numLineWrapper.classList="stretcher"
+    numLineWrapper.innerHTML = "12 1 2 3 4 5 6 7 8 9 10 11 12 1 2 3 4 5 6 7 8 9 10 11"
+    const numlineStretcher = document.createElement("span")
+    numlineStretcher.classList = "stretcherSpan"
+    numLineWrapper.appendChild(numlineStretcher) 
+    return numLineWrapper;
 }
