@@ -15,3 +15,25 @@ innerbar{
     top:0;
     left:0;
 }
+
+
+.stretcher{
+    text-align:justify;
+  }
+  
+.stretcherSpan{
+    width:100%;
+    height:1em;
+    display:inline-block;
+}
+
+@media only screen and (max-width: 540px) {
+    .stretcher{
+    font-size:8px;
+    }
+}
+@media only screen and (max-width: 237px) {
+    .stretcher{
+    font-size:5px;
+    }
+}

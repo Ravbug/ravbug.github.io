@@ -15,11 +15,20 @@ function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
+const numberlineStr = `
+<div class="stretcher">
+  12 1 2 3 4 5 6 7 8 9 10 11 12 1 2 3 4 5 6 7 8 9 10 11
+  <span class="stretcherSpan"></span>
+</div>
+`;
+
+
 // stores entry objects
 let entries = []
 const rendertarget = document.getElementById("graphroot")
 
 const localUserOffset = new Date().getTimezoneOffset()/60;
+document.getElementById("postinfo").innerHTML = `Relative to your timezone (GMT${localUserOffset<0?"+":"-"}${localUserOffset})`;
 
 // do we have url params?
 {
@@ -32,7 +41,6 @@ const localUserOffset = new Date().getTimezoneOffset()/60;
         render(rendertarget)
     }
 }
-
 
 /**
  * create the HTML for the current representation
@@ -140,6 +148,7 @@ function render(container){
                 bgdiv.style.opacity = 0.5;
             }
         }
+        root.innerHTML += numberlineStr
 
         idx++
         container.appendChild(root);
@@ -147,9 +156,10 @@ function render(container){
 
     // now we add the final availability bar, containing the intersection of all unavailabilities
     const masterBar = document.createElement('bar')
+    const allContainer = document.createElement('div')
     const hr = document.createElement('hr')
-    container.firstChild.prepend(hr);
-    container.firstChild.prepend(masterBar);
+    allContainer.appendChild(hr);
+    allContainer.appendChild(masterBar);
     for(const range of allNotOkRanges){
         const rdiv = document.createElement('innerbar')
         rdiv.style.marginLeft = `${range.min}%`
@@ -158,7 +168,14 @@ function render(container){
     }
     const title = document.createElement('h3')
     title.innerHTML = "All Availability"
-    container.firstChild.prepend(title)
+    allContainer.firstChild.prepend(title)
+
+    const numline = document.createElement('div')
+    numline.innerHTML = numberlineStr
+    allContainer.appendChild(numline)
+
+    container.firstChild.prepend(allContainer)
+   
 
     // lastly, save the data to the URL bar as a compressed string
     let str = JSON.stringify(entries);
