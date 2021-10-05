@@ -16,10 +16,23 @@ function mod(n, m) {
 }
 
 // stores entry objects
-const entries = []
+let entries = []
 const rendertarget = document.getElementById("graphroot")
 
-const localUserOffset = - new Date().getTimezoneOffset()/60;
+const localUserOffset = new Date().getTimezoneOffset()/60;
+
+// do we have url params?
+{
+    const params = new URLSearchParams(window.location.search);
+    const urlparam = params.get("t")
+    if (urlparam != null){
+        
+        const dec = decode(urlparam);
+        entries = JSON.parse(dec)
+        render(rendertarget)
+    }
+}
+
 
 /**
  * create the HTML for the current representation
@@ -72,7 +85,7 @@ function render(container){
 
         // info
         const data = document.createElement("inline");
-        data.innerHTML = `zone = ${elt.timezone}, name = ${elt.name}, people = ${elt.people}`
+        data.innerHTML = `${elt.name} ${elt.people != "" ? `(${elt.people})` : ""}`
         root.appendChild(data);
 
         // representation
@@ -146,6 +159,12 @@ function render(container){
     const title = document.createElement('h3')
     title.innerHTML = "All Availability"
     container.firstChild.prepend(title)
+
+    // lastly, save the data to the URL bar as a compressed string
+    let str = JSON.stringify(entries);
+    const enc = encode(str);
+
+    window.history.pushState("", "", document.URL.substring(0,document.URL.indexOf('?')) + "?t=" + enc);;
 }   
 
 /**
@@ -159,7 +178,7 @@ function addnew(){
     const e = new entry();
     e.name = mainsel.options[mainsel.selectedIndex].text;
     e.timezone = mainsel.options[mainsel.selectedIndex].value;
-    e.people = peoplelist.value
+    e.people = peoplelist.value.trim();
 
     peoplelist.value = "";
 
@@ -210,4 +229,45 @@ function setEnabled(idx, state){
 
 function rangeRemap(value, low1, high1, low2, high2){
      return low2 + (value - low1) * (high2 - low2) / (high1 - low1)
+}
+
+/**
+ * ASCII to Unicode (decode Base64 to original data)
+ * @param {string} b64
+ * @return {string}
+ */
+ function atou(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  /**
+ * Unicode to ASCII (encode data to Base64)
+ * @param {string} data
+ * @return {string}
+ */
+function utoa(data) {
+    return btoa(unescape(encodeURIComponent(data)));
+  }
+
+function encode(str){
+    const compressed = LZString.compressToUint8Array(str);
+    const arr = [];
+    for(let byte of compressed){
+        const thisByte = btoa(String.fromCharCode(byte));
+        arr.push(thisByte.substring(0,2));  // we know every conversion here ends with '=='
+    }
+    return arr.join('')
+}
+
+function decode(str){
+    // convert to pairs
+    const pairs = str.match(/.{1,2}/g);
+    let dec = [];
+    for(pair of pairs){
+        const thisByte = atob(`${pair}==`);
+        dec.push(thisByte.charCodeAt(0));
+    }
+    Uint8Array.from(dec);
+    dec = LZString.decompressFromUint8Array(dec);
+    return dec;
 }

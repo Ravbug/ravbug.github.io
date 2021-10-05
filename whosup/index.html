@@ -12,9 +12,9 @@
 </head>
 <body>
     <div class="main">
-        <div style="width:100%;background-color: lightgray;">
-            <button onclick="addnew()">+</button>
-            <select id="mainsel"> 
+        <div style="width:100%;">
+            <button class="btn btn-success" style="display:unset" onclick="addnew()">+</button>
+            <select class="form-control" style="display:unset" id="mainsel"> 
                 <option value=-11>Midway Islands</option>
                 <option value=-10>Hawaii</option>
                 <option value=-9>Alaska</option>
@@ -42,7 +42,7 @@
                 <option value=11>Solomon</option>
                 <option value=12>New Zealand</option>
             </select>
-            <input placeholder="(optional) names of people" id="peoplelist"></input>
+            <input class="form-control" style="display:unset;" placeholder="(optional) names of people" id="peoplelist"></input>
         </div>
        <div id="graphroot" style="width:100%"></div>
     </div>
@@ -54,5 +54,6 @@
         opt.innerHTML = `(GMT${opt.value >= 0 ?'+':''}${opt.value}) ${opt.innerHTML}`;
     }
 </script>
+<script src="../lz-string/lz-string.min.js"></script>
 <script src="main.js"></script>
 <script src="../header.js"></script>
