@@ -165,6 +165,12 @@ data = [
                     ref:"graphics",
                     img:"graphics/gpu.svg"
                 },
+                {
+                    title:"Who's Up?",
+                    tag:"Display a graph of the intersection where people are awake in different timezones",
+                    ref:"whosup/",
+                    img:"whosup/alarmclock.svg"
+                },
                 /*{
                     title:"Rate My Professors Scraper",
                     img:"img/rmp.png",
