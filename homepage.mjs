@@ -14,17 +14,17 @@
  * content: array of cards
  */
 data = [
-        {
-            title: "DevBlogs",
-            content:[
-                {
-                    title:"RavEngine DevBlog",
-                    img:"img/joystick.svg",
-                    tag:"Recording my progress and thoughts while developing a custom game engine in C++",
-                    ref:"blog/ravengine",
-                }
-            ]
-        },
+        // {
+        //     title: "DevBlogs",
+        //     content:[
+        //         {
+        //             title:"RavEngine DevBlog",
+        //             img:"img/joystick.svg",
+        //             tag:"Recording my progress and thoughts while developing a custom game engine in C++",
+        //             ref:"blog/ravengine",
+        //         }
+        //     ]
+        // },
         {
             title:"Software Development",
             content:[
