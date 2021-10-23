@@ -1,0 +1,18 @@
+<html>
+    <body>
+		Method 1:
+        <pre id="output"></pre>
+        <script type="text/javascript">
+            var element = new Image;
+            var devtoolsOpen = false;
+            element.__defineGetter__("id", function() {
+                devtoolsOpen = true; // This only executes when devtools is open.
+            });
+            setInterval(function() {
+                devtoolsOpen = false;
+                console.log(element);
+                document.getElementById('output').innerHTML = (devtoolsOpen ? "dev tools is open\n" : "dev tools is closed\n");
+            }, 1000);
+        </script>
+    </body>
+</html>
