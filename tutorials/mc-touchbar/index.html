@@ -23,8 +23,10 @@
             or you can search for <code>Terminal</code> in spotlight.
         </li>
         <li>
-            <b>Paste the following command into terminal and press return:</b><br>
+            <b>If using java 14 or below, paste the following command into terminal and press return:</b><br>
             <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys</code>
+            <b>If using java 16 or above, paste the following command into terminal and press return:</b><br>
+            <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.java functionKeys</code>
             <br><picture>
                     <source srcset="terminal.png" media="(prefers-color-scheme: light)"></source>
                     <source srcset="terminal_dark.png" media="(prefers-color-scheme: dark)"></source>
@@ -58,7 +60,8 @@
     without needing to press FN.
     <br><br>
     <h3 id="experts">Shortcut commands for power users <a href="#experts">🔗</a></h3>
-    <b>Enable: </b><code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys && sudo killall TouchBarServer NowPlayingTouchUI ControlStrip</code><br>
+    <b>Enable (Java 8-14): </b><code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys && sudo killall TouchBarServer NowPlayingTouchUI ControlStrip</code><br>
+    <b>Enable (Java 16): </b> <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.java functionKeys && sudo killall TouchBarServer NowPlayingTouchUI ControlStrip</code><br>
 </div>
 
 </html>
