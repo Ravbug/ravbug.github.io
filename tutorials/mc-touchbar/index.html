@@ -23,9 +23,12 @@
             or you can search for <code>Terminal</code> in spotlight.
         </li>
         <li>
-            <b>If using java 14 or below, paste the following command into terminal and press return:</b><br>
-            <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys</code>
-            <b>If using java 16 or above, paste the following command into terminal and press return:</b><br>
+            <b>
+                Paste the following command into Terminal and press return:<br>
+            </b>
+            Java 14 or older<br>
+            <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.cmd functionKeys</code><br>
+            Java 16 or newer<br>
             <code>defaults write com.apple.touchbar.agent PresentationModePerApp -dict-add net.java.openjdk.java functionKeys</code>
             <br><picture>
                     <source srcset="terminal.png" media="(prefers-color-scheme: light)"></source>
