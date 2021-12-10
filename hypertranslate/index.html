@@ -131,9 +131,9 @@
   }
 
   function translate_failed() {
-    swal("Uh oh!", "An unexpected error occurred with the translate service. \n\nThis can happen if you lose your internet connection\n" +
-      "or your input exceeds the HttpRequest CORS length spec \n(aka it is too long). \n\nTry checking your internet connection, and splitting up your input into pieces and translating them separately.", "error");
-    outputField.value = "Translate Service Error. \n\n Please check your internet connection, and if that doesn't work, shorten the input.";
+    swal("Uh oh!", "An unexpected error occurred. \n\nThis can happen if you lose your internet connection\n" +
+      "or your input it is too long. \n\nTry checking your internet connection, splitting up your input into pieces and translating them separately, or trying again later.", "error");
+    outputField.value = "Translate Service Error. \n\n Please check your internet connection, and if that doesn't work, shorten the input, or try again later.";
   }
 
   //called when the engine finishes
