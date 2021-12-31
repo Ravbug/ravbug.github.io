@@ -362,6 +362,12 @@ data = [
                     ref:"tutorials/virtual-rpi"
                 },
                 {
+                    title:"Vulkan for Raspberry Pi",
+                    img:"tutorials/rpi-vulkan/vulkan.svg",
+                    tag:"Run the Vulkan API on your Raspberry Pi",
+                    ref:"tutorials/rpi-vulkan"
+                },
+                {
                     title:"Rapid Discord.js tutorial",
                     img:"tutorials/discordjs/discordjs.png",
                     tag:"A condensed Discord.js bot tutorial for experienced developers, includes starter code.",

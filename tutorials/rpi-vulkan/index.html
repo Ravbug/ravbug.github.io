@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>Vulkan for Raspberry Pi</title>
+    <meta name="description" content="A tutorial for getting Vulkan running on your Raspberry Pi">
+    <link id="favicon" rel="icon" href="vulkan.svg" type="image/x-icon">
+    <meta charset="utf-8">
+    
+     <!-- Social icon -->
+     <meta property="og:image" content="https://www.ravbug.com/tutorials/virtual-rpi/pi.png">
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="252">
+     <meta property="og:image:height" content="322">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+    <div class="main">
+        The Raspberry Pi supports the Vulkan graphics API! However, as of writing () this support 
+        does not come preinstalled with the raspberry pi OS. This tutorial explains how to get Vulkan support on
+        the Raspberry Pi.
+        <hr>
+        <h3>Step 1: Install Dependencies</h3>
+        We need to install some dependency libraries in order to compile the Vulkan driver. Run the following command 
+        to install them:
+        <br><br>
+        <code>sudo apt-get install libxcb-randr0-dev libxrandr-dev libxcb-xinerama0-dev libxinerama-dev libxcursor-dev libxcb-cursor-dev libxkbcommon-dev xutils-dev xutils-dev libpthread-stubs0-dev libpciaccess-dev libffi-dev x11proto-xext-dev libxcb1-dev libxcb-*dev libssl-dev libgnutls28-dev x11proto-dri2-dev x11proto-dri3-dev libx11-dev libxcb-glx0-dev libx11-xcb-dev libxext-dev libxdamage-dev libxfixes-dev libva-dev x11proto-randr-dev x11proto-present-dev libclc-dev libelf-dev mesa-utils libvulkan-dev libvulkan1 libassimp-dev libdrm-dev libxshmfence-dev libxxf86vm-dev libunwind-dev libwayland-dev wayland-protocols libwayland-egl-backend-dev valgrind libzstd-dev vulkan-tools git build-essential bison flex ninja-build python3-mako</code>
+        <hr>
+        <h3>Step 2: Download the source code</h3>
+        Using git, download the source code for Mesa, by running the following command:<br><br>
+        <code>git clone -b 21.3 https://gitlab.freedesktop.org/mesa/mesa.git mesa_vulkan --depth=1</code>
+        <br><br>
+        Using the <code>--depth=1</code> argument allows us to avoid downloading the entire git history, which saves significant time on slow internet connections.
+        To download a different version, change the number after the <code>-b</code> argument to the version you want. Visit <a href=https://gitlab.freedesktop.org/mesa/mesa>https://gitlab.freedesktop.org/mesa/mesa</a>
+        to view the version tags that are available.
+        <details>
+            <summary>Expand to show screenshot</summary>
+            <img class="responsiveimg" style="max-width: 510px;" src="mesa-branches.png">
+        </details>
+        <hr>
+        <h3>Step 3: Compile and install the driver</h3>
+        We need to do two things for this step. First, we will configure the build system for our device, by running the following command:
+<pre><code class="sh"># move our terminal into the source code folder
+cd mesa_vulkan
+
+# configure into a folder named "build"
+CFLAGS="-mcpu=cortex-a72" \
+CXXFLAGS="-mcpu=cortex-a72" meson --prefix /usr \
+-D platforms=x11 \
+-D vulkan-drivers=broadcom \
+-D dri-drivers= \
+-D gallium-drivers=kmsro,v3d,vc4 \
+-D buildtype=release build
+</code></pre> 
+    This will create a folder named <code>build</code> inside the repo, which contains everything needed to compile the driver.
+    Next, we'll compile, by running the following commands:<br><br>
+    <code>ninja -C build -j`nproc` && sudo ninja -C build install</code>
+    <br><br>
+    If the compilation is successful, the Vulkan driver will be installed! You do not need to restart your pi to begin using it.
+    <hr>
+    <h3>Step 4 (optional): Test the Vulkan driver</h3>
+    The Sascha Willems Vulkan demos are a good way to test a platform's vulkan implementation. We can compile them with the following commands:
+<pre><code class="sh"># Download the code
+git clone --recursive --depth=1 https://github.com/SaschaWillems/Vulkan.git 
+cd Vulkan
+
+# download the assets (this can take a while!)
+python3 download_assets.py 
+
+# install CMake (needed for compilation)
+sudo apt install cmake -y
+
+# configure and compile
+mkdir build && cd build
+cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+</code></pre> 
+    Then just navigate to <code>build/bin</code> and run the samples!
+</div>
+</body>
+
+<script src="../../header.js"></script>
+<script src="../../statistics.js" url="https://bit.ly/3eDftmA"></script>  
