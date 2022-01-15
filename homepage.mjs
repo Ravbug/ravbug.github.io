@@ -77,11 +77,17 @@ data = [
                     ref:"mcsounds-extractor/",
                 },
                 {
+                    title:"EmbedBot",
+                    img:"img/embedbot.png",
+                    tag:"A simple Discord integration for creating better embeds for some websites",
+                    ref:"https://embed-bot.vercel.app",
+                },
+                /*{
                     title:"Cleverbug",
                     img:"https://images-ext-1.discordapp.net/external/FZ6XbC9DP_MCNKIog6TaBwbnO0qIW7mCAd7KGrUGkPs/%3Fsize%3D256/https/cdn.discordapp.com/avatars/374793801455108097/34cd9178a4f93f3dfb14fa55a0f3f74f.png",
                     tag:"A fun chatbot for your Discord server",
                     ref:"https://cleverbug-bot.herokuapp.com"
-                },
+                },*/
                 {
                     title:"AutoResponder",
                     img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
