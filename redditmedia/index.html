@@ -95,7 +95,7 @@
             const all_img = []
             for(const image of images){
                 all_img.push(`<a href="${image}">Image URL</a><br>`)
-                all_img.push(`<img class="responsiveimg" src="${image}" onerror="this.outerHTML = 'The image at <code>${image}</code> could not be displayed. Use the direct URL above.'"></img>`)
+                all_img.push(`<img class="responsiveimg" src="${image}" onerror="this.outerHTML = 'The image at <code>${image}</code> could not be displayed. Use the direct URL above.'"></img><br>`)
             }
             all_img.push(`<summary>Images (${images.length})</summary>`)
             out_i.innerHTML = all_img.join('')
@@ -135,7 +135,9 @@
                 const images = []
                 if (parsed[0]["data"]["children"][0]["data"].hasOwnProperty("gallery_data")){
                     for(let stub of parsed[0]["data"]["children"][0]["data"]["gallery_data"]["items"]){
-                        images.push(`https://i.redd.it/${stub["media_id"]}.jpg`);
+                        // get the extension
+                        const ext = parsed[0]["data"]["children"][0]["data"]["media_metadata"][stub["media_id"]]["m"].replace("image/",'');
+                        images.push(`https://i.redd.it/${stub["media_id"]}.${ext}`);
                     }
                     has_data = true;
                 }
