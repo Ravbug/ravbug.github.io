@@ -1,0 +1,54 @@
+<head>
+    <title>
+        MobileShadow 1: Prior Research
+    </title>
+    <meta name="description" content="MobileShadow Development Blog">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        MobileShadow is a research project investigating rendering pixel-accurate raster-shadows in real-time 
+        using mobile-friendly techniques. 
+    </p>
+    <ul>
+        Below is a list containing relevant prior research
+        <li>
+            <a href="alias-free-shadowvolume.pdf">An Efficient Alias-free Shadow Algorithm for Opaque and Transparent Objects using per-triangle Shadow Volumes</a>
+            <p>
+                Via a custom CUDA-based layered rasterizer, generate shadow volumes per triangle, enabling support for arbitrary geometry and transparency
+            </p>
+        </li>
+        <li>
+            <a href="alias-free-shadowmap.pdf">Alias-Free Shadow Maps</a>
+            <p>
+                By changing the way a shadow map is arranged, produce pixel-perfect shadows using depth mapping.
+            </p>
+        </li>
+        <li>
+            <a href="pixel-accurate-shadowmap.pdf">Pixel Accurate Shadows with Shadow Mapping</a>
+            <p>
+                Combining conventional depth mapping with a multipass confidence-based sampling system to produce pixel-perfect shadows with shadow mapping
+            </p>
+        </li>
+        <li>
+            <a href="ShaderX_ShadowExtrusion.pdf">Shadow Volume Extrusion using a Vertex Shader</a>
+            <p>
+                Preprocessing geometry to add zero-length quads, such that volume extrusion can be performed in a vertex shader.
+            </p>
+        </li>
+        <li>
+            <a href="shadow-volumes.pdf">Rendering 3D Vector Data Using the Theory Of Shadow Volumes</a>
+            <p>
+                An overview of the shadow volumes technique.
+            </p>
+        </li>
+    </ul>
+</div>
+<script src="../../../header.js"></script>

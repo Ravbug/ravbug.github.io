@@ -30,7 +30,7 @@ data = [
             content:[
                 {
                     title:"RavEngine",
-                    img:"https://avatars2.githubusercontent.com/u/22283943",
+                    img:"ravbug.png",
                     tag:"Fast and flexible C++ game engine leveraging both OOP and ECS",
                     ref:"https://github.com/Ravbug/RavEngine",
                 },
