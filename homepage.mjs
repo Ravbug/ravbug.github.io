@@ -26,7 +26,7 @@ data = [
         //     ]
         // },
         {
-            title:"Software Development",
+            title:"Software",
             content:[
                 {
                     title:"RavEngine",
@@ -109,7 +109,7 @@ data = [
             ]
         },
         {
-            title:"Web Development",
+            title:"In Your Browser",
             content:[     
                 {
                     title: "WebPhoto",
@@ -134,6 +134,12 @@ data = [
                     tag:"The classic code-breaking game in your browser",
                     ref:"mastermind/",
                     img:"mastermind/pin.svg"
+                },
+                {
+                    title:"Wordle Helper",
+                    tag:"A filtering tool to help you play Wordle!",
+                    ref:"wordle-help/",
+                    img:"wordle-help/wordle.svg"
                 },
                 {
                     title:"Calculator",

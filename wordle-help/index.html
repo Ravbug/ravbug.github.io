@@ -1,0 +1,38 @@
+<head>
+    <title>Wordle Helper</title>
+    <meta name="description" content="Word filtering tool for Wordle">
+    <link id="favicon" rel="icon" href="wordle.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+
+    <meta charset="utf-8">
+    <meta property="og:image" content="https://ravbug.github.io/wordle-helper/wordle.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+</head>
+<body>
+    <div class="main">
+        Find all words where: <button onclick="newFilter()">➕</button><button onclick="enableDelBtns()">🗑</button>
+        <div id="filter-ui"></div>
+        <button onclick="doFilter()">Go!</button>
+        <div id="output"></div>
+        <div class="breadcrumb">
+            <strong>What's this?</strong>
+            <p>
+                If you're like me, and you have trouble remembering words for the word game Wordle, this is the page for you!
+                As Wordle gives you hints, use them to narrow your search. You'll be a Wordle pro in no time!
+            </p>
+            <p>
+                Is this cheating? I don't think so, this page doesn't play the game for you.
+            </p>
+            <p>
+                Words adapted from: <a href="https://github.com/dwyl/english-words" target="_blank">dwyl/english-words</a>
+            </p>
+        </div>
+    </div>
+   
+</body>
+<script src="ui.js"></script>
+<script src="words.js"></script>
+<script src="../header.js"></script>
+<script src="../statistics.js" url="https://bit.ly/2YrFwIN"></script>
