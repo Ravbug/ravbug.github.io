@@ -68,5 +68,28 @@
             </p>
         </li>
     </ul>
+    <p>
+        <h3>Market Research</h3><br>
+        Groups who could be interested in a technology like this:
+        <ul>
+            <li>
+                Anyone with a realtime shadow system, ie Unity, Unreal, game studios with custom engines, etc.
+                <p>
+                    Unity and Unreal have <a href="https://docs.unity3d.com/Manual/shadow-cascades.html">shadow cascades</a> (<a href="https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/Mobile/Lighting/HowTo/CascadedShadow/">Unreal version</a>), and while these look good, 
+                    they still leave much to be desired compared to ray tracing in quality
+                </p>
+            </li>
+            <li>
+                Offline rendering, ie RenderMan
+                <p>
+                    Opportunities to eliminate path tracing while getting similar-or-better quality will lead to drastically improved render times. 
+                    <p>
+                        Blender implements <a href="https://docs.blender.org/manual/en/latest/render/layers/denoising.html">denoising</a> to cover up the artifacts 
+                        produced by path tracing which helps, but it can produce its <a href="https://www.blendernation.com/2020/02/08/a-way-to-get-rid-of-some-denoising-artefacts-60-second-tutorial/">own artifacts.</a>
+                    </p>
+                </p>
+            </li>
+        </ul>
+    </p>
 </div>
 <script src="../../../header.js"></script>
