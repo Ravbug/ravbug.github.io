@@ -463,9 +463,9 @@ data = [
                     ref: "mc-googletranslate/"
                 },
                 {
-                    title:"Math experiments",
+                    title:"Math Demos",
                     img:"img/desmos.png",
-                    tag:"Various fun thought experiments I've conducted with math",
+                    tag:"Some educational math demos",
                     ref:"math/",
                 },
                 {
