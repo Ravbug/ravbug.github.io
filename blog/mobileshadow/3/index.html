@@ -1,0 +1,84 @@
+<head>
+    <title>
+        MobileShadow 3: Volume Generation
+    </title>
+    <meta name="description" content="Determining what is in shadow">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="2/13/2022"></script>
+    </p>
+        <b>Volume Generation</b>
+    <p>
+        This week, I focused on the first big part of the algorithm - determining which pixels in the final frame are in shadow. 
+        Based on the research that I did prior, I found that many implementations worked around the issues of generating volume silhouettes 
+        by simply not doing that at all, and instead considering each triangle individually in a vacuum. I decided to implement something
+        similar, but with a twist.
+    </p>
+    <p>
+        Instead of building a hierarchical depth map like multiple existing implementations do, I decided to opt for potentially the naïvest
+        approach possible, just to see what performance is like. I made a triangular prism mesh which I then copy to each triangle 
+        rendered in the previous pass, and then transform it so that its base face covers that triangle. Then the cap on the opposite side
+        is extended to form that triangle's volume mesh. 
+    </p>
+    <p>
+        It took a few attempts to get that to work:<br>
+        <figure>
+            <video class="responsiveImg" controls src="prisms_wrong.webm"></video>
+            <video class="responsiveImg" controls src="prisms_rightbinding.webm"></video>
+            <figcaption>Got bit by vec3 reading as vec4 again, but reading as separate floats + manually offsetting fixed the bindings</figcaption>
+        </figure>
+        <figure>
+            <video class="responsiveImg" controls src="withMatrix_wrong.webm"></video>
+            <figcaption>An interesting effect caused by an incorrect implementation of an overcomplicated solution</figcaption>
+        </figure>
+
+    </p>
+    <p>
+        Then I attached the prisms to the triangles, offsetting first by the normal vector to see if everything was working, and then extending along the light vector:
+        <figure>
+            <video class="responsiveImg" controls src="normalized_volumes.webm"></video>
+            <video class="responsiveImg" controls src="aligned_prisms.webm"></video>
+            <figcaption>By triangle normal vector</figcaption>
+        </figure>
+        <figure>
+            <video class="responsiveImg" controls src="posed_volumes.webm"></video>
+            <figcaption>Along light vector, which was captured while rendering the unshadowed light pass</figcaption>
+        </figure>
+        <figure>
+            <img class="responsiveImg" src="volume.png">
+            <figcaption>A more complex skinned mesh</figcaption>
+        </figure>
+    </p>
+    <p>
+        Once those were resolved, it kind of worked:
+        <figure>
+            <video class="responsiveImg" controls src="bustedshadows_2.webm"></video>
+            <video class="responsiveImg" controls src="bustedshadows_1.webm"></video>
+            <figcaption>The shadows are trying to exist, but they are not quite succeeding</figcaption>
+        </figure>
+    </p>
+    <p>
+        I ran into two large problems with this approach. Geometry is cheap, as I thought, but what is not cheap is the immense amount of overdraw this 
+        solution causes. I implemented Carmack's Reverse to determine if a region was in shadow, but found that for dense volume counts this 
+        caused high GPU usage and low framerates, the exact opposite of what I was going for! The stencil buffer, being 1 byte per slot, also caused 
+        problems during wraparound though this could be a bug in my implementation. I was able to reduce the overdraw problem significantly by
+        only calculating volumes for triangles that were oriented towards the light, but it was still slower than I wanted since Carmack's Reverse still requires a lot of 
+        wasted calculations. 
+    </p>
+    <p>
+        Next week, I will investigate a different method of determining if a pixel is in shadow. Because I know the number of vertices 
+        in each volume, and I know that they are convex (because they are triangular prisms), it should be possible to easily determine
+        if the current instance encompasses the pixel depth-wise. Once one is found, I could then write a depth or stencil value which would
+        cause all future fragment invocations at that location to early-out, greatly reducing the amount of overdraw. Hopefully this will resolve the errors and make it faster. 
+    </p>
+</div>
+<script src="../../../header.js"></script>
