@@ -1,0 +1,175 @@
+<head>
+    <title>
+        MobileShadow 4: Volume Intersection
+    </title>
+    <meta name="description" content="Determining what is in shadow, part 2">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="2/20/2022"></script>
+    </p>
+        <b>Volume Intersection</b>
+    <p>
+        Because Carmack's Reverse combined with my volume generation resulted in low frame rates, I needed a new way to determine if 
+        a pixel on the result image was in shadow. I designed and tested 3 possibilities this week.
+    </p>
+    <u>Method 1: Backface-Frontface Lightmap</u>
+    <p>
+        One of the main reasons why Carmack's Reverse was so slow had to do with the high amount of overdraw, and the 
+        bottleneck created by so many competing writes to the stencil texture. Ideally, the shadow engine
+        would be able to determine if a pixel was in shadow without needing to always check every single overlapping volume 
+        at that pixel. After all, for a given light, the pixel is either in shadow or it's not, so once a single enveloping volume
+        is found for a given pixel, the shadow engine can stop. 
+    </p>
+    <p>
+        I decided to make two assumptions when designing this algorithm, ignoring if they were actually valid or not:
+            <li>
+                Two overlapping instances are never run at the same time
+            </li>
+            <li>
+                An instance finishes drawing before the next one completes  
+            </li>
+        </ol>
+        Using these assumptions, I created the following algorithm:
+        <blockquote>
+            Create a new stage in the render pipeline, between primary light and final display. This stage uses the depth data
+            from the deferred geometry stage, and allocates a 2-channel scratch texture and a 4-channel output texture.
+            It then executes one instanced draw, culling neither front faces nor back faces. For each fragment:
+            <ul>
+                <li>
+                    If the triangle is a front face – <code>gl_FrontFacing = true</code>
+                    <ul>
+                        <li>
+                            If there is a value in the green channel of the scratch texture, compare it to this innovation's 
+                            depth (<code>gl_FragCoord.z</code>) and the depth of the sampled pixel (from the depth texture), 
+                            if it is bounded, then write shadowed color to the output texture.
+                        </li>
+                        <li>
+                            If there is not a value in the green channel, then the corresponding back face was not already rendered 
+                            at this location, so write <code>gl_FragCoord.z</code> to the red channel.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Else, if the triangle is a back face – <code>gl_FrontFacing = false</code>
+                    <ul>
+                        <li>
+                            If there is a value in the red channel of the scratch texture, compare it to this innovation's 
+                            depth (<code>gl_FragCoord.z</code>) and the depth of the sampled pixel (from the depth texture), 
+                            if it is bounded, then write shadowed color to the output texture
+                        </li>
+                        <li>
+                            If there is not a value in the red channel, then the corresponding front face was not already rendered 
+                            at this location, so write <code>gl_FragCoord.z</code> to the green channel.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </blockquote>
+        This algorithm did not work, because it turns out fragment hardware is more complicated than I thought and it does not
+        commit the values of a shader to the texture immediately, which meant that future invocations always
+        read 0 in the red or green channels of the scratch texture, no matter what order they were rendered in.
+    </p>
+    <p>
+        I made a small tweak to the algorithm to address this issue. Instead of using a red-green texture, I created a simple 1D buffer with size screenWidth * screenHeight * 2
+        and used some simple math to index it as if it was a texture. It had 2 floats per pixel to behave as the red and green channels of the old scratch texture.
+        Unlike with textures, writes to a buffer are committed immediately.
+    </p>
+    <p>
+        Unfortunately, this algorithm did not work for a different reason. It turns out that both of the assumptions the algorithm 
+        hinged on were invalid, leading to data races which created the following mess:
+        <figure>
+            <video controls class="responsiveImg" src="why.webm"></video>
+            <figcaption>Why.</figcaption>
+        </figure>
+        Had this algorithm worked, I would've added some additional writes to a stencil texture or similar to cause future invocations at a shadowed
+        pixel to early-out, eliminating the overdraw. However, I abandoned this algorithm here and tried a different approach. 
+    </p>
+    <u>Method 2: Triangle Intersection</u>
+    <p>
+        The simplified volume meshes I am using have an important property. Because they are never twisted, they always remain convex, which means
+        if a volume is on screen, it always has one pixel facing the camera and one pixel facing away from the camera. Therefore, I thought
+        if I could determine which backface triangles the camera "ray" intersected with, I could solve for the back depth and 
+        determine if the volume encompassed the pixel. I created the following algorithm:
+        <blockquote>
+            Render all volumes in one instanced call, culling back faces. <br>
+            Vertex Shader:
+            <ul>
+                <li>
+                    Project all 6 vertices to camera space, then write those as output parameters of the vertex shader. Ideally to reduce repeated work 
+                    this could be done once in a compute shader, but I did it the quick-and-dirty way first to determine if the algorithm would work in the first place.
+                </li>
+            </ul>
+            Fragment Shader:
+            <ol>
+                <li>
+                    Figure out which faces of the prism the point overlaps with on the XY plane
+                </li>
+                <li>
+                    For these faces, generate coefficients for and use the plane equation of that face to determine the depth
+                </li>
+                <li>
+                    If the pixel is between these planes, then it is in shadow. Write immediately to the final output texture.
+                </li>
+            </ol>
+        </blockquote>
+        Not only did this not work, but it was extremely slow due to all of the repeated calculations.
+        <figure>
+            <video controls class="responsiveImg" src="lazerbeam.webm"></video>
+            <figcaption>Lazer beam!</figcaption>
+        </figure>
+        This algorithm proved to be overcomplicated and computationally wasteful, so I decided to refine it. 
+    </p>
+    <u>Method 3: Plane Solving</u>
+    <p>
+        The concepts behind Method 2 are sound, but the implementation was doing far more work than it needed to, a lot of which 
+        was repeated for every fragment! I designed a simpler algorithm based on it:
+        <blockquote>
+            Render all volumes in one instanced call, culling back faces. <br>
+            Vertex Shader:
+            <ol>
+                <li>
+                    Project all 6 vertices to camera space. Ideally to reduce repeated work 
+                    this could be done once in a compute shader, but I did it the quick-and-dirty way first to determine if the algorithm would work in the first place.     
+                </li>
+                <li>
+                    From this, determine which triangle normals are pointing away from the camera. These must be the back faces for this volume.
+                </li>
+                <li>
+                    Calculate the plane coefficients A, B, C, D for the up-to 2 backface planes, and pass those to the fragment shader as parameters.
+                </li>
+            </ol>
+            Fragment Shader
+            <ul>
+                <li>
+                    Solve the planes for the depth value, then determines if the planes are further from the camera than the sampled depth value. 
+                    They must be behind the front face, so no need to check that. Because of the depth texture, if the shadowed pixel 
+                    is in front of the volume, no fragment invocation is generated due to depth testing.
+                </li>
+                <li>
+                    If the checks pass, then this volume encompasses the pixel, so it is in shadow.
+                </li>
+            </ul>
+        </blockquote>
+        It appears that my math was wrong, because I did not get the results that I was expecting:
+        <figure>
+            <video controls class="responsiveImg" src="slime.webm"></video>
+            <figcaption>Looks kind of cool though.</figcaption>
+        </figure>
+        I created a much simpler case than the animation demo, consisting of just one triangle and a flat plane, and it was still wrong there:
+        <figure>
+            <video controls class="responsiveImg" src="simplecase.webm"></video>
+            <figcaption>It's almost working...</figcaption>
+        </figure>
+        So this would indicate that the issue is fixable without redoing the algorithm. I'm going to tackle that next week.
+    </p>
+</div>
+<script src="../../../header.js"></script>
