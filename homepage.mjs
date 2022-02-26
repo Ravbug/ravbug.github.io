@@ -454,7 +454,7 @@ data = [
                     title:"Kit Spleef",
                     img: "img/kitspleef.png",
                     tag: "The classic minecraft minigame with a chaotic spin! No player cap.",
-                    ref: "https://www.curseforge.com/minecraft/worlds/kit-spleef",
+                    ref: "kit-spleef",
                 },
                 {
                     title: "Minecraft Google Translate Resource Pack",
