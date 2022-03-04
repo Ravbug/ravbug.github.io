@@ -1,0 +1,69 @@
+<head>
+    <title>
+        MobileShadow 5: It works! Mostly
+    </title>
+    <meta name="description" content="Shadows appear! But there is still work to do">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="3/4/2022"></script>
+    </p>
+        <b>Into Darkness</b>
+    <p>
+        Why don't you see for yourself :)
+        <figure>
+            <video controls class="responsiveImg" src="yesss.webm"></video>
+            <figcaption>
+                We have shadows! But there are still some issues to resolve
+            </figcaption>
+        </figure>
+        After weeks and two separate GPU debuggers later, the shadow algorithm correctly generates pixel-perfect shadows given a static or animated mesh! However, there are a few important issues to resolve:
+        <ol>
+            <li>
+                When the camera enters a shadow volume, that volume stops working (see in the video).
+            </li>
+            <li>
+                The implementation can only handle 1 light (this should be fairly trivial to fix)
+            </li>
+            <li>
+                It wastes cycles in the vertex shader doing unnecessary repeated work
+            </li>
+            <li>
+                The overlapping volumes create a lot of overdraw which quickly becomes a performance bottleneck as the polygon count increases
+            </li>
+            <li>
+                Soft edges?
+            </li>
+        </ol>
+        The reason issue #1 happens is because the engine only calculates fragments for the front side of the volumes. If the camera goes inside a volume, this stops happening.
+        It may be possible to cap the positioning of the volume vertices such that the caps never end up behind the camera, thus ensuring a volume always has fragment invocations.
+        <figure>
+            <img class="responsiveImg" src="test1.png"></video>
+            <img class="responsiveImg" src="graph1.png"></video>
+            <figcaption>
+                I spent many hours staring at graphs of planes. A change of one (1) character caused my solution to go from completely broken to the video above.
+            </figcaption>
+        </figure>
+        <p>
+            I intend to address issues #2 and #3 through a combination of compute shaders (to reduce repeated work in the vertex shader) and multidraw-indirect (for multiple source lights). Issue #4 is perhaps the most
+            complex issue. While the overdraw problem is significantly better than brute-forcing with Carmack's Reverse, it remains the major source of performance problems.
+            If I can find a way to make all future fragment invocations early-out once a shadowed pixel is found for a given light, I could greatly reduce the amount of overdraw.
+        </p>
+        <figure>
+            <img class="responsiveImg" src="overdraw.png"></video>
+            <figcaption>
+                Lighter colors indicate more overdraw. Yikes!
+            </figcaption>
+        </figure>
+        I plan to focus on issue #1 for next week. Fixing it would mean that for opaque shadows the system works, and my tasks become focused on optimization rather than functionality. 
+    </p>
+</div>
+<script src="../../../header.js"></script>
