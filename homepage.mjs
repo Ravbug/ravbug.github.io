@@ -26,8 +26,8 @@ data = [
         //     ]
         // },
         {
-            title:"Software",
-            content:[
+            title:"Games",
+            content: [
                 {
                     title:"RavEngine",
                     img:"ravbug.png",
@@ -40,6 +40,35 @@ data = [
                     tag:"Mulitplayer tank battle game in development",
                     ref:"https://rrsoftware.github.io",
                 },
+                {
+                    title:"Battle Islands",
+                    img: "battle-islands/icon.png",
+                    tag: "Build your way to victory in this team survival game!",
+                    ref: "battle-islands",
+                },
+                {
+                    title:"Kit Spleef",
+                    img: "img/kitspleef.png",
+                    tag: "The classic minecraft minigame with a chaotic spin! No player cap.",
+                    ref: "kit-spleef",
+                },
+                {
+                    title:"Mastermind",
+                    tag:"The classic code-breaking game in your browser",
+                    ref:"mastermind/",
+                    img:"mastermind/pin.svg"
+                },
+                {
+                    title:"Tanks Unreal",
+                    tag:"Unity's Tanks! sample rewritten in Unreal C++",
+                    ref:"https://github.com/ravbug/TanksUnreal",
+                    img:"img/unrealengine.svg"
+                },
+            ]
+        },
+        {
+            title:"Software",
+            content:[
                 {
                     title:"Open Source Software",
                     img:"img/github.svg",
@@ -63,12 +92,6 @@ data = [
                     tag:"A lighting-fast native rewrite of the Unity Hub in C++",
                     ref:"unityhubnative/",
                     img:"img/unityhubnative.png"
-                },
-                {
-                    title:"Tanks Unreal",
-                    tag:"Unity's Tanks! sample rewritten in Unreal C++",
-                    ref:"https://github.com/ravbug/TanksUnreal",
-                    img:"img/unrealengine.svg"
                 },
                 {
                     title:"Minecraft Sounds Extractor",
@@ -128,12 +151,6 @@ data = [
                     tag:"A live markdown editor in your browser!",
                     ref:"markdownviz/",
                     img:"markdownviz/markdown.svg"
-                },
-                {
-                    title:"Mastermind",
-                    tag:"The classic code-breaking game in your browser",
-                    ref:"mastermind/",
-                    img:"mastermind/pin.svg"
                 },
                 {
                     title:"Wordle Helper",
@@ -300,7 +317,7 @@ data = [
             ]
         },
         {
-            title:"Animation and Rigging",
+            title:"Animation",
             content:[
                 {
                     title:"YouTube Channel",
@@ -333,6 +350,12 @@ data = [
                     ref:"rigs/minecraft-misc",
                 },
                 {
+                    title:"Minecraft Animal Rigs",
+                    img:"img/mcsheep.png",
+                    tag:"Sheep, wolves, cats, rabbits, etc",
+                    ref:"rigs/minecraft-animal",
+                },
+                {
                     title:"Uncategorized Rigs (Maya)",
                     img:"img/spotlight.svg",
                     tag:"Lighting, etc",
@@ -350,12 +373,6 @@ data = [
                     tag:"Old slime rig with a different design",
                     ref:"rigs/minecraft-legacy-slime",
                 },
-                {
-                    title:"Minecraft Animal Rigs",
-                    img:"img/mcsheep.png",
-                    tag:"Sheep, wolves, cats, rabbits, etc",
-                    ref:"rigs/minecraft-animal",
-                }
             ]
         },
         {
@@ -450,12 +467,6 @@ data = [
         {
             title:"Miscellaneous",
             content:[
-                {
-                    title:"Kit Spleef",
-                    img: "img/kitspleef.png",
-                    tag: "The classic minecraft minigame with a chaotic spin! No player cap.",
-                    ref: "kit-spleef",
-                },
                 {
                     title: "Minecraft Google Translate Resource Pack",
                     img: "img/googletranslate.svg",
