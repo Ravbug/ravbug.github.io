@@ -59,10 +59,34 @@ data = [
                     img:"mastermind/pin.svg"
                 },
                 {
+                    title:"Mastermind Python",
+                    img:"img/pygame.png",
+                    tag:"The Mastermind game, written in python and pygame",
+                    ref:"https://github.com/ravbug/mastermind"
+                },
+                {
                     title:"Tanks Unreal",
                     tag:"Unity's Tanks! sample rewritten in Unreal C++",
                     ref:"https://github.com/ravbug/TanksUnreal",
                     img:"img/unrealengine.svg"
+                },
+                {
+                    title: "The NPM Drinking Game",
+                    tag: "Your liver will not like this",
+                    ref:"npm-drinking-game",
+                    img:"npm-drinking-game/npm-logo.svg"
+                },
+                {
+                    title: "The PyPi Drinking Game",
+                    tag: "Your liver might not like this",
+                    ref:"pypi-drinking-game",
+                    img:"pypi-drinking-game/pypi-logo.svg"
+                },
+                {
+                    title: "The Cargo Drinking Game",
+                    tag: "Your liver might be ok with this",
+                    ref:"cargo-drinking-game",
+                    img:"cargo-drinking-game/cargo-logo.png"
                 },
             ]
         },
@@ -169,24 +193,6 @@ data = [
                     tag:"Writes original poems using the text on webpages",
                     ref:"poetry/",
                     img:"poetry/icon.png"
-                },
-                {
-                    title: "The NPM Drinking Game",
-                    tag: "Your liver will not like this",
-                    ref:"npm-drinking-game",
-                    img:"npm-drinking-game/npm-logo.svg"
-                },
-                {
-                    title: "The PyPi Drinking Game",
-                    tag: "Your liver might not like this",
-                    ref:"pypi-drinking-game",
-                    img:"pypi-drinking-game/pypi-logo.svg"
-                },
-                {
-                    title: "The Cargo Drinking Game",
-                    tag: "Your liver might be ok with this",
-                    ref:"cargo-drinking-game",
-                    img:"cargo-drinking-game/cargo-logo.png"
                 },
                 {
                     title: "Graphics API support chart",
@@ -478,12 +484,6 @@ data = [
                     img:"img/desmos.png",
                     tag:"Some educational math demos",
                     ref:"math/",
-                },
-                {
-                    title:"Mastermind Python",
-                    img:"img/pygame.png",
-                    tag:"The Mastermind game, written in python and pygame",
-                    ref:"https://github.com/ravbug/mastermind"
                 },
                 {
                     title:"Shoddy Tech Drawings",
