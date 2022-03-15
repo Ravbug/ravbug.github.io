@@ -1,0 +1,68 @@
+<head>
+    <title>
+        MobileShadow 6: Meetings and Interviews
+    </title>
+    <meta name="description" content="Meeting w/ people">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="3/14/2022"></script>
+    </p>
+    <p>
+        This week I didn't write any code due to it being a heavy exams week. I scheduled two meetings, one with a professor at this university and 
+        an industry professional at a local game development company.
+    </p>
+    <p>
+        Notes from their meetings:
+        <ul>
+            <li>Common issues encountered implementing Cascade shadows
+                <ul>
+                    <li>
+                        Cascade shadow map uses a lot of VRAM 
+                    </li>
+                    <li>
+                        Managing where details should and should not appear - Common issue: standing on a hilltop and casting a shadow into the valley below, that shadow might get eaten by the lower cascade
+                    </li>
+                    <li>
+                        Blending between shadow cascades
+                    </li>
+                </ul>
+                My algorithm addresses all of these problems, but no solution is perfect and currently my solution would lose an implementer transparent casters and soft shadows. So, I need to work on solutions for both of those issues.
+            </li>
+            <li>
+                Things to try:
+                <ul>
+                    <li>
+                        Sometimes the compute pipeline is “free” depending on the architecture if it's not in use during another operation
+                    </li>
+                    <li>
+                        Radeon RGP (or its new name?) gives the best timing information as of writing
+                    </li>
+                    <li>
+                        Noise in shadows → expand each volume a small amount so that they overlap and eliminate the issues of triangle edges
+                    </li>
+                    <li>
+                        “Wavy edge” on the sphere → check rasterizing linear surface on nonlinear edge. Also could skip the calculation if the cap (bounded, not just planes) is too close to the front face. Use normal 
+                        information from earlier deferred stage to determine if a self shadow calculation is necessary, for triangles facing away from the light no self shadow calculation is necessary. Are shadow calculations 
+                        necessary in general if the triangle is not facing the light? Need to test this. 
+                    </li>
+                    <li>
+                        Radiosity Maps - A way to have transparency by encoding information about each object in textures and then doing lookups in the shader. May be a way to implement transparent casters.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </p>
+    <p>
+        I have rescheduled the todo task from last week to this week to get caught up again.
+    </p>
+</div>
+<script src="../../../header.js"></script>
