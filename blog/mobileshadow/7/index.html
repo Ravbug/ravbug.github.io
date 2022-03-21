@@ -1,0 +1,62 @@
+<head>
+    <title>
+        MobileShadow 7: Fixing bugs
+    </title>
+    <meta name="description" content="Meeting w/ people">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="3/28/2022"></script>
+    </p>
+    <p>
+        This week I tackled bugs in my system. The first problem I addressed is the incorrect shadowing on triangles that are not facing 
+        the light. Because triangles that are not facing the light are blocking themselves, their color had already been calculated
+        by the primary light pass in an earlier stage. Therefore, the system can skip calculating shadows for these triangles.
+        <figure>
+            <img class="responsiveImg" src="withnormal_0.png">
+            <figcaption>Without the fix, "waves" are visible on the backsides of objects, particularly the sphere.</figcaption>
+        </figure>
+        <figure>
+            <img class="responsiveImg" src="withnormal_1.png">
+            <img class="responsiveImg" src="withnormal_2.png">
+            <figcaption>
+                By reading from the normal texture calculated in the first deferred stage, this artifact can be removed. I experimented with 
+                the min nDotL value to determine the best cutoff to use. 
+            </figcaption>
+        </figure>
+        <figure>
+            <img class="responsiveImg" src="physics_1.png">
+            <figcaption>
+                The shading on the objects in the physics demo is also now mostly correct.
+            </figcaption>
+        </figure>
+    </p>
+    <p>
+        The next issue that I decided to tackle was the behavior where the shadow system would break down depending on the behavior of the camera.
+        It turns out this bug was actually two separate problems. The first was if the camera intersected a volume, no fragments would get generated for it,
+        resulting in gaps. However, a second issue causes the system to completely freak out if the camera is simply oriented in a certain way, as shown
+        below:
+        <figure>
+            <video controls class="responsiveImg" src="orientation.webm"></video>
+            <figcaption>
+                Yikes! What's happening??
+            </figcaption>
+        </figure>
+        The intersection problem is more complicated to solve than I initially thought. After some experimentation, I determined that pinning the volume vertices to the near-clip plane 
+        if they end up behind the camera will not work. My current idea for fixing this involves doing a second pass of the volumes but rendering them inside-out and 
+        inverting the plane tests. However, I will need to figure out a way to do this without making the overdraw problem even worse. 
+    </p>
+    <p>
+        I had planned for the above issue to be fixed this week, but due to its newly discovered complexity, I have the camera-orientation bug slated for fix next week, as well as 
+        coming up with the inside-out approach. 
+    </p>
+</div>
+<script src="../../../header.js"></script>
