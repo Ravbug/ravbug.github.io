@@ -1,0 +1,85 @@
+<head>
+    <title>
+        MobileShadow 8: Running on Metal!
+    </title>
+    <meta name="description" content="Putting the Mobile in MobileShadow">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="3/28/2022"></script>
+    </p>
+    <p>
+        <figure>
+            <img class="responsiveImg" src="shadow-on-mac.png">
+            <figcaption>
+                Running on Mac!
+            </figcaption>
+        </figure>
+        I dug deeper into the bgfx crash on Metal caused by attempting to execute a vertex shader that writes to compute buffers.
+        It turns out that this behavior was not supported in Metal until version 2.1 (2.2 for writing to textures). SPIRV-Cross, 
+        the library BGFX's shader compiler tool uses to automatically generate shaders from a single source file for all supported
+        backends, is aware of this limitation and handles it appropriately. However, bgfx's shader compiler did not set the Metal 
+        shader version when configuring the compile, and so SPIRV-Cross assumed Metal 1.0. This caused SPIRV-Cross to detect that
+        the shader was writing to a compute buffer and disable rasterizaton, which meant changing the generated vertex shader's 
+        return type to <code>void</code>. Because the shader had no output, trying to link it with a fragment program would cause 
+        Metal to error and bgfx to crash. 
+    </p>
+    <p>
+        I was able to fix the issue by hardcoding the Metal shader target version to 2.1 in Shaderc's source code. I plan to 
+        submit a proper PR to bgfx which adds the ability to specify the metal version via a command-line flag.
+    </p>
+    <p>
+       Now that I had Metal working, I tested the engine on my iPad which has an A12X processor. It has interesting performance
+       characteristics compared to the desktop version.
+    </p>
+    <p>
+        <video controls class="responsiveImg" src="ipad.webm">
+    </p>
+    <p>
+        The animation sample performed significantly better on the iPad compared to my laptop in my tests, and never dropped below ~120
+        fps (the refresh rate of the display), whereas my laptop, which has a significantly faster GPU, would sometimes stutter and
+        drop frames, sometimes into the 30fps range. However, on the rigid bodies demo, the iPad performed significantly worse 
+        when compared to my laptop. I believe these behaviors are symptoms of the large amounts of overdraw and how 
+        a tile-based GPU resolves them when compared to a desktop GPU.
+    </p>
+    <p>
+        I also fixed another bug. The noise in the shadows was indeed caused by slight gaps in the projected triangles. By expanding the
+        triangles slightly when projecting them, they now overlap on those borders, reducing the noise to almost zero.
+        <figure>
+            <img class="responsiveImg" src="no-noise.png">
+            <figcaption>
+                Clean!
+            </figcaption>
+        </figure>
+        There are still cases where a very small amount of noise is possible, but I think when I implement edge feathering this 
+        issue should be made so minimal it may no longer matter.
+    </p>
+    <p>
+        I didn't fix the shadow-freakout bug this week, but I have gotten closer. It appears that the way I am calculating 
+        the normal vectors for the triangles on the prism creates faulty results. 
+        <figure>
+            <img src="correct.png" class="responsiveImg">
+            <figcaption>
+                The signs of the z-component of the normal vectors cannot all be the same. In camera orientation A,
+                the signs are as expected.
+            </figcaption>
+            <img src="positive.png" class="responsiveImg">
+           
+            <figcaption>
+                However, when moving to camera orientation B, they are all positive, which indicates that my method of calculating 
+                the screen-space normal vectors does not work.
+            </figcaption>
+        </figure>
+        The later stages of the pipeline are then fed bad data because of this error, leading to the broken shadows. Fixing this 
+        calculation should resolve the issue, and I have that slated for next week. 
+    </p>
+</div>
+<script src="../../../header.js"></script>
