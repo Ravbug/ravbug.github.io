@@ -1,0 +1,89 @@
+<head>
+    <title>
+        MobileShadow 8: Compute Buffers and Atomics
+    </title>
+    <meta name="description" content="Forgoing rasterizaton">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="4/4/2022"></script>
+    </p>
+    <p>
+        One of the benefits of the deferred lighting technique is that the primary light pass can be done extremely efficiently 
+        and with very few draw calls, in fact, in RavEngine, it takes only at most four draw calls total to calculate
+        every single light, regardless of how many you have! However, I realized the path I was taking when
+        implementing the shadow engine would make all of that not work.
+    </p>
+    <p>
+        In the current implementation, I was assuming only one light was part of the draw because most of the time in the 
+        demos that was the case. However, as soon as you have two lights of the same type, the current implementation
+        completely breaks down, because while it can know that a pixel is blocked by <i>a light</i>, it does not know
+        <i> which light</i>. 
+    </p>
+    <p>
+        I did not want to process every shadow casting light individually, because that would probably end up being slower than
+        depth mapping. However, I thought of something else. What if I could store bitfields? Then I could do lights in groups, up to
+        the bitfield size, in parallel. It's not as good as four total, but it is still much more efficient than one-at-a-time. 
+    </p>
+    <p>
+        I decided to replace the render texture with a simple compute buffer of 32-bit unsigned ints. Each light is assigned 
+        a numeric ID (derived from the instancing ID) and that ID corresponds to a bit in the output buffer. 
+        The important part here is that all writes to this buffer must be atomic. When rendering to a texture 
+        this is taken care of for you, but when dealing with buffers the programmer must take special care. Fortunately, I have access to the
+        <code>InterlockedOr</code> HLSL function, which enables atomic bitwise-or writes to shared memory, which is exactly
+        what I need.
+    </p>
+    <p>
+        The pipeline now looks something like this:
+        <ol>
+            <li>
+                Create a screen-size compute buffer of size backbuffer_width x backbuffer_height holding <code>uint</code>.
+            </li>
+            <li>
+                For each light type, excluding ambient lights:
+                <ol>
+                    <li>
+                        For each group of 32 lights:
+                        <ol>
+                            <li>
+                                Clear the compute buffer to all zeros - this might be able to be optimized by using a raster shader instead of a compute shader and only updating 
+                                the cells that the light cares about.
+                            </li>
+                            <li>
+                                Execute the Shadow detection shader. The compute buffer at each index now holds a zero if the pixel it 
+                                corresponds to is blocked by no lights, and bits populated corresponding to which lights it is blocked by.
+                            </li>
+                            <li>
+                                Execute the instanced light shader. This shader reads from the compute buffer and performs a bitwise-and 
+                                operation on a bitshift created from the light's ID. This read does not need to be atomic 
+                                because no writes happen during this stage. If the check succeeds, then this light cannot 
+                                reach this pixel, so discard. Otherwise, illuminate the pixel as normal
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+        </ol>
+        Unfortunately, as of writing my implementation super doesn't work, so I don't have any videos or screenshots to show. I broke 
+        many things reordering critical parts of the pipeline!
+    </p>
+    <p>
+        During testing I noticed something interesting: these atomic writes to the compute buffer were significantly faster than 
+        rendering to the texture, even with all of the overdraw unchanged. In addition, this doesn't cost any additional memory 
+        over having a 1-channel texture. I also might be able to have smarter early-out due to fewer abstractions between this 
+        type of memory and the shader.
+    </p>
+    <p>
+        Next week, I will fix up the pipeline so that we can produce coherent images again.
+    </p>
+        
+</div>
+<script src="../../../header.js"></script>
