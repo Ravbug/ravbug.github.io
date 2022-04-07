@@ -391,6 +391,12 @@ data = [
                     ref:"tutorials/cmake-easy"
                 },
                 {
+                    title:"Make a GitHub Pull Request",
+                    img:"img/github.svg",
+                    tag:"A brief and to-the-point tutorial",
+                    ref:"tutorials/github-pr"
+                },
+                {
                     title:"Simulate a Raspberry Pi",
                     img:"tutorials/virtual-rpi/pi.svg",
                     tag:"Emulate a full Raspberry Pi on your PC",
