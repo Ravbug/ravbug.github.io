@@ -12,37 +12,35 @@ function start(){
             }
             else{
                 alert("You must enable compass permissions to play this game!")
+                return;
             }
         });
         if (!navigator.geolocation){
             alert("Your browser does not have GPS capabilities, try using a (newer) mobile device")
-        }
-        else{
-            getLocation();
+            return;
         }
     }
     else{
         // for non-iOS browsers:     
         window.addEventListener("deviceorientationabsolute", OrientationHandler, true);
     }
-   
+    // start game loop
+    tick();
 
 }
 
 function OrientationHandler(e){
     let compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
-    document.getElementById("out").innerHTML = compass;
     document.getElementById("compassImg").style.transform = `rotate(${-compass}deg)`
     //console.log(compass);
     /// compassCircle;
 }
 
-function getLocation() {
+function tick(){
     let position = undefined;
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {position = pos});
-    } else { 
-        alert("geoLocation failed")
-    }
-    return position;
+    navigator.geolocation.getCurrentPosition(pos => {position = pos});
+
+    document.getElementById("out").innerHTML = position;
+    console.log(position);
+    setTimeout(tick, 500);
 }
