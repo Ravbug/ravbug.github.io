@@ -34,8 +34,12 @@ function start(){
 
     // initialize GPS
     navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
-        console.error(`Failed to get geolocation info, error = ${PosError}`)
-
+        if (PosError.code == 1){
+            alert("Could not read GPS: Permission denied")
+        }
+        else{
+            console.error(`Failed to get geolocation info, error = ${PosError.message}`)
+        }
     })
 
     // start game loop
