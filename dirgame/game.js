@@ -34,7 +34,7 @@ function start(){
 
     // initialize GPS
     navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
-        console.error(`Failed to get geolocation info, error = ${posError}`)
+        console.error(`Failed to get geolocation info, error = ${PosError}`)
 
     })
 
@@ -56,7 +56,9 @@ function GeoLocationHandler(geoloc){
 
 function tick(){
     
-    document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+    if (mostRecentPos){
+        document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+    }
 
     setTimeout(tick, 500);
 }
