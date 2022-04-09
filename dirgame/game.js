@@ -26,6 +26,21 @@ function start(){
         catch(e){
             alert("Your browser does not support DeviceOrientation - Compass will be disabled.")
         }
+        
+        // initialize accelerometer
+        try{
+            DeviceMotionEvent.requestPermission().then(response => {
+                if (response === 'granted') {
+                    window.addEventListener('devicemotion', MotionHandler);
+                }
+                else{
+                    alert("You must enable accelerometer permissions to play this game!");
+                }
+            });
+        }
+        catch(e){
+            alert("Your browser does not support DeviceMotionEvent - Try using a (newer) mobile device")
+        }
     }
     else{
         // for non-iOS browsers:     
@@ -56,13 +71,14 @@ function OrientationHandler(e){
 
 function GeoLocationHandler(geoloc){
     mostRecentPos = geoloc;
+    document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+}
+
+function MotionHandler(evt){
+    document.getElementById("out2").innerHTML = `x=${evt.acceleration.x},y=${evt.acceleration.y},z=${evt.acceleration.x}`;
 }
 
 function tick(){
-    
-    if (mostRecentPos){
-        document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
-    }
 
     setTimeout(tick, 500);
 }
