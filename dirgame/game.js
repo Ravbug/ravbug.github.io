@@ -38,7 +38,6 @@ function OrientationHandler(e){
 
 function tick(){
     navigator.geolocation.getCurrentPosition(position => {
-        position = pos
         document.getElementById("out").innerHTML = position;
         console.log(position);
     });
