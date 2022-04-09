@@ -3,27 +3,41 @@ const isIOS = !(
     navigator.userAgent.match(/AppleWebKit/)
 );
 
+let mostRecentPos = undefined; 
+
 function start(){
-    // initialize compass and GPS
+    // initialize compass
     if (true){
-        DeviceOrientationEvent.requestPermission().then(response => {
-            if (response === "granted"){
-                window.addEventListener("deviceorientation", OrientationHandler, true);
-            }
-            else{
-                alert("You must enable compass permissions to play this game!")
+        try{
+            DeviceOrientationEvent.requestPermission().then(response => {
+                if (response === "granted"){
+                    window.addEventListener("deviceorientation", OrientationHandler, true);
+                }
+                else{
+                    alert("You must enable compass permissions to play this game!")
+                    return;
+                }
+            });
+            if (!navigator.geolocation){
+                alert("Your browser does not have GPS capabilities, try using a (newer) mobile device")
                 return;
             }
-        });
-        if (!navigator.geolocation){
-            alert("Your browser does not have GPS capabilities, try using a (newer) mobile device")
-            return;
+        }
+        catch(e){
+            alert("Your browser does not support DeviceOrientation - Compass will be disabled.")
         }
     }
     else{
         // for non-iOS browsers:     
         window.addEventListener("deviceorientationabsolute", OrientationHandler, true);
     }
+
+    // initialize GPS
+    navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
+        console.error(`Failed to get geolocation info, error = ${posError}`)
+
+    })
+
     // start game loop
     tick();
 
@@ -36,11 +50,13 @@ function OrientationHandler(e){
     /// compassCircle;
 }
 
+function GeoLocationHandler(geoloc){
+    mostRecentPos = geoloc;
+}
+
 function tick(){
-    navigator.geolocation.getCurrentPosition(position => {
-        document.getElementById("out").innerHTML = position;
-        console.log(position);
-    });
     
+    document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+
     setTimeout(tick, 500);
 }
