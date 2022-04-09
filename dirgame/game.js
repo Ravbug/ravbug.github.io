@@ -37,10 +37,11 @@ function OrientationHandler(e){
 }
 
 function tick(){
-    let position = undefined;
-    navigator.geolocation.getCurrentPosition(pos => {position = pos});
-
-    document.getElementById("out").innerHTML = position;
-    console.log(position);
+    navigator.geolocation.getCurrentPosition(position => {
+        position = pos
+        document.getElementById("out").innerHTML = position;
+        console.log(position);
+    });
+    
     setTimeout(tick, 500);
 }
