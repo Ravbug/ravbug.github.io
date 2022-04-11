@@ -1,0 +1,90 @@
+<head>
+    <title>
+        MobileShadow 10: Pipeline fixup
+    </title>
+    <meta name="description" content="Video output once again">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="4/11/2022"></script>
+    </p>
+    <p>
+        In the previous post I described my rewrite of the lighting stage of the pipeline due to 
+        critical flaws in its original design, and how during that week I did not have a working 
+        renderer. However, this week that is not the case :)
+    </p>
+    <figure>
+        <img src="workingpipeline.png" class="responsiveImg">
+        <figcaption>
+            Spicy!
+        </figcaption>
+    </figure>
+    <p>
+        The lights are now properly blocked by the shadows, meaning that a light calculation is skipped if the engine determines
+        the pixel cannot "see" that light, so the proper shadowed-side colors appear.
+    </p>
+    <p>
+        <figure>
+            <img src="shadowcubes.png" class="responsiveImg">
+            <figcaption>Working with instanced geometry</figcaption>
+        </figure>
+    </p>
+        It took some experimentation to get to this point, and I also made some important optimizations along the way.
+        The first issue I noticed was that the shadow system was calculating fragments even though there was no way that 
+        those fragments could appear in the final frame because they were behind objects. This led to some strange results:   
+    </p>
+    <figure>
+        <img src="error_1.png" class="responsiveImg">
+        <img src="error_2.png" class="responsiveImg">
+        <figcaption>
+            The shader assumes that only pixels that could possibly be shadows were running, resulting in overshadowing the scene
+        </figcaption>
+    </figure>
+    <p>
+        Despite rewriting the shader to remove all calls to <code>discard</code>, since those disable the early fragment tests, it was 
+        still producing the exact same result. It turns out that writing to a compute buffer in fragment shader also disables early fragment 
+        discard. Fortunately, there is an override for this, via the <code>[earlydepthstencil]</code> HLSL attribute.
+    </p>
+    <p>
+        I enabled it and it did absolutely nothing. I discovered that this was a bug in bgfx - it was not enabling the feature on Metal or Vulkan 
+        even though both APIs support this feature. I fixed it (it was a very simple fix) and PR'ed it into bgfx, which they merged.
+    </p>
+    <p>
+        With the feature enabled, I got a large speedup because only fragments that were in-view were now getting calculations. However, even with 
+        this optimization, shadow calculations are still taking a worrying amount of time:
+    </p>
+    <figure>
+        <img src="profile.png" class="responsiveImg">
+        <figcaption>
+            6ms just for lights!!!
+        </figcaption>
+    </figure>
+    <p>
+        For reference, the ambient light pass, which does no shadow calculations, takes so little time it doesn't even appear on the graph.
+    </p>
+    <p>
+        I also noticed a bizarre result when running the device on my iPad:
+        <figure>
+            <video controls src="ipad_errors.webm" class="responsiveImg"></video>
+            <figcaption>
+                Some tile GPU shenanigans?
+            </figcaption>
+        </figure>
+        The iPad still maintains significantly superior performance to my laptop on the animation demo.
+    </p>
+    <p>
+        Despite all the bugs that still exist in this implementation, I believe I have achieved what I intended to during this process - I demonstrated 
+        that rendering shadows for opaque casters is possible with this method, that it demonstrates measurable improvements over depth mapping 
+        and ray tracing in some aspects relevant to realtime rendering, and it works well on mobile. The process forward, I expect, is mostly 
+        fixing bugs and making tweaks to improve the quality and performance. 
+    </p>
+</div>
+<script src="../../../header.js"></script>
