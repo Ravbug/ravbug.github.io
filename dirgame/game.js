@@ -9,7 +9,7 @@ let absoluteSpeed = 0;
 let currentHeading = 0;
 let headingReference = 0;
 
-const instructionLabel = document.getElementById("compassImg");
+const instructionLabel = document.getElementById("instr");
 
 function start(){
     // initialize compass
@@ -66,7 +66,7 @@ function start(){
     // start game loop
     instructionLabel.innerHTML = "Choose a direction"
     document.getElementById("beginBtn").hidden = true;
-    document.getElementById("confirmBtn").hidden = true;
+    document.getElementById("confirmBtn").hidden = false;
     tick();
 }
 
