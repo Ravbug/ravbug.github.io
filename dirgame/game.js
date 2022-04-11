@@ -4,6 +4,7 @@ const isIOS = !(
 );
 
 let mostRecentPos = undefined; 
+let currentVelocity = {x:0, y:0, z:0};
 
 function start(){
     // initialize compass
@@ -62,19 +63,32 @@ function start(){
 
 }
 
+/**
+ * Called on compass changes
+ * @param {DeviceOrientationEvent} e - containing compass heading information
+ */
 function OrientationHandler(e){
     let compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
     document.getElementById("compassImg").style.transform = `rotate(${-compass}deg)`
-    //console.log(compass);
-    /// compassCircle;
 }
 
+/**
+ * Called on GPS updates
+ * @param {GeolocationPosition} geoloc - contains latlong information
+ */
 function GeoLocationHandler(geoloc){
     mostRecentPos = geoloc;
     document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
 }
 
+/**
+ * Called on accelerometer updates
+ * @param {DeviceMotionEvent} evt - containing acceleration and time information
+ */
 function MotionHandler(evt){
+    currentVelocity.x += evt.acceleration.x;
+    currentVelocity.y += evt.acceleration.y;
+    currentVelocity.z += evt.acceleration.z;
     document.getElementById("out2").innerHTML = `x=${evt.acceleration.x},y=${evt.acceleration.y},z=${evt.acceleration.x}`;
 }
 
