@@ -5,6 +5,11 @@ const isIOS = !(
 
 let mostRecentPos = undefined; 
 let currentVelocity = {x:0, y:0, z:0};
+let absoluteSpeed = 0;
+let currentHeading = 0;
+let headingReference = 0;
+
+const instructionLabel = document.getElementById("compassImg");
 
 function start(){
     // initialize compass
@@ -59,8 +64,16 @@ function start(){
     })
 
     // start game loop
+    instructionLabel.innerHTML = "Choose a direction"
+    document.getElementById("beginBtn").hidden = true;
+    document.getElementById("confirmBtn").hidden = true;
     tick();
+}
 
+function confirmDirection(){
+    headingReference = currentHeading;
+    instructionLabel.innerHTML = "Start walking!";
+    document.getElementById("compassImg").src = "arrow.svg";
 }
 
 /**
@@ -68,8 +81,8 @@ function start(){
  * @param {DeviceOrientationEvent} e - containing compass heading information
  */
 function OrientationHandler(e){
-    let compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
-    document.getElementById("compassImg").style.transform = `rotate(${-compass}deg)`
+    currentHeading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+    document.getElementById("compassImg").style.transform = `rotate(${-(currentHeading - headingReference)}deg)`
 }
 
 /**
@@ -89,6 +102,7 @@ function MotionHandler(evt){
     currentVelocity.x += evt.acceleration.x;
     currentVelocity.y += evt.acceleration.y;
     currentVelocity.z += evt.acceleration.z;
+    absoluteSpeed = Math.sqrt(currentVelocity.x * currentVelocity.x + currentVelocity.y * currentVelocity.y + currentVelocity.z * currentVelocity.z)
     document.getElementById("out2").innerHTML = `x=${evt.acceleration.x},y=${evt.acceleration.y},z=${evt.acceleration.x}`;
 }
 
