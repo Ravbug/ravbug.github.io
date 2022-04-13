@@ -4,10 +4,13 @@ const isIOS = !(
 );
 
 let mostRecentPos = undefined; 
-let currentVelocity = {x:0, y:0, z:0};
+let currentVelocity = {x:0, z:0};
+let prevAccel = {x:0,z:0,time:0};
 let absoluteSpeed = 0;
 let currentHeading = 0;
 let headingReference = 0;
+
+let velAvg = []
 
 const instructionLabel = document.getElementById("instr");
 
@@ -74,6 +77,8 @@ function confirmDirection(){
     headingReference = currentHeading;
     instructionLabel.innerHTML = "Start walking!";
     document.getElementById("compassImg").src = "arrow.svg";
+    document.getElementById("confirmBtn").hidden = true;
+    document.getElementById("headingImg").hidden = false;
 }
 
 /**
@@ -99,11 +104,54 @@ function GeoLocationHandler(geoloc){
  * @param {DeviceMotionEvent} evt - containing acceleration and time information
  */
 function MotionHandler(evt){
-    currentVelocity.x += evt.acceleration.x;
-    currentVelocity.y += evt.acceleration.y;
-    currentVelocity.z += evt.acceleration.z;
-    absoluteSpeed = Math.sqrt(currentVelocity.x * currentVelocity.x + currentVelocity.y * currentVelocity.y + currentVelocity.z * currentVelocity.z)
-    document.getElementById("out2").innerHTML = `x=${evt.acceleration.x},y=${evt.acceleration.y},z=${evt.acceleration.x}`;
+    if (prevAccel.time == 0){
+        prevAccel.x = evt.acceleration.x;
+        prevAccel.z = evt.acceleration.z;
+        prevAccel.time = evt.acceleration.time;
+    }
+    else{
+        currentVelocity.x = (evt.acceleration.x - prevAccel.x) * (evt.timeStamp - prevAccel.time);
+        currentVelocity.z = (evt.acceleration.z - prevAccel.z) * (evt.timeStamp - prevAccel.time);
+
+        // running avg
+        velAvg.push({...currentVelocity})
+        if(velAvg.length > 10){
+            velAvg.shift(1);    
+        }
+
+        prevAccel.x = evt.acceleration.x;
+        prevAccel.z = evt.acceleration.z;
+        prevAccel.time = evt.timeStamp;
+    }
+
+    let avgVel = {x:0, z:0}
+    for(let i = 0; i < velAvg.length; i++){
+        avgVel.x += velAvg[i].x;
+        avgVel.z += velAvg[i].z;
+    }
+    avgVel.x /= velAvg.length;
+    avgVel.z /= velAvg.length;
+
+    if (Math.abs(velAvg.x) < 0.3){
+        velAvg.x = 0;
+    }
+    if (Math.abs(velAvg.z) < 0.3){
+        velAvg.z = 0;
+    }
+
+    absoluteSpeed = Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)
+    document.getElementById("out2").innerHTML = `x=${avgVel.x.toFixed(2)}<br>z=${avgVel.z.toFixed(2)}<br>speed=${absoluteSpeed.toFixed(2)}`;
+
+    if (absoluteSpeed > 0.2){
+        // angle between vectors 
+        let unitVec = {x:0, z:1};
+
+        // theta = cos^-1((x dot y) / (||x|| * ||y||))
+        let currentVelAngle = Math.acos((avgVel.x * unitVec.x + avgVel.z * unitVec.z)/(Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)));
+        currentVelAngle = currentVelAngle * 360/Math.PI;
+        document.getElementById("headingImg").style.transform = `rotate(${currentVelAngle}deg)`
+    }
+    
 }
 
 function tick(){
