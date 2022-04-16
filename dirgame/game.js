@@ -1,7 +1,9 @@
-const isIOS = !(
-    navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
-    navigator.userAgent.match(/AppleWebKit/)
-);
+/*
+Sensors and their uses:
+Compass: indicate heading w/ device orientation
+Accelerometer: detect when the player starts moving
+GPS: determine path, speed, and when the game should end
+*/
 
 let mostRecentPos = undefined; 
 let currentVelocity = {x:0, y:0, z:0};
@@ -10,10 +12,11 @@ let currentHeading = 0;
 let headingReference = 0;
 
 const nVelSamples = 50;
-
 let accelBuffer = []
-
 let hasBegunWalking = undefined;
+
+// stores GPS info
+let breadcrumb = [];
 
 const instructionLabel = document.getElementById("instr");
 
@@ -62,16 +65,27 @@ function start(){
     // initialize GPS
     if (navigator.geolocation){
         navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
-            if (PosError.code == 1){
-                alert("Could not read GPS: Permission denied")
+            switch(PosError.code){
+                case GeolocationPositionError.PERMISSION_DENIED:
+                    alert(`Could not read GPS: ${PosError.message}. To fix, Please go to Settings -> Privacy -> Location Services -> Safari Websites and allow location access.`)
+                    break;
+                case GeolocationPositionError.POSITION_UNAVAILABLE:
+                    console.error(`Location unavailable (${PosError.message})`);
+                    break;
+                case GeolocationPositionError.TIMEOUT:
+                    console.error(`Location request timed out (${PosError.message})`);
+                    break;
+                case GeolocationPositionError.UNKNOWN_ERROR:
+                    console.error(`GPS: unknown error (${PosError.message})`);
+                    break;
+                default:
+
             }
-            else{
-                console.error(`Failed to get geolocation info, error = ${PosError.message}`)
-            }
-        })
+        },{maximumAge:0,enableHighAccuracy:true,timeout:1000})
     }
     else{
         alert("GPS is not supported in this browser")
+        return;
     }
    
 
@@ -79,7 +93,6 @@ function start(){
     instructionLabel.innerHTML = "Choose a direction"
     document.getElementById("beginBtn").hidden = true;
     document.getElementById("confirmBtn").hidden = false;
-    tick();
 }
 
 function confirmDirection(){
@@ -104,8 +117,23 @@ function OrientationHandler(e){
  * @param {GeolocationPosition} geoloc - contains latlong information
  */
 function GeoLocationHandler(geoloc){
-    mostRecentPos = geoloc;
-    document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+    if (hasBegunWalking){
+        mostRecentPos = geoloc;
+        breadcrumb.push(geoloc);
+        document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
+
+        // figure out the current heading from the last 3 latlongs
+        if (breadcrumb.length > 6){
+            // calculate the initial heading from the first 6 coordinates
+
+
+            // analyze coords 
+            if (Date.now() - hasBegunWalking > 2000){
+
+                // was there a sudden change in direction? if so, game over
+            }
+        }
+    }
 }
 
 /**
@@ -117,13 +145,10 @@ function MotionHandler(evt){
         return;
     }
 
-    function recordAccel(){
-        accelBuffer.push({...evt.acceleration,time:evt.timeStamp})
-        if(accelBuffer.length > nVelSamples){
-            accelBuffer.shift(1);    
-        }
+    accelBuffer.push({...evt.acceleration,time:evt.timeStamp})
+    if(accelBuffer.length > nVelSamples){
+        accelBuffer.shift(1);    
     }
-    recordAccel();
    
     currentVelocity.x = 0;
     currentVelocity.y = 0;
@@ -140,35 +165,20 @@ function MotionHandler(evt){
     absoluteSpeed = Math.sqrt(currentVelocity.x * currentVelocity.x + currentVelocity.z * currentVelocity.z + currentVelocity.y * currentVelocity.y)
     document.getElementById("out2").innerHTML = `x=${currentVelocity.x.toFixed(2)}<br>y=${currentVelocity.y.toFixed(2)}<br>z=${currentVelocity.z.toFixed(2)}<br>speed=${absoluteSpeed.toFixed(2)}`;
 
-    if (absoluteSpeed > 0.2){
-        // angle between vectors 
-        let unitVec = {x:0, z:1};
-
-        // theta = cos^-1((x dot y) / (||x|| * ||y||))
-        //let currentVelAngle = Math.acos((avgVel.x * unitVec.x + avgVel.z * unitVec.z)/(Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)));
-        //currentVelAngle = currentVelAngle * 360/Math.PI;
-        //document.getElementById("headingImg").style.transform = `rotate(${currentVelAngle}deg)`
-    }
-    
     if (absoluteSpeed > 0.2 && accelBuffer.length == nVelSamples && !hasBegunWalking){
         hasBegunWalking = Date.now();
         instructionLabel.innerHTML = "Continue walking in this direction for as long as you can!"
-        //TODO: decide the reference direction here
-    }
-    
-    // 2 seconds must pass before ending the game
-    if (absoluteSpeed < 0.05 && hasBegunWalking && Date.now() - hasBegunWalking > 2000){
-        // game over!
-        instructionLabel.innerHTML = "Game Over!"
-        // remove event handlers
+        accelBuffer = undefined;    // release this array
+        // accelerometer is now useless so no need to keep monitoring it
         window.removeEventListener('devicemotion',MotionHandler);
-        window.removeEventListener('deviceorientation',OrientationHandler);
-        //window.removeEventListener('deviceorientationabsolute',);
-        navigator.geolocation.clearWatch(GeoLocationHandler);
     }
 }
 
-function tick(){
-
-    setTimeout(tick, 500);
+function gameOver(){
+     // game over!
+     instructionLabel.innerHTML = "Game Over!"
+     // remove event handlers
+     window.removeEventListener('deviceorientation',OrientationHandler);
+     //window.removeEventListener('deviceorientationabsolute',);
+     navigator.geolocation.clearWatch(GeoLocationHandler);
 }
