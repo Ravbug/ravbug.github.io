@@ -4,13 +4,16 @@ const isIOS = !(
 );
 
 let mostRecentPos = undefined; 
-let currentVelocity = {x:0, z:0};
-let prevAccel = {x:0,z:0,time:0};
+let currentVelocity = {x:0, y:0, z:0};
 let absoluteSpeed = 0;
 let currentHeading = 0;
 let headingReference = 0;
 
-let velAvg = []
+const nVelSamples = 10;
+
+let accelBuffer = []
+
+let hasBegunWalking = undefined;
 
 const instructionLabel = document.getElementById("instr");
 
@@ -20,7 +23,7 @@ function start(){
         try{
             DeviceOrientationEvent.requestPermission().then(response => {
                 if (response === "granted"){
-                    window.addEventListener("deviceorientation", OrientationHandler, true);
+                    window.addEventListener("deviceorientation", OrientationHandler);
                 }
                 else{
                     alert("You must enable compass permissions to play this game!")
@@ -104,54 +107,59 @@ function GeoLocationHandler(geoloc){
  * @param {DeviceMotionEvent} evt - containing acceleration and time information
  */
 function MotionHandler(evt){
-    if (prevAccel.time == 0){
-        prevAccel.x = evt.acceleration.x;
-        prevAccel.z = evt.acceleration.z;
-        prevAccel.time = evt.acceleration.time;
+    if (headingReference == 0){
+        return;
     }
-    else{
-        currentVelocity.x = (evt.acceleration.x - prevAccel.x) * (evt.timeStamp - prevAccel.time);
-        currentVelocity.z = (evt.acceleration.z - prevAccel.z) * (evt.timeStamp - prevAccel.time);
 
-        // running avg
-        velAvg.push({...currentVelocity})
-        if(velAvg.length > 10){
-            velAvg.shift(1);    
+    function recordAccel(){
+        accelBuffer.push({...evt.acceleration,time:evt.timeStamp})
+        if(accelBuffer.length > nVelSamples){
+            accelBuffer.shift(1);    
         }
+    }
+    recordAccel();
+   
+    currentVelocity.x = 0;
+    currentVelocity.y = 0;
+    currentVelocity.z = 0;
 
-        prevAccel.x = evt.acceleration.x;
-        prevAccel.z = evt.acceleration.z;
-        prevAccel.time = evt.timeStamp;
+    // do some rough calculus to calculate velocity over samples - riemann sum of accelerations
+    for(let i = 0; i < accelBuffer.length-1; i++){
+        const timeDiff = (accelBuffer[i+1].time - accelBuffer[i].time)/1000;
+        currentVelocity.x += accelBuffer[i].x * timeDiff;
+        currentVelocity.y += accelBuffer[i].y * timeDiff;
+        currentVelocity.z += accelBuffer[i].z * timeDiff;
     }
 
-    let avgVel = {x:0, z:0}
-    for(let i = 0; i < velAvg.length; i++){
-        avgVel.x += velAvg[i].x;
-        avgVel.z += velAvg[i].z;
-    }
-    avgVel.x /= velAvg.length;
-    avgVel.z /= velAvg.length;
-
-    if (Math.abs(velAvg.x) < 0.3){
-        velAvg.x = 0;
-    }
-    if (Math.abs(velAvg.z) < 0.3){
-        velAvg.z = 0;
-    }
-
-    absoluteSpeed = Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)
-    document.getElementById("out2").innerHTML = `x=${avgVel.x.toFixed(2)}<br>z=${avgVel.z.toFixed(2)}<br>speed=${absoluteSpeed.toFixed(2)}`;
+    absoluteSpeed = Math.sqrt(currentVelocity.x * currentVelocity.x + currentVelocity.z * currentVelocity.z + currentVelocity.y * currentVelocity.y)
+    document.getElementById("out2").innerHTML = `x=${currentVelocity.x.toFixed(2)}<br>y=${currentVelocity.y.toFixed(2)}<br>z=${currentVelocity.z.toFixed(2)}<br>speed=${absoluteSpeed.toFixed(2)}`;
 
     if (absoluteSpeed > 0.2){
         // angle between vectors 
         let unitVec = {x:0, z:1};
 
         // theta = cos^-1((x dot y) / (||x|| * ||y||))
-        let currentVelAngle = Math.acos((avgVel.x * unitVec.x + avgVel.z * unitVec.z)/(Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)));
-        currentVelAngle = currentVelAngle * 360/Math.PI;
-        document.getElementById("headingImg").style.transform = `rotate(${currentVelAngle}deg)`
+        //let currentVelAngle = Math.acos((avgVel.x * unitVec.x + avgVel.z * unitVec.z)/(Math.sqrt(avgVel.x * avgVel.x + avgVel.z * avgVel.z)));
+        //currentVelAngle = currentVelAngle * 360/Math.PI;
+        //document.getElementById("headingImg").style.transform = `rotate(${currentVelAngle}deg)`
     }
     
+    if (absoluteSpeed > 0.4 && accelBuffer.length == nVelSamples && !hasBegunWalking){
+        hasBegunWalking = Date.now();
+        instructionLabel.innerHTML = "Continue walking in this direction for as long as you can!"
+        //TODO: decide the reference direction here
+    }
+    
+    // 2 seconds must pass before ending the game
+    if (absoluteSpeed < 0.05 && hasBegunWalking && Date.now() - hasBegunWalking > 2000){
+        // game over!
+        instructionLabel.innerHTML = "Game Over!"
+        // remove event handlers
+        window.removeEventListener('devicemotion',MotionHandler);
+        window.removeEventListener('deviceorientation',OrientationHandler);
+        //window.removeEventListener('deviceorientationabsolute',);
+        navigator.geolocation.clearWatch(GeoLocationHandler);
+    }
 }
 
 function tick(){
