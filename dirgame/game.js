@@ -9,7 +9,7 @@ let absoluteSpeed = 0;
 let currentHeading = 0;
 let headingReference = 0;
 
-const nVelSamples = 10;
+const nVelSamples = 50;
 
 let accelBuffer = []
 
@@ -60,14 +60,20 @@ function start(){
     }
 
     // initialize GPS
-    navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
-        if (PosError.code == 1){
-            alert("Could not read GPS: Permission denied")
-        }
-        else{
-            console.error(`Failed to get geolocation info, error = ${PosError.message}`)
-        }
-    })
+    if (navigator.geolocation){
+        navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
+            if (PosError.code == 1){
+                alert("Could not read GPS: Permission denied")
+            }
+            else{
+                console.error(`Failed to get geolocation info, error = ${PosError.message}`)
+            }
+        })
+    }
+    else{
+        alert("GPS is not supported in this browser")
+    }
+   
 
     // start game loop
     instructionLabel.innerHTML = "Choose a direction"
@@ -144,7 +150,7 @@ function MotionHandler(evt){
         //document.getElementById("headingImg").style.transform = `rotate(${currentVelAngle}deg)`
     }
     
-    if (absoluteSpeed > 0.4 && accelBuffer.length == nVelSamples && !hasBegunWalking){
+    if (absoluteSpeed > 0.2 && accelBuffer.length == nVelSamples && !hasBegunWalking){
         hasBegunWalking = Date.now();
         instructionLabel.innerHTML = "Continue walking in this direction for as long as you can!"
         //TODO: decide the reference direction here
