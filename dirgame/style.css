@@ -2,3 +2,29 @@
     width: 200px;
     height:200px;
 }
+
+#simpleMap{
+    width:100%;
+    height:400px;
+    background-color: green;
+    position: relative; /* This allows the dots to be absolute-positioned*/
+    overflow: hidden;
+}
+
+body{
+    margin:0;
+}
+
+.dot{
+    --s: 24;
+    height: var(--s);
+    width: var(--s);
+    background-color: yellow;
+    border-radius: 50%;
+    position:absolute;
+    transform: translate( calc(var(--s) * -0.5px), calc(var(--s) * -0.5px))
+}
+
+.newest{
+    background-color: blue
+}

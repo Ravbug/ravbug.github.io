@@ -19,6 +19,7 @@ let hasBegunWalking = undefined;
 let breadcrumb = [];
 
 const instructionLabel = document.getElementById("instr");
+const map = document.getElementById("simpleMap")
 
 function start(){
     // initialize compass
@@ -122,10 +123,41 @@ function GeoLocationHandler(geoloc){
         breadcrumb.push(geoloc);
         document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
 
+
+        // calculate bounds
+        const bbmin = {lat:breadcrumb[0].coords.latitude,long:breadcrumb[0].coords.longitude}
+        const bbmax = {lat:breadcrumb[0].coords.latitude,long:breadcrumb[0].coords.longitude}
+        for(const point of breadcrumb){
+            if (point.coords.latitude < bbmin.lat){
+                bbmin.lat = point.coords.latitude;
+            }
+            if (point.coords.latitude > bbmax.lat){
+                bbmax.lat = point.coords.latitude;
+            }
+
+            if (point.coords.longitude < bbmin.long){
+                bbmin.long = point.coords.longitude;
+            }
+            if (point.coords.longitude > bbmax.long){
+                bbmax.long = point.coords.longitude;
+            }
+        }
+        // generate points
+        map.innerHTML = "";
+        {
+            let i = 0;
+            for(const point of breadcrumb){
+                const newLat = rangeRemap(point.coords.latitude,bbmin.lat,bbmax.lat,0,100);
+                const newLong = rangeRemap(point.coords.longitude,bbmin.long,bbmax.long,0,100);
+                map.innerHTML += `<div class="dot ${i == breadcrumb.length - 1 ? "newest" : ""}" style=top:${newLat}%;left:${newLong}%></div>`;
+                i++;
+            }
+        }
+
         // figure out the current heading from the last 3 latlongs
         if (breadcrumb.length > 6){
             // calculate the initial heading from the first 6 coordinates
-
+            
 
             // analyze coords 
             if (Date.now() - hasBegunWalking > 2000){
@@ -181,4 +213,17 @@ function gameOver(){
      window.removeEventListener('deviceorientation',OrientationHandler);
      //window.removeEventListener('deviceorientationabsolute',);
      navigator.geolocation.clearWatch(GeoLocationHandler);
+}
+
+/**
+ * Convert a value from one scale to another
+ * @param {Number} value the value on scale of [low1, high1]
+ * @param {Number} low1 the min of the range of value
+ * @param {Number} high1 the max of the range of value
+ * @param {Number} low2 the min of the new range
+ * @param {Number} high2 the max of the new range
+ * @return value remapped to [low2,high2]
+ */
+function rangeRemap(value,low1,high1,low2,high2){
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 }
