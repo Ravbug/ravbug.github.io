@@ -1,0 +1,46 @@
+<head>
+    <title>
+        MobileShadow 11: Getting ready for the expo
+    </title>
+    <meta name="description" content="Showtime">
+    <link id="favicon" rel="icon" href="../../../ravbug.png">
+
+    <meta property="og:image" content="https://www.ravbug.com/ravbug.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../blog.css">
+</head>
+<div class=main>
+    <p>
+        Posted on <script src="../../../date.js" date="4/18/2022"></script>
+    </p>
+    <p>
+        To avoid breaking stuff before the showcase I limited my development this week, but I made some progress.
+        <ul>
+            <li>
+                Fixed a potential overflow issue in the Input Manager (size_t to uint32_t)
+            </li>
+            <li>
+                Port unit tests from the old ECS repository into mainline 
+            </li>
+            <li>
+                Switch to single-precision float mode by default to improve performance
+            </li>
+            <li>
+                Make some changes to the lighting pipeline in preparation for point lights -- the stride sizes
+                were incorrect for point light data. The shader will also need to change because it is making the 
+                invalid assumption that the vertex-to-light vector is the same for every vertex, this is only 
+                true for directional lights. 
+            </li>
+            <li>
+                I got ahold of an iPhone 6 (an 8 year old device!) to test low end hardware. Unfortunately, it can't 
+                run anything newer than iOS 12, and std::filesystem was added in iOS 13. So I am working on 
+                making a wrapper between boost::filesystem and std::filesystem for compatibility against old operating 
+                systems. 
+            </li>
+        </ul>
+    </p>
+</div>
+<script src="../../../header.js"></script>
