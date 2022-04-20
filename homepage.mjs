@@ -36,7 +36,7 @@ data = [
                 },
                 {
                     title:"Tankista",
-                    img:"https://rrsoftware.github.io/images/appicon.png",
+                    img:"img/tankista.png",
                     tag:"Mulitplayer tank battle game in development",
                     ref:"https://rrsoftware.github.io",
                 },
