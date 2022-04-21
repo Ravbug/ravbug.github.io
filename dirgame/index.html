@@ -4,18 +4,35 @@
         <title>Direction Game</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" type="text/css" href="../bootstrap-custom.css">
+        <link rel="stylesheet" type="text/css" href="../stylesheet.css">
     </head>
     <body>
-        <button id="beginBtn" onclick="start()">Begin</button>
-        <button id="confirmBtn" onclick="confirmDirection()" hidden>Let's Go!</button>
-        <p id="out">output label</p>
-        <p id="out2">output label</p>
-        <p id="instr">Instructions</p>
-        <img id="compassImg" src="compass.svg">
-        <img id="headingImg" src="arrow.svg" hidden>
-        <div id="simpleMap">
-            <div class="dot" style="left:80%"></div>
+        <div class="mainview">
+            <div>
+                <h1 style="text-align:center">Direction Game!</h1>
+                <div style="padding: 5px; text-align:center">
+                    <p id="instr">
+                        How far can you walk in a straight line?<br>
+                        This game is best played outside.
+                    </p>
+                </div>
+                <div style="width:100%; position:relative">
+                    <img id="compassImg" src="compass.svg">
+                    <img id="headingImg" src="arrow.svg" style="display:none;position:absolute">
+                </div>
+               
+                <div id="simpleMap" hidden>
+                    <div class="dot" style="left:80%"></div>
+                </div></div>
+            <div class="btnrow">
+                <button id="beginBtn" class="btn btn-primary" onclick="start()">Begin</button>
+                <button id="confirmBtn" class="btn btn-success" style="display:none" onclick="confirmDirection()">Let's Go!</button>
+                <button id="reloadBtn" class="btn" style="display:none" onclick="location.reload()">Restart</button>
+                <button id="endGameBtn" class="btn btn-danger" style="display:none" onclick="gameOver()">End Game</button>
+            </div>
         </div>
+        
     </body>
     <script src="game.js"></script>
 </html>

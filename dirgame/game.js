@@ -116,17 +116,20 @@ function start(){
    
 
     // start game loop
-    instructionLabel.innerHTML = "Choose a direction"
-    document.getElementById("beginBtn").hidden = true;
-    document.getElementById("confirmBtn").hidden = false;
+    instructionLabel.innerHTML = "First, choose a direction"
+    document.getElementById("beginBtn").style.display = "none";
+    document.getElementById("confirmBtn").style.display = "";
 }
 
 function confirmDirection(){
     headingReference = currentHeading;
     instructionLabel.innerHTML = "Start walking!";
     document.getElementById("compassImg").src = "arrow.svg";
-    document.getElementById("confirmBtn").hidden = true;
-    document.getElementById("headingImg").hidden = false;
+    document.getElementById("compassImg").style.filter = `opacity(0.5) invert(50%) sepia(100%) saturate(600%)`
+    document.getElementById("confirmBtn").style.display = "none";
+    document.getElementById("reloadBtn").style.display = "";
+    document.getElementById("headingImg").style.display = "";
+    document.getElementById("headingImg").style.filter = "opacity(0.5)";
 }
 
 /**
@@ -146,8 +149,6 @@ function GeoLocationHandler(geoloc){
     if (hasBegunWalking){
         mostRecentPos = geoloc;
         breadcrumb.push(geoloc);
-        document.getElementById("out").innerHTML = `${mostRecentPos.coords.latitude},${mostRecentPos.coords.longitude}`
-
 
         // calculate bounds
         const bbmin = {lat:breadcrumb[0].coords.latitude,long:breadcrumb[0].coords.longitude}
@@ -181,6 +182,9 @@ function GeoLocationHandler(geoloc){
 
         // figure out the current heading from the last 3 latlongs
         if (breadcrumb.length > 6){
+            document.getElementById("reloadBtn").style.display = "none";
+            document.getElementById("endGameBtn").style.display = "";
+
             // calculate the initial heading from the first 6 coordinates: avg
             let heading = {lat:0,long:0}
             for(let i = 0; i < 6; i++){
@@ -251,7 +255,6 @@ function MotionHandler(evt){
     }
 
     absoluteSpeed = Math.sqrt(currentVelocity.x * currentVelocity.x + currentVelocity.z * currentVelocity.z + currentVelocity.y * currentVelocity.y)
-    document.getElementById("out2").innerHTML = `x=${currentVelocity.x.toFixed(2)}<br>y=${currentVelocity.y.toFixed(2)}<br>z=${currentVelocity.z.toFixed(2)}<br>speed=${absoluteSpeed.toFixed(2)}`;
 
     if (absoluteSpeed > 0.2 && accelBuffer.length == nVelSamples && !hasBegunWalking){
         hasBegunWalking = Date.now();
