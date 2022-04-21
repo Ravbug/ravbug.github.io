@@ -10,21 +10,26 @@
     <body>
         <div class="mainview">
             <div>
-                <h1 style="text-align:center">Direction Game!</h1>
-                <div style="padding: 5px; text-align:center">
-                    <p id="instr">
-                        How far can you walk in a straight line?<br>
-                        This game is best played outside.
-                    </p>
+                <div class="splitview">
+                    <div>
+                        <h1 style="text-align:center">Direction Game!</h1>
+                        <div style="padding: 5px; text-align:center">
+                            <p id="instr">
+                                How far can you walk in a straight line?<br>
+                                This game is best played outside.
+                            </p>
+                        </div>
+                        <div style="position:relative;">
+                            <img id="compassImg" src="compass.svg">
+                            <img id="headingImg" src="arrow.svg" style="display:none;position:absolute">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="simpleMap">
+                        </div>
+                    </div>
                 </div>
-                <div style="width:100%; position:relative">
-                    <img id="compassImg" src="compass.svg">
-                    <img id="headingImg" src="arrow.svg" style="display:none;position:absolute">
-                </div>
-               
-                <div id="simpleMap" hidden>
-                    <div class="dot" style="left:80%"></div>
-                </div></div>
+            </div>
             <div class="btnrow">
                 <button id="beginBtn" class="btn btn-primary" onclick="start()">Begin</button>
                 <button id="confirmBtn" class="btn btn-success" style="display:none" onclick="confirmDirection()">Let's Go!</button>

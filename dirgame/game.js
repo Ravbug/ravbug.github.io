@@ -258,7 +258,7 @@ function MotionHandler(evt){
 
     if (absoluteSpeed > 0.2 && accelBuffer.length == nVelSamples && !hasBegunWalking){
         hasBegunWalking = Date.now();
-        instructionLabel.innerHTML = "Continue walking in this direction for as long as you can!"
+        instructionLabel.innerHTML = "Continue walking in this direction for as long as you can!<br>Try to keep the arrows aligned"
         accelBuffer = undefined;    // release this array
         // accelerometer is now useless so no need to keep monitoring it
         window.removeEventListener('devicemotion',MotionHandler);
