@@ -21,9 +21,31 @@ let breadcrumb = [];
 const instructionLabel = document.getElementById("instr");
 const map = document.getElementById("simpleMap")
 
+function UseOrientationEvent(){
+    try{
+        DeviceOrientationEvent;
+        try{
+            if(DeviceOrientationEvent.hasOwnProperty("requestPermission")){
+                return true;
+            }
+            return false;
+        }
+        catch(e){
+            return false;
+        }
+    }
+    catch(e){
+        return false;
+    }
+}
+
 function start(){
+    if (!navigator.geolocation){
+        alert("Your browser does not have GPS capabilities, try using a (newer) mobile device")
+        return;
+    }
     // initialize compass
-    if (true){
+    if (UseOrientationEvent()){
         try{
             DeviceOrientationEvent.requestPermission().then(response => {
                 if (response === "granted"){
@@ -34,17 +56,19 @@ function start(){
                     return;
                 }
             });
-            if (!navigator.geolocation){
-                alert("Your browser does not have GPS capabilities, try using a (newer) mobile device")
-                return;
-            }
         }
         catch(e){
             alert("Your browser does not support DeviceOrientation - Compass will be disabled.")
         }
-        
-        // initialize accelerometer
-        try{
+    }
+    else{
+        // for non-iOS browsers:     
+        window.addEventListener("deviceorientationabsolute", OrientationHandler, true);
+    }
+
+     // initialize accelerometer
+     try{
+        if (DeviceMotionEvent.hasOwnProperty("requestPermission")){
             DeviceMotionEvent.requestPermission().then(response => {
                 if (response === 'granted') {
                     window.addEventListener('devicemotion', MotionHandler);
@@ -54,18 +78,19 @@ function start(){
                 }
             });
         }
-        catch(e){
-            alert("Your browser does not support DeviceMotionEvent - Try using a (newer) mobile device")
+        else{
+            // non-iOS browsers
+            window.addEventListener('devicemotion', MotionHandler);
         }
     }
-    else{
-        // for non-iOS browsers:     
-        window.addEventListener("deviceorientationabsolute", OrientationHandler, true);
+    catch(e){
+        alert("Your browser does not support DeviceMotionEvent - Try using a (newer) mobile device")
     }
 
     // initialize GPS
     if (navigator.geolocation){
-        navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
+        // global variable on purpose
+        watchID = navigator.geolocation.watchPosition(GeoLocationHandler,PosError => {
             switch(PosError.code){
                 case GeolocationPositionError.PERMISSION_DENIED:
                     alert(`Could not read GPS: ${PosError.message}. To fix, Please go to Settings -> Privacy -> Location Services -> Safari Websites and allow location access.`)
@@ -156,13 +181,44 @@ function GeoLocationHandler(geoloc){
 
         // figure out the current heading from the last 3 latlongs
         if (breadcrumb.length > 6){
-            // calculate the initial heading from the first 6 coordinates
-            
+            // calculate the initial heading from the first 6 coordinates: avg
+            let heading = {lat:0,long:0}
+            for(let i = 0; i < 6; i++){
+                heading.lat += breadcrumb[i].coords.latitude - breadcrumb[i+1].coords.latitude 
+                heading.long += breadcrumb[i].coords.longitude - breadcrumb[i+1].coords.longitude 
+            }
+            heading.lat /= 6;
+            heading.long /= 6;
 
             // analyze coords 
             if (Date.now() - hasBegunWalking > 2000){
 
                 // was there a sudden change in direction? if so, game over
+                let currentHeading = {lat:0,long:0}
+                for(let i = breadcrumb.length - 2; i < breadcrumb.length - 1; i++){
+                    currentHeading.lat += breadcrumb[i].coords.latitude - breadcrumb[i+1].coords.latitude 
+                    currentHeading.long += breadcrumb[i].coords.longitude - breadcrumb[i+1].coords.longitude 
+                }
+                currentHeading.lat /= 2;
+                currentHeading.long /= 2;
+
+                // angle between vectors
+
+                function angleBetween(v1, v2){
+                    function vlen(v){
+                        return Math.sqrt(v.lat*v.lat + v.long*v.long)
+                    }
+                    function dot(v1,v2){
+                        return v1.lat * v2.lat + v1.long * v2.long;
+                    }
+                    return Math.acos(dot(v1,v2)/(vlen(v1)*vlen(v2)))
+                }
+                const angle = angleBetween(heading, currentHeading);
+                document.getElementById("headingImg").style.transform = `rotate(${angle * 180/Math.PI}deg)`
+
+                if (angle > (20 * Math.PI/180)){  // 20 degrees in radians
+                    gameOver();
+                }
             }
         }
     }
@@ -208,11 +264,28 @@ function MotionHandler(evt){
 
 function gameOver(){
      // game over!
+
+     // total score is the distance traveled between the first point and the final point
+
+    // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+    function distance(lat1, lon1, lat2, lon2) {
+        var p = 0.017453292519943295;    // Math.PI / 180
+        var c = Math.cos;
+        var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+                c(lat1 * p) * c(lat2 * p) * 
+                (1 - c((lon2 - lon1) * p))/2;
+    
+        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+    }
+    // convert to meters
+    const dist = distance(breadcrumb[0].coords.latitude,breadcrumb[0].coords.longitude,breadcrumb[breadcrumb.length-1].coords.latitude,breadcrumb[breadcrumb.length-1].coords.longitude) * 1000
+    alert(`You traveled ${dist}m`)
+
      instructionLabel.innerHTML = "Game Over!"
      // remove event handlers
      window.removeEventListener('deviceorientation',OrientationHandler);
-     //window.removeEventListener('deviceorientationabsolute',);
-     navigator.geolocation.clearWatch(GeoLocationHandler);
+     window.removeEventListener('deviceorientationabsolute',OrientationHandler);
+     navigator.geolocation.clearWatch(watchID);
 }
 
 /**
