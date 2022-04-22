@@ -20,14 +20,16 @@
                                 This game is best played outside.
                             </p>
                         </div>
-                        <div style="position:relative;">
+                        <div id="glyphContainer" style="position:relative;">
                             <img id="compassImg" src="compass.svg">
                             <img id="headingImg" src="arrow.svg" style="display:none;position:absolute">
                         </div>
                     </div>
-                    <div>
-                        <div id="simpleMap" >
-                        </div>
+                    <div id="mapRegion" style="height:100%;position:relative;" >
+                        <div id="simpleMap" style="position:relative"> </div>
+                        <div style="position:absolute;top: 5px; right:10px;"><b>Map</b></div>
+                        <div id="latDist" style="position:absolute;bottom: 5px; left: 5px; margin:auto">Scale: ...</div>
+                        <div id="longDist" style="position: absolute; transform-origin: left; width: 150px; transform:translateX(100%) rotate(90deg); top: 0px; left:-135px;">Scale: ...</div>
                     </div>
                 </div>
             </div>
