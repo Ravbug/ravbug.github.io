@@ -226,7 +226,7 @@ function GeoLocationHandler(geoloc){
                 document.getElementById("headingImg").style.transform = `rotate(${angle * 180/Math.PI}deg)`
 
                 if (angle > (20 * Math.PI/180)){  // 20 degrees in radians
-                    gameOver();
+                    //gameOver();
                 }
             }
         }
