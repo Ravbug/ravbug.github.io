@@ -20,10 +20,11 @@
 
 <body>
     <div class="main">
-        The Raspberry Pi supports the Vulkan graphics API! However, as of writing (<script src="../../date.js" date="12/30/2021"></script>) this support 
-        does not come preinstalled with the raspberry pi OS. This tutorial explains how to get Vulkan support on
-        the Raspberry Pi.
+        <h2>For Raspberry Pi OS 2022 or newer</h2>
+        Install the driver via <code>sudo apt install mesa-vulkan-drivers</code>. No driver compilation or reboot necessary. Skip to the bottom of this article for some Vulkan sample programs you can compile and run. 
         <hr>
+        <h2> For Raspberry Pi OS 2021 or earlier</h2>
+        The mesa driver must be compiled from source.
         <h3>Step 1: Install Dependencies</h3>
         We need to install some dependency libraries in order to compile the Vulkan driver. Run the following command 
         to install them:
