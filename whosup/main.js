@@ -20,7 +20,6 @@ let entries = []
 const rendertarget = document.getElementById("graphroot")
 
 const localUserOffset = new Date().getTimezoneOffset()/60;
-document.getElementById("postinfo").innerHTML = `Relative to your timezone (GMT${localUserOffset<0?"+":"-"}${localUserOffset})`;
 
 // do we have url params?
 {
@@ -34,6 +33,13 @@ document.getElementById("postinfo").innerHTML = `Relative to your timezone (GMT$
     }
 }
 
+function saveState(){
+    let str = JSON.stringify(entries);
+    const enc = encodeCompress(str);
+
+    window.history.pushState("", "", document.URL.substring(0,document.URL.indexOf('?')) + "?t=" + enc);
+}
+
 /**
  * create the HTML for the current representation
  * @param {HTMLElement} container container to write output
@@ -43,7 +49,7 @@ function render(container){
 
     container.innerHTML = "";
     let idx = 0;
-    for(elt of entries){
+    for(let elt of entries){
         const local = idx;
         // root element
         const root = document.createElement("div");
@@ -84,13 +90,21 @@ function render(container){
         }
 
         // info
-        const data = document.createElement("inline");
-        data.innerHTML = `${elt.name} ${elt.people != "" ? `(${elt.people})` : ""}`
+        const label = document.createElement('inline')
+        label.innerHTML = `${elt.name}: `;
+        const data = document.createElement("input");
+        data.value = `${elt.people != "" ? `${elt.people}` : ""}`
+        data.onchange = function(a){
+            elt.people = this.value
+            saveState()
+        }
+        data.style.width = "50%"
+        root.appendChild(label)
         root.appendChild(data);
 
         // representation
         // for sanity, we use 24-hour time internally, where 0:00 = midnight and 23:59 = 11:59pm
-        const notOkRanges = [new range(0,8),new range(23,24)];   //assume (unrealistically) that people sleep from 11pm -> 8am
+        const notOkRanges = [new range(0,8)];   //assume (unrealistically) that people sleep from 12am -> 8am
 
         //Offset the ranges
         const offset = parseInt(elt.timezone) + localUserOffset;
@@ -160,7 +174,7 @@ function render(container){
         masterBar.appendChild(rdiv);
     }
     const title = document.createElement('h3')
-    title.innerHTML = "All Availability"
+    title.innerHTML = `All Availability (GMT${localUserOffset<0?"+":"-"}${localUserOffset})`
     allContainer.firstChild.prepend(title)
 
     allContainer.appendChild(genNumline())
@@ -169,10 +183,7 @@ function render(container){
    
 
     // lastly, save the data to the URL bar as a compressed string
-    let str = JSON.stringify(entries);
-    const enc = encodeCompress(str);
-
-    window.history.pushState("", "", document.URL.substring(0,document.URL.indexOf('?')) + "?t=" + enc);;
+    saveState()
 }   
 
 /**
