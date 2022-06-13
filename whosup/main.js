@@ -1,6 +1,5 @@
 function entry(){
     this.timezone = 0
-    this.name = "";
     this.people = []
     this.enabled = true;
 }
@@ -15,11 +14,63 @@ function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
+const offsetToNameDict = {
+    "-11" : "Midway Islands",
+    "-10" : "Hawaii",
+    "-9" : "Alaska",
+    "-8" : "Pacific",
+    "-7" : "NA-West",
+    "-6" : "NA-Central",
+    "-5" : "NA-Eastern",
+    "-4" : "Puerto Rico, US Virgin Islands",
+    "-3" : "Newfoundland, Brazil Eastern",
+    "-2" : "Brazil DeNoronha",
+    "-1" : "Central Africa",
+    "0" : "UK",
+    "1" : "Central Europe",
+    "2" : "Eastern Europe",
+    "3" : "East Africa, Middle East",
+    "4" : "Near East",
+    "5" : "Pakistan-Lahore",
+    "5.5" : "India",
+    "6" : "Bangladesh, Bhutan",
+    "7" : "Vietnam, West Indonesia",
+    "8" : "China-Mainland",
+    "9" : "Japan, East Indonesia",
+    "9.5" : "Australia-Central",
+    "10" : "Australia-Eastern",
+    "11" : "Solomon, Vladivostok",
+    "12" : "New Zealand"
+}
+
+function offsetToName(offset){
+    const name = offsetToNameDict[`${offset}`]
+    if (name == undefined){
+        return "Unknown"
+    }
+    else{
+        return name
+    }
+}
+ 
+
 // stores entry objects
 let entries = []
 const rendertarget = document.getElementById("graphroot")
 
 const localUserOffset = new Date().getTimezoneOffset()/60;
+const mainsel = document.getElementById("mainsel");
+
+
+function makePickerFor(mainsel){
+    for(const [offset, name] of Object.entries(offsetToNameDict)){
+        const optElt = document.createElement('option')
+        optElt.value = parseInt(offset)
+        optElt.innerHTML = `(GMT${offset >= 0 ?'+':''}${offset}) ${name}`
+        mainsel.appendChild(optElt)
+    }
+}
+makePickerFor(mainsel)
 
 // do we have url params?
 {
@@ -91,7 +142,7 @@ function render(container){
 
         // info
         const label = document.createElement('inline')
-        label.innerHTML = `${elt.name}: `;
+        label.innerHTML = `${offsetToName(elt.timezone)}: `;
         const data = document.createElement("input");
         data.value = `${elt.people != "" ? `${elt.people}` : ""}`
         data.onchange = function(a){
@@ -191,11 +242,9 @@ function render(container){
  */
 function addnew(){
 
-    const mainsel = document.getElementById("mainsel");
     const peoplelist = document.getElementById("peoplelist");
 
     const e = new entry();
-    e.name = mainsel.options[mainsel.selectedIndex].text;
     e.timezone = mainsel.options[mainsel.selectedIndex].value;
     e.people = peoplelist.value.trim();
 
