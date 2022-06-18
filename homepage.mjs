@@ -421,6 +421,12 @@ data = [
                     ref:"tutorials/mc-ngrok/"
                 },
                 {
+                    title:"Minecraft Simple Voice Chat Mod without port forwarding",
+                    img:"tutorials/mc-voicechat-playit/playit_icon.png",
+                    tag:"Use the playit.gg service to host both ports at once",
+                    ref:"tutorials/mc-voicechat-playit/"
+                },
+                {
                     title:"How To Extract Minecraft Textures",
                     img:"img/mcpainting.png",
                     tag:"Get the texture files from any minecraft version",

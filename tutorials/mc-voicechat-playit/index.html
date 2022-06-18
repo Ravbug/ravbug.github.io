@@ -1,0 +1,150 @@
+<html>
+<head>
+    <title>Use the Simple Voice Chat Mod without Port Forwarding</title>
+    <meta name="description" content="Use the playit.gg service to host both ports at once">
+    <link id="favicon" rel="icon" href="playit_icon.png" type="image/x-icon">
+    <meta charset="UTF-8">
+
+    <!-- Social embed image -->
+    <meta property="og:image" content="https://www.ravbug.com/tutorials/mc-voicechat-playit/playit_icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+</head>
+<style>
+    .responsiveimg{
+        max-width:500px !important
+    }
+
+</style>
+<div class="main">
+    The <a href="https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat">Simple Voice Chat Mod</a> for fabric creates an easy-to-use proximity voice chat system for Minecraft servers. With it, when a player
+    speaks into their microphone, their voice appears to come from their in-game avatar, and fades with distance. For it to work, it requires opening 
+    an additional port for the voice system, meaning that many secure tunneling services like ngrok won't work with it for those who are unable to port forward.
+    <br><br>
+    <a href="">Playit.gg</a> is a new (at time of writing) service for securely hosting web servers behind a firewall without port forwarding. It's like 
+    ngrok, but it is focused on gaming and so offers both better latency and unique features, like the ability to have multiple tunnels open at once. 
+    <br><br>
+    Below are the steps for using the Simple Voice Chat mod with playit.gg. If you already have a server with the mod installed, you can skip to step 3.
+    <ol>
+        <li>
+            <h4>Install the Fabric Loader</h4> Download the JAR from <a href="https://fabricmc.net/use/installer/" target="_blank">fabricmc.net/use/installer</a>, then launch it
+            and move to the Server tab. Then set the dialog how you want it. You do not need to download the server jar yet, Fabric can download it for you.
+            <br>
+            <img src="installfabric.png" class="responsiveimg">
+            <img src="downloadserver.png" class="responsiveimg">
+            <img src="serverdownloaded.png" class="responsiveimg">
+            <br>
+        </li>
+        <li>
+            <h4>Install the Simple Voice Chat Mod</h4>
+            Download the one that matches your Minecraft version at <a href="https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat/files" target="_blank">curseforge.com/minecraft/mc-mods/simple-voice-chat/files</a>. 
+            Then go to your server directory and place the jar file in the <code>mods</code> folder. If the folder does not exist, create it.
+            <br>
+            Your server folder should now look like this:
+            <br>
+            <picture>
+                <source srcset="mods_light.png" media="(prefers-color-scheme: light)"></source>
+                <source srcset="mods_dark.png" media="(prefers-color-scheme: dark)"></source>
+                <img src="mods_light.png" class="responsiveimg" style="max-width: 400px !important">
+            </picture>
+        </li>
+        <li>
+            <h4>Download and launch the playit.gg program</h4>
+            Download the binary for your platform at <a href="https://playit.gg/download" target="_blank">playit.gg/download</a>. Place it inside your server folder.
+            <br><br>
+            The playit.gg binary is a command-line tool. Use your system's terminal to add executable permissions if necessary, then run it from your terminal.
+            <br>
+            <picture>
+                <source srcset="playit_launched_light.png" media="(prefers-color-scheme: light)"></source>
+                <source srcset="playit_launched_dark.png" media="(prefers-color-scheme: dark)"></source>
+                <img src="playit_launched_light.png" class=responsiveimg style="max-width: 400px !important">
+            </picture>
+            <br>
+            It will also open a browser window if you do not already have an account logged in. If a browser does not open, go to <a href="https://playit.gg/account/tunnels" target="_blank">playit.gg/account/tunnels</a>
+            in your browser. 
+        </li>
+        <li>
+            <h4>Create the Primary Playit Tunnel</h4>
+            The first tunnel is easy to create. Just press the Minecraft Java button and follow the on-screen instructions.
+            <br>
+            <img src="playit_tunnels.png" class="responsiveimg">
+            <img src="playit_add_tunnel.png" class="responsiveimg">
+            <img src="playit_confirm_tunnel.png" class="responsiveimg">
+            <br>
+            You'll then see the tunnel appear under Your Tunnels.
+            <br>
+            <img src="playit_mc_tunnel.png" class="responsiveimg" style="max-width: 800px !important">
+            <br>
+        </li>
+        <li>
+            <h4>Create the Secondary Playit Tunnel</h4>
+            The second tunnel requires some more configuration. Select the <code>Custom</code> option and type any number for the port range, and set <code>protocol</code> to <code>udp</code>.
+            <br>
+            <img src="playit_udp_tunnel.png" class="responsiveimg">
+            <img src="playit_udp_tunnel_confirm.png" class="responsiveimg">
+            <br>
+            You should then see both tunnels listed under Your Tunnels.
+            <br>
+            <img src="both_tunnels.png" class="responsiveimg" style="max-width: 800px !important">
+            <br>
+            After this, press Edit on the custom tunnel and copy the port at the end of the <code>tunnel address</code> to the Local Port. <b>This is important!</b>
+            <br>
+            <img src="edit_playit_address.png" class="responsiveimg">
+        </li>
+        <li>
+            <h5>Launch the Minecraft server</h5>
+            Create a script to launch the game. An example command to run is <code>java -Xmx4G -jar fabric-server-launch.jar nogui</code> Make sure to agree to the EULA if prompted.
+            Then wait for the server to finish generating a world, after which run the <code>stop</code> command in the console and wait for it to shut down. This will create the necessary
+            files for the next step. 
+            <br>
+            Your filesystem should now look like this:
+            <br>
+            <picture>
+                <source srcset="files_light.png" media="(prefers-color-scheme: light)"></source>
+                <source srcset="files_dark.png" media="(prefers-color-scheme: dark)"></source>
+                <img src="files_light.png" class=responsiveimg style="max-width: 300px !important">
+            </picture>
+        </li>
+        <li>
+            <h6>Configure the Voice Server</h6>
+            Since the Voice Chat Mod is not yet aware of playit.gg, joining the playit address for the Minecraft server at this stage will not give functioning voice chat.
+            <br>
+            Open the <code>config/voicechat/voicechat-server.properties</code> and edit two properties:
+            <ul>
+                <li>
+                    <code>voice_host</code> - set this to the <code>tunnel address</code> of your Custom UDP Playit tunnel, <u>without</u> the port.
+                </li>
+                <li>
+                    <code>port</code> - set this to the port of your playit tunnel.
+                </li>
+            </ul>
+            <picture>
+                <source srcset="voicechat_config_light.png" media="(prefers-color-scheme: light)"></source>
+                <source srcset="voicechat_config_dark.png" media="(prefers-color-scheme: dark)"></source>
+                <img src="voicechat_config_light.png" class=responsiveimg style="max-width: 400px !important">
+            </picture>
+            <img src="correct-tunnel.png" class="responsiveimg">
+        </li>
+        <li>
+            <h4>Play!</h4>
+            In order for this to work, you must have the minecraft server and the playit executable running at the same time. Open two terminals and execute your server's startup script and the playit executable.
+            You should see the line <code>[VoiceChatServerThread/INFO]: Server started at port 38429</code>, where the port matches the one you set in the properties file.
+            Then, paste the <code>tunnel address</code> of the Minecraft Java tunnel into Minecraft's Direct Connect box. 
+            <br>
+            <img src="correct_mc_tunnel.png" class="responsiveimg" style="max-width: 800px !important">
+            <br>
+            <img src="serveraddr.png" class="responsiveimg" style="max-width: 600px !important">
+            <br>
+            If all goes well, you should be able to press the <code>v</code> key on your keyboard to configure in-game voice settings!
+            <br>
+            <img src="vc.png" class="responsiveimg shadow" style="max-width: 600px !important">
+        </li>
+        Happy crafting!
+    </ol>
+    
+</div>
+
+</html>
+<script src="../../header.js"></script>
+<script src="../../statistics.js" url="https://bit.ly/2XZAYpt"></script>    
