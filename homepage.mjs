@@ -13,7 +13,7 @@
  * title: name of section
  * content: array of cards
  */
-data = [
+data = {
         // {
         //     title: "DevBlogs",
         //     content:[
@@ -25,7 +25,7 @@ data = [
         //         }
         //     ]
         // },
-        {
+        "games":{
             title:"Games",
             content: [
                 {
@@ -90,7 +90,7 @@ data = [
                 },
             ]
         },
-        {
+        "software":{
             title:"Software",
             content:[
                 {
@@ -155,7 +155,7 @@ data = [
                 }
             ]
         },
-        {
+        "browser":{
             title:"In Your Browser",
             content:[     
                 {
@@ -322,7 +322,7 @@ data = [
                 },*/
             ]
         },
-        {
+        "animation":{
             title:"Animation",
             content:[
                 {
@@ -381,7 +381,7 @@ data = [
                 },
             ]
         },
-        {
+        "tutorials":{
             title:"Tutorials",
             content:[
                 {
@@ -482,7 +482,7 @@ data = [
                 }
             ]
         },
-        {
+       "misc": {
             title:"Miscellaneous",
             content:[
                 {
@@ -502,8 +502,14 @@ data = [
                     img:"shoddy-drawings/intelhd.png",
                     tag:"Make fun of tech using these crude drawings",
                     ref:"shoddy-drawings/"
+                },
+                {
+                    title:"Rickroll in C",
+                    img: "img/male_dancer.svg",
+                    tag: "Never gonna give you up",
+                    ref: "fun/c-rickroll"
                 }
             ]
         },
-    ]
+    }
 document.currentScript.remove()

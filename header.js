@@ -6,14 +6,14 @@
  * 
  */{
     function generateHeaderContent(stylesheetroot){
-        let body = document.getElementsByTagName("body")[0];
+        const body = document.getElementsByTagName("body")[0];
 
        
-        let head = document.getElementsByTagName('head')[0];
+        const head = document.getElementsByTagName('head')[0];
 
         //get the page title and content as described in the head
-        let page_title = head.getElementsByTagName('title')[0].innerText;
-        let page_desc = head.getElementsByTagName('meta')[0].content;
+        const page_title = head.getElementsByTagName('title')[0].innerText;
+        const page_desc = head.getElementsByTagName('meta')[0].content;
 
         //head boilerplate content
         head.innerHTML += `
@@ -23,8 +23,8 @@
             <link rel="stylesheet" type="text/css" href="${stylesheetroot}stylesheet.css">`;
 
         
-        let menus = [`<a class="headerlink btn btn-primary" href="/">Home</a>`];
-        for (let card of data){
+        const menus = [`<a class="headerlink btn btn-primary" href="/">Home</a>`];
+        for (const card of Object.values(data)){
             menus.push(`<a class="headerlink btn btn-primary header-nonessential" href="/#${card.title.toLowerCase().replace(/ /g,'_')}">${card.title}</a>`);
         }
 
@@ -42,7 +42,7 @@
         }
 
         //construct jumbotron
-        let header = document.createElement('div');
+        const header = document.createElement('div');
         header.className = "jumbotron header";
         header.innerHTML = `
         <div style="display:grid;grid-template-columns:100px 1fr;grid-template-rows:1fr;gap:10px;padding-bottom:10px">
