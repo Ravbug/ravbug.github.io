@@ -13,7 +13,7 @@
  * title: name of section
  * content: array of cards
  */
-data = [
+data = {
         // {
         //     title: "DevBlogs",
         //     content:[
@@ -25,7 +25,7 @@ data = [
         //         }
         //     ]
         // },
-        {
+        "games":{
             title:"Games",
             content: [
                 {
@@ -90,7 +90,7 @@ data = [
                 },
             ]
         },
-        {
+        "software":{
             title:"Software",
             content:[
                 {
@@ -155,7 +155,7 @@ data = [
                 }
             ]
         },
-        {
+        "browser":{
             title:"In Your Browser",
             content:[     
                 {
@@ -322,7 +322,7 @@ data = [
                 },*/
             ]
         },
-        {
+        "animation":{
             title:"Animation",
             content:[
                 {
@@ -381,7 +381,7 @@ data = [
                 },
             ]
         },
-        {
+        "tutorials":{
             title:"Tutorials",
             content:[
                 {
@@ -419,6 +419,12 @@ data = [
                     img:"img/server.svg",
                     tag:"Let friends join your Java Edition server without port forwarding using ngrok",
                     ref:"tutorials/mc-ngrok/"
+                },
+                {
+                    title:"Minecraft Simple Voice Chat Mod without port forwarding",
+                    img:"tutorials/mc-voicechat-playit/playit_icon.png",
+                    tag:"Use the playit.gg service to host both ports at once",
+                    ref:"tutorials/mc-voicechat-playit/"
                 },
                 {
                     title:"How To Extract Minecraft Textures",
@@ -476,7 +482,7 @@ data = [
                 }
             ]
         },
-        {
+       "misc": {
             title:"Miscellaneous",
             content:[
                 {
@@ -496,8 +502,14 @@ data = [
                     img:"shoddy-drawings/intelhd.png",
                     tag:"Make fun of tech using these crude drawings",
                     ref:"shoddy-drawings/"
+                },
+                {
+                    title:"Rickroll in C",
+                    img: "img/male_dancer.svg",
+                    tag: "Never gonna give you up",
+                    ref: "fun/c-rickroll"
                 }
             ]
         },
-    ]
+    }
 document.currentScript.remove()

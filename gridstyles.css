@@ -1,0 +1,30 @@
+article{
+    gap:10px;
+}
+.attention{
+   font-size:20; 
+}
+.header-img{
+    width:100px;
+    margin:15px;
+}
+.card-img{
+    float:right;
+    width:60px;
+    margin:10px;
+    filter: drop-shadow(5px 5px 2px #0004);
+}
+@media only screen and (max-width: 550px) {
+    .header-img{
+        width:75px;
+    }
+    .card-img{
+        width:80px;
+    }
+}
+.header{
+    margin-bottom:0px;
+}
+.header-tag-img{
+    width:30px;
+}

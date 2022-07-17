@@ -1,0 +1,99 @@
+<head>
+	<title>Rickroll in C</title>
+	<meta name="description" content="Never gonna give you up">
+    <link id="favicon" rel="icon" href="../../img/male_dancer.svg" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../gridstyles.css">
+
+	<!-- Social embed image -->
+    <meta property="og:image" content="https://www.ravbug.com/img/male_dancer.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<div class=main>
+    On macOS, the following program, when compiled with <code>gcc file.c</code>, prints <code>Never gonna give you up</code>
+
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+int main(){
+    uint64_t a = 4610877184;
+    uint64_t b = 752229920040515872ull;
+    uint64_t c = 7311146936728383086ull;
+    uint64_t d = 8027420536511817038ull;
+        
+    printf("%s", (char*)&d);
+}</code></pre>
+<p>
+    But why is this?
+</p>
+<p>
+    The program leverages some behaviors about how C gets compiled on macOS to accomplish this. Firstly, the four 64-bit int 
+    variables are holding the actual string. Bytes are bytes, and so by changing our interpretation of those bytes with the cast to a C character pointer, 
+    what appear to be meaningless numbers transform into the message. 
+</p>
+<p>
+    We can use this program to take a string and output it as 64-bit integers:
+</p>
+<pre><code class="cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main(){
+    const char str[] = "Never gonna give you up\n";
+    for(const uint64_t* i = reinterpret_cast&lt;decltype(i)&gt;(str); i < reinterpret_cast&lt;decltype(i)&gt;(str + sizeof(str)); i++){
+        cout << *i << "\n";
+    }
+}</code></pre>
+<p>
+    However, if you run this program, you'll notice that the output appears like this:
+<pre>
+8027420536511817038
+7311146936728383086
+752229920040515872
+4610877184
+</pre>
+Which is the reverse order that they are listed in the rickroll program. This is because x86_64 and arm64 computers are little-endian, so 
+the order of the bytes in memory starts at the least-significant byte and ends at the most significant byte. This, combined with the 
+stack growing down, means we must list our variables in reverse order, and begin printing from the last one. In addition, on macOS, 
+the variables are placed one-after-another in memory without any padding inserted, which enables us to print all four of them.
+</p>
+
+<p>
+    However, if you do not have a macOS device, and instead run the program on a Windows or Linux machine, you may instead 
+    get something like <code>Never go??$@</code> as the output. Why is that?
+</p>
+<p>
+    From what I've been able to gather, the alignment and padding of stack memory on Linux and Windows is different than it is on macOS, such that
+    one can't simply print all four variables at once. To make our program stable across compilers, operating systems, and endians, the program 
+    needs a few modifications:
+</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+int main(){
+    struct {
+        uint64_t a, b, c, d;
+    } s = {,
+        .a = 8027420536511817038ull, 
+        .b = 7311146936728383086ull
+        .c = 752229920040515872ull,
+        .d = 4610877184
+    }; 
+    printf("%s", (char*)&s);
+}</code></pre>
+<p>
+    In this version, we use a <code>struct</code> to guarantee alignment and padding placement. Since the four variables are aligned, 
+    the compiler does not insert padding between the items. The struct also solves the endianness issue, so we instead start printing from 
+    the beginning of the struct instead of the end, and sort our variables accordingly. 
+</p>
+<p>
+    In my opinion this version is less fun because it is more obvious what is happening, since what we've done is essentially make a C array out of a struct. One can name the struct members with underscores and 
+    shuffle the order of the initializers to obfuscate it a little bit in an attempt to restore some of the mystery of the macOS version. 
+</p>
+</div>
+<script src="../../header.js"></script>
+<script src="../../statistics.js" url="https://bit.ly/3bl9nbO"></script>  
