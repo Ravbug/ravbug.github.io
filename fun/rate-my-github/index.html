@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Rate My GitHub</title>
+        <meta name="description" content="What is your open source quality?">
+        <link id="favicon" rel="icon" href="../../img/github.svg" type="image/x-icon">
+        <meta charset="UTF-8">
+
+         <!-- Social embed image -->
+        <meta property="og:image" content="https://www.ravbug.com/img/github.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="306">
+        <meta property="og:image:height" content="275">
+    </head>
+    <body>
+        <div class="main">
+            <p>
+               What GitHub Class are you? Enter your username and press Go to analyze your user!
+               <br>
+               Note that this is just for fun.
+            </p>
+            
+            <div class="input-group" style="min-width:200px;float:left;margin:auto">
+                <input id="user" placeholder="Enter GitHub username..." onkeyup="checkKey(event)" class="form-control"></input>
+                <button onclick="go()" class="btn btn-primary">Go!</button>
+            </div>
+            <div id="output"></div>
+            <div id="chart"></div>
+        </div>
+    </body>
+    <script src="script.js"></script>
+    <script src="../../plotly.js"></script>
+    <script>
+        const input = document.getElementById('user')
+        const output = document.getElementById('output')
+        function go(){
+            calculate(input.value)
+        }
+        function checkKey(event){
+            if(event.keyCode == 13){
+                go();
+            }
+        }
+    </script>
+    <script src="../../header.js"></script>
+    <script src="../statistics.js" url="https://bit.ly/2YoOXIr"></script> 
+</html>
