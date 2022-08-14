@@ -19,6 +19,8 @@ async function calculate(user){
         reviewerPts : 0,
         vampirePts : 0,
     }
+    let analyzed = 0;
+    output.innerHTML = "Loading..."
     /**
      * 
      * @param {stats} stats 
@@ -38,6 +40,7 @@ async function calculate(user){
 
         const forks = [];
 
+
         // forks vs original code
         for(const repo of repos){
             if (repo.fork){
@@ -47,8 +50,10 @@ async function calculate(user){
             else{
                 // account owns the repo, +1 creator points
                 stats.creatorPts++;
+                analyzed ++;
             }
         }
+        output.innerHTML = `Analyzed ${analyzed} repositories...`
 
         // get number of PRs
         const prs = await httpget(`https://api.github.com/search/issues?q=+type:pr+user:${user}`)
@@ -73,6 +78,8 @@ async function calculate(user){
             if (!found){
                 stats.vampirePts++;
             }
+            analyzed++
+            output.innerHTML = `Analyzed ${analyzed} repositories...`
         }
     }
     catch(e){
@@ -93,7 +100,7 @@ async function calculate(user){
     // now find the highest percentage item
 
     const maxKey = Object.keys(stats).reduce((a, b) => stats[a] > stats[b] ? a : b);
-    outstr += `Your GitHub Class is: <b>`
+    outstr += `Based on analysis of ${analyzed} repositories, your GitHub Class is: <b>`
 
 
     switch(maxKey){
@@ -110,6 +117,7 @@ async function calculate(user){
             outstr += printVampire()
             break;
     }
+
     const config = {
         responsive: true
     } 
@@ -132,7 +140,7 @@ async function calculate(user){
 
 function printCreator(){
     return `Creator</b><br>
-    You create many new projects to share with the world.
+    You create new projects and you share them with the world.
     `
 }
 

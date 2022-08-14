@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Rate My GitHub</title>
-        <meta name="description" content="What is your open source quality?">
+        <meta name="description" content="What type of GitHub user are you?">
         <link id="favicon" rel="icon" href="../../img/github.svg" type="image/x-icon">
         <meta charset="UTF-8">
 
@@ -18,13 +18,36 @@
                <br>
                Note that this is just for fun.
             </p>
-            
-            <div class="input-group" style="min-width:200px;float:left;margin:auto">
-                <input id="user" placeholder="Enter GitHub username..." onkeyup="checkKey(event)" class="form-control"></input>
-                <button onclick="go()" class="btn btn-primary">Go!</button>
-            </div>
+            <p>
+                <div class="input-group" style="min-width:200px;float:left;margin:auto">
+                    <input id="user" placeholder="Enter GitHub username..." onkeyup="checkKey(event)" class="form-control"></input>
+                    <button onclick="go()" class="btn btn-primary">Go!</button>
+                </div>
+            </p>
+               
+           <p>
             <div id="output"></div>
             <div id="chart"></div>
+           </p>
+            
+            <br><br>
+            <div class="breadcrumb">
+                <b>How it works:</b>
+                <ul>
+                    <li>
+                        Repositories you own that are not forks contribute to your Creator score
+                    </li>
+                    <li>
+                        Submitting Pull Requests contributes to your Contributor score
+                    </li>
+                    <li>
+                        Commenting contributes to your Reviewer score
+                    </li>
+                    <li>
+                        Creating forks and then doing nothing with them contributes to your Vampire score
+                    </li>
+                </ul>
+            </div>
         </div>
     </body>
     <script src="script.js"></script>
@@ -42,5 +65,5 @@
         }
     </script>
     <script src="../../header.js"></script>
-    <script src="../statistics.js" url="https://bit.ly/2YoOXIr"></script> 
+    <script src="../statistics.js" url="https://bit.ly/3PnD9uQ"></script> 
 </html>
