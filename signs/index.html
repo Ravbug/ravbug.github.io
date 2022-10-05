@@ -1,9 +1,14 @@
+
 <html>
     <head>
         <title>your're goin to HEL!!11!</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="gonna cry? gonna piss your pants??">
         <style>
+            @font-face {
+                font-family: MarkerFeltFallback;
+                src: url("MarkerFelt.ttf");
+            }
             .container{
                 display:grid;
                 grid-template-rows: 1fr 1fr 1fr;
@@ -51,7 +56,7 @@
                 text-align: center;
             }
             .handwritten{
-                font-family: 'Marker Felt';
+                font-family: 'Marker Felt', 'MarkerFeltFallback';
             }
             @media (max-width: 400px) {
                 .attention {
