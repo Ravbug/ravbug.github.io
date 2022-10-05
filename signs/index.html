@@ -103,19 +103,31 @@
             "butt scratchers",
             "phone callers",
             "extended warranties",
-            "interneters"
+            "interneters",
+            "mixtape spreaders",
+            "wordart users",
+            "orange enjoyers",
+            "nose breathers",
+            "clothes wearers",
+            "ballers",
+            "cool people",
+            "abcdefgh",
+            "hygenics",
         ]
         function rand(min, max) { 
             return Math.random() * (max - min) + min;
         }
-        function randElt(array){
-            return array[Math.floor(rand(0,array.length))]
+        function randEltAndRemove(array){
+            const idx = Math.floor(rand(0,array.length))
+            const elt = array[idx];
+            // array.splice(idx,1);    // remove the element
+            return elt;
         }
 
         // generate some words and put them on the sign
         for(let i = 0 ; i < 10; i++){
             const elt = document.createElement('w');
-            const word = randElt(words);
+            const word = randEltAndRemove(words);
             elt.innerHTML = `${word} `; // space permits wrapping
             // spice up the element with some styles
             elt.classList = ["handwritten"]
