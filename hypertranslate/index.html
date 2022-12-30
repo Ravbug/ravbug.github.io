@@ -12,71 +12,86 @@
   <!-- The actual content -->
   <div class=main>
     <displayAd class="longWideAd"></displayAd>
-    <div style="width:100%; max-width:1200px;margin:auto">
-      <article>
-        <div>
-          <span id=header1 style="font-size:20;font-weight:bold">Input</span>
-          <textarea autofocus id="input" class="form-control" style="width:100%;height:60%;resize:none"
-            placeholder="Type or paste text here..."></textarea>
+
+    <div class="paddingGrid">
+      <paddingGridElt>
+        <displayAd class="tallThinAd"></displayAd>
+        <displayAd class="tallThinAd"></displayAd>
+      </paddingGridElt>
+
+      <div style="width:100%; max-width:1200px;margin:auto">
+        <article>
+          <div>
+            <span id=header1 style="font-size:20;font-weight:bold">Input</span>
+            <textarea autofocus id="input" class="form-control" style="width:100%;height:60%;resize:none"
+              placeholder="Type or paste text here..."></textarea>
+          </div>
+          <div>
+            <span id=header2 style="font-size:20;font-weight:bold">Translated</span>
+            <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+          </div>
+        </article>
+    
+        <!-- the progres indicator -->
+        <div id=progressdiv class="progress" style="display:none">
+          <progress id=progress min=0 max=100 value=0 style="width:100%"></progress>    
         </div>
-        <div>
-          <span id=header2 style="font-size:20;font-weight:bold">Translated</span>
-          <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+        <!-- where to output the language  list -->
+        <p id=langStack></p>
+    
+        <!-- The control buttons at the bottom -->
+        <br>
+        <table border=0 style="width:100%">
+          <tr>
+            <td style="width:200px">
+              <button class="btn btn-primary" onclick="trans_interface();" style="float:left;"><span
+                  style="font-size:20">Translate!</span></button>
+            </td>
+            <td style="width:200px">
+              <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span
+                  style="font-size:20">Copy!</span></button>
+            </td>
+        </table>
+        <article>
+          <div class="input-group" style="min-width:200px;float:left;margin:auto">
+            <span class="input-group-addon">Start Language</span>
+            <input type="text" id=lang1 class="form-control" value=en>
+          </div>
+          <div class="input-group" style="min-width:200px;float:right;margin:auto">
+            <span class="input-group-addon">End Language</span>
+            <input type="text" id=lang2 class="form-control" value="en">
+          </div>
+          <div class="input-group" style="min-width:300px;float:center;margin:auto">
+            <span class="input-group-addon">Translate</span>
+            <input type="number" id=count class="form-control" value=4>
+            <span class="input-group-addon">times</span>
+          </div>
+        </article>
+        <br>
+        <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+          <strong>Whoa! What service this sheet does?</strong>
+    
+          <br>This webpage takes text in any language, sends it through <a target="_blank"
+            href="https://translate.google.com">Google Translate</a> a bunch of times, and then outputs it in any language.
+          <br>The start and end language boxes only accept language codes from ISO-639-1. Get the list <a target="_blank"
+            href="https://cloud.google.com/translate/docs/languages"> here. </a>
+          <br>If you don't know what language you are pasting in, type "auto" into the start language field.
+          <br><br><strong>Not working?</strong> This webpage circumvents Google's translate API by using their "secret"
+          unprotected call. This is the same call
+          that the Google Translate webpage uses. Google now temporarily bans IP addresses which use their private API too
+          frequently. If this tool hangs,
+          use a VPN, change which network you are connected to, or try again later.
         </div>
-      </article>
-  
-      <!-- the progres indicator -->
-      <div id=progressdiv class="progress" style="display:none">
-        <progress id=progress min=0 max=100 value=0 style="width:100%"></progress>    
+        <displayAd class="longWideAd"></displayAd>
       </div>
-      <!-- where to output the language  list -->
-      <p id=langStack></p>
-  
-      <!-- The control buttons at the bottom -->
-      <br>
-      <table border=0 style="width:100%">
-        <tr>
-          <td style="width:200px">
-            <button class="btn btn-primary" onclick="trans_interface();" style="float:left;"><span
-                style="font-size:20">Translate!</span></button>
-          </td>
-          <td style="width:200px">
-            <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span
-                style="font-size:20">Copy!</span></button>
-          </td>
-      </table>
-      <article>
-        <div class="input-group" style="min-width:200px;float:left;margin:auto">
-          <span class="input-group-addon">Start Language</span>
-          <input type="text" id=lang1 class="form-control" value=en>
-        </div>
-        <div class="input-group" style="min-width:200px;float:right;margin:auto">
-          <span class="input-group-addon">End Language</span>
-          <input type="text" id=lang2 class="form-control" value="en">
-        </div>
-        <div class="input-group" style="min-width:300px;float:center;margin:auto">
-          <span class="input-group-addon">Translate</span>
-          <input type="number" id=count class="form-control" value=4>
-          <span class="input-group-addon">times</span>
-        </div>
-      </article>
-      <br>
-      <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
-        <strong>Whoa! What service this sheet does?</strong>
-  
-        <br>This webpage takes text in any language, sends it through <a target="_blank"
-          href="https://translate.google.com">Google Translate</a> a bunch of times, and then outputs it in any language.
-        <br>The start and end language boxes only accept language codes from ISO-639-1. Get the list <a target="_blank"
-          href="https://cloud.google.com/translate/docs/languages"> here. </a>
-        <br>If you don't know what language you are pasting in, type "auto" into the start language field.
-        <br><br><strong>Not working?</strong> This webpage circumvents Google's translate API by using their "secret"
-        unprotected call. This is the same call
-        that the Google Translate webpage uses. Google now temporarily bans IP addresses which use their private API too
-        frequently. If this tool hangs,
-        use a VPN, change which network you are connected to, or try again later.
-      </div>
-      <displayAd class="longWideAd"></displayAd>
+
+      <paddingGridElt>
+        <displayAd class="tallThinAd"></displayAd>
+        <displayAd class="tallThinAd"></displayAd>
+      </paddingGridElt>
     </div>
+
+    
     
   </div>
 </body>
