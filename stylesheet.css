@@ -71,10 +71,13 @@ figcaption{
 
 .longWideAd{
     width: 100%;
+    max-width: 800px;
     height: 150px;
-    display:inline-block;
+    display: block;
     content: "Advertisement";
+    margin:auto
 }
+
 
 /*
 Dark mode
