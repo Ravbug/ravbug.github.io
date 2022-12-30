@@ -73,9 +73,8 @@ figcaption{
     width: 100%;
     max-width: 800px;
     height: 150px;
-    display: block;
-    content: "Advertisement";
-    margin:auto
+    display: none;
+    margin:auto;
 }
 
 .tallThinAd{
@@ -101,7 +100,7 @@ paddingGridElt{
         display:unset;
     }
     .longWideAd{
-        display:none
+        display:block
     }
 }
 

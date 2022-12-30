@@ -17,83 +17,95 @@
   </style>
 
 <body id=main>
-  <displayAd class="longWideAd"></displayAd>
-  <!-- The actual content -->
-  <div style="height: 500px;float: center; width: 100%;">
-    <!-- Inset Content Div -->
-    <div style="margin: auto; float: center; width: 95%; max-width:1200px">
-      <article>
-        <div>
-          <span id=header1 style="font-size:20;font-weight:bold">English</span>
-          <textarea autofocus id="input" onkeyup="generate(true)" class="form-control"
-            style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
-        </div>
-        <div>
-          <span id=header2 style="font-size:20;font-weight:bold">Emoji</span>
-          <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
-        </div>
-      </article>
-
-      <!-- The control buttons at the bottom -->
-      <br>
-      <table border=0 style="width:100%">
-        <tr>
-          <td style="width:200px">
-            <button class="btn btn-primary" onclick="update();" style="float:left;"><span
-                style="font-size:20">Translate!</span></button>
-          </td>
-          <td style="width:200px">
-            <button id=toggle class="btn btn-secondary" onclick="swap();" style="float:center;width:100%"><span
-                style="font-size:20">Emoji ➔ English</span></button>
-          </td>
-          <td style="width:200px">
-            <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span
-                style="font-size:20">Copy!</span></button>
-          </td>
-      </table>
-      <br>
-      <table border=0 style="width:100%">
-        <tr>
-          <td>
-            <input type=checkbox id="discord" class="magic-checkbox" onclick="update();" /><label for="discord"
-              style="float:center;">Discord Emojis</label>
-          </td>
-          <td>
-            <label>Mode: </label>
-            <select id=mode onclick="update();">
-              <option value=0>Strict Match</option>
-              <option value=1>Length Ratio</option>
-              <option value=2>Loose Match</option>
-            </select>
-            <div id=ratio_container style="display:none;float:center;min-width:100px" class="input-group"
-              style="width:10%">
-              <span class="input-group-addon">Ratio</span>
-              <input onkeyup="update();" id=ratio_value type="number" value=0.3 class="form-control"
-                aria-label="A decimal between 0 and 1">
+  <div class="paddingGrid">
+    <paddingGridElt>
+      <displayAd class="tallThinAd"></displayAd>
+      <displayAd class="tallThinAd"></displayAd>
+    </paddingGridElt>
+    <div>
+      <displayAd class="longWideAd"></displayAd>
+      <!-- The actual content -->
+      <div style="height: 500px;float: center; width: 100%;">
+        <!-- Inset Content Div -->
+        <div style="margin: auto; float: center; width: 95%; max-width:1200px">
+          <article>
+            <div>
+              <span id=header1 style="font-size:20;font-weight:bold">English</span>
+              <textarea autofocus id="input" onkeyup="generate(true)" class="form-control"
+                style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
             </div>
-          </td>
-          <td>
-            <label>Operation:</label>
-            <select id="operation" onClick="update()">
-              <option value=0>Replace</option>
-              <option value=1>Append</option>
-              <option value=2>Prepend</option>
-            </select>
-          </td>
-        </tr>
-      </table>
-      <br>
-      <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
-        <h3>😱 😱 😱 👌👌👌</h3></strong>
-
-        This webpage transforms plain text into the immaculate emoji language.
-        <br>Want emoji tokens for the VOIP service Discord instead of Unicode characters? Tick that checkbox!
-        <br><br>You can force a particular emoji in loose/ratio modes by putting colons around it, like this - :dog2:
-        <br><strong>Not working?</strong> A script might not have loaded. Try reloading.
-
-      </div>
+            <div>
+              <span id=header2 style="font-size:20;font-weight:bold">Emoji</span>
+              <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+            </div>
+          </article>
+    
+          <!-- The control buttons at the bottom -->
+          <br>
+          <table border=0 style="width:100%">
+            <tr>
+              <td style="width:200px">
+                <button class="btn btn-primary" onclick="update();" style="float:left;"><span
+                    style="font-size:20">Translate!</span></button>
+              </td>
+              <td style="width:200px">
+                <button id=toggle class="btn btn-secondary" onclick="swap();" style="float:center;width:100%"><span
+                    style="font-size:20">Emoji ➔ English</span></button>
+              </td>
+              <td style="width:200px">
+                <button class="btn btn-success" onclick="copy(document.getElementById('output'))" style="float:right;"><span
+                    style="font-size:20">Copy!</span></button>
+              </td>
+          </table>
+          <br>
+          <table border=0 style="width:100%">
+            <tr>
+              <td>
+                <input type=checkbox id="discord" class="magic-checkbox" onclick="update();" /><label for="discord"
+                  style="float:center;">Discord Emojis</label>
+              </td>
+              <td>
+                <label>Mode: </label>
+                <select id=mode onclick="update();">
+                  <option value=0>Strict Match</option>
+                  <option value=1>Length Ratio</option>
+                  <option value=2>Loose Match</option>
+                </select>
+                <div id=ratio_container style="display:none;float:center;min-width:100px" class="input-group"
+                  style="width:10%">
+                  <span class="input-group-addon">Ratio</span>
+                  <input onkeyup="update();" id=ratio_value type="number" value=0.3 class="form-control"
+                    aria-label="A decimal between 0 and 1">
+                </div>
+              </td>
+              <td>
+                <label>Operation:</label>
+                <select id="operation" onClick="update()">
+                  <option value=0>Replace</option>
+                  <option value=1>Append</option>
+                  <option value=2>Prepend</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <br>
+          <div class="breadcrumb" style="min-width:50%; float:center" role=alert>
+            <h3>😱 😱 😱 👌👌👌</h3></strong>
+    
+            This webpage transforms plain text into the immaculate emoji language.
+            <br>Want emoji tokens for the VOIP service Discord instead of Unicode characters? Tick that checkbox!
+            <br><br>You can force a particular emoji in loose/ratio modes by putting colons around it, like this - :dog2:
+            <br><strong>Not working?</strong> A script might not have loaded. Try reloading.
+    
+          </div>
+        </div>
+        <displayAd class="longWideAd"></displayAd>
     </div>
-    <displayAd class="longWideAd"></displayAd>
+    <paddingGridElt>
+      <displayAd class="tallThinAd"></displayAd>
+      <displayAd class="tallThinAd"></displayAd>
+    </paddingGridElt>
+  </div>
 
   </div>
 </body>
