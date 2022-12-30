@@ -170,16 +170,19 @@
   }
 
   function resize() {
-    inputField.style.height = (window.innerHeight - 220) / 3;
-    outputField.style.height = (window.innerHeight - 220) / 3;
-    document.getElementById("jumbotron").style.padding = window.innerHeight / 20;
-    var width = document.getElementById("main").scrollWidth;
-    var colcount = width / 324;
-    colcount = parseInt(colcount);
-    if (colcount == 1) {
-      inputField.style.height = (window.innerHeight) / 6;
-      outputField.style.height = (window.innerHeight) / 6;
+    try{
+      inputField.style.height = (window.innerHeight - 220) / 3;
+      outputField.style.height = (window.innerHeight - 220) / 3;
+      document.getElementById("jumbotron").style.padding = window.innerHeight / 20;
+      var width = document.getElementById("main").scrollWidth;
+      var colcount = width / 324;
+      colcount = parseInt(colcount);
+      if (colcount == 1) {
+        inputField.style.height = (window.innerHeight) / 6;
+        outputField.style.height = (window.innerHeight) / 6;
+      }
     }
+    catch(e){}
   }
 
 
