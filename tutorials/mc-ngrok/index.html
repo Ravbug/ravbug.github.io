@@ -29,7 +29,8 @@
         }
     }
 </style>
-<div class="main">
+<body>
+<div class="main" id="contentmain">
     Not everyone wants to or is able to port-forward their router so friends can join their Minecraft server. 
     Fortunately, it is easy to share your server without port forwarding using secure tunneling services like ngrok.
     Below is a condensed tutorial showing you how to use ngrok with your Minecraft server.
@@ -145,5 +146,8 @@ The Windows Batch script cannot detect when it is terminated, while the Powershe
 On macOS (zsh), the async ngrok process will automatically be stopped when the script is stopped. On Linux this is not always the case. 
 Test this on your distro and shell to determine the behavior and adjust the script accordingly.
 </div>
+</body>
 <script src="../../header.js"></script>
 <script src="../../statistics.js" url="https://bit.ly/3h88BgF"></script>  
+<script src="../../delayedlayout.js" target="contentmain"></script>
+<script src="../../delayedload.js"></script>

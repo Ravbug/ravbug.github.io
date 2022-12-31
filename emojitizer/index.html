@@ -17,17 +17,11 @@
   </style>
 
 <body id=main>
-  <div class="paddingGrid">
-    <paddingGridElt>
-      <displayAd class="tallThinAd"></displayAd>
-      <displayAd class="tallThinAd"></displayAd>
-    </paddingGridElt>
-    <div>
-      <displayAd class="longWideAd"></displayAd>
+    <div id="content_main">
       <!-- The actual content -->
       <div style="height: 500px;float: center; width: 100%;">
         <!-- Inset Content Div -->
-        <div style="margin: auto; float: center; width: 95%; max-width:1200px">
+        <div style="margin: auto; float: center; width: 95%;">
           <article>
             <div>
               <span id=header1 style="font-size:20;font-weight:bold">English</span>
@@ -99,15 +93,8 @@
     
           </div>
         </div>
-        <displayAd class="longWideAd"></displayAd>
     </div>
-    <paddingGridElt>
-      <displayAd class="tallThinAd"></displayAd>
-      <displayAd class="tallThinAd"></displayAd>
-    </paddingGridElt>
-  </div>
-
-  </div>
+    </div>
 </body>
 
 <script>
@@ -260,5 +247,6 @@
 <script src="../sweetalert.min.js"></script>
 <script src="../header.js"></script>
 <script src="../statistics.js" url="https://bit.ly/2FnC5Jh"></script>  
+<script src="../delayedlayout.js" target="content_main"></script>
 <script src="../delayedload.js"></script>
 </html>

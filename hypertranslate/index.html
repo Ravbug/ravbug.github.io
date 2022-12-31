@@ -11,15 +11,7 @@
 
   <!-- The actual content -->
   <div class=main>
-    <displayAd class="longWideAd"></displayAd>
-
-    <div class="paddingGrid">
-      <paddingGridElt>
-        <displayAd class="tallThinAd"></displayAd>
-        <displayAd class="tallThinAd"></displayAd>
-      </paddingGridElt>
-
-      <div style="width:100%; max-width:1200px">
+      <div id="content_main" style="width:100%; max-width:1200px">
         <article>
           <div>
             <span id=header1 style="font-size:20;font-weight:bold">Input</span>
@@ -82,17 +74,7 @@
           frequently. If this tool hangs,
           use a VPN, change which network you are connected to, or try again later.
         </div>
-        <displayAd class="longWideAd"></displayAd>
       </div>
-
-      <paddingGridElt>
-        <displayAd class="tallThinAd"></displayAd>
-        <displayAd class="tallThinAd"></displayAd>
-      </paddingGridElt>
-    </div>
-
-    
-    
   </div>
 </body>
 
@@ -217,4 +199,5 @@
 <script src="../sweetalert.min.js"></script>
 <script src="../header.js"></script>
 <script src="../statistics.js" url="https://bit.ly/3fWU5Xv"></script> 
+<script src="../delayedlayout.js" target="content_main"></script>
 <script src="../delayedload.js"></script>
