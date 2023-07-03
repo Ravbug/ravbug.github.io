@@ -47,7 +47,22 @@
             <li>Return to the menu. The text should be changed.</li>
         </ol>
     <hr>
-    <h4>Downloads</h4>
+    <h4>Create-A-Pack</h4>
+    <div id="cap-body">
+        <label for="level-select">Level:</label>
+        <select id="level-select" >
+            <option>
+                10x
+            </option>
+            <option>
+                30x
+            </option>
+        </select>
+        <button onclick="generatePack()">Download for 1.19!</button>
+       
+    </div>
+<hr>
+    <h4>Legacy Downloads</h4>
         <h6><a href="https://bit.ly/3yjk9ID">Download 10x pack for 1.19+</a></h6>
         <details>
             <summary>Older Downloads</summary>
@@ -69,5 +84,7 @@
 </div>
 
 <script src="../header.js"></script>
+<script src="jszip/jszip.min.js"></script>
+<script src="generator.js"></script>
 <script src="../statistics.js" url="https://bit.ly/33X7AnJ"></script>
 </html>
