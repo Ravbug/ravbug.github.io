@@ -17,40 +17,22 @@
     }
 </style>
 <div class="main">
-    <h4>"Three Kingdoms Minecraft"</h4>
-    <p>
-        Inspired by <a target="_blank"
-            href="https://www.reddit.com/r/PhoenixSC/comments/cnbe4l/google_translate_minecraft/">DutChen18</a>,
-        I created two Google Translate resource packs for Minecraft Java Edition 1.16. All text in the game has been translated,
-        including the splash texts, the end poem, and the game's credits.
-    </p>
-    <p>
-        There are 1-3 versions available, depending on Minecraft version: a 10x translation, a 20x translation, and a 30x translation. 
-    </p>
-    <p>
-        To get around Google's IP tempban (which they impose if you spam the translation URL too much), I created a
-        Google Spreadsheet which performs the translations using the <code>GOOGLETRANSLATE()</code> call. Then, I
-        wrote a C++ program which takes the JSON langauge file and coverts it to a TSV (Tab-separated values). I pasted
-        the TSV's cells into the spreadsheet and waited a couple hours. I wrote a python script to download the spreadsheet directly as plain text and 
-        used a second C++ program I wrote to convert the spreadsheet back to JSON, automatically inserting any formatting. The source code for these programs is available <a target="_blank" href="https://github.com/Ravbug/GameGoogleTranslate">on GitHub</a>.
-    </p>
-    <p>
-        If you want to mess around with translation telephone, I made a webpage which lets you do that easily. 
-        You can visit it here: <a href="../hypertranslate/">Hypertranslate</a>. Note that if you use this too much
-        Google will temporarily block your IP (it runs client-side) and it will stop working. 
-    </p>
-    <h4>How to install these packs</h4>
+    <h4>"How package is this??"</h4>
+    After (almost) every major Minecraft Java Edition Update, starting with version 1.14, I run every single string in the game through multiple recursive layers of Google Translate. 
+    Yes, <em>every single one.</em> Even the menus, splashes, and end poem. Some example screenshots are below. 
+    
+    <h4>How to install these packs (read carefully!)</h4>
         <ol>
-            <li>Place the .zip files inside your resourcepacks folder at <code>minecraft/resourcepacks</code> and extract them.</li>
-            <li>Open Minecraft, select Options > Resource Packs, and enable the resource pack you want to use. <b>It will not be active right away.</b></li>
+            <li>Place the .zip files inside your resourcepacks folder at <code>minecraft/resourcepacks</code></li>
+            <li>Open Minecraft, select Options > Resource Packs, and enable the resource pack you want to use. <b>The language mods will not be active right away.</b></li>
             <li><b>Important!</b> Return to the Options menu, select Language, then find Google Translate in the list and select it.</li>
             <li>Return to the menu. The text should be changed.</li>
         </ol>
     <hr>
-    <h4>Create-A-Pack</h4>
+    <h4>Download Pack</h4>
     <div id="cap-body">
-        <label for="level-select">Level:</label>
-        <select id="level-select" >
+        <label for="level-select" hidden>Level:</label>
+        <select id="level-select" hidden>
             <option>
                 10x
             </option>
@@ -58,14 +40,13 @@
                 30x
             </option>
         </select>
-        <button onclick="generatePack()">Download for 1.19!</button>
+        <button onclick="generatePack()">Download for 1.20!</button>
        
     </div>
-<hr>
-    <h4>Legacy Downloads</h4>
-        <h6><a href="https://bit.ly/3yjk9ID">Download 10x pack for 1.19+</a></h6>
+    <p>
         <details>
-            <summary>Older Downloads</summary>
+            <summary>Legacy Downloads</summary>
+            <h6><a href="https://bit.ly/3yjk9ID">Download 10x pack for 1.19+</a></h6>
             <h6><a href="https://bit.ly/3DLeuKS">Download 10x pack for 1.18+</a></h6>
             <h6><a href="https://bit.ly/3Gx3anI">Download 30x pack for 1.18+</a></h6>
             <h6><a href="https://bit.ly/2Sp56Lu">Download 10x pack for 1.17+</a></h6>
@@ -76,6 +57,8 @@
             <h6><a href="https://bit.ly/37ZW6iO">10x pack for 1.14</a></h6>
             <h6><a href="https://bit.ly/2DXYNnv">30x pack for 1.14</a></h6>
         </details>
+    </p>
+        
     <hr>
     <img src="main.png">
     <img src="options.png">
