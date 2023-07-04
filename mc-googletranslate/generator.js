@@ -73,7 +73,10 @@ function genUI(){
 }
 genUI()
 
-async function generatePack(){
+async function generatePack(sender){
+    sender.disabled = true;
+    setTimeout(() => {sender.disabled = false},5000)
+
     const level = levelSelect.options[levelSelect.selectedIndex].text
     let baseEdition = 1;
     for(const button of levelButtons[0]){
