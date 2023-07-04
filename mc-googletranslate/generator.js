@@ -1,5 +1,7 @@
 const patch_start_version = 16;
 const currentVersion = 20;
+const numVariants = [5,4,3,2]
+const variantVersions = [14,16,17,18]
 
 // source: https://dev.to/nombrekeff/download-file-from-blob-21ho
 function downloadBlob(blob, name = 'file.txt') {
@@ -32,21 +34,75 @@ function downloadBlob(blob, name = 'file.txt') {
     }, 100);
 }
 
-
 const levelSelect = document.getElementById('level-select')
+const configurator = document.getElementById('configurator')
+const levelButtons = []
+
+function genUI(){
+
+  for(let version = patch_start_version; version <= currentVersion + 1; version++){
+    const i = version - patch_start_version;
+    const group = document.createElement('fieldset')
+    const vver = variantVersions[i] == undefined ? version-1 : variantVersions[i];
+    group.innerHTML = `<legend>1.${vver} patch variant</legend>`
+    const variantCount = i < numVariants.length ? numVariants[i] : 1;
+    const buttonArr = []
+    for(let index = 0; index < variantCount; index++){
+      const divider = document.createElement('p')
+      const button = document.createElement('input');
+      button.type = "radio"
+      button.id = `e${index}`
+      button.value = index+1
+      button.name = `sel-${vver}`
+      if (index == 0){
+        button.checked = true
+      }
+      const label = document.createElement('label')
+      label.for = button.name
+      label.innerHTML = `Variant ${index+1}`
+
+      buttonArr.push(button)
+
+      divider.appendChild(button)
+      divider.appendChild(label)
+      group.appendChild(divider)
+    }
+    levelButtons.push(buttonArr)
+    configurator.appendChild(group)
+  }
+}
+genUI()
 
 async function generatePack(){
     const level = levelSelect.options[levelSelect.selectedIndex].text
+    let baseEdition = 1;
+    for(const button of levelButtons[0]){
+      if (button.checked){
+        baseEdition = button.value
+      }
+    }
+
+    // determine which game editions are selected
+    let gameVersionEditions = [];
+    for(const buttonArr of levelButtons.slice(1)){
+      for(const button of buttonArr){
+        if (button.checked){
+          gameVersionEditions.push(button.value)
+        }
+      }
+    }
     
     // get the base data
-    let full_game_data = await (await fetch(`generator/base_game_${level}.json`)).json()
+    let full_game_data = await (await fetch(`generator/base_game_${level}_${baseEdition}.json`)).json()
     let full_realms_data = await (await fetch(`generator/base_realms_${level}.json`)).json()
     //let full_credits_data = await (await fetch(`generator/base_credits_${level}.json`)).json()
 
     // get the patches
     for(let i = patch_start_version; i <= currentVersion; i++){
-        const game_data = await (await fetch(`generator/${i}_game_${level}.json`)).json()
-        const realms_data = await (await fetch(`generator/${i}_game_${level}.json`)).json()
+        const editionIndex = i - patch_start_version;
+        let gameEdition = editionIndex < gameVersionEditions.length ? gameVersionEditions[editionIndex] : 1;
+        const game_data = await (await fetch(`generator/${i}_game_${level}_${gameEdition}.json`)).json()
+        const realms_data = await (await fetch(`generator/${i}_realms_${level}.json`)).json()
         full_game_data = {...full_game_data, ...game_data};
         full_realms_data = {...full_realms_data, ...realms_data};
         if (i >= 19){

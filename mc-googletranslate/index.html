@@ -15,6 +15,11 @@
         width:100%;
         max-width:1200px;
     }
+    #configurator{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap:5px;
+    }
 </style>
 <div class="main">
     <h4>"How package is this??"</h4>
@@ -40,6 +45,12 @@
                 30x
             </option>
         </select>
+        <details >
+            <summary>Customize</summary>
+            <div id="configurator">
+
+            </div>
+        </details>
         <button onclick="generatePack()">Download for 1.20!</button>
        
     </div>
