@@ -44,7 +44,8 @@ const allPrograms = {
         "paths": {
             "win":[
                 "~/Documents/maya",
-                "/Autodesk/maya"
+                "/Autodesk/*",
+               "/solidangle/"
             ],
             "mac" : [
                 "~/Documents/maya"
@@ -67,7 +68,7 @@ const allPrograms = {
         "vendor" : "",
         "paths": {
             "win" : [
-
+               "~/.gitconfig"
             ],
             "mac" : [
                 "~/.git"
@@ -112,5 +113,44 @@ const allPrograms = {
                 "~/.nuget"
             ]
         }
-    }
+    },
+   "Visual Studio": {
+        vendor: "Microsoft",
+        paths: {
+            win: [
+                "~/.templateEngine",
+                "~/.nuget",
+               "~/Documents/Visual Studio 20XX"
+            ]
+        }
+    },
+    "Star Wars Battlefront II": {
+        vendor: "Electronic Arts",
+        paths: {
+            win: [
+                "~/Documents/STAR WARS Battlefront II",
+            ]
+        }
+    },
+    "SteamVR": {
+        vendor: "Valve",
+        paths: {
+            win: [
+                "~/Documents/steamvr",
+            ],
+           linux: []
+        }
+    },
+   "Quartus": {
+        vendor: "Intel",
+        paths: {
+            win: [
+                "~/Documents/steamvr",
+               "~/quartus2.ini"
+               "~/quartus2.qreg"
+               "/intelFPGA_lite"
+            ],
+           linux: []
+        }
+    },
 }
