@@ -146,9 +146,9 @@ const allPrograms = {
         paths: {
             win: [
                 "~/Documents/steamvr",
-               "~/quartus2.ini"
-               "~/quartus2.qreg"
-               "/intelFPGA_lite"
+               "~/quartus2.ini",
+               "~/quartus2.qreg",
+               "/intelFPGA_lite",
             ],
            linux: []
         }
