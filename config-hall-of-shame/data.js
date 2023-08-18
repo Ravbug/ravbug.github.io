@@ -58,7 +58,8 @@ const allPrograms = {
 
             ],
             "mac" : [
-                "~/.plastic4"
+                "~/.plastic4",
+                "~/.mono"
             ]
         }
     },
@@ -73,6 +74,42 @@ const allPrograms = {
             ],
             "linux" : [
                 "~/.git"
+            ]
+        }
+    },
+    "CMake" : {
+        "vendor" : "",
+        "paths" : {
+            "win" : [],
+            "mac" : [
+                "~/.cmake"
+            ],
+            "linux" : [
+                "~/.cmake"
+            ]
+        }
+
+    },
+    "NodeJS" : {
+        "vendor" : "",
+        "paths" : {
+            "win" : [],
+            "mac" : [
+                "~/.node",
+                "~/.npm"
+            ],
+            "linux" : [
+                "~/.node",
+                "~/.npm"
+            ]
+        }
+    },
+    "Visual Studio (Mac)": {
+        vendor: "Microsoft",
+        paths: {
+            mac: [
+                "~/.templateEngine",
+                "~/.nuget"
             ]
         }
     }
