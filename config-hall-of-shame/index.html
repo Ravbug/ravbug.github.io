@@ -1,0 +1,140 @@
+<head>
+	<title>Config Hall of Shame</title>
+	<meta name="description" content="Stop dumping your data in my home folder">
+    <link id="favicon" rel="icon" href="../img/trashcan.svg" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../gridstyles.css">
+
+	<!-- Social embed image -->
+    <meta property="og:image" content="https://www.ravbug.com/img/trashcan.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+
+     <!-- Highlight.js -->
+     <link rel="stylesheet" href="../highlight/styles/atom-one-light.css" media="(prefers-color-scheme: light)">
+     <link rel="stylesheet" href="../highlight/styles/atom-one-dark.css" media="(prefers-color-scheme: dark)">
+     <script src="../highlight/highlight.pack.js"></script>
+     <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<style>
+    table, td{
+        border: 1px solid gray
+    }
+</style>
+<script src="./data.js"></script>
+<div class=main>
+    <h2>Dear Developers...</h2>
+    <em>Stop dumping your data in my home folder.</em>
+    <p>
+        If you're a developer, here is some code you can use right now to get the proper place to store your data. 
+        It's public domain. You should use it.
+    </p>
+<pre><code class="c">#include &lt;filesystem&gt;
+static std::filesystem::path GetApplicationDataDirectory(){
+#if _WIN32
+    return std::filesystem::path(getenv("HOMEDRIVE")) / getenv("HOMEPATH") / "AppData" / "LocalLow";
+#elif __APPLE__
+    return std::filesystem::path(getenv("HOME")) / "Application Support";
+#elif __linux__
+    return std::filesystem::path(getenv("HOME")) / ".config";
+#else
+#error Unknown platform
+#endif
+}
+</code></pre>
+    <p>
+        I am compiling a list of all apps that dump their trash on my driveway. The scoring system works like this:
+        <table>
+            <tr>
+                <td>Metric</td>
+                <td>Points</td>
+            </tr>
+            <tr>
+                <td>Data in <code>$HOME</code></td>
+                <td>+1</td>
+            </tr>
+            <tr>
+                <td>Data in <code>~/Documents</code></td>
+                <td>+2</td>
+            </tr>
+            <tr>
+                <td>Data at drive root</td>
+                <td>+3</td>
+            </tr>
+            <tr>
+                <td>Starts with <code>.</code> on Windows</td>
+                <td>+5</td>
+            </tr>
+            <tr>
+                <td>Program is not cross-platform</td>
+                <td>+20</td>
+            </tr>
+        </table>
+        Points are tallied against each platform the program commits these sins on.
+    </p>
+    <p id="output"></p>
+
+</div>
+<script>
+    const shameScores = {
+
+    }
+
+
+    function shameAll(){
+        const html = []
+        for(const [name, data] of Object.entries(allPrograms)){
+            let score = 0
+            const htmlForThis = ['<ul>']
+            for(const [platformName, paths] of Object.entries(data["paths"])){
+                htmlForThis.push(`<li>${platformName}<ul>`)
+                for(const path of paths){
+                    // Documents folder?
+                    htmlForThis.push(`<li><ul><code>${path}</code>`)
+                    if (path.includes("~/Documents")){
+                        score += 2;
+                        htmlForThis.push("<li>Documents folder: ✅</li>")
+                    }
+                    // Home folder?
+                    else if (path.includes('~')){
+                        score += 1;
+                        htmlForThis.push("<li>Home folder: ✅</li>")
+                    }
+                    // otherise it's a drive root path
+                    else{
+                        score += 3;
+                        htmlForThis.push("<li>Drive root: ✅</li>")
+                    }
+                    // Windows && starts with '.'?
+                    if (platformName != "win"){
+                        htmlForThis.push('</ul>')
+                        continue;
+                    }
+                    const pathComponents = path.split('/')
+                    for(const comp of pathComponents){
+                        if (comp.startsWith(".")){
+                            score += 5;
+                            htmlForThis.push("<li> <code>.</code> on Windows: ✅</li>")
+                            break;
+                        }
+                    }
+                    htmlForThis.push('</ul>')
+                }
+                htmlForThis.push("</ul></li>")
+            }
+            if (Object.keys(data["paths"]).length == 1){
+                score += 20
+                htmlForThis.push("<li> Not cross platform</li>")
+            }
+            htmlForThis.push("</ul>")
+            html.push(`
+                ${data["vendor"]} ${name} - ${score}
+                ${htmlForThis.join('')}
+            `)
+        }
+        document.getElementById("output").innerHTML = html.join('<hr>')
+    }
+
+    shameAll()
+</script>
+<script src="../header.js"></script>
