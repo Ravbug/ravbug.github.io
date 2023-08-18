@@ -51,23 +51,23 @@ static std::filesystem::path GetApplicationDataDirectory(){
             </tr>
             <tr>
                 <td>Data in <code>$HOME</code></td>
-                <td>+1</td>
+                <td id="homePoints"></td>
             </tr>
             <tr>
                 <td>Data in <code>~/Documents</code></td>
-                <td>+2</td>
+                <td id="documentsPoints"></td>
             </tr>
             <tr>
                 <td>Data at drive root</td>
-                <td>+3</td>
+                <td id="driveRootPoints"></td>
             </tr>
             <tr>
                 <td>Starts with <code>.</code> on Windows</td>
-                <td>+5</td>
+                <td id="dotOnWindowsPoints"></td>
             </tr>
             <tr>
                 <td>Program is not cross-platform</td>
-                <td>+20</td>
+                <td id="monoPlatformPoints"></td>
             </tr>
         </table>
         Points are tallied against each platform the program commits these sins on.
@@ -76,10 +76,18 @@ static std::filesystem::path GetApplicationDataDirectory(){
 
 </div>
 <script>
-    const shameScores = {
-
+    const points = {
+        "home" : 1,
+        "documents" : 2,
+        "driveRoot" : 3,
+        "dotOnWindows" : 5,
+        "monoPlatform" : 20
     }
-
+    function writeTable(){
+        for(const [name, value] of Object.entries(points)){
+            document.getElementById(`${name}Points`).innerHTML = `+${value}`
+        }
+    }
 
     function shameAll(){
         const html = []
@@ -92,18 +100,18 @@ static std::filesystem::path GetApplicationDataDirectory(){
                     // Documents folder?
                     htmlForThis.push(`<li><ul><code>${path}</code>`)
                     if (path.includes("~/Documents")){
-                        score += 2;
-                        htmlForThis.push("<li>Documents folder: ✅</li>")
+                        score += points["documents"];
+                        htmlForThis.push(`<li>Documents folder: <strong>+${points["documents"]}</strong> </li>`)
                     }
                     // Home folder?
                     else if (path.includes('~')){
-                        score += 1;
-                        htmlForThis.push("<li>Home folder: ✅</li>")
+                        score += points["home"];
+                        htmlForThis.push(`<li>Home folder: <strong>+${points["home"]}</strong></li>`)
                     }
                     // otherise it's a drive root path
                     else{
-                        score += 3;
-                        htmlForThis.push("<li>Drive root: ✅</li>")
+                        score += points["driveRoot"];
+                        htmlForThis.push(`<li>Drive root: <strong>+${points["driveRoot"]}</strong></li>`)
                     }
                     // Windows && starts with '.'?
                     if (platformName != "win"){
@@ -113,8 +121,8 @@ static std::filesystem::path GetApplicationDataDirectory(){
                     const pathComponents = path.split('/')
                     for(const comp of pathComponents){
                         if (comp.startsWith(".")){
-                            score += 5;
-                            htmlForThis.push("<li> <code>.</code> on Windows: ✅</li>")
+                            score += points["dotOnWindows"];
+                            htmlForThis.push(`<li> <code>.</code> on Windows: <strong>+${points["dotOnWindows"]}</strong></li>`)
                             break;
                         }
                     }
@@ -123,8 +131,8 @@ static std::filesystem::path GetApplicationDataDirectory(){
                 htmlForThis.push("</ul></li>")
             }
             if (Object.keys(data["paths"]).length == 1){
-                score += 20
-                htmlForThis.push("<li> Not cross platform</li>")
+                score += points["monoPlatform"]
+                htmlForThis.push(`<li> Not cross platform: <strong>+${points["monoPlatform"]}</strong></li>`)
             }
             htmlForThis.push("</ul>")
             html.push(`
@@ -135,6 +143,7 @@ static std::filesystem::path GetApplicationDataDirectory(){
         document.getElementById("output").innerHTML = html.join('<hr>')
     }
 
+    writeTable()
     shameAll()
 </script>
 <script src="../header.js"></script>
