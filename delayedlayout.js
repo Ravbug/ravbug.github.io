@@ -5,13 +5,13 @@
         <displayAd class="tallThinAd"></displayAd>
         <displayAd class="tallThinAd"></displayAd>
     </paddingGridElt>
-    <div>
-        <displayAd class="longWideAd"></displayAd>
+    <div class="paddingGridVertical">
 
         <div id="content_parent">
 
         </div>
         
+        <displayAd class="longWideAd"></displayAd>
         <displayAd class="longWideAd"></displayAd>
     </div>
     <paddingGridElt>

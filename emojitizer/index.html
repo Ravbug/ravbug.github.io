@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -19,18 +20,20 @@
 <body id=main>
     <div id="content_main">
       <!-- The actual content -->
-      <div style="height: 500px;float: center; width: 100%;">
+      <div style="float: center; width: 100%;">
+
+        
         <!-- Inset Content Div -->
         <div style="margin: auto; float: center; width: 95%;">
           <article>
-            <div>
+            <div style="width:100%">
               <span id=header1 style="font-size:20;font-weight:bold">English</span>
               <textarea autofocus id="input" onkeyup="generate(true)" class="form-control"
-                style="width:100%;height:60%;resize:none" placeholder="Type or paste text here..."></textarea>
+                 placeholder="Type or paste text here..."></textarea>
             </div>
             <div>
               <span id=header2 style="font-size:20;font-weight:bold">Emoji</span>
-              <textarea id="output" readonly class="form-control" style="width:100%;height:60%;resize:none"></textarea>
+              <textarea id="output" readonly class="form-control"></textarea>
             </div>
           </article>
     
@@ -111,8 +114,6 @@
 
   setupFromQString();
 
-  resize();
-
   //setup vars from qstring
 
   function update() {
@@ -163,18 +164,6 @@
         outputField.scrollTop = outputField.scrollHeight;
         outputField.style.backgroundColor = "eeeeee";
       }, 1000);
-    }
-  }
-
-  function resize() {
-    inputField.style.height = (window.innerHeight - 220) / 3;
-    outputField.style.height = (window.innerHeight - 220) / 3;
-    var width = document.getElementById("main").scrollWidth;
-    var colcount = width / 324;
-    colcount = parseInt(colcount);
-    if (colcount == 1) {
-      inputField.style.height = (window.innerHeight) / 6;
-      outputField.style.height = (window.innerHeight) / 6;
     }
   }
 
@@ -241,8 +230,6 @@
       outputField.style.backgroundColor = "eeeeee";
     }, 700);
   }
-  //get a window listener for responsive sizing of input/output fields
-  window.addEventListener('resize', resize);
 </script>
 <script src="../sweetalert.min.js"></script>
 <script src="../header.js"></script>

@@ -72,9 +72,10 @@ figcaption{
 .longWideAd{
     width: 100%;
     max-width: 800px;
-    height: 150px;
+    height: 100%;
     display: none;
     margin:auto;
+    margin-bottom: 20px;
 }
 
 .tallThinAd{
@@ -86,6 +87,7 @@ figcaption{
 .paddingGrid{
     display:grid;
     grid-template-columns: 250px 1fr 250px;
+    gap: 50px;
 }
 
 paddingGridElt{
@@ -101,6 +103,12 @@ paddingGridElt{
     }
     .longWideAd{
         display:block
+    }
+
+    .paddingGridVertical{
+        display: grid;
+        grid-template-rows: 1fr 150px 150px;
+        gap: 20px;
     }
 }
 

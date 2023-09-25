@@ -284,12 +284,12 @@ data = {
                     ref:"redditmedia/",
                     img:"redditmedia/reddit.svg"
                 },
-                {
+                /*{
                     title: "YouTube Direct Video downloader",
                     tag: "Access the direct high-quality media URLs of YouTube videos",
                     ref: "yt-direct/",
                     img: "yt-direct/icon.svg"
-                },
+                },*/
                 {
                     title:"Editable BSODs",
                     tag:"An editable Windows blue screen of death, using content-editable divs",
