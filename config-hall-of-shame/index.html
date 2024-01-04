@@ -20,6 +20,9 @@
     table, td{
         border: 1px solid gray
     }
+    article{
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    }
 </style>
 <script src="./data.js"></script>
 <div class=main>
@@ -72,7 +75,7 @@ static std::filesystem::path GetApplicationDataDirectory(){
         </table>
         Points are tallied against each platform the program commits these sins on.
     </p>
-    <p id="output"></p>
+    <article class="" id="output"></article>
 
 </div>
 <script>
@@ -140,9 +143,10 @@ static std::filesystem::path GetApplicationDataDirectory(){
             htmlForThis.push("</ul>")
             html[name] = {
                 score: score,
-                body: `
+                body: `<div class="card">
                 ${data["vendor"]} ${name} - <strong><u>${score}</u></strong>
                 ${htmlForThis.join('')}
+                </div>
             `
             }
         }
