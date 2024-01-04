@@ -105,6 +105,17 @@ const allPrograms = {
             ]
         }
     },
+    "µProf" : {
+        "vendor" : "AMD",
+        "paths" : {
+            "win" : [
+               "~/.AMDuProf"
+            ],
+            "linux" : [
+                "~/.AMDuProf",
+            ]
+        }
+    },
     "Visual Studio (Mac)": {
         vendor: "Microsoft",
         paths: {
