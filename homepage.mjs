@@ -117,6 +117,12 @@ data = {
                     ref:"unityhubnative/",
                     img:"img/unityhubnative.png"
                 },
+                     {
+                    title:"BatchCompress",
+                    tag:"A cross-platform bulk image compression utilty, inspired by ImageOptim",
+                    ref:"BatchCompress/",
+                    img:"BatchCompress/favicon.png"
+                },
                 {
                     title:"Minecraft Sounds Extractor",
                     img:"img/mcextractor.png",
