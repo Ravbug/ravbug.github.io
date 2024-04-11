@@ -25,39 +25,11 @@
     tr:nth-child(even) {background-color: rgba(128,128,128,0.2)}
     tr:hover {background-color: rgba(16,16,16,0.3)}
 
-    mark{
-        background-color: rgba(0,0,255,0.8);
-        border-radius:2px;
-    }
     table{
         margin:auto;
     }
-
-    /* Tooltip container */
-    .tooltip {
-        position: relative;
-        display: inline-block;
-        border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-    }
-    /* Tooltip text */
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color: gray;
-        color: #fff;
-        text-align: center;
-        padding: 5px 0;
-        border-radius: 6px;
-        padding: 5px;
-    
-        /* Position the tooltip text - see examples below! */
-        position: absolute;
-        z-index: 1;
-    }
-
-    /* Show the tooltip text when you mouse over the tooltip container */
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
+    sup{
+        font-size: 10px
     }
 </style>
 
@@ -83,14 +55,14 @@
             </tr>
             <tr>
                 <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL>OpenGL 4.5+</a></th>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Drivers for newer hardware may not be available</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Not supported on ARM</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Not supported on ARM</span></mark></td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Deprecated, max supported = 4.1, is present on Apple Silicon</span></mark></td>
+                <td>🔶<sup>1</sup></td>
+                <td>🔶<sup>2</sup></td>
+                <td>🔶<sup>2</sup></td>
+                <td>❌<sup>17</sup></td>
                 <td>❌</td>
                 <td>❌</td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Support in 3rd party drivers not guaranteed</span></mark></td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Pi4+ only. Max version = 3.1. Disabled by default.</span></mark></td>
+                <td>🔶<sup>5</sup></td>
+                <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -99,14 +71,14 @@
             </tr>
             <tr>
                 <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL_ES>OpenGL ES 3.2+</a></th>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Drivers for newer hardware may not be available</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Not supported on ARM</span></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Not supported on ARM</span></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Deprecated outside of WebGL</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Deprecated outside of WebGL<br><br>WebGL implementation does not support all features</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Missing features, buggy drivers</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Support in 3rd party drivers not guaranteed</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Max version = 3.1. Disabled by default.</span></mark></td>
+                <td>🔶<sup>1</sup></td>
+                <td>🔶<sup>2</sup></td>
+                <td>🔶<sup>2</sup></td>
+                <td>🔶<sup>4</sup></td>
+                <td>🔶<sup>4</sup></td>
+                <td>🔶<sup>15</sup></td>
+                <td>🔶<sup>5</sup></td>
+                <td>🔶<sup>16</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -118,10 +90,10 @@
                 <td>✅</td>
                 <td>✅</td>
                 <td>✅</td>
+                <td>❌<sup>10</sup></td>
+                <td>❌<sup>10</sup></td>
                 <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Experimental support via dxvk</span></mark></td>
+                <td>❌<sup>18</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -134,10 +106,10 @@
                 <td>❌</td>
                 <td>✅</td>
                 <td>✅</td>
+                <td>❌<sup>10</sup></td>
+                <td>❌<sup>10</sup></td>
                 <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Experimental support via vkd3d</span></mark></td>
+                <td>❌<sup>3</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -148,12 +120,12 @@
             <tr>
                 <th scope='row'><a href=https://en.wikipedia.org/wiki/DirectX_Raytracing>Direct3D 12 RT</a></th>
                 <td>❌</td>
-                <td><mark class="tooltip">✅<span class="tooltiptext">Requires ray-tracing hardware</span></mark></td>
-                <td><mark class="tooltip">✅<span class="tooltiptext">Requires ray-tracing hardware</span></mark></td>
+                <td>✅<sup>7</sup></td>
+                <td>✅<sup>7</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Experimental support via vkd3d</span></mark></td>
+                <td>❌<sup>3</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -164,12 +136,12 @@
             <tr>
                 <th scope='row'><a href=https://en.wikipedia.org/wiki/Metal_(API)>Metal</a></th>
                 <td>❌</td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Shader compiler is available</span></mark></td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Shader compiler is available</span></mark></td>
+                <td>❌<sup>6</sup></td>
+                <td>❌<sup>6</sup></td>
                 <td>✅</td>
                 <td>✅</td>
                 <td>❌</td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Basic support provided by darlinghq/darling</span></mark></td>
+                <td>❌<sup>11</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -179,14 +151,14 @@
             </tr>
             <tr>
                 <th scope='row'><a href=https://en.wikipedia.org/wiki/Vulkan_(API)>Vulkan</a></th>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Dependent on driver support</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">No support in UWP or ARM</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">No support in UWP or ARM</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Only via MoltenVK</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Only via MoltenVK</span></mark></td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Subset of newer devices only. No support for 1.2 or higher.</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Support in 3rd party drivers not guaranteed</span></mark></td>
-                <td><mark class="tooltip">❌<span class="tooltiptext">Experimental, missing some critical features.</span></mark></td>
+                <td>🔶</td>
+                <td>🔶<sup>8</sup></td>
+                <td>🔶<sup>8</sup></td>
+                <td>🔶<sup>9</sup></td>
+                <td>🔶<sup>9</sup></td>
+                <td>🔶<sup>12</sup></td>
+                <td>🔶<sup>5</sup></td>
+                <td>🔶<sup>13</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -198,15 +170,15 @@
                 <td>✅</td>
                 <td>✅</td>
                 <td>✅</td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">CPU device unavailable on Apple Silicon</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">CPU device unavailable</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Dependent on OEM</span></mark></td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Support in 3rd party drivers not guaranteed</span></mark></td>
+                <td>🔶<sup>14</sup></td>
+                <td>🔶<sup>14</sup></td>
+                <td>🔶</td>
+                <td>🔶<sup>5</sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
-                <td><mark class="tooltip">🔶<span class="tooltiptext">Latest version = 1.2</span></mark></td>
+                <td>✅<sup>19</sup></td>
                 <td>❌</td>
             </tr>
             <tr>
@@ -231,7 +203,31 @@
         <p>✅ API is reliably supported, OK to use</p>
         <p>🔶 API is supported but expect issues</p>
         <p>❌ API is not reliably supported, or not supported at all, avoid using</p>
-        <p><mark class="tooltip">🔶<span class="tooltiptext">more information</span></mark> Hover for more information</p> 
+       
+        <details>
+            <summary>Special Cases</summary>
+            <ol>
+                <li>Drivers for newer hardware may not be available</li>
+                <li>Not supported on ARM</li>
+                <li>Experimental support via vkd3d</li>
+                <li>Deprecated outside of WebGL. WebGL Implementation does not support all features.</li>
+                <li>Support in 3rd party drivers not guaranteed</li>
+                <li>Shader compiler is available</li>
+                <li>Requires ray-tracing hardware</li>
+                <li>No support in UWP or ARM</li>
+                <li>No first-party support. A subset is provided by MoltenVk.</li>
+                <li>Experimental first-party support provided to porters via D3DMetal. Cannot be used in shipping products.</li>
+                <li>Basic support provided by darlinghq/darling</li>
+                <li>Subset of newer devices only. 1.3 requires Android 13.</li>
+                <li>No support (yet) for 1.3 or higher.</li>
+                <li>CPU device unavailable on Apple Silicon</li>
+                <li>Missing features, buggy drivers. Prefer Vulkan if possible.</li>
+                <li>Max version = 3.1. Disabled by default.</li>
+                <li>Deprecated, max version = 4.1. Present on Apple Silicon.</li>
+                <li>Experimental support via dxvk</li>
+                <li>Latest version = 1.2</li>
+            </ol>
+        </details>
         <p>
             Is something missing or not quite right? Let me know by <a href="https://github.com/Ravbug/ravbug.github.io/issues/new?title=Error%20in%20table%20on%20Graphics" target=_blank>opening an issue.</a>
         </p>
