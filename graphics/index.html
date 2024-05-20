@@ -203,9 +203,8 @@
         <p>✅ API is reliably supported, OK to use</p>
         <p>🔶 API is supported but expect issues</p>
         <p>❌ API is not reliably supported, or not supported at all, avoid using</p>
-       
-        <details>
-            <summary>Special Cases</summary>
+       <hr>
+      <h2>Notes</h2>
             <ol>
                 <li>Drivers for newer hardware may not be available</li>
                 <li>Not supported on ARM</li>
@@ -213,7 +212,7 @@
                 <li>Deprecated outside of WebGL. WebGL Implementation does not support all features.</li>
                 <li>Support in 3rd party drivers not guaranteed</li>
                 <li>Shader compiler is available</li>
-                <li>Requires ray-tracing hardware</li>
+                <li>Production use requires compatible graphics hardware. Use <a href="https://learn.microsoft.com/en-us/windows/win32/direct3darticles/directx-warp">WARP</a> for debugging without hardware support. </li>
                 <li>No support in UWP or ARM</li>
                 <li>No first-party support. A subset is provided by MoltenVk.</li>
                 <li>Experimental first-party support provided to porters via D3DMetal on Apple Silicon only. Cannot be used in shipping products.</li>
@@ -227,7 +226,6 @@
              	<li>Experimental support via <a href="https://github.com/doitsujin/dxvk">dxvk</a></li>
                 <li>Latest version = 1.2</li>
             </ol>
-        </details>
         <p>
             Is something missing or not quite right? Let me know by <a href="https://github.com/Ravbug/ravbug.github.io/issues/new?title=Error%20in%20table%20on%20Graphics" target=_blank>opening an issue.</a>
         </p>
