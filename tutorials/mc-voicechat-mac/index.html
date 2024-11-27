@@ -11,7 +11,12 @@
     <meta property="og:image:width" content="128">
     <meta property="og:image:height" content="128">
 </head>
+<style>
+    .responsiveimg{
+        max-width:300px !important
+    }
 
+</style>
 <div class="main">
     <p>
     The <a href="https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat">Simple Voice Chat</a> mod likely will not work out of the box on macOS due to microphone permissions issues. Fortunately, there is a simple workaround
@@ -35,6 +40,27 @@
         </li>
     </ol>
     If everything worked, then other players should be able to hear your voice. You'll need to run Minecraft via the workaround .command each time you want to play using the Simple Voice Chat mod.
+
+    <h3> Troubleshooting</h3>
+    <p>
+        <img src="noperm.png" class="responsiveimg">
+    </p>
+    To resolve this issue, do the following:
+    <ol>
+        <li>
+            Open Spotlight and type <code>terminal</code> to open Terminal.
+        </li>
+        <li>
+            In Terminal, type <code>chmod +x </code> (with a trailing space)
+        </li>
+        <li>
+            Drag the .command file into the terminal window 
+        </li>
+        <li>
+            Hit enter to run the command
+        </li>
+    </ol>
+    After this, double-clicking the .command should successfully run it.
 </div>
 
 </html>
