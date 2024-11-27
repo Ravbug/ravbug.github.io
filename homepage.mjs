@@ -433,6 +433,12 @@ data = {
                     ref:"tutorials/mc-voicechat-playit/"
                 },
                 {
+                    title:"Minecraft Simple Voice Chat Mod on a Mac",
+                    img:"tutorials/mc-voicechat-mac/svc.png",
+                    tag:"Fix microphone permissions issues with the Simple Voice Chat Mod on macOS",
+                    ref:"tutorials/mc-voicechat-mac/"
+                },
+                {
                     title:"How To Extract Minecraft Textures",
                     img:"img/mcpainting.png",
                     tag:"Get the texture files from any minecraft version",
