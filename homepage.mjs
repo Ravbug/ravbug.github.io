@@ -433,7 +433,7 @@ data = {
                     ref:"tutorials/mc-voicechat-playit/"
                 },
                 {
-                    title:"Minecraft Simple Voice Chat Mod on a Mac",
+                    title:"Fix the Simple Voice Chat Mod on a Mac",
                     img:"tutorials/mc-voicechat-mac/svc.png",
                     tag:"Fix microphone permissions issues with the Simple Voice Chat Mod on macOS",
                     ref:"tutorials/mc-voicechat-mac/"
