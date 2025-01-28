@@ -1,5 +1,5 @@
 const patch_start_version = 16;
-const currentVersion = 20;
+const currentVersion = 21;
 const numVariants = [5,4,3,2]
 const variantVersions = [14,16,17,18]
 
@@ -105,7 +105,10 @@ async function generatePack(sender){
         const editionIndex = i - patch_start_version;
         let gameEdition = editionIndex < gameVersionEditions.length ? gameVersionEditions[editionIndex] : 1;
         const game_data = await (await fetch(`generator/${i}_game_${level}_${gameEdition}.json`)).json()
-        const realms_data = await (await fetch(`generator/${i}_realms_${level}.json`)).json()
+        let realms_data = {} 
+        if (i < 21){
+          realms_data = await (await fetch(`generator/${i}_realms_${level}.json`)).json()
+        }
         full_game_data = {...full_game_data, ...game_data};
         full_realms_data = {...full_realms_data, ...realms_data};
         if (i >= 19){
@@ -124,7 +127,7 @@ async function generatePack(sender){
 
     zip.file("pack.mcmeta",`{
         "pack": {
-           "pack_format": 15,
+           "pack_format": 46,
            "description": "By Ravbug (www.ravbug.com)"
         },
         "language": {
