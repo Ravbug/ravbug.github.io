@@ -31,6 +31,7 @@
    In this minigame, two teams live on small floating islands separated by a vast void which can only be crossed with creativity. They must use their Minecraft skills to destroy the other team's villagers and claim victory.
    <h3>Downloads!</h3>
    <p>
+        <a href="https://bit.ly/4dOL4zh"><strong>Battle Islands Datapack for Minecraft 1.21.4 (BETA)</strong></a><br>
         <a href="https://bit.ly/3ORL32u"><strong>Battle Islands Map for Minecraft 1.19 v2</strong></a><br>
         <details>
             <summary>Older downloads </summary>
@@ -69,7 +70,41 @@
         <img src="instructions/flying0051.png">
         <img src="instructions/flying0061.png">
     </details>
-
+    <details>
+        <summary>Troubleshooting</summary>
+        <ul>
+            <li>
+                Problem: Lobby does not load / players spawned outside the lobby
+                <br>
+                Solution: <code>/function tntwars:lobby</code>
+            </li>
+            <li>
+                Problem: Players cannot edit settings via clicking the signs 
+                <br>
+                Solution: edit <code>server.properties</code>, set <code>spawn-protection=0</code>
+            </li>
+            <li>
+                Problem: game doesn't start
+                <br>
+                Solution: <code>/reload</code>
+            </li>
+            <li>
+                Problem: round doesn't end 
+                <br>
+                Solution: <code>/kill @e[type=villager]</code>, and if that doesn't work, <code>/function tntwars:gameover</code>
+            </li>
+            <li>
+                Problem: late-joiner spawns in the wrong location 
+                <br>
+                Solution: <code>/execute as PLAYERNAME run function tntwars:join_blue</code> / <code>/execute as PLAYERNAME run function tntwars:join_red</code>, then <code>/kill PLAYERNAME</code>
+            </li>
+            <li>
+                Problem: none of the above steps worked 
+                <br>
+                Solution: <code>/stop</code>, delete all folders inside <code>world</code> except <code>datapacks</code>, and restart the server
+            </li>
+        </ul>
+    </details>
 </div>
 
 <script src="../header.js"></script>
