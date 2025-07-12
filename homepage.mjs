@@ -142,18 +142,6 @@ data = {
                     ref:"https://cleverbug-bot.herokuapp.com"
                 },*/
                 {
-                    title:"AutoResponder",
-                    img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
-                    tag:"A customizable, regex-powered responder bot for your Discord server",
-                    ref:"https://autoresponder-bot.herokuapp.com",
-                },
-                {
-                    title:"QReaper",
-                    tag:"A Discord bot which deletes QR Codes it sees (Self-host only)",
-                    ref:"https://github.com/ravbug/qreaper",
-                    img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
-                },
-                {
                     title:"Maya Scripts",
                     img:"img/maya.png",
                     tag:"MEL and Python tools for Autodesk Maya",
@@ -195,12 +183,6 @@ data = {
                     img:"calculator/icon.svg"
                 },
                 {
-                    title:"PoetryBot Web",
-                    tag:"Writes original poems using the text on webpages",
-                    ref:"poetry/",
-                    img:"poetry/icon.png"
-                },
-                {
                     title: "Graphics API support chart",
                     tag: "A table of reliably supported graphics APIs, by platform",
                     ref:"graphics",
@@ -218,12 +200,6 @@ data = {
                     tag:"Quickly get a list of the best professors for your classes",
                     ref:"rate-my-professors-scraper/",
                 },*/
-                {
-                    title:"Legacy Web Cleverbug",
-                    img:"cleverbug-alpha/cleverbot.png",
-                    tag:"The webpage-based ancestor to the Cleverbug Discord bot. Source available!",
-                    ref:"cleverbug-alpha/"
-                },
                 /*{
                     title:"Instabook",
                     img:"instabook/encyclopedia.svg",
@@ -235,12 +211,6 @@ data = {
                     img:"img/dictionary.svg",
                     tag:"What if English spelling was phonetic?",
                     ref:"tfa/"
-                },
-                {
-                    title:"YouTube Audio Player",
-                    img: "yt-audio/yt.svg",
-                    tag: "An audio-only player for YouTube videos and playlists. Does not (intentionally) reduce data usage.",
-                    ref:"yt-audio/"
                 },
                 {
                     title:"Article Summarizer",
@@ -523,5 +493,42 @@ data = {
                 }
             ]
         },
+        "discontinued": {
+            title: "Discontinued",
+            description: "<i>These pages are left in their current state but are no longer supported. At present, some may be nonfunctional.</i>",
+            no_toolbar: true,
+            content: [
+                {
+                    title:"YouTube Audio Player",
+                    img: "yt-audio/yt.svg",
+                    tag: "An audio-only player for YouTube videos and playlists. Does not (intentionally) reduce data usage.",
+                    ref:"yt-audio/"
+                },
+                  {
+                    title:"Legacy Web Cleverbug",
+                    img:"cleverbug-alpha/cleverbot.png",
+                    tag:"The webpage-based ancestor to the Cleverbug Discord bot. Source available!",
+                    ref:"cleverbug-alpha/"
+                },
+                 {
+                    title:"AutoResponder",
+                    img:"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
+                    tag:"A customizable, regex-powered responder bot for your Discord server",
+                    ref:"https://autoresponder-bot.herokuapp.com",
+                },
+                {
+                    title:"QReaper",
+                    tag:"A Discord bot which deletes QR Codes it sees (Self-host only)",
+                    ref:"https://github.com/ravbug/qreaper",
+                    img:"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
+                },
+                {
+                    title:"PoetryBot Web",
+                    tag:"Writes original poems using the text on webpages",
+                    ref:"poetry/",
+                    img:"poetry/icon.png"
+                },
+            ]
+        }
     }
 document.currentScript.remove()

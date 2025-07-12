@@ -51,16 +51,18 @@
     for (let section of Object.values(data)){
         let components = [];
         let jump = section.title.toLowerCase().replace(/ /g,'_');
+        if (! section.no_toolbar) {
         headers.push(`
             <a href="#${jump}">${section.title}</a>
         `)
+        }
         for (let card of section.content){
             //construct card and add to array
             components.push(makecard(card));
         }
         //add html to master array
         content.push(`
-            <h2 id="${jump}">${section.title} <a href="#${jump}">🔗</a></h2>
+            <h2 id="${jump}">${section.title} <a href="#${jump}">🔗</a></h2> ${section.description ? section.description : ""}
             <article id='article'>${components.join('')}</article>
         `);
     }
