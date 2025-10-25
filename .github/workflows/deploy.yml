@@ -12,7 +12,9 @@ jobs:
           submodules: true
       - name: Run Templates
         run : |
-          ./localbuild.sh
+          rsync -av ./ ./_site --exclude=.git
+          cd ./_site
+          python3 build.py
 
       - name: Upload 
         uses: actions/upload-pages-artifact@v3
