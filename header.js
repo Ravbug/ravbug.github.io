@@ -14,14 +14,6 @@
         //get the page title and content as described in the head
         const page_title = head.getElementsByTagName('title')[0].innerText;
         const page_desc = head.getElementsByTagName('meta')[0].content;
-
-        //head boilerplate content
-        head.innerHTML += `
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta charset="UTF-8">
-            <link rel="stylesheet" type="text/css" href="${stylesheetroot}bootstrap-custom.css">
-            <link rel="stylesheet" type="text/css" href="${stylesheetroot}stylesheet.css">`;
-
         
         const menus = [`<a class="headerlink btn btn-primary" href="/">Home</a>`];
         for (const card of Object.values(data)){
