@@ -12,7 +12,7 @@ jobs:
           submodules: true
       - name: Run Templates
         run : |
-          ./deploylocal.sh
+          ./localbuild.sh
 
       - name: Upload 
         uses: actions/upload-pages-artifact@v3
