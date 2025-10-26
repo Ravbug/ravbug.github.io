@@ -17,17 +17,4 @@
         {TUTORIAL_CONTENT}
     </article>
 </div>
-<script src="../homepage.mjs"></script>
-<script src="../makecard.js"></script>
-<script>
-	{
-        const html = []
-        for(const card of data["tutorials"]["content"]){
-            html.push(makecard(card,".."))
-        }
-        document.getElementById("article").innerHTML = html.join('')
-	}
-    delete data
-	document.currentScript.remove();
-</script>
 <script src="../statistics.js" url="https://bit.ly/3OvcDQn"></script>  
