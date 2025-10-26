@@ -33,46 +33,15 @@
     </table>
 </div>
 <div class="main">
-    <div id="jumpto" class="breadcrumb">Jump To:</div>
-    <div id="main"></div>
+    <div id="jumpto" class="breadcrumb">Jump To: {HOMEPAGE_TOOLBAR}</div>
+    <div id="main">
+        {HOMEPAGE_CONTENT}
+    </div>
     <br>
     <div class="breadcrumb">
        <a href="attributions/">Image attributions</a>
     </div>
 </div>
 </html>
-
-<script src="homepage.mjs"></script>
-<script src="makecard.js"></script>
-<script>
-{
-    let content = [];
-    let headers = [];
-    for (let section of Object.values(data)){
-        let components = [];
-        let jump = section.title.toLowerCase().replace(/ /g,'_');
-        if (! section.no_toolbar) {
-        headers.push(`
-            <a href="#${jump}">${section.title}</a>
-        `)
-        }
-        for (let card of section.content){
-            //construct card and add to array
-            components.push(makecard(card));
-        }
-        //add html to master array
-        content.push(`
-            <h2 id="${jump}">${section.title} <a href="#${jump}">🔗</a></h2> ${section.description ? section.description : ""}
-            <article id='article'>${components.join('')}</article>
-        `);
-    }
-    //insert into document
-    document.getElementById("main").innerHTML = content.join('<br>');
-    document.getElementById("jumpto").innerHTML += headers.join('|');
-    delete data;
-}
-//remove script tag
-document.currentScript.remove();
-</script>
 
 <script src="statistics.js" url="https://bit.ly/3aqXcpE"></script>
