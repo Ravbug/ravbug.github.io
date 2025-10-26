@@ -207,7 +207,7 @@ data = {
                     ref:"instabook/",
                 },*/
                 {
-                    title:"Twain's Funetik Alphabet",
+                    title:"English Funetik Alphabet",
                     img:"img/dictionary.svg",
                     tag:"What if English spelling was phonetic?",
                     ref:"tfa/"
