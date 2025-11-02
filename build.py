@@ -3,6 +3,9 @@
 import os
 from html.parser import HTMLParser
 
+# used for og:image embeds which require absolute URLs
+site_root = "https://www.ravbug.com"
+
 class HeaderHTMLParser(HTMLParser):
     _isInTitle = False
     title = ""
@@ -81,6 +84,7 @@ for subdir, dirs, files in os.walk(directory):
 
             # perform text replacements
             file_content = file_content.replace("{HEADER_CONTENT}", local_header)
+            file_content = file_content.replace("{SITE_ROOT}", site_root)
 
             if "{JUMBOTRON}" in file_content:
                 parser = HeaderHTMLParser()
