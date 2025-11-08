@@ -32,149 +32,186 @@
     sup{
         font-size: 10px
     }
+
+    .f1::before{
+        content: "[1] "
+    }
+    .f2::before{
+        content: "[2] "
+    }
+    .f3::before{
+        content: "[3] "
+    }
+    .f4::before{
+        content: "[4] "
+    }
+    .f5::before{
+        content: "[5] "
+    }
+    .f6::before{
+        content: "[6] "
+    }
+    .f7::before{
+        content: "[7] "
+    }
+    .f8::before{
+        content: "[8] "
+    }
+    .f9::before{
+        content: "[9] "
+    }
+    .f10::before{
+        content: "[10] "
+    }
+    .f11::before{
+        content: "[11] "
+    }
+    .nobullet {
+        list-style-type:none;
+    }
 </style>
 
 <div class="main">
     <div style="width:100%; overflow-x:scroll">
         <table>
-            <caption><h2>Reliably Supported Graphics APIs</h2></caption>
-            <tr>
-                <td></td>
-                <th>Windows 7</th>
-                <th>Windows 10</th>
-                <th>Windows 11</th>
-                <th>macOS</th>
-                <th>iOS</th>
-                <th>Android</th>
-                <th>Linux</th>
-                <th>Raspberry Pi</th>
-                <th>PS4 & 5 Family</th>
-                <th>Xbox One Family</th>
-                <th>Xbox Series Family</th>
-                <th>Switch 1 & 2</th>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL>OpenGL 4.5+</a></th>
-                <td>🔶<sup>1</sup></td>
-                <td>🔶<sup>2</sup></td>
-                <td>🔶<sup>2</sup></td>
-                <td>❌<sup>17</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>🔶<sup>5</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>✅</td>
-                <td>✅</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL_ES>OpenGL ES 3.2+</a></th>
-                <td>🔶<sup>1</sup></td>
-                <td>🔶<sup>2</sup></td>
-                <td>🔶<sup>2</sup></td>
-                <td>🔶<sup>4</sup></td>
-                <td>🔶<sup>4</sup></td>
-                <td>🔶<sup>15</sup></td>
-                <td>🔶<sup>5</sup></td>
-                <td>🔶<sup>16</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>✅</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/Direct3D#Direct3D_11>Direct3D 11</th>
-                <td>✅</td>
-                <td>✅</td>
-                <td>✅</td>
-                <td>❌<sup>10</sup></td>
-                <td>❌<sup>10</sup></td>
-              	<td>❌<sup>18</sup></td>
-                <td>❌<sup>18</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>✅</td>
+          <caption><h2>Reliably Supported Graphics APIs</h2></caption>
+          <tr>
+            <th></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL>OpenGL 4.5+</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenGL_ES>OpenGL ES 3.2+</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/Direct3D#Direct3D_11>Direct3D 11</th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/Direct3D#Direct3D_12>Direct3D 12</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/DirectX_Raytracing>Direct3D 12 RT</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/Metal_(API)>Metal</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/Vulkan_(API)>Vulkan</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenCL>OpenCL</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/PlayStation_4_system_software#System>Gnm, Gnmx</a></th>
+            <th scope='row'><a href=https://en.wikipedia.org/wiki/Nintendo_Switch_system_software#Technology>NVN</a></th>
+          </tr>
+          <tr>
+            <td>
+                Windows 7
+            </td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
                 <td>✅</td>
                 <td>❌</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/Direct3D#Direct3D_12>Direct3D 12</a></th>
-              <td>❌<sup>3</sup></td>
-                <td>✅</td>
-                <td>✅</td>
-                <td>❌<sup>10</sup></td>
-                <td>❌<sup>10</sup></td>
-                <td>❌</td>
-                <td>❌<sup>3</sup></td>
                 <td>❌</td>
                 <td>❌</td>
-                <td>✅</td>
-                <td>✅</td>
-                <td>❌</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/DirectX_Raytracing>Direct3D 12 RT</a></th>
-                <td>❌<sup>3</sup></td>
-                <td>✅<sup>7</sup></td>
-                <td>✅<sup>7</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌<sup>3</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>✅</td>
-                <td>❌</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/Metal_(API)>Metal</a></th>
-                <td>❌</td>
-                <td>❌<sup>6</sup></td>
-                <td>❌<sup>6</sup></td>
-                <td>✅</td>
-                <td>✅</td>
-                <td>❌</td>
-                <td>❌<sup>11</sup></td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-                <td>❌</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/Vulkan_(API)>Vulkan</a></th>
                 <td>🔶</td>
-                <td>🔶<sup>8</sup></td>
-                <td>🔶<sup>8</sup></td>
-                <td>🔶<sup>9</sup></td>
-                <td>🔶<sup>9</sup></td>
-                <td>🔶<sup>12</sup></td>
-                <td>🔶<sup>5</sup></td>
-                <td>🔶<sup>13</sup></td>
+                <td>✅</td>
                 <td>❌</td>
                 <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Windows 10
+            </td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>✅</td>
                 <td>❌</td>
                 <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
             </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/OpenCL>OpenCL</a></th>
+           <tr>
+            <td>
+                Windows 11
+            </td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
+                <td>🔶<sup class="f1"></sup><sup class="f2"></sup></td>
                 <td>✅</td>
                 <td>✅</td>
                 <td>✅</td>
-                <td>🔶<sup>14</sup></td>
-                <td>🔶<sup>14</sup></td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                macOS
+            </td>
+                <td>🔶<sup class="f11"></sup></td>
+                <td>🔶<sup class="f5"></sup></td>
+                <td>❌</td>
+                <td>❌<sup class="f7"></sup></td>
+                <td>❌<sup class="f7"></sup></td>
+                <td>✅</td>
+                <td>🔶<sup class="f6"></sup></td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                iOS
+            </td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>🔶<sup class="f6"></sup></td>
                 <td>🔶</td>
-                <td>🔶<sup>5</sup></td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Android
+            </td>
+                <td>❌</td>
+                <td>🔶<sup class="f9"></sup></td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
-                <td>✅<sup>19</sup></td>
                 <td>❌</td>
-            </tr>
-            <tr>
-                <th scope='row'><a href=https://en.wikipedia.org/wiki/PlayStation_4_system_software#System>Gnm, Gnmx, PSSL</a></th>
+                <td>🔶<sup class="f8"></sup></td>
+                <td>🔶</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Linux
+            </td>
+                <td>🔶<sup class="f1"></sup></td>
+                <td>🔶<sup class="f1"></sup></td>
+                <td>🔶<sup class="f4"></sup></td>
+                <td>🔶<sup class="f3"></sup></td>
+                <td>🔶<sup class="f3"></sup></td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>🔶</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Raspberry Pi 4 & 5
+            </td>
+                <td>❌</td>
+                <td>🔶<sup class="f10"></sup></td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>🔶</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                PlayStation 4 & 5
+            </td>
                 <td>❌</td>
                 <td>❌</td>
                 <td>❌</td>
@@ -185,37 +222,81 @@
                 <td>❌</td>
                 <td>✅</td>
                 <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Xbox One Family
+            </td>
                 <td>❌</td>
                 <td>❌</td>
-            </tr>
-        </table>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Xbox Series Family
+            </td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+          </tr>
+           <tr>
+            <td>
+                Switch 1 & 2
+            </td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+          </tr>
+     </table>
     </div>
     <div class="main">
-        <p>✅ API is reliably supported, OK to use</p>
-        <p>🔶 API is supported but expect issues</p>
-        <p>❌ API is not reliably supported, or not supported at all, avoid using</p>
+        This table is intended for developers of greenfield projects or official ports. This table is not intended for users. 
+        <ul class="nobullet">
+            <li>
+                ✅ API is reliably supported, OK to use
+            </li>
+            <li>
+                🔶 API is supported but has issues or requires layers
+            </li>
+            <li>
+                ❌ API is not reliably supported, or not supported at all, avoid using
+            </li>
+        </ul>
        <hr>
       <h2>Notes</h2>
             <ol>
-                <li>Drivers for newer hardware may not be available</li>
+                <li>Not all features available in debugging tools</li>
                 <li>Not supported on ARM</li>
-              	<li>Experimental support via <a href="https://github.com/HansKristian-Work/vkd3d-proton">vkd3d</a></li>
+              	<li>Experimental support via <a href="https://gitlab.winehq.org/wine/vkd3d">vkd3d</a></li>
+                <li>Experimental support via <a href="https://github.com/doitsujin/dxvk">dxvk</a></li>
                 <li>Deprecated outside of WebGL. WebGL Implementation does not support all features.</li>
-                <li>Support in 3rd party drivers not guaranteed</li>
-                <li>Shader compiler is available</li>
-                <li>Production use requires compatible graphics hardware. Use <a href="https://learn.microsoft.com/en-us/windows/win32/direct3darticles/directx-warp">WARP</a> for debugging without hardware support. </li>
-                <li>No support in UWP or ARM</li>
-                <li>No first-party support. A subset is provided by MoltenVk.</li>
+                <li>No first-party support. A subset is provided by MoltenVk and KosmicKrisp.</li>
                 <li>Experimental first-party support provided to porters via D3DMetal on Apple Silicon only. Cannot be used in shipping products.</li>
-              	<li>Basic support provided by <a href="https://github.com/darlinghq/indium">Indium</a></li>
-                <li>Subset of newer devices only. 1.3 requires Android 13.</li>
-                <li>No support (yet) for 1.3 or higher.</li>
-                <li>CPU device unavailable on Apple Silicon</li>
+                <li>Subset of newer devices only. 1.3 requires Android 13. Certified Android 16 devices must support Vulkan.</li>
                 <li>Missing features, buggy drivers. Prefer Vulkan if possible.</li>
                 <li>Max version = 3.1. Disabled by default.</li>
-                <li>Deprecated, max version = 4.1. Present on Apple Silicon.</li>
-             	<li>Experimental support via <a href="https://github.com/doitsujin/dxvk">dxvk</a></li>
-                <li>Latest version = 1.2</li>
+                <li>Deprecated, max version = 4.1.</li>
             </ol>
         <p>
             Is something missing or not quite right? Let me know by <a href="https://github.com/Ravbug/ravbug.github.io/issues/new?title=Error%20in%20table%20on%20Graphics" target=_blank>opening an issue.</a>
