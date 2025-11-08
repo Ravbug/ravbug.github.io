@@ -83,12 +83,12 @@
                     "title":"FatFileFinder",
                     "img": "img/broom.svg",
                     "tag": "A fast, native cross platform disk sweeper written in C++",
-                    "ref": "fatfilefinder/"
+                    "ref": "FatFileFinder/"
                 },
                 {
                     "title":"Unity Hub Native",
                     "tag":"A lighting-fast native rewrite of the Unity Hub in C++",
-                    "ref":"unityhubnative/",
+                    "ref":"UnityHubNative/",
                     "img":"img/unityhubnative.png"
                 },
                      {
