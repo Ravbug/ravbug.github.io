@@ -468,7 +468,7 @@
                 },
                  {
                     "title":"AutoResponder",
-                    "img":"https://images-ext-1.discordapp.net/external/SwQny5232U0cU3rqx9OZcLLucdkjppRcxocu7Dpu1p4/%3Fsize%3D256/https/cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png",
+                    "img":"img/autoresponder.png",
                     "tag":"A customizable, regex-powered responder bot for your Discord server",
                     "ref":"https://autoresponder-bot.herokuapp.com"
                 },
@@ -476,7 +476,7 @@
                     "title":"QReaper",
                     "tag":"A Discord bot which deletes QR Codes it sees (Self-host only)",
                     "ref":"https://github.com/ravbug/qreaper",
-                    "img":"https://cdn.discordapp.com/avatars/666309507105816586/9e1e20e18619535cbf4f87f454957d5b.png?size=2048"
+                    "img":"img/qreaper.png"
                 },
                 {
                     "title":"PoetryBot Web",

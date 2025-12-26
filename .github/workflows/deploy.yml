@@ -10,6 +10,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - name: Install site builder dependencies
+        run: pip install bs4 cssutils pillow
       - name: Run Templates
         run : |
           rsync -av ./ ./_site --exclude=.git
