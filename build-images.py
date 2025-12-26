@@ -7,9 +7,8 @@ from bs4 import BeautifulSoup
 import cssutils
 from cssutils import parseStyle
 import logging
+import xml.etree.ElementTree as ET
 directory = os.fsencode(os.getcwd())
-
-import get_image_size
 
 exclusions = [
     "codemirror"
@@ -47,19 +46,27 @@ for subdir, dirs, files in os.walk(directory):
                 if (has_exclusion):
                     continue
 
-                try:
-                    with Image.open(routed_url) as img:
-                        width, height = img.size
+                def set_aspect(width, height):
+                    style = img_tag.get("style")
+                    style = parseStyle(style)
+                    style["aspect-ratio"] = f"{width}/{height}"
 
-                        # add the aspect ratio style
-                        style = img_tag.get("style")
-                        style = parseStyle(style)
-                        style["aspect-ratio"] = f"{width}/{height}"
+                    img_tag['style'] = style.cssText
 
-                        img_tag['style'] = style.cssText
+                if url.endswith(".svg"):
+                    tree = ET.parse(routed_url).getroot()
+                    if "viewBox" in tree.attrib: 
+                        viewbox = tree.attrib["viewBox"].split(' ')
+                        set_aspect(viewbox[2],viewbox[3])
+                    pass
+                else:
+                    try:
+                        with Image.open(routed_url) as img:
+                            width, height = img.size
+                            set_aspect(width, height)      
 
-                except Exception as e:
-                    print(f"{absolute_path} Failed to decode {url}: {e}")
+                    except Exception as e:
+                        print(f"{absolute_path} Failed to decode {url}: {e}")
 
             # serialize modified HTML
             file_content = str(parsed_html)
