@@ -95,12 +95,13 @@ add_executable("${PROJECT_NAME}" ${MY_SOURCES})</code></pre>
             </ol>
             Here, GLOB will help you by automatically adding the new files as you add or rename them. Note that GLOB does not search recursively by default. GLOB has a recursive mode but it is not covered in this guide.
             <br><br>
-            and I recommend hard-coding filenames if:
+            I recommend hard-coding filenames if:
             <ol>
                 <li>Your project has a small number of files</li>
                 <li>You do not anticipate adding many new files or renaming many files</li>
                 <li>You want to control which files are included with other logic</li>
             </ol>
+            You can even mix-and-match both options at the same time. 
         </p>
         <hr>
         <h3>Creating a Library</h3>
