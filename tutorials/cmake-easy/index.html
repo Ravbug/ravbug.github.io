@@ -83,10 +83,10 @@
 </p>
 <p>
             "But what if I have a lot of files? I don't want to type all of their names manually!" Fortunately, we can have CMake find the files we want automatically using a GLOB. Replace the above line with the code below:
-<pre><code class="cmake">file(GLOB MY_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
+<pre><code class="cmake">file(GLOB MY_SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
 add_executable("${PROJECT_NAME}" ${MY_SOURCES})</code></pre>            
         This will instruct CMake to find all of the files with the file extensions .cpp, .h, and .hpp, in the directories <code>src</code> and <code>include/your-project</code>, and add them to a variable named <code>MY_SOURCES</code>. 
-        We then instruct CMake to create the executable using the filenames stored within <code>MY_SOURCES</code>. 
+        We then instruct CMake to create the executable using the filenames stored within <code>MY_SOURCES</code>. <code>CONFIGURE_DEPENDS</code> tells CMake to automatically update the build system if files are added or removed from the specified locations.
         </p>            
             There's really no right or wrong answer regarding when you should or should not use GLOB. In general, I recommend using GLOB if:
             <ol>
@@ -185,7 +185,7 @@ cmake_minimum_required(VERSION 3.17)
 project("my-project") 
 
 # Add our main executable
-file(GLOB MY_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
+file(GLOB MY_SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/*.hpp" "src/*.h" "include/your-project/*.h" "include/your-project/*.hpp")
 add_executable("${PROJECT_NAME}" ${MY_SOURCES})
 
 # Add our library and make its headers available
