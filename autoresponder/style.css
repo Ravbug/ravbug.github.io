@@ -1,0 +1,96 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  color:#FFFFFF;
+  background-color:#36393F;
+}
+
+article{
+   margin: 10px;
+}
+
+th,table{
+ background-color:#202225; 
+ border-radius:5px;
+}
+
+td{
+  background-color:#34363C;
+  color:#ACADAF;
+  font-size:12px
+}
+
+code{
+ background-color:#222222; 
+}
+
+.bold {
+  font-weight: bold;
+}
+
+p {
+  max-width: 600px;
+}
+
+form {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: cyan;
+  display: inline-block;
+  width: 100%;
+  max-width: 340px;
+  border-radius: 3px;
+}
+
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+button {
+  font-size: 16px;
+  border-radius: 3px;
+  background-color: lightgrey;
+  border: 1px solid grey;
+  box-shadow: 2px 2px teal;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: yellow;
+}
+
+button:active {
+  box-shadow: none;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+footer {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid lightgrey;
+}
+
+ a {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+a:hover{
+  color: #CCCCCC;
+}
+
+.nicejob {
+  text-decoration: line-through;
+}

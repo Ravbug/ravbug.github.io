@@ -470,7 +470,7 @@
                     "title":"AutoResponder",
                     "img":"img/autoresponder.png",
                     "tag":"A customizable, regex-powered responder bot for your Discord server",
-                    "ref":"https://autoresponder-bot.herokuapp.com"
+                    "ref":"autoresponder/"
                 },
                 {
                     "title":"QReaper",

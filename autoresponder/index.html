@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AutoResponder Info</title>
+    <meta name="description" content="An automatic responder bot, user-programmable to say things on different conditions. Run /help for more info">
+    <link id="favicon" rel="icon" href="https://cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tiny-boostrap.css">
+  </head>
+  <body>
+  <script src="../discontinued.js" reason="Discord denied my Message Content privileged intents request, rendering the bot inoperable. See the <a href='https://docs.discord.com/developers/resources/auto-moderation'>AutoMod API</a> for the first-party replacement to AutoResponder."></script>
+  <table style="width:100%">
+    <!-- The header -->
+      <tr>
+        <th><img style="width:75px;height:75px;margin:15px" src="https://cdn.discordapp.com/avatars/409947148172394498/7ff43b27f39a267fc9f658cbdf99775f.png"></img>
+      </th>
+        <th style="width:100%"><h1 style="text-align:left">AutoResponder</h1>
+          <table>
+           <!-- The menus -->
+          <tr>
+            <th><a href="#commands">Commands</a></th>
+            <th><a href="#service">Status</a></th>
+            <th><a href="https://discordapp.com/oauth2/authorize?client_id=409947148172394498&scope=bot%20applications.commands&permissions=26688">Invite!</a></th>
+          </tr>
+        </table>
+        </th>
+      </tr>
+    </table>
+  <article>
+    
+    An automatic responder bot! User-programmable to say things on different conditions. See the commands list below to learn how to use this bot.
+    
+    <!-- Commands list -->
+    <h2>
+      <u id="commands">Commands</u>
+    </h2>
+    <p>
+      Exclude [ or ] from your message.
+      <table>
+        <tr>
+          <th style="padding:15px;min-width:150px">Command</th>
+          <th style="width:100%">Description</th>
+        </tr>
+        <tr>
+          <td><samp>/setcommand -t [trigger] -r [output] [other optional flags]</samp><br><br><samp>setimage -t [trigger] -url [image URL] [other optional flags]</samp></td>
+          <td>Specify trigger test and text to respond with. Use a valid regex for the trigger.<br>
+              <u>Flags</u><br>
+              <code>-r</code>: Textual response to the command.<br>
+              <code>-url</code>: Embed an image with the command.<br>
+              <code>-tr</code>: Alternative to <code>-t</code> for advanced users. Specify an exact JS regex string and it will not be post-processed. If <code>-t</code> and <code>-tr</code> are present, the bot will execute the command if either succeed.<br>
+              <code>-inv</code>: Invert the result of the trigger. If the trigger passes, this will make it false, and vice-versa.<br>
+              <code>-del</code>: delete the trigger message<br>
+              <code>-tag</code>: tag the user who triggered the command<br>
+              <code>-bc #channel1 #channel2 ...</code>: prevent the command from running in the included list channels (can supply more than 2).<br>
+              <code>-ac #channel1 #channel2 ...</code>: the command only runs in the included list channels (can supply more than 2). Ignores <code>-bc</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><pre>/edit [int] [new flags]</pre></td>
+          <td>Edit a command's data. Speficy the new flags to update, like you do for <code>setcommand</code></td>
+        </tr>
+        <tr>
+          <td><pre>/delete [int]</pre></td>
+          <td>Delete the command with an ID. This is not undoable.</td>
+        </tr>
+        <tr>
+          <td><pre>/wipe</pre></td>
+          <td>Delete ALL commands. This is not undoable.</td>
+        </tr>
+        <tr>
+          <td><pre>/list</pre></td>
+          <td>List the commands for this server.</td>
+        </tr>
+        <tr>
+          <td><pre>/help</pre></td>
+          <td>Display this list of commands</td>
+        </tr>
+        <tr>
+          <td><pre>/about</pre></td>
+          <td>Get a link to this webpage</td>
+        </tr> 
+        <tr>
+          <td><pre>/announce [#channel] [message]</pre></td>
+          <td>Posts a message in a channel. The bot must have write access to the destination channel.</td>
+        </tr>
+      </table>
+    </p>
+    
+    <!-- Bot vitals -->
+    <h2>
+      <u id="service">Service Status</u>
+    </h2>
+    <p id="status">
+      Decommissioned on November 15, 2026.
+    </p>
+
+  </article>
+<footer>
+  Created by <a href="https://www.ravbug.com">Ravbug</a>
+</footer>
+</body>
+</html>
