@@ -19,40 +19,33 @@
     <h1>Legacy Cleverbug Source Code</h1>
 
     I decided to partially open-source the legacy Cleverbug code. You can find
-    its entirety contained within <code>cleverbug-alpha/</code> of this website. 
+    its entirety contained within <code>cleverbug-alpha/</code> on this website. 
     <br>
     To view the code on GitHub, visit this link: <a href="https://github.com/Ravbug/ravbug.github.io/tree/master/cleverbug-alpha">GitHub</a>
     
-    <br><br>The code 
-    is a mess and poorly documented. I will attempt to break it down below.
+    <br><br>The code is a mess and poorly documented. I will attempt to break it down below.
     <hr>
     <br>
-    This version of cleverbug was split into three parts. One part ran serverside, while the 
-    other ran clientside, and the third part was a Google Spreadsheet. Yes, I used Google Sheets 
+    This version of Cleverbug was split into three parts. One part ran serverside, another  
+    ran clientside, and the third part was a Google Spreadsheet. Yes, I used Google Sheets 
     as a free SQL database. 
     <br><br>
 
     <h3>Client-side code</h3>
-    The way users interacted with the bot was through a webpage. The webpage presented the user 
-    a simple interface: a large text area for the session's chat history, a text field for typing
-    messages to the bot, and buttons to send the message and toggle the settings. In the settings 
-    menu were two text fields for changing your's or the bot's display name. A "think for me" button 
-    adorned the info box alongside the settings button. 
+    Users interacted with the bot through a webpage. The webpage featured
+    a simple interface: a large text area for the session's chat history, a text field for writing
+    messages to the bot, and buttons to send the message and show or hide the settings. The settings menu 
+    featured two options: two text fields to change your display name as well as the bot's display name. In case you 
+    had writer's block, there was a "Think for me!" button which generated messages to send to the bot on your behalf.
 
     <br><br>
-    When the user pressed enter or clicked the say button, the responder engine executed. It actually 
-    ran the responder clientside. The responder queried the google spreadsheet recursively with different 
-    a different SELECT call until it got a satisfactory answer. It would then add the message to the chat history. 
-    The client did not stop the user from sending messages before it had finished responding, making spam possible.
+    When the user pressed enter or clicked the send button, the responder engine executed clientside. The responder queried the google spreadsheet recursively with different 
+    SELECT calls until it got a satisfactory answer determined by a simple heuristic. It would then add the message to the chat history. 
+    The client did not prevent the user from sending additional messages before it had finished responding.
 
     <br><br>
     Think for me was nothing special. It simply called the responder with an empty string, effectively
-    guarenteeing the base case of a random answer. It then placed that answer inside the user's say field.
-
-    <br><br>The user posting a message to the chat also triggered the data collection, or "learning," aspect 
-    of this version. It queried my server with a set of URL arguments containg what the user wrote and other information.
-    This was how the bot learned. It gathered sentences from the users that interacted with it and added 
-    them to the repertoire of phrases it could use. It did not generate unique phrases. 
+    producing the base case of a random answer. It then placed that answer inside the user's input field.
 
     <br><br>
     You can see the original, working client running <a href="../"><b>here.</b></a>
@@ -70,21 +63,20 @@
     add new tokens without fear of accidentally breaking the php code. 
 
     <br><br>
-    When the server recieved a request from the client, it first checked the body for blacklisted
+    When the server received a request from the client, it first checked the body for blacklisted
     words as described by <code>cleverbug_badwords.txt</code>. If a bad word was found, the server rejected
-    the request. This step helped prevent (and worked surprisingly well) the bot from learning
+    the request. This step helped prevent (surprisingly effectively) the bot from learning
     racist or offensive phrases. The server also performed basic duplicate-detection by checking the input string
     as lowercase with the spaces and double letters removed against a column in the spreadsheet which stored all the phrases lowercase without spaces.
     The spreadsheet calculated those automatically via spreadsheet ArrayFormula, so the server simply ran a select query on that column. 
     Like the bad word detection, this duplicate detection worked surprisingly well. 
 
     <br><br>
-    If the code did not find a bad word or a duplicate phrase (and it checked for variations), then it proceeded to the 
-    next step of adding it to the database. Here, it initialized the Google Spreadsheet API library
+    If the code did not find a bad word or a fuzzy-duplicate phrase, it added the message to the database. Here, it initialized the Google Spreadsheet API library
     for php (verison 2.2.0) and authenticated using the credentials described in <code>client_secret.json</code>.
     <br><br>
-    After authentication, it called the Spreadsheet API to add a row to the spreadsheet. The row, once added,
-    was instantly available to the clients, enabling real-time learning. 
+    After authentication, it called the Spreadsheet API to add a row to the spreadsheet. Once added,
+    the new row was instantly available to the clients, enabling real-time learning. 
 
     <br><br>Two files, <code>cleverbot_up.php</code> and <code>cleverbot_respond.php</code> also exist. These
     files contained a single instruction which was to include a different php file. The clients called 
@@ -97,7 +89,6 @@
     <br><br>
     <h3>Conclusion</h3>
     I didn't want to delete this code, so I decided to make it public, not that this code is worth anything. 
-    If you want to read it, go ahead. This code turned into a Discord bot with the same name, which you
-    can invite to your server by visiting the working client (linked above) and using the link in the footer. 
+    If you want to read it, go ahead. This code became the basis for a Discord bot with the same name, which for a time was available for invite.
     <br><br>
 </div>
